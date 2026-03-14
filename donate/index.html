@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support IronVibe — IronVibe</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <script>
+        (function() {
+            var supported = ['en','ru','ar','de','es','fr','hi','it','pt','zh'];
+            var path = window.location.pathname.replace(/\/$/, '') || '';
+            var segment = path.split('/')[1];
+            if (segment && supported.indexOf(segment) !== -1) {
+                window.location.replace('/' + segment + '/donate/');
+                return;
+            }
+            var lang = (navigator.language || navigator.userLanguage || 'en').split('-')[0].toLowerCase();
+            var locale = supported.indexOf(lang) !== -1 ? lang : 'en';
+            window.location.replace('/' + locale + '/donate/');
+        })();
+    </script>
+</head>
+<body><p>Redirecting…</p></body>
+</html>

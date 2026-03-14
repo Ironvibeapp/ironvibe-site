@@ -75,5 +75,18 @@
     "s8Body": "For questions about this Privacy Policy, data processing, or IronVibe in general, write to us at <a href=\"mailto:support@ironvibe.app\" class=\"text-gray-400 hover:underline\">support@ironvibe.app</a>. We will aim to reply as soon as reasonably possible.",
     "footerNote": "The current full version of this policy is always available at <strong class=\"text-gray-400\">ironvibe.app/privacy</strong>.",
     "footerRights": "© 2026 IronVibe. All rights reserved."
+  },
+  "donate": {
+    "metaTitle": "Support IronVibe — Donate",
+    "backToHome": "← Back to home",
+    "h1": "Support IronVibe",
+    "intro": "The project is developed out of pure enthusiasm. If the app helps you with your training, you can support development with cryptocurrency.",
+    "copied": "Copied!",
+    "copyAriaBtc": "Copy BTC address",
+    "copyAriaEth": "Copy ETH address",
+    "copyAriaUsdt": "Copy USDT address",
+    "qrAriaBtc": "Show BTC QR code",
+    "qrAriaEth": "Show ETH QR code",
+    "qrAriaUsdt": "Show USDT QR code"
   }
 }

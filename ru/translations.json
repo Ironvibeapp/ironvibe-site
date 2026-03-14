@@ -75,5 +75,18 @@
     "s8Body": "Если у вас есть вопросы по этой Политике конфиденциальности, по обработке данных или по работе IronVibe в целом, напишите нам на <a href=\"mailto:support@ironvibe.app\" class=\"text-gray-400 hover:underline\">support@ironvibe.app</a>. Мы постараемся ответить в максимально разумные сроки.",
     "footerNote": "Актуальная и полная версия этой политики всегда доступна на сайте <strong class=\"text-gray-400\">ironvibe.app/privacy</strong>.",
     "footerRights": "© 2026 IronVibe. Все права защищены."
+  },
+  "donate": {
+    "metaTitle": "Поддержать IronVibe — Донат",
+    "backToHome": "← На главную",
+    "h1": "Поддержать IronVibe",
+    "intro": "Проект развивается на чистом энтузиазме. Если приложение помогает тебе в тренировках, ты можешь поддержать разработку криптой.",
+    "copied": "Скопировано!",
+    "copyAriaBtc": "Скопировать адрес BTC",
+    "copyAriaEth": "Скопировать адрес ETH",
+    "copyAriaUsdt": "Скопировать адрес USDT",
+    "qrAriaBtc": "Показать QR-код BTC",
+    "qrAriaEth": "Показать QR-код ETH",
+    "qrAriaUsdt": "Показать QR-код USDT"
   }
 }

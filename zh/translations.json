@@ -75,5 +75,18 @@
     "s8Body": "如果你对本隐私政策、数据处理或 IronVibe 本身有任何疑问，请发送邮件至 <a href=\"mailto:support@ironvibe.app\" class=\"text-gray-400 hover:underline\">support@ironvibe.app</a>。我们会在合理的时间内尽力回复。",
     "footerNote": "本政策的最新完整版本始终可在 <strong class=\"text-gray-400\">ironvibe.app/privacy</strong> 查阅。",
     "footerRights": "© 2026 IronVibe。保留所有权利。"
+  },
+  "donate": {
+    "metaTitle": "支持 IronVibe — 捐赠",
+    "backToHome": "← 返回首页",
+    "h1": "支持 IronVibe",
+    "intro": "项目纯靠热情维护。如果应用对你的训练有帮助，可以用加密货币支持开发。",
+    "copied": "已复制！",
+    "copyAriaBtc": "复制 BTC 地址",
+    "copyAriaEth": "复制 ETH 地址",
+    "copyAriaUsdt": "复制 USDT 地址",
+    "qrAriaBtc": "显示 BTC 二维码",
+    "qrAriaEth": "显示 ETH 二维码",
+    "qrAriaUsdt": "显示 USDT 二维码"
   }
 }

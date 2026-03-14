@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" data-locale="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="donate.metaTitle">Support IronVibe — Donate</title>
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; background-color: #0d0d0d; color: #E0E0E0; }
+        .steel-text { background: linear-gradient(180deg, #FFFFFF 0%, #A0A0A0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .steel-border { border-color: rgba(255,255,255,0.08); }
+        a { color: #60a5fa; }
+        a:hover { color: #93c5fd; text-decoration: underline; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <nav class="border-b steel-border bg-[#121212]/95 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="../" class="text-gray-300 hover:text-white font-bold tracking-widest">IRONVIBE</a>
+            <a href="../" class="text-sm text-gray-500 hover:text-gray-300" data-i18n="donate.backToHome">← Back to home</a>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-2xl mx-auto px-4 py-16">
+        <h1 class="text-3xl md:text-4xl font-black tracking-wide steel-text mb-2" data-i18n="donate.h1">Support IronVibe</h1>
+        <p class="text-gray-500 text-sm mb-10" data-i18n="donate.intro">The project is developed out of pure enthusiasm. If the app helps you with your training, you can support development with cryptocurrency.</p>
+
+        <div class="space-y-6">
+            <div class="donate-row border border-white/10 rounded-lg p-4 bg-[#151515]">
+                <div class="flex items-center justify-between gap-3 mb-2">
+                    <span class="text-gray-300 text-sm font-semibold">BTC</span>
+                    <div class="flex items-center gap-2">
+                        <button type="button" class="donate-copy-btn p-1.5 rounded bg-white/5 hover:bg-white/10 text-gray-300 transition-colors" data-address="bc1q5jp9nxh0u3v403w9gnpkmvhj2v0fh2qa6t0hlh" data-i18n-aria="donate.copyAriaBtc"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8a2 2 0 012 2v8a2 2 0 01-2 2H8a2 2 0 01-2-2V9a2 2 0 012-2z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3H10a2 2 0 00-2 2v0"/></svg></button>
+                        <button type="button" class="donate-qr-btn p-1.5 rounded bg-white/5 hover:bg-white/10 text-gray-300 transition-colors" data-address="bc1q5jp9nxh0u3v403w9gnpkmvhj2v0fh2qa6t0hlh" data-i18n-aria="donate.qrAriaBtc"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 3h3v3h-3v-3zM14 11h2v2h-2zM18 11h2v2h-2z"/></svg></button>
+                    </div>
+                </div>
+                <p class="font-mono text-xs text-gray-400 break-all">bc1q5jp9nxh0u3v403w9gnpkmvhj2v0fh2qa6t0hlh</p>
+                <div class="donate-qr hidden mt-3"><div class="inline-block p-2 bg-black rounded border border-white/10"><canvas class="donate-qr-canvas w-32 h-32"></canvas></div></div>
+            </div>
+            <div class="donate-row border border-white/10 rounded-lg p-4 bg-[#151515]">
+                <div class="flex items-center justify-between gap-3 mb-2">
+                    <span class="text-gray-300 text-sm font-semibold">ETH</span>
+                    <div class="flex items-center gap-2">
+                        <button type="button" class="donate-copy-btn p-1.5 rounded bg-white/5 hover:bg-white/10 text-gray-300 transition-colors" data-address="0xE0dE0d3D6F5EB6a03C54BfD96Bbfde0D331F085c" data-i18n-aria="donate.copyAriaEth"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8a2 2 0 012 2v8a2 2 0 01-2 2H8a2 2 0 01-2-2V9a2 2 0 012-2z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3H10a2 2 0 00-2 2v0"/></svg></button>
+                        <button type="button" class="donate-qr-btn p-1.5 rounded bg-white/5 hover:bg-white/10 text-gray-300 transition-colors" data-address="0xE0dE0d3D6F5EB6a03C54BfD96Bbfde0D331F085c" data-i18n-aria="donate.qrAriaEth"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 3h3v3h-3v-3zM14 11h2v2h-2zM18 11h2v2h-2z"/></svg></button>
+                    </div>
+                </div>
+                <p class="font-mono text-xs text-gray-400 break-all">0xE0dE0d3D6F5EB6a03C54BfD96Bbfde0D331F085c</p>
+                <div class="donate-qr hidden mt-3"><div class="inline-block p-2 bg-black rounded border border-white/10"><canvas class="donate-qr-canvas w-32 h-32"></canvas></div></div>
+            </div>
+            <div class="donate-row border border-white/10 rounded-lg p-4 bg-[#151515]">
+                <div class="flex items-center justify-between gap-3 mb-2">
+                    <span class="text-gray-300 text-sm font-semibold">USDT (TRC20)</span>
+                    <div class="flex items-center gap-2">
+                        <button type="button" class="donate-copy-btn p-1.5 rounded bg-white/5 hover:bg-white/10 text-gray-300 transition-colors" data-address="TNNBuiNzBJSxex4rAWpDLPdVQPcqshF6i3" data-i18n-aria="donate.copyAriaUsdt"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8a2 2 0 012 2v8a2 2 0 01-2 2H8a2 2 0 01-2-2V9a2 2 0 012-2z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3H10a2 2 0 00-2 2v0"/></svg></button>
+                        <button type="button" class="donate-qr-btn p-1.5 rounded bg-white/5 hover:bg-white/10 text-gray-300 transition-colors" data-address="TNNBuiNzBJSxex4rAWpDLPdVQPcqshF6i3" data-i18n-aria="donate.qrAriaUsdt"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 3h3v3h-3v-3zM14 11h2v2h-2zM18 11h2v2h-2z"/></svg></button>
+                    </div>
+                </div>
+                <p class="font-mono text-xs text-gray-400 break-all">TNNBuiNzBJSxex4rAWpDLPdVQPcqshF6i3</p>
+                <div class="donate-qr hidden mt-3"><div class="inline-block p-2 bg-black rounded border border-white/10"><canvas class="donate-qr-canvas w-32 h-32"></canvas></div></div>
+            </div>
+        </div>
+
+        <div id="donate-tooltip" class="fixed inset-x-0 bottom-6 mx-auto w-max px-3 py-1 rounded bg-white/10 text-gray-100 text-xs backdrop-blur-sm border border-white/10 hidden z-50" data-i18n="donate.copied">Copied!</div>
+    </main>
+
+    <footer class="border-t steel-border py-8 mt-16">
+        <div class="max-w-3xl mx-auto px-4 text-center">
+            <p class="text-gray-600 text-sm" data-i18n="privacy.footerRights">© 2026 IronVibe. All rights reserved.</p>
+            <p class="text-gray-500 text-xs mt-4 lang-list flex flex-wrap justify-center gap-x-2 gap-y-1"><a href="/en/">EN</a> · <a href="/ru/">RU</a> · <a href="/ar/">AR</a> · <a href="/de/">DE</a> · <a href="/es/">ES</a> · <a href="/fr/">FR</a> · <a href="/hi/">HI</a> · <a href="/it/">IT</a> · <a href="/pt/">PT</a> · <a href="/zh/">ZH</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        (function() {
+            var scope = 'donate';
+            var base = '../';
+            fetch(base + 'translations.json').then(function(r){ return r.json(); }).then(function(t){
+                var strings = t[scope] || {};
+                function get(key) { var parts = key.split('.'); var v = t; for (var i = 0; i < parts.length && v; i++) v = v[parts[i]]; return v != null ? String(v) : ''; }
+                document.querySelectorAll('[data-i18n]').forEach(function(el){ var key = el.getAttribute('data-i18n'); if (!key || key.indexOf(scope + '.') !== 0) return; var val = get(key); if (val) el.textContent = val; });
+                document.querySelectorAll('[data-i18n-html]').forEach(function(el){ var key = el.getAttribute('data-i18n-html'); if (!key || key.indexOf(scope + '.') !== 0) return; var val = get(key); if (val) el.innerHTML = val; });
+                document.querySelectorAll('[data-i18n-aria]').forEach(function(el){ var key = el.getAttribute('data-i18n-aria'); if (!key || key.indexOf(scope + '.') !== 0) return; var val = get(key); if (val) el.setAttribute('aria-label', val); });
+                if (strings.metaTitle) document.title = strings.metaTitle;
+                var privacyRights = (t.privacy && t.privacy.footerRights) ? t.privacy.footerRights : '';
+                if (privacyRights) document.querySelectorAll('[data-i18n="privacy.footerRights"]').forEach(function(el){ el.textContent = privacyRights; });
+            }).catch(function(){});
+        })();
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var donateTooltip = document.getElementById('donate-tooltip');
+            document.querySelectorAll('.donate-copy-btn').forEach(function(btn) {
+                btn.addEventListener('click', async function() {
+                    try {
+                        await navigator.clipboard.writeText(btn.getAttribute('data-address') || '');
+                        if (donateTooltip) { donateTooltip.classList.remove('hidden'); setTimeout(function() { donateTooltip.classList.add('hidden'); }, 1500); }
+                    } catch(e) {}
+                });
+            });
+            document.querySelectorAll('.donate-qr-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var address = btn.getAttribute('data-address') || '';
+                    var row = btn.closest('.donate-row');
+                    var qrWrapper = row ? row.querySelector('.donate-qr') : null;
+                    var canvas = qrWrapper ? qrWrapper.querySelector('.donate-qr-canvas') : null;
+                    if (!qrWrapper || !canvas || !window.QRious) return;
+                    document.querySelectorAll('.donate-qr').forEach(function(el) { el.classList.add('hidden'); });
+                    if (qrWrapper.classList.contains('hidden')) {
+                        new QRious({ element: canvas, value: address, size: 128, background: 'black', foreground: 'white' });
+                        qrWrapper.classList.remove('hidden');
+                    } else {
+                        qrWrapper.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

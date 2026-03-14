@@ -75,5 +75,18 @@
     "s8Body": "अगर इस प्राइवेसी पॉलिसी, डेटा प्रोसेसिंग या IronVibe के बारे में तुम्हारे कोई सवाल हैं, तो हमें इस पते पर लिखो: <a href=\"mailto:support@ironvibe.app\" class=\"text-gray-400 hover:underline\">support@ironvibe.app</a>. हम यथोचित समय के भीतर जवाब देने की कोशिश करेंगे।",
     "footerNote": "इस पॉलिसी का मौजूदा और पूरा वर्ज़न हमेशा यहाँ उपलब्ध है: <strong class=\"text-gray-400\">ironvibe.app/privacy</strong>.",
     "footerRights": "© 2026 IronVibe. सर्वाधिकार सुरक्षित।"
+  },
+  "donate": {
+    "metaTitle": "IronVibe को सपोर्ट करें — दान",
+    "backToHome": "← होम पर वापस",
+    "h1": "IronVibe को सपोर्ट करें",
+    "intro": "प्रोजेक्ट पूरी तरह उत्साह से चल रहा है। अगर ऐप आपकी ट्रेनिंग में मदद करता है, तो आप क्रिप्टो से डेवलपमेंट सपोर्ट कर सकते हैं।",
+    "copied": "कॉपी हो गया!",
+    "copyAriaBtc": "BTC एड्रेस कॉपी करें",
+    "copyAriaEth": "ETH एड्रेस कॉपी करें",
+    "copyAriaUsdt": "USDT एड्रेस कॉपी करें",
+    "qrAriaBtc": "BTC QR कोड दिखाएं",
+    "qrAriaEth": "ETH QR कोड दिखाएं",
+    "qrAriaUsdt": "USDT QR कोड दिखाएं"
   }
 }
