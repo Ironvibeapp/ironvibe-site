@@ -26,14 +26,19 @@
     document.querySelectorAll("[data-screenshot]").forEach(function (el) {
       var n = el.getAttribute("data-screenshot");
       if (!n) return;
-      var url = "../screenshots/" + folder + "/" + n + ".jpg";
+      /* Query string ties decoded image to theme (avoids stale bitmap when swapping light/dark). */
+      var url = "../screenshots/" + folder + "/" + n + ".jpg?v=" + folder;
       el.setAttribute("data-lightbox", url);
       var img = el.querySelector("img");
-      if (img) {
-        /* Lazy-loaded thumbs often ignore setAttribute("src") swaps; assign .src and drop lazy so the browser always repaints. */
-        img.removeAttribute("loading");
-        img.src = url;
-      }
+      if (!img) return;
+      /* Replace the node: Chromium/Safari lazy-loaded thumbs may not repaint after .src-only updates. */
+      var next = img.cloneNode(false);
+      next.removeAttribute("loading");
+      next.alt = img.alt;
+      next.className = img.className;
+      next.setAttribute("src", url);
+      next.src = url;
+      img.parentNode.replaceChild(next, img);
     });
   }
 

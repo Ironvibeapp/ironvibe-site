@@ -11,7 +11,8 @@
   }
 
   function urlForIndex(i) {
-    return "../screenshots/" + themeFolder() + "/" + i + ".jpg";
+    var f = themeFolder();
+    return "../screenshots/" + f + "/" + i + ".jpg?v=" + f;
   }
 
   function applyIndex(i) {
@@ -19,7 +20,9 @@
     if (i > TOTAL) i = 1;
     currentIndex = i;
     if (lightboxImg) {
-      lightboxImg.src = urlForIndex(currentIndex);
+      var url = urlForIndex(currentIndex);
+      lightboxImg.setAttribute("src", url);
+      lightboxImg.src = url;
       lightboxImg.alt = "IronVibe screenshot " + currentIndex;
     }
   }
@@ -53,7 +56,17 @@
 
   /** Theme switched while viewer open — swap image; thumbs updated by theme-toggle. */
   window.ironVibeGalleryRefresh = function () {
-    if (openState && lightboxImg) lightboxImg.src = urlForIndex(currentIndex);
+    if (!openState || !lightboxImg) return;
+    var wrap = lightboxImg.parentNode;
+    if (!wrap) return;
+    var url = urlForIndex(currentIndex);
+    var next = lightboxImg.cloneNode(false);
+    next.id = "lightbox-img";
+    next.alt = "IronVibe screenshot " + currentIndex;
+    next.className = lightboxImg.className;
+    next.src = url;
+    wrap.replaceChild(next, lightboxImg);
+    lightboxImg = next;
   };
 
   document.addEventListener("DOMContentLoaded", function () {
