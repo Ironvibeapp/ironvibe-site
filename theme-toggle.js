@@ -20,10 +20,24 @@
     } catch (e) {}
   }
 
+  function syncScreenshotThumbs() {
+    var dark = getTheme() === "dark";
+    var folder = dark ? "dark" : "light";
+    document.querySelectorAll("[data-screenshot]").forEach(function (el) {
+      var n = el.getAttribute("data-screenshot");
+      if (!n) return;
+      var url = "../screenshots/" + folder + "/" + n + ".jpg";
+      el.setAttribute("data-lightbox", url);
+      var img = el.querySelector("img");
+      if (img) img.setAttribute("src", url);
+    });
+  }
+
   function setTheme(theme) {
     applyTheme(theme);
     persist(theme);
     syncToggleUi();
+    syncScreenshotThumbs();
   }
 
   function toggleTheme() {
@@ -47,11 +61,13 @@
 
   window.ironVibeToggleTheme = toggleTheme;
   window.ironVibeSyncThemeToggle = syncToggleUi;
+  window.ironVibeSyncScreenshotThumbs = syncScreenshotThumbs;
 
   document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll("[data-theme-toggle]").forEach(function (btn) {
       btn.addEventListener("click", toggleTheme);
     });
     syncToggleUi();
+    syncScreenshotThumbs();
   });
 })();
