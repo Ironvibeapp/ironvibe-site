@@ -36,9 +36,9 @@
 
 html[data-theme="dark"] {
   --iv-page: #121212;
-  --iv-text: #e0e0e0;
-  --iv-text-muted: #9ca3af;
-  --iv-text-soft: #6b7280;
+  --iv-text: #e8e8e8;
+  --iv-text-muted: #b8bcc4;
+  --iv-text-soft: #9ca3af;
   --iv-nav-bg: rgba(18, 18, 18, 0.94);
   --iv-nav-border: rgba(255, 255, 255, 0.1);
   --iv-link: #60a5fa;
@@ -302,6 +302,17 @@ html[data-theme="dark"] .iv-btn-primary-like:hover {
 
 .iv-border-t {
   border-top: 1px solid var(--iv-nav-border);
+}
+
+/* Top + bottom borders that follow theme (Tailwind border-t/b alone uses default gray). */
+.iv-border-y {
+  border-top: 1px solid var(--iv-nav-border);
+  border-bottom: 1px solid var(--iv-nav-border);
+}
+
+/* Optional accent for glass cards (glass-panel already borders; this aligns Tailwind `border-iv`). */
+.border-iv {
+  border-color: var(--iv-card-border);
 }
 
 .iv-border {
