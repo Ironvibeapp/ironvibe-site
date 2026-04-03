@@ -29,7 +29,11 @@
       var url = "../screenshots/" + folder + "/" + n + ".jpg";
       el.setAttribute("data-lightbox", url);
       var img = el.querySelector("img");
-      if (img) img.setAttribute("src", url);
+      if (img) {
+        /* Lazy-loaded thumbs often ignore setAttribute("src") swaps; assign .src and drop lazy so the browser always repaints. */
+        img.removeAttribute("loading");
+        img.src = url;
+      }
     });
   }
 

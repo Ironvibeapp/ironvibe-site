@@ -322,3 +322,20 @@ html[data-theme="dark"] .iv-btn-primary-like:hover {
 [dir="rtl"] .lang-list {
   flex-direction: row-reverse;
 }
+
+/* Hall of Legends — themed thumbnails (steel / light & dark) */
+.iv-legend-thumb {
+  position: relative;
+  background: var(--iv-section-alt);
+}
+.iv-legend-img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.92) contrast(1.04) brightness(0.99);
+  transition: filter 0.22s ease;
+}
+html[data-theme="dark"] .iv-legend-img {
+  filter: saturate(0.88) contrast(1.06) brightness(0.94);
+}
