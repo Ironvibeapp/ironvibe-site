@@ -38,6 +38,7 @@
     persist(theme);
     syncToggleUi();
     syncScreenshotThumbs();
+    if (window.ironVibeGalleryRefresh) window.ironVibeGalleryRefresh();
   }
 
   function toggleTheme() {

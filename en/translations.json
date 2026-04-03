@@ -22,6 +22,8 @@
     "cryptoBaronsTitle": "CRYPTO BARONS",
     "screenshotAria": "Enlarge screenshot",
     "lightboxCloseAria": "Close",
+    "lightboxPrevAria": "Previous screenshot",
+    "lightboxNextAria": "Next screenshot",
     "lightboxAria": "View screenshot",
     "privacyTeaser": "Privacy and data processing:",
     "privacyLinkText": "Privacy Policy",

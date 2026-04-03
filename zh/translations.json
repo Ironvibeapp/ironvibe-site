@@ -22,6 +22,8 @@
     "cryptoBaronsTitle": "加密赞助人",
     "screenshotAria": "放大截图",
     "lightboxCloseAria": "关闭",
+    "lightboxPrevAria": "上一张截图",
+    "lightboxNextAria": "下一张截图",
     "lightboxAria": "查看截图",
     "privacyTeaser": "隐私与数据处理：",
     "privacyLinkText": "隐私政策",
