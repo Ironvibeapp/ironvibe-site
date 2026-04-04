@@ -4,11 +4,19 @@
  */
 (function () {
   var STORAGE_KEY = "user_consent_accepted";
+  var LOCALES = ["en", "ru", "ar", "de", "es", "fr", "hi", "it", "pt", "zh"];
 
   function translationsUrl() {
     var segs = window.location.pathname.replace(/\/$/, "").split("/").filter(Boolean);
-    if (segs.length >= 2 && (segs[1] === "donate" || segs[1] === "privacy")) {
+    if (
+      segs.length >= 2 &&
+      LOCALES.indexOf(segs[0]) !== -1 &&
+      (segs[1] === "donate" || segs[1] === "privacy")
+    ) {
       return "../translations.json";
+    }
+    if (segs.length === 1 && (segs[0] === "privacy" || segs[0] === "donate")) {
+      return "../en/translations.json";
     }
     return "translations.json";
   }
