@@ -37,7 +37,10 @@
     "qrAriaEth": "ETH का QR कोड दिखाएँ",
     "qrAriaUsdt": "USDT का QR कोड दिखाएँ",
     "footerRights": "© 2026 IronVibe. सर्वाधिकार सुरक्षित।",
-    "footerPrivacy": "प्राइवेसी पॉलिसी"
+    "footerPrivacy": "प्राइवेसी पॉलिसी",
+    "consentBannerText": "हम आपके अनुभव को बेहतर बनाने के लिए कुकीज़ का उपयोग करते हैं। आगे बढ़कर, आप पुष्टि करते हैं कि आपकी आयु 18+ है।",
+    "consentAccept": "स्वीकार करें और आगे बढ़ें",
+    "consentAria": "कुकी और आयु संबंधी सूचना"
   },
   "privacy": {
     "metaTitle": "प्राइवेसी पॉलिसी — IronVibe",

@@ -37,7 +37,10 @@
     "qrAriaEth": "BTC-QR-Code anzeigen",
     "qrAriaUsdt": "USDT-QR-Code anzeigen",
     "footerRights": "© 2026 IronVibe. Alle Rechte vorbehalten.",
-    "footerPrivacy": "Datenschutzerklärung"
+    "footerPrivacy": "Datenschutzerklärung",
+    "consentBannerText": "Wir verwenden Cookies, um dein Erlebnis zu verbessern. Mit Fortfahren bestätigst du, dass du 18+ bist.",
+    "consentAccept": "Akzeptieren & weiter",
+    "consentAria": "Hinweis zu Cookies und Altersbestätigung"
   },
   "privacy": {
     "metaTitle": "Datenschutzerklärung – IronVibe",

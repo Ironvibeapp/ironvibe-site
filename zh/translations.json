@@ -36,8 +36,13 @@
     "qrAriaBtc": "显示 BTC 二维码",
     "qrAriaEth": "显示 ETH 二维码",
     "qrAriaUsdt": "显示 USDT 二维码",
-    "footerRights": "© 2026 IronVibe。保留所有权利。",
-    "footerPrivacy": "隐私政策"
+    "footerRights":
+
+ "© 2026 IronVibe。保留所有权利。",
+    "footerPrivacy": "隐私政策",
+    "consentBannerText": "我们使用 Cookie 以改善您的体验。继续即表示您确认已满 18 岁。",
+    "consentAccept": "接受并进入",
+    "consentAria": "Cookie 与年龄确认"
   },
   "privacy": {
     "metaTitle": "隐私政策 — IronVibe",

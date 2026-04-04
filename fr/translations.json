@@ -37,7 +37,10 @@
     "qrAriaEth": "Afficher le QR code ETH",
     "qrAriaUsdt": "Afficher le QR code USDT",
     "footerRights": "© 2026 IronVibe. Tous droits réservés.",
-    "footerPrivacy": "Politique de confidentialité"
+    "footerPrivacy": "Politique de confidentialité",
+    "consentBannerText": "Nous utilisons des cookies pour améliorer votre expérience. En continuant, vous confirmez avoir 18 ans ou plus.",
+    "consentAccept": "Accepter et entrer",
+    "consentAria": "Cookies et confirmation d’âge"
   },
   "privacy": {
     "metaTitle": "Politique de confidentialité — IronVibe",

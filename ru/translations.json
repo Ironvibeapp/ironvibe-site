@@ -37,7 +37,10 @@
     "qrAriaEth": "Показать QR ETH",
     "qrAriaUsdt": "Показать QR USDT",
     "footerRights": "© 2026 IronVibe. Все права защищены.",
-    "footerPrivacy": "Политика конфиденциальности"
+    "footerPrivacy": "Политика конфиденциальности",
+    "consentBannerText": "Мы используем cookie, чтобы улучшить работу сайта. Продолжая, вы подтверждаете, что вам исполнилось 18 лет.",
+    "consentAccept": "Принять и войти",
+    "consentAria": "Уведомление о cookie и возрасте"
   },
   "privacy": {
     "metaTitle": "Политика конфиденциальности — IronVibe",
