@@ -15,7 +15,12 @@
     ) {
       return "../translations.json";
     }
+    /* /privacy/ or /donate/ at site root (no locale segment): use <html lang> or data-locale */
     if (segs.length === 1 && (segs[0] === "privacy" || segs[0] === "donate")) {
+      var dl = document.documentElement.getAttribute("data-locale");
+      if (dl && LOCALES.indexOf(dl) !== -1) return "../" + dl + "/translations.json";
+      var lng = (document.documentElement.getAttribute("lang") || "en").split("-")[0].toLowerCase();
+      if (LOCALES.indexOf(lng) !== -1) return "../" + lng + "/translations.json";
       return "../en/translations.json";
     }
     return "translations.json";
