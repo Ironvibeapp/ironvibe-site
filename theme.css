@@ -365,7 +365,7 @@ html[data-theme="dark"] .iv-legend-img {
   letter-spacing: 0.12em;
 }
 
-/* Cookie + 18+ consent — glass, non-blocking corner (full-width on small screens) */
+/* Cookie + 18+ consent — glass (strong blur), corner on desktop; full-width strip on small screens */
 .iv-consent-banner {
   position: fixed;
   /* Below screenshot lightbox (z-100), above sticky nav (z-50) */
@@ -376,11 +376,13 @@ html[data-theme="dark"] .iv-legend-img {
   inset-inline-end: 1rem;
   /* logical: right in LTR, left in RTL */
   border-radius: 0.75rem;
-  background: rgba(18, 20, 26, 0.78);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  background: rgba(12, 14, 20, 0.72);
+  -webkit-backdrop-filter: blur(16px) saturate(1.25);
+  backdrop-filter: blur(16px) saturate(1.25);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
   opacity: 0;
   transform: translateY(0.5rem);
   transition: opacity 0.35s ease, transform 0.35s ease;
