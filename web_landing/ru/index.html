@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth" data-locale="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>(function(){try{var t=localStorage.getItem('ironvibe-site-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+    <title data-i18n="home.metaTitle">IronVibe</title>
+    <link rel="icon" type="image/png" href="../logo-icon.png?v=3">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../theme.css">
+    <style>
+        .logo-hero { width: 11rem; height: 11rem; }
+        @media (min-width: 768px) { .logo-hero { width: 15rem; height: 15rem; } }
+        .logo-footer { width: 4rem; height: 4rem; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen iv-site opacity-0 transition-opacity duration-300">
+    <nav class="iv-nav sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+            <a href="./" class="iv-nav-brand text-lg">IRONVIBE</a>
+            <div class="flex items-center gap-2 shrink-0">
+                <button type="button" class="iv-theme-toggle" data-theme-toggle data-aria-dark="" data-aria-light="" aria-pressed="false" aria-label=""></button>
+                <a href="privacy/" class="iv-nav-link transition-colors" data-i18n="home.navPrivacy">Privacy Policy</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="flex-grow flex flex-col items-center justify-center text-center px-4 py-20 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full iv-hero-bg -z-10"></div>
+        <div class="z-10 flex flex-col items-center">
+            <div class="flex items-center justify-center mb-8">
+                <img src="../logo_final.png" alt="IronVibe" class="logo-hero object-contain object-center" />
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black tracking-widest mb-2 steel-text">IRONVIBE</h1>
+            <p class="text-lg md:text-xl slogan-text max-w-2xl mx-auto mb-10" data-i18n="home.slogan">YOUR WORKOUT VIBE</p>
+            <p class="iv-prose max-w-xl mx-auto mb-3" data-i18n="home.philosophy1"></p>
+            <p class="iv-prose max-w-xl mx-auto mb-12" data-i18n="home.philosophy2"></p>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-6">
+                <div class="flex flex-col items-center">
+                    <a href="#" class="iv-btn-primary-like font-bold py-4 px-10 rounded-lg text-lg tracking-wider transition-colors flex items-center gap-2 cursor-not-allowed opacity-80"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg><span data-i18n="home.downloadApk">DOWNLOAD APK</span></a>
+                    <span class="text-xs iv-text-soft mt-2" data-i18n="home.internalAlpha">Internal Alpha Access</span>
+                </div>
+                <a href="#" class="inline-block opacity-90 hover:opacity-100 transition-opacity focus:outline-none" aria-label="Get it on Google Play (coming soon)" data-i18n-aria="home.getOnPlayAria">
+                    <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" class="h-14 md:h-16 w-auto" />
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-20 px-4 iv-section-tint">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="glass-panel p-8 rounded-xl text-center transition duration-300">
+                <div class="iv-feature-icon-wrap w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-6">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 4v4m0 8v4m4-8h4M4 12h4M12 7a5 5 0 100 10 5 5 0 000-10z"/>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 iv-feature-title" data-i18n="home.feature1Title">Simplicity and focus</h3>
+                <p class="iv-prose" data-i18n="home.feature1Desc"></p>
+            </div>
+            <div class="glass-panel p-8 rounded-xl text-center transition duration-300">
+                <div class="iv-feature-icon-wrap w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-6">
+                    <svg class="w-8 h-8" viewBox="0 0 64 64" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-width="2.5" d="M18.45 56c-.38 0-.75-.14-1.04-.43-.57-.57-.57-1.5 0-2.08 3.99-3.99 3.26-8.79 2.49-13.88-.81-5.33-1.72-11.37 3.31-16.4 5.04-5.03 11.07-4.12 16.4-3.31 5.09.77 9.9 1.5 13.88-2.49.57-.57 1.5-.57 2.08 0s.57 1.5 0 2.08c-5.04 5.04-11.07 4.12-16.4 3.31-5.09-.77-9.9-1.5-13.88 2.49-3.99 3.99-3.26 8.79-2.49 13.88.81 5.33 1.72 11.37-3.31 16.4-.29.29-.66.43-1.03.43Z"/>
+                        <path stroke-width="2.5" d="M9.47 47.02c-.38 0-.75-.14-1.04-.43-.57-.57-.57-1.5 0-2.08 5.04-5.04 11.08-4.12 16.4-3.31 5.09.77 9.9 1.5 13.88-2.49 3.99-3.99 3.26-8.79 2.49-13.88-.81-5.33-1.72-11.37 3.31-16.4.57-.57 1.5-.57 2.08 0s.57 1.5 0 2.08c-3.99 3.99-3.26 8.79-2.49 13.88.81 5.33 1.72 11.37-3.31 16.4-5.04 5.04-11.07 4.12-16.4 3.31-5.09-.77-9.9-1.5-13.88 2.49-.28.29-.66.43-1.04.43Z"/>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 iv-feature-title" data-i18n="home.feature2Title">Trainer or athlete</h3>
+                <p class="iv-prose" data-i18n="home.feature2Desc"></p>
+            </div>
+            <div class="glass-panel p-8 rounded-xl text-center transition duration-300">
+                <div class="iv-feature-icon-wrap w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-6">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5h9m-9 4h6m-6 4h9m-9 4h6M5 5h.01M5 9h.01M5 13h.01M5 17h.01"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 iv-feature-title" data-i18n="home.feature3Title">Your rules</h3>
+                <p class="iv-prose" data-i18n="home.feature3Desc"></p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-14 md:py-16 px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 md:mb-14 steel-text" data-i18n="home.sectionInterface">INTERFACE</h2>
+        <div class="max-w-5xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-end justify-items-center">
+            <button type="button" class="relative w-full max-w-[165px] lg:max-w-[180px] cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--iv-ring)] rounded-[1.75rem] lg:-translate-y-4" data-screenshot="1" data-i18n-aria="home.screenshotAria"><div class="relative aspect-[9/19] iv-phone-shell rounded-[1.75rem] border-[10px] overflow-hidden transition transform group-hover:scale-[1.02]"><div class="absolute top-0 left-1/2 -translate-x-1/2 w-[4.25rem] h-4 iv-phone-notch rounded-b-lg z-10 border-b border-x"></div><img src="../screenshots/light/1.jpg" alt="IronVibe" class="absolute inset-0 h-[112%] w-full object-cover object-top pt-5 scale-[1.08] origin-top pointer-events-none" loading="lazy" /></div></button>
+            <button type="button" class="relative w-full max-w-[165px] lg:max-w-[180px] cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--iv-ring)] rounded-[1.75rem] lg:-translate-y-4" data-screenshot="2" data-i18n-aria="home.screenshotAria"><div class="relative aspect-[9/19] iv-phone-shell rounded-[1.75rem] border-[10px] overflow-hidden transition transform group-hover:scale-[1.02]"><div class="absolute top-0 left-1/2 -translate-x-1/2 w-[4.25rem] h-4 iv-phone-notch rounded-b-lg z-10 border-b border-x"></div><img src="../screenshots/light/2.jpg" alt="IronVibe" class="absolute inset-0 h-[112%] w-full object-cover object-top pt-5 scale-[1.08] origin-top pointer-events-none" loading="lazy" /></div></button>
+            <button type="button" class="relative w-full max-w-[165px] lg:max-w-[180px] cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--iv-ring)] rounded-[1.75rem] lg:-translate-y-4" data-screenshot="3" data-i18n-aria="home.screenshotAria"><div class="relative aspect-[9/19] iv-phone-shell rounded-[1.75rem] border-[10px] overflow-hidden transition transform group-hover:scale-[1.02]"><div class="absolute top-0 left-1/2 -translate-x-1/2 w-[4.25rem] h-4 iv-phone-notch rounded-b-lg z-10 border-b border-x"></div><img src="../screenshots/light/3.jpg" alt="IronVibe" class="absolute inset-0 h-[112%] w-full object-cover object-top pt-5 scale-[1.08] origin-top pointer-events-none" loading="lazy" /></div></button>
+            <button type="button" class="relative w-full max-w-[165px] lg:max-w-[180px] cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--iv-ring)] rounded-[1.75rem] lg:-translate-y-4" data-screenshot="4" data-i18n-aria="home.screenshotAria"><div class="relative aspect-[9/19] iv-phone-shell rounded-[1.75rem] border-[10px] overflow-hidden transition transform group-hover:scale-[1.02]"><div class="absolute top-0 left-1/2 -translate-x-1/2 w-[4.25rem] h-4 iv-phone-notch rounded-b-lg z-10 border-b border-x"></div><img src="../screenshots/light/4.jpg" alt="IronVibe" class="absolute inset-0 h-[112%] w-full object-cover object-top pt-5 scale-[1.08] origin-top pointer-events-none" loading="lazy" /></div></button>
+        </div>
+    </section>
+
+    <div id="lightbox" class="fixed inset-0 z-[100] hidden items-center justify-center p-4" role="dialog" aria-modal="true" data-i18n-aria="home.lightboxAria">
+        <div id="lightbox-backdrop" class="absolute inset-0 lightbox-backdrop cursor-pointer" aria-hidden="true"></div>
+        <button type="button" id="lightbox-close" class="absolute top-3 right-3 z-[60] flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-white/35 bg-black/55 text-3xl font-light leading-none text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-black/70 hover:border-white/55 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--iv-ring)] md:top-6 md:right-6" data-i18n-aria="home.lightboxCloseAria" aria-label="Close">×</button>
+        <button type="button" id="lightbox-prev" class="absolute left-1 top-1/2 z-[60] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/50 text-white shadow-md backdrop-blur-sm transition-colors hover:bg-black/65 md:left-4 md:h-14 md:w-14" data-i18n-aria="home.lightboxPrevAria" aria-label="Previous screenshot">
+            <svg class="h-7 w-7 md:h-8 md:w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <button type="button" id="lightbox-next" class="absolute right-1 top-1/2 z-[60] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/50 text-white shadow-md backdrop-blur-sm transition-colors hover:bg-black/65 md:right-4 md:h-14 md:w-14" data-i18n-aria="home.lightboxNextAria" aria-label="Next screenshot">
+            <svg class="h-7 w-7 md:h-8 md:w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <div class="relative z-50 pointer-events-none flex max-h-[90vh] max-w-[min(96vw,520px)] items-center justify-center">
+            <img id="lightbox-img" src="" alt="" class="pointer-events-auto max-h-[min(85vh,780px)] w-auto max-w-full rounded-lg object-contain shadow-2xl" />
+        </div>
+    </div>
+
+    <section class="py-16 px-4 iv-section-tint iv-border-y">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 steel-text" data-i18n="home.sectionHallOfFame">НАШИ ЛЕГЕНДЫ</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="glass-panel p-8 rounded-2xl text-center border-iv transition-transform duration-300 ease-out hover:scale-[1.02]">
+                    <div class="iv-legend-thumb mb-4 mx-auto max-w-md overflow-hidden rounded-xl border border-iv" aria-hidden="true">
+                        <img src="../images/hall-of-fame/alpha-squad.webp" alt="" width="720" height="405" loading="lazy" decoding="async" class="iv-legend-img h-48 w-full sm:h-52 md:h-64" />
+                    </div>
+                    <h3 class="text-2xl font-black mb-6 iv-feature-title uppercase tracking-tight" data-i18n="home.alphaGangTitle">Альфа-отряд</h3>
+                    <ul class="iv-legend-roll iv-legend-roll--alpha-squad" role="list">
+                        <li><span class="iv-legend-name steel-text">Savulik</span></li>
+                        <li><span class="iv-legend-name steel-text">MartinsonElvira</span></li>
+                        <li><span class="iv-legend-name steel-text">PI</span></li>
+                        <li><span class="iv-legend-name steel-text">Shizuka</span></li>
+                        <li><span class="iv-legend-name steel-text">Альфия</span></li>
+                    </ul>
+                </div>
+                <div class="glass-panel p-8 rounded-2xl text-center border-iv transition-transform duration-300 ease-out hover:scale-[1.02]">
+                    <div class="iv-legend-thumb mb-4 mx-auto max-w-md overflow-hidden rounded-xl border border-iv" aria-hidden="true">
+                        <img src="../images/hall-of-fame/crypto-barons.webp" alt="" width="720" height="405" loading="lazy" decoding="async" class="iv-legend-img h-48 w-full sm:h-52 md:h-64" />
+                    </div>
+                    <h3 class="text-2xl font-black mb-6 iv-feature-title uppercase tracking-tight" data-i18n="home.cryptoBaronsTitle">Крипто-бароны</h3>
+                    <ul class="iv-legend-roll iv-legend-roll--empty" aria-hidden="true"></ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12 px-4 iv-section-footer border-t">
+        <div class="max-w-4xl mx-auto text-center">
+            <p class="iv-prose text-sm"><span data-i18n="home.privacyTeaser">Privacy and data processing:</span> <a href="privacy/" class="iv-muted-link transition-colors underline" data-i18n="home.privacyLinkText">Privacy Policy</a></p>
+        </div>
+    </section>
+
+    <section class="py-10 px-4 iv-section-tint iv-border-t">
+        <div class="max-w-4xl mx-auto">
+            <button id="donate-toggle" class="iv-donate-toggle w-full flex items-center justify-between px-4 py-3 text-left text-sm md:text-base rounded-lg transition-colors">
+                <span class="tracking-wide uppercase text-xs md:text-sm iv-text-soft" data-i18n="home.supportProject">Support the project</span>
+                <svg id="donate-toggle-icon" class="w-4 h-4 iv-text-soft transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="donate-panel" class="iv-donate-panel mt-3 space-y-4 border rounded-lg px-4 py-4 hidden">
+                <p class="text-xs iv-text-soft mb-1" data-i18n="home.donateIntro"></p>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between gap-3"><span class="iv-feature-title text-sm font-semibold">BTC</span><div class="flex items-center gap-2"><button class="donate-copy-btn iv-icon-btn p-1.5 rounded" data-address="bc1q5jp9nxh0u3v403w9gnpkmvhj2v0fh2qa6t0hlh" data-i18n-aria="home.copyAriaBtc"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8a2 2 0 012 2v8a2 2 0 01-2 2H8a2 2 0 01-2-2V9a2 2 0 012-2z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3H10a2 2 0 00-2 2v0"/></svg></button><button class="donate-qr-btn iv-icon-btn p-1.5 rounded" data-address="bc1q5jp9nxh0u3v403w9gnpkmvhj2v0fh2qa6t0hlh" data-i18n-aria="home.qrAriaBtc"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 3h3v3h-3v-3zM14 11h2v2h-2zM18 11h2v2h-2z"/></svg></button></div></div>
+                    <p class="font-mono text-[11px] md:text-xs iv-prose break-all">bc1q5jp9nxh0u3v403w9gnpkmvhj2v0fh2qa6t0hlh</p>
+                    <div class="donate-qr hidden mt-2"><div class="inline-block p-2 rounded iv-border bg-[var(--iv-page)]"><canvas class="donate-qr-canvas w-32 h-32"></canvas></div></div>
+                </div>
+                <div class="space-y-2 pt-2 iv-border-t">
+                    <div class="flex items-center justify-between gap-3"><span class="iv-feature-title text-sm font-semibold">ETH</span><div class="flex items-center gap-2"><button class="donate-copy-btn iv-icon-btn p-1.5 rounded" data-address="0xE0dE0d3D6F5EB6a03C54BfD96Bbfde0D331F085c" data-i18n-aria="home.copyAriaEth"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8a2 2 0 012 2v8a2 2 0 01-2 2H8a2 2 0 01-2-2V9a2 2 0 012-2z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3H10a2 2 0 00-2 2v0"/></svg></button><button class="donate-qr-btn iv-icon-btn p-1.5 rounded" data-address="0xE0dE0d3D6F5EB6a03C54BfD96Bbfde0D331F085c" data-i18n-aria="home.qrAriaEth"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 3h3v3h-3v-3zM14 11h2v2h-2zM18 11h2v2h-2z"/></svg></button></div></div>
+                    <p class="font-mono text-[11px] md:text-xs iv-prose break-all">0xE0dE0d3D6F5EB6a03C54BfD96Bbfde0D331F085c</p>
+                    <div class="donate-qr hidden mt-2"><div class="inline-block p-2 rounded iv-border bg-[var(--iv-page)]"><canvas class="donate-qr-canvas w-32 h-32"></canvas></div></div>
+                </div>
+                <div class="space-y-2 pt-2 iv-border-t">
+                    <div class="flex items-center justify-between gap-3"><span class="iv-feature-title text-sm font-semibold">USDT (TRC20)</span><div class="flex items-center gap-2"><button class="donate-copy-btn iv-icon-btn p-1.5 rounded" data-address="TNNBuiNzBJSxex4rAWpDLPdVQPcqshF6i3" data-i18n-aria="home.copyAriaUsdt"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8a2 2 0 012 2v8a2 2 0 01-2 2H8a2 2 0 01-2-2V9a2 2 0 012-2z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3H10a2 2 0 00-2 2v0"/></svg></button><button class="donate-qr-btn iv-icon-btn p-1.5 rounded" data-address="TNNBuiNzBJSxex4rAWpDLPdVQPcqshF6i3" data-i18n-aria="home.qrAriaUsdt"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 3h3v3h-3v-3zM14 11h2v2h-2zM18 11h2v2h-2z"/></svg></button></div></div>
+                    <p class="font-mono text-[11px] md:text-xs iv-prose break-all">TNNBuiNzBJSxex4rAWpDLPdVQPcqshF6i3</p>
+                    <div class="donate-qr hidden mt-2"><div class="inline-block p-2 rounded iv-border bg-[var(--iv-page)]"><canvas class="donate-qr-canvas w-32 h-32"></canvas></div></div>
+                </div>
+                <div id="donate-tooltip" class="iv-tooltip fixed inset-x-0 bottom-6 mx-auto w-max px-3 py-1 rounded text-xs backdrop-blur-sm hidden" data-i18n="home.copied">Copied!</div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-10 text-center iv-border-t">
+        <div class="flex justify-center mb-6">
+            <img src="../logo_final.png" alt="IronVibe" class="logo-footer object-contain object-center" />
+        </div>
+        <p class="iv-text-soft text-sm" data-i18n="home.footerRights">© 2026 IronVibe. All rights reserved.</p>
+        <p class="iv-prose text-sm mt-2">
+            <a href="mailto:support@ironvibe.app" class="iv-muted-link transition-colors">support@ironvibe.app</a>
+            ·
+            <a href="privacy/" class="iv-muted-link transition-colors" data-i18n="home.footerPrivacy">Privacy Policy</a>
+        </p>
+        <div class="mt-4 flex items-center justify-center gap-3 iv-text-soft text-xs">
+            <span class="iv-lang-globe inline-flex items-center justify-center w-7 h-7 rounded-full">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3a9 9 0 100 18 9 9 0 000-18z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12h18"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3c2.5 2 4 5.1 4 9s-1.5 7-4 9c-2.5-2-4-5.1-4-9s1.5-7 4-9z"/>
+                </svg>
+            </span>
+            <p class="lang-list iv-lang-list flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+                <a href="/en/">EN</a><span>·</span>
+                <a href="/ru/">RU</a><span>·</span>
+                <a href="/ar/">AR</a><span>·</span>
+                <a href="/de/">DE</a><span>·</span>
+                <a href="/es/">ES</a><span>·</span>
+                <a href="/fr/">FR</a><span>·</span>
+                <a href="/hi/">HI</a><span>·</span>
+                <a href="/it/">IT</a><span>·</span>
+                <a href="/pt/">PT</a><span>·</span>
+                <a href="/zh/">ZH</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="../theme-toggle.js"></script>
+    <script src="../screenshots-lightbox.js"></script>
+    <script src="../consent-banner.js"></script>
+    <script>
+        (function() {
+            var locale = document.documentElement.getAttribute('data-locale') || 'en';
+            var scope = document.body.querySelector('[data-i18n^="privacy."]') ? 'privacy' : 'home';
+            var base = scope === 'privacy' ? '../' : '';
+            fetch(base + 'translations.json').then(function(r){ return r.json(); }).then(function(t){
+                var strings = t[scope] || {};
+                function get(key) { var parts = key.split('.'); var v = t; for (var i = 0; i < parts.length && v; i++) v = v[parts[i]]; return v != null ? String(v) : ''; }
+                document.querySelectorAll('[data-i18n]').forEach(function(el){
+                    var key = el.getAttribute('data-i18n');
+                    if (!key || key.indexOf(scope + '.') !== 0) return;
+                    var val = get(key);
+                    if (val) el.textContent = val;
+                });
+                document.querySelectorAll('[data-i18n-html]').forEach(function(el){
+                    var key = el.getAttribute('data-i18n-html');
+                    if (!key || key.indexOf(scope + '.') !== 0) return;
+                    var val = get(key);
+                    if (val) el.innerHTML = val;
+                });
+                document.querySelectorAll('[data-i18n-aria]').forEach(function(el){
+                    var key = el.getAttribute('data-i18n-aria');
+                    if (!key || key.indexOf(scope + '.') !== 0) return;
+                    var val = get(key);
+                    if (val) el.setAttribute('aria-label', val);
+                });
+                var titleKey = scope + '.metaTitle';
+                if (strings.metaTitle) document.title = strings.metaTitle;
+                var themeBtn = document.querySelector('[data-theme-toggle]');
+                if (themeBtn) {
+                    var al = get('home.themeAriaLight');
+                    var ad = get('home.themeAriaDark');
+                    if (al) themeBtn.setAttribute('data-aria-light', al);
+                    if (ad) themeBtn.setAttribute('data-aria-dark', ad);
+                }
+                setTimeout(function() {
+                    if (window.ironVibeSyncThemeToggle) window.ironVibeSyncThemeToggle();
+                    if (window.ironVibeSyncScreenshotThumbs) window.ironVibeSyncScreenshotThumbs();
+                }, 0);
+            }).catch(function(){});
+        })();
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('opacity-100');
+            var donateToggle = document.getElementById('donate-toggle');
+            var donatePanel = document.getElementById('donate-panel');
+            var donateTooltip = document.getElementById('donate-tooltip');
+            if (donateToggle && donatePanel) { donateToggle.addEventListener('click', function() { var isHidden = donatePanel.classList.contains('hidden'); donatePanel.classList.toggle('hidden'); document.getElementById('donate-toggle-icon').classList.toggle('rotate-180', isHidden); }); }
+            document.querySelectorAll('.donate-copy-btn').forEach(function(btn) { btn.addEventListener('click', async function() { try { await navigator.clipboard.writeText(btn.getAttribute('data-address') || ''); if (donateTooltip) { donateTooltip.classList.remove('hidden'); setTimeout(function() { donateTooltip.classList.add('hidden'); }, 1500); } } catch(e) {} }); });
+            document.querySelectorAll('.donate-qr-btn').forEach(function(btn) { btn.addEventListener('click', function() { var address = btn.getAttribute('data-address') || ''; var block = btn.closest('div.space-y-2'); var qrWrapper = block ? block.querySelector('.donate-qr') : null; var canvas = qrWrapper ? qrWrapper.querySelector('.donate-qr-canvas') : null; if (!qrWrapper || !canvas || !window.QRious) return; document.querySelectorAll('.donate-qr').forEach(function(el) { el.classList.add('hidden'); }); if (qrWrapper.classList.contains('hidden')) { new QRious({ element: canvas, value: address, size: 128, background: 'black', foreground: 'white' }); qrWrapper.classList.remove('hidden'); } else { qrWrapper.classList.add('hidden'); } }); });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

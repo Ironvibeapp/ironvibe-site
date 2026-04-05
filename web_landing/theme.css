@@ -1,0 +1,472 @@
+/* IronVibe landing — light by default; html[data-theme="dark"] for dark */
+
+:root {
+  --iv-page: #f4f6f9;
+  --iv-text: #1b1f26;
+  --iv-text-muted: #5c6475;
+  --iv-text-soft: #6b7280;
+  --iv-nav-bg: rgba(255, 255, 255, 0.94);
+  --iv-nav-border: rgba(15, 23, 42, 0.08);
+  --iv-link: #2563eb;
+  --iv-link-hover: #1d4ed8;
+  --iv-card: rgba(255, 255, 255, 0.92);
+  --iv-card-border: rgba(15, 23, 42, 0.08);
+  --iv-card-hover: rgba(241, 245, 249, 0.95);
+  --iv-section: #e8ecf2;
+  --iv-section-alt: #eef1f6;
+  --iv-donate-panel: #ffffff;
+  --iv-donate-inner: #f8fafc;
+  --iv-hero-glow: rgba(148, 163, 184, 0.25);
+  --iv-steel-from: #1b1f26;
+  --iv-steel-to: #5c6475;
+  --iv-slogan-from: #374151;
+  --iv-slogan-to: #6b7280;
+  --iv-icon-circle: #f1f5f9;
+  --iv-icon-circle-border: rgba(15, 23, 42, 0.1);
+  --iv-feature-icon: #334155;
+  --iv-heading: #0f172a;
+  --iv-lightbox-bg: rgba(15, 23, 42, 0.88);
+  --iv-phone-frame: #0a0a0a;
+  --iv-phone-bezel: #252525;
+  --iv-ring: rgba(37, 99, 235, 0.35);
+  --iv-theme-btn-bg: rgba(15, 23, 42, 0.06);
+  --iv-theme-btn-border: rgba(15, 23, 42, 0.12);
+  --iv-theme-btn-hover: rgba(15, 23, 42, 0.1);
+}
+
+html[data-theme="dark"] {
+  --iv-page: #121212;
+  --iv-text: #e8e8e8;
+  --iv-text-muted: #b8bcc4;
+  --iv-text-soft: #9ca3af;
+  --iv-nav-bg: rgba(18, 18, 18, 0.94);
+  --iv-nav-border: rgba(255, 255, 255, 0.1);
+  --iv-link: #60a5fa;
+  --iv-link-hover: #93c5fd;
+  --iv-card: rgba(30, 33, 38, 0.72);
+  --iv-card-border: rgba(255, 255, 255, 0.1);
+  --iv-card-hover: rgba(30, 33, 38, 0.95);
+  --iv-section: #181818;
+  --iv-section-alt: #151515;
+  --iv-donate-panel: #151515;
+  --iv-donate-inner: #151515;
+  --iv-hero-glow: rgba(55, 65, 81, 0.2);
+  --iv-steel-from: #ffffff;
+  --iv-steel-to: #a0a0a0;
+  --iv-slogan-from: #e5e5e5;
+  --iv-slogan-to: #9ca3af;
+  --iv-icon-circle: #1f2937;
+  --iv-icon-circle-border: rgba(255, 255, 255, 0.1);
+  --iv-feature-icon: #ffffff;
+  --iv-heading: #ffffff;
+  --iv-lightbox-bg: rgba(0, 0, 0, 0.85);
+  --iv-ring: rgba(255, 255, 255, 0.45);
+  --iv-theme-btn-bg: rgba(255, 255, 255, 0.06);
+  --iv-theme-btn-border: rgba(255, 255, 255, 0.12);
+  --iv-theme-btn-hover: rgba(255, 255, 255, 0.1);
+}
+
+body.iv-site {
+  font-family: "Roboto", sans-serif;
+  background-color: var(--iv-page);
+  color: var(--iv-text);
+  transition: background-color 0.22s ease, color 0.22s ease;
+}
+
+.iv-privacy-body a:not(.iv-nav-brand):not(.iv-muted-link),
+.iv-donate-body a:not(.iv-nav-brand):not(.iv-muted-link) {
+  color: var(--iv-link);
+}
+.iv-privacy-body a:not(.iv-nav-brand):not(.iv-muted-link):hover,
+.iv-donate-body a:not(.iv-nav-brand):not(.iv-muted-link):hover {
+  color: var(--iv-link-hover);
+}
+
+.steel-text {
+  background: linear-gradient(180deg, var(--iv-steel-from) 0%, var(--iv-steel-to) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.slogan-text {
+  background: linear-gradient(180deg, var(--iv-slogan-from) 0%, var(--iv-slogan-to) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.glass-panel {
+  background: var(--iv-card);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--iv-card-border);
+  transition: background-color 0.22s ease, border-color 0.22s ease;
+}
+
+.glass-panel:hover {
+  background: var(--iv-card-hover);
+}
+
+.iv-nav {
+  border-bottom: 1px solid var(--iv-nav-border);
+  background: var(--iv-nav-bg);
+  backdrop-filter: blur(10px);
+}
+
+.iv-nav-brand {
+  color: var(--iv-text-secondary, var(--iv-text-muted));
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+.iv-nav-brand:hover {
+  color: var(--iv-heading);
+}
+html[data-theme="dark"] .iv-nav-brand:hover {
+  color: #fff;
+}
+
+.iv-nav-link {
+  color: var(--iv-text-soft);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.iv-nav-link:hover {
+  color: var(--iv-text-muted);
+}
+html[data-theme="dark"] .iv-nav-link:hover {
+  color: #e5e7eb;
+}
+
+.iv-muted-link {
+  color: var(--iv-text-muted);
+}
+.iv-muted-link:hover {
+  color: var(--iv-text);
+}
+
+.iv-hero-bg {
+  background: radial-gradient(ellipse at center, var(--iv-hero-glow) 0%, var(--iv-page) 45%, var(--iv-page) 100%);
+}
+
+.iv-section-tint {
+  background-color: var(--iv-section);
+}
+
+.iv-section-footer {
+  background-color: var(--iv-section-alt);
+  border-color: var(--iv-nav-border);
+}
+
+.iv-feature-icon-wrap {
+  background-color: var(--iv-icon-circle);
+  border: 1px solid var(--iv-icon-circle-border);
+}
+.iv-feature-icon-wrap svg {
+  color: var(--iv-feature-icon);
+}
+
+.iv-feature-title {
+  color: var(--iv-heading);
+}
+
+.iv-text-soft {
+  color: var(--iv-text-soft);
+}
+
+.iv-prose {
+  color: var(--iv-text-muted);
+}
+
+.iv-prose h2 {
+  color: var(--iv-heading);
+}
+
+.iv-lang-globe {
+  background: var(--iv-theme-btn-bg);
+  border: 1px solid var(--iv-theme-btn-border);
+}
+.iv-lang-globe svg {
+  color: var(--iv-text-soft);
+}
+
+.iv-lang-list a {
+  color: var(--iv-text-soft);
+}
+.iv-lang-list a:hover {
+  color: var(--iv-link);
+}
+
+.iv-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  border: 1px solid var(--iv-theme-btn-border);
+  background: var(--iv-theme-btn-bg);
+  color: var(--iv-text-muted);
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+.iv-theme-toggle:hover {
+  background: var(--iv-theme-btn-hover);
+  color: var(--iv-heading);
+}
+html[data-theme="dark"] .iv-theme-toggle:hover {
+  color: #fff;
+}
+.iv-theme-toggle:focus {
+  outline: none;
+}
+.iv-theme-toggle:focus-visible {
+  box-shadow: 0 0 0 2px var(--iv-page), 0 0 0 4px var(--iv-ring);
+}
+
+.lightbox-backdrop {
+  background: var(--iv-lightbox-bg);
+  backdrop-filter: blur(8px);
+}
+
+.iv-phone-shell {
+  background: var(--iv-phone-frame);
+  border-color: #1a1a1a;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.35);
+}
+.iv-phone-notch {
+  background: var(--iv-phone-frame);
+  border-color: var(--iv-phone-bezel);
+}
+
+.iv-btn-primary-like {
+  background: var(--iv-section);
+  color: var(--iv-text);
+  border: 1px solid var(--iv-nav-border);
+}
+.iv-btn-primary-like:hover {
+  background: var(--iv-card-hover);
+}
+html[data-theme="dark"] .iv-btn-primary-like {
+  background: #1f2937;
+  color: #e5e7eb;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+html[data-theme="dark"] .iv-btn-primary-like:hover {
+  background: #374151;
+}
+
+.iv-donate-toggle {
+  color: var(--iv-text-muted);
+  border-color: var(--iv-nav-border);
+  background: var(--iv-theme-btn-bg);
+}
+.iv-donate-toggle:hover {
+  background: var(--iv-theme-btn-hover);
+}
+
+.iv-donate-panel {
+  border-color: var(--iv-nav-border);
+  background: var(--iv-donate-panel);
+}
+
+.iv-donate-row {
+  border-color: var(--iv-nav-border);
+  background: var(--iv-donate-inner);
+}
+
+.iv-icon-btn {
+  background: var(--iv-theme-btn-bg);
+  color: var(--iv-text-muted);
+  border: 1px solid var(--iv-theme-btn-border);
+}
+.iv-icon-btn:hover {
+  background: var(--iv-theme-btn-hover);
+}
+
+.iv-tooltip {
+  background: var(--iv-card);
+  color: var(--iv-text);
+  border-color: var(--iv-nav-border);
+}
+
+.iv-qr-canvas-wrap {
+  background: var(--iv-page);
+  border: 1px solid var(--iv-nav-border);
+}
+
+.steel-border {
+  border-color: var(--iv-nav-border);
+}
+
+.iv-border-t {
+  border-top: 1px solid var(--iv-nav-border);
+}
+
+/* Top + bottom borders that follow theme (Tailwind border-t/b alone uses default gray). */
+.iv-border-y {
+  border-top: 1px solid var(--iv-nav-border);
+  border-bottom: 1px solid var(--iv-nav-border);
+}
+
+/* Optional accent for glass cards (glass-panel already borders; this aligns Tailwind `border-iv`). */
+.border-iv {
+  border-color: var(--iv-card-border);
+}
+
+.iv-border {
+  border: 1px solid var(--iv-nav-border);
+}
+
+[dir="rtl"] .lang-list {
+  flex-direction: row-reverse;
+}
+
+/* Hall of Legends — themed thumbnails (steel / light & dark) */
+.iv-legend-thumb {
+  position: relative;
+  background: var(--iv-section-alt);
+}
+.iv-legend-img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.92) contrast(1.04) brightness(0.99);
+  transition: filter 0.22s ease;
+}
+html[data-theme="dark"] .iv-legend-img {
+  filter: saturate(0.88) contrast(1.06) brightness(0.94);
+}
+
+.iv-legend-roll {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+/* Alpha squad: many names — wrap in rows, smaller type */
+.iv-legend-roll.iv-legend-roll--alpha-squad {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  column-gap: 0.45rem;
+  row-gap: 0.3rem;
+}
+.iv-legend-roll.iv-legend-roll--alpha-squad > li {
+  margin: 0;
+}
+.iv-legend-roll.iv-legend-roll--alpha-squad .iv-legend-name {
+  font-size: clamp(0.78rem, 2.35vw, 1rem);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+}
+.iv-legend-roll.iv-legend-roll--alpha-squad .iv-legend-name.steel-text {
+  letter-spacing: 0.08em;
+}
+.iv-legend-roll.iv-legend-roll--empty {
+  min-height: clamp(2.75rem, 7vw, 4rem);
+}
+.iv-legend-name {
+  display: inline-block;
+  margin: 0;
+  font-size: clamp(1.2rem, 4.8vw, 1.65rem);
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  line-height: 1.35;
+  -webkit-font-smoothing: antialiased;
+}
+.iv-legend-name.steel-text {
+  letter-spacing: 0.12em;
+}
+
+/* Cookie + 18+ consent — glass (strong blur), corner on desktop; full-width strip on small screens */
+.iv-consent-banner {
+  position: fixed;
+  /* Below screenshot lightbox (z-100), above sticky nav (z-50) */
+  z-index: 80;
+  max-width: min(22rem, calc(100vw - 1.5rem));
+  padding: 0.85rem 1rem 1rem;
+  bottom: 1rem;
+  inset-inline-end: 1rem;
+  /* logical: right in LTR, left in RTL */
+  border-radius: 0.75rem;
+  background: rgba(12, 14, 20, 0.72);
+  -webkit-backdrop-filter: blur(16px) saturate(1.25);
+  backdrop-filter: blur(16px) saturate(1.25);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: auto;
+}
+.iv-consent-banner--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.iv-consent-banner--hide {
+  opacity: 0 !important;
+  transform: translateY(0.5rem) !important;
+  pointer-events: none;
+}
+.iv-consent-banner__text {
+  margin: 0 0 0.75rem 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  font-weight: 400;
+  color: rgba(248, 250, 252, 0.92);
+}
+.iv-consent-banner__btn {
+  display: block;
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0f172a;
+  background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.35rem;
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+.iv-consent-banner__btn:hover {
+  filter: brightness(1.05);
+}
+.iv-consent-banner__btn:focus {
+  outline: none;
+}
+.iv-consent-banner__btn:focus-visible {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+@media (max-width: 640px) {
+  .iv-consent-banner {
+    max-width: none;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    inset-inline-end: auto;
+    border-radius: 0.75rem 0.75rem 0 0;
+    padding: 1rem 1rem 1.1rem;
+    padding-bottom: calc(1.1rem + env(safe-area-inset-bottom, 0px));
+  }
+  .iv-consent-banner__text {
+    font-size: 0.875rem;
+  }
+  .iv-consent-banner__btn {
+    font-size: 0.8rem;
+    padding: 0.65rem 0.85rem;
+  }
+}

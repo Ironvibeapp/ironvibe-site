@@ -1,0 +1,20 @@
+# Flutter / Dart (see also Flutter/.gitignore)
+Flutter/build/
+Flutter/.dart_tool/
+Flutter/.flutter-plugins-dependencies
+Flutter/android/.gradle/
+Flutter/android/app/build/
+Flutter/android/local.properties
+Flutter/ios/Pods/
+Flutter/ios/.symlinks/
+
+# IDE
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Web / tooling (optional)
+node_modules/
