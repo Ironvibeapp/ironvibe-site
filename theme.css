@@ -32,10 +32,6 @@
   --iv-theme-btn-bg: rgba(15, 23, 42, 0.06);
   --iv-theme-btn-border: rgba(15, 23, 42, 0.12);
   --iv-theme-btn-hover: rgba(15, 23, 42, 0.1);
-  --iv-tg-star: #f5b400;
-  --iv-tg-star-mid: #ffcc33;
-  --iv-tg-star-glow: rgba(255, 193, 7, 0.9);
-  --iv-tg-star-soft: rgba(255, 200, 0, 0.35);
 }
 
 html[data-theme="dark"] {
@@ -68,10 +64,6 @@ html[data-theme="dark"] {
   --iv-theme-btn-bg: rgba(255, 255, 255, 0.06);
   --iv-theme-btn-border: rgba(255, 255, 255, 0.12);
   --iv-theme-btn-hover: rgba(255, 255, 255, 0.1);
-  --iv-tg-star: #ffda44;
-  --iv-tg-star-mid: #ffe566;
-  --iv-tg-star-glow: rgba(255, 224, 100, 0.95);
-  --iv-tg-star-soft: rgba(255, 220, 80, 0.45);
 }
 
 body.iv-site {
@@ -386,52 +378,63 @@ html[data-theme="dark"] .iv-legend-img {
 .iv-legend-roll.iv-legend-roll--alpha-squad .iv-legend-name.steel-text {
   letter-spacing: 0.08em;
 }
-.iv-alpha-tg-star {
+/* Gold star as SVG background — text color / Tailwind cannot wash it out like Unicode ✦ */
+.iv-legend-roll.iv-legend-roll--alpha-squad .iv-alpha-tg-star {
   display: inline-block;
   flex-shrink: 0;
-  font-size: clamp(0.62rem, 2vw, 0.78rem);
-  line-height: 1;
-  color: var(--iv-tg-star-mid);
-  text-shadow:
-    0 0 6px var(--iv-tg-star-glow),
-    0 0 12px var(--iv-tg-star-soft),
-    0 1px 0 rgba(160, 95, 0, 0.28);
-  animation: iv-tg-star-breathe 1.05s ease-in-out infinite;
-  transform-origin: 50% 55%;
+  width: 0.92em;
+  height: 0.92em;
+  min-width: 0.65rem;
+  min-height: 0.65rem;
+  font-size: clamp(0.75rem, 2.4vw, 0.95rem);
+  line-height: 0;
+  vertical-align: -0.14em;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  /* 4-point sparkle, fill #FFC107 (Telegram-adjacent gold) */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFC107' d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/%3E%3C/svg%3E");
+  animation: iv-tg-star-pulse 1.15s ease-in-out infinite;
+  transform-origin: 50% 50%;
+  will-change: transform, filter;
+}
+html[data-theme="dark"] .iv-legend-roll.iv-legend-roll--alpha-squad .iv-alpha-tg-star {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFEB3B' d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/%3E%3C/svg%3E");
 }
 .iv-alpha-tg-star--r {
-  animation-delay: 0.18s;
+  animation-delay: 0.2s;
 }
 .iv-legend-roll.iv-legend-roll--alpha-squad > li:nth-child(odd) .iv-alpha-tg-star {
-  animation-delay: 0.05s;
+  animation-delay: 0.06s;
 }
 .iv-legend-roll.iv-legend-roll--alpha-squad > li:nth-child(odd) .iv-alpha-tg-star--r {
-  animation-delay: 0.22s;
+  animation-delay: 0.26s;
 }
-@keyframes iv-tg-star-breathe {
+@keyframes iv-tg-star-pulse {
   0%,
   100% {
-    opacity: 0.82;
-    transform: scale(0.9);
-    text-shadow:
-      0 0 4px var(--iv-tg-star-soft),
-      0 0 10px var(--iv-tg-star-glow),
-      0 1px 0 rgba(160, 95, 0, 0.28);
+    opacity: 0.88;
+    transform: scale(0.82) rotate(-6deg);
+    filter: drop-shadow(0 0 2px rgba(255, 193, 7, 0.55))
+      drop-shadow(0 0 6px rgba(255, 193, 7, 0.35));
   }
   50% {
     opacity: 1;
-    transform: scale(1.16);
-    text-shadow:
-      0 0 10px var(--iv-tg-star-glow),
-      0 0 22px var(--iv-tg-star-soft),
-      0 1px 0 rgba(160, 95, 0, 0.22);
+    transform: scale(1.22) rotate(6deg);
+    filter: drop-shadow(0 0 6px rgba(255, 213, 79, 0.95))
+      drop-shadow(0 0 14px rgba(255, 193, 7, 0.65))
+      drop-shadow(0 0 22px rgba(255, 180, 0, 0.35));
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .iv-alpha-tg-star {
+  .iv-legend-roll.iv-legend-roll--alpha-squad .iv-alpha-tg-star {
     animation: none;
     opacity: 1;
     transform: none;
+    filter: drop-shadow(0 0 4px rgba(255, 193, 7, 0.5));
   }
 }
 .iv-legend-roll.iv-legend-roll--empty {
