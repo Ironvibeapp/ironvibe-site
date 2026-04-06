@@ -18,3 +18,7 @@ Thumbs.db
 
 # Web / tooling (optional)
 node_modules/
+
+# Local clones / deploy scratch (not part of this repo)
+ironvibe-site-push/
+ironvibe-site-work/
