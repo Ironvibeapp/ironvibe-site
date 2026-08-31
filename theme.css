@@ -18,7 +18,7 @@
   --iv-section-alt: #eef1f6;
   --iv-donate-panel: #fefefe;
   --iv-donate-inner: #f0f2f7;
-  --iv-hero-glow: rgba(196, 160, 106, 0.2);
+  --iv-hero-glow: rgba(196, 160, 106, 0.34);
   --iv-steel-from: #2a3140;
   --iv-steel-to: #5f6878;
   --iv-slogan-from: #3a4354;
@@ -62,7 +62,7 @@ html[data-theme="dark"] {
   --iv-section-alt: #151515;
   --iv-donate-panel: #1a1e24;
   --iv-donate-inner: #121212;
-  --iv-hero-glow: rgba(196, 160, 106, 0.12);
+  --iv-hero-glow: rgba(196, 160, 106, 0.2);
   --iv-steel-from: #ffffff;
   --iv-steel-to: #9aa3b2;
   --iv-slogan-from: #e4e8f0;
@@ -123,18 +123,19 @@ body.iv-site ::selection {
   letter-spacing: 0.2em;
 }
 
-.glass-panel {
+body.iv-site .glass-panel {
   background: var(--iv-card);
   backdrop-filter: blur(10px);
   border: 0.5px solid var(--iv-card-border);
-  border-radius: 16px;
+  border-radius: 16px !important;
   box-shadow: var(--iv-card-shadow);
   transition: background-color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
 }
 
-.glass-panel:hover {
+body.iv-site .glass-panel:hover {
   background: var(--iv-card-hover);
-  border-color: rgba(196, 160, 106, 0.38);
+  border-color: rgba(196, 160, 106, 0.55);
+  box-shadow: var(--iv-card-shadow), 0 0 0 0.5px rgba(196, 160, 106, 0.28);
 }
 
 .iv-nav {
@@ -172,29 +173,34 @@ body.iv-site ::selection {
   background: radial-gradient(ellipse at center, var(--iv-hero-glow) 0%, var(--iv-page) 45%, var(--iv-page) 100%);
 }
 
-/* Themed mark: light = dark steel, dark = pale steel. No black plate. */
-.iv-logo-slot {
-  position: relative;
-  display: block;
+/* Sketch 16 raster, black plate knocked out. Same light mark in both themes. */
+.logo-hero,
+.logo-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 }
-.iv-logo-slot img {
-  position: absolute;
-  inset: 0;
+.iv-logo {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
   background: transparent;
+  filter:
+    drop-shadow(0 8px 16px rgba(42, 49, 64, 0.22))
+    drop-shadow(0 0 22px rgba(196, 160, 106, 0.38));
 }
-.iv-logo-slot .iv-logo-dark {
-  opacity: 0;
-  pointer-events: none;
+html[data-theme="dark"] .iv-logo {
+  filter: drop-shadow(0 0 18px rgba(196, 160, 106, 0.28));
 }
-html[data-theme="dark"] .iv-logo-slot .iv-logo-light {
-  opacity: 0;
+.logo-footer .iv-logo {
+  filter:
+    drop-shadow(0 2px 6px rgba(42, 49, 64, 0.2))
+    drop-shadow(0 0 10px rgba(196, 160, 106, 0.22));
 }
-html[data-theme="dark"] .iv-logo-slot .iv-logo-dark {
-  opacity: 1;
+html[data-theme="dark"] .logo-footer .iv-logo {
+  filter: drop-shadow(0 0 10px rgba(196, 160, 106, 0.2));
 }
 
 .iv-section-tint {
@@ -206,10 +212,17 @@ html[data-theme="dark"] .iv-logo-slot .iv-logo-dark {
   border-color: var(--iv-nav-border);
 }
 
-.iv-feature-icon-wrap {
-  background: linear-gradient(180deg, var(--iv-icon-metal-from) 0%, var(--iv-icon-metal-to) 100%);
-  border: 1px solid var(--iv-icon-circle-border);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+body.iv-site .iv-feature-icon-wrap {
+  background: linear-gradient(180deg, var(--iv-icon-metal-from) 0%, var(--iv-icon-metal-to) 100%) !important;
+  border: 1.1px solid var(--iv-icon-circle-border);
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+html[data-theme="dark"] body.iv-site .iv-feature-icon-wrap {
+  box-shadow:
+    0 3px 10px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 .iv-feature-icon-wrap svg {
   color: var(--iv-feature-icon);
@@ -288,31 +301,33 @@ html[data-theme="dark"] .iv-logo-slot .iv-logo-dark {
   border-color: var(--iv-phone-bezel);
 }
 
-.iv-btn-primary-like {
-  min-height: 3.25rem;
-  padding: 0.85rem 1.75rem;
+body.iv-site a.iv-btn-primary-like {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.5rem;
+  height: 3.5rem;
+  padding: 0 1.85rem;
   border-radius: 9999px;
-  background: linear-gradient(180deg, var(--iv-cta-from) 0%, var(--iv-cta-to) 100%);
-  color: var(--iv-cta-text);
-  border: 1.5px solid var(--iv-accent);
-  font-weight: 800;
+  background-color: transparent !important;
+  background-image: linear-gradient(180deg, var(--iv-cta-from) 0%, var(--iv-cta-to) 100%) !important;
+  color: var(--iv-cta-text) !important;
+  border: 1.1px solid var(--iv-accent) !important;
+  font-weight: 800 !important;
   letter-spacing: 0.04em;
-  font-size: 0.95rem;
-  line-height: 1.1;
+  font-size: 0.9375rem;
+  line-height: 1;
   box-shadow: 0 8px 18px var(--iv-cta-shadow);
 }
-.iv-btn-primary-like:hover {
+body.iv-site a.iv-btn-primary-like:hover {
   filter: brightness(1.06);
-  background: linear-gradient(180deg, var(--iv-cta-from) 0%, var(--iv-cta-to) 100%);
+  background-image: linear-gradient(180deg, var(--iv-cta-from) 0%, var(--iv-cta-to) 100%) !important;
 }
-html[data-theme="dark"] .iv-btn-primary-like {
-  background: linear-gradient(180deg, var(--iv-cta-from) 0%, var(--iv-cta-to) 100%);
-  color: var(--iv-cta-text);
-  border-color: var(--iv-cta-border);
+html[data-theme="dark"] body.iv-site a.iv-btn-primary-like {
+  border-color: var(--iv-cta-border) !important;
 }
-html[data-theme="dark"] .iv-btn-primary-like:hover {
+html[data-theme="dark"] body.iv-site a.iv-btn-primary-like:hover {
   filter: brightness(1.05);
-  background: linear-gradient(180deg, var(--iv-cta-from) 0%, var(--iv-cta-to) 100%);
 }
 
 .iv-donate-toggle {
