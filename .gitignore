@@ -1,22 +1,35 @@
-# Flutter / Dart (see also Flutter/.gitignore)
+# Flutter / Dart (see also app/.gitignore)
+app/build/
+app/.dart_tool/
+app/.flutter-plugins-dependencies
+app/android/.gradle/
+app/android/app/build/
+app/android/local.properties
+app/ios/Pods/
+app/ios/.symlinks/
 Flutter/build/
 Flutter/.dart_tool/
-Flutter/.flutter-plugins-dependencies
-Flutter/android/.gradle/
-Flutter/android/app/build/
-Flutter/android/local.properties
-Flutter/ios/Pods/
-Flutter/ios/.symlinks/
+
+# Signing — never commit
+**/key.properties
+**/*.jks
+**/*.keystore
+
+# Local release archives (versioned copies on the maintainer machine)
+/IronVibe-1.*.apk
+/IronVibe-1.*.aab
+/IronVibe-*.symbols/
 
 # IDE
 .idea/
 *.iml
+.continue/
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Web / tooling (optional)
+# Web / tooling
 node_modules/
 
 # Local clones / deploy scratch (not part of this repo)

@@ -1,5 +1,127 @@
 part of 'package:fitness_app/main.dart';
 
+String ironVibeRelativeSessionWhen(BuildContext context, DateTime dt) {
+  final l = AppLocalizations.of(context)!;
+  final today = ironVibeDateOnly(DateTime.now());
+  final day = ironVibeDateOnly(dt);
+  final diff = day.difference(today).inDays;
+  if (diff == 0) return l.clientSessionToday;
+  if (diff == -1) return l.clientSessionYesterday;
+  if (diff == 1) return l.clientSessionTomorrow;
+  if (diff < 0) return l.clientSessionDaysAgo(-diff);
+  return l.clientSessionInDays(diff);
+}
+
+String ironVibeTrainerSessionSubtitle(
+  BuildContext context,
+  TrainerSession session,
+) {
+  final l = AppLocalizations.of(context)!;
+  if (ironVibeTrainerSessionHasLoggedData(session)) {
+    return ironVibeWorkoutVolumeLabel(l, session.exercises);
+  }
+  final n = ironVibeTrainerSessionNamedExerciseCount(session);
+  if (n > 0) return l.trainerSessionPlanned(n);
+  return l.trainerSessionEmpty;
+}
+
+Future<void> ironVibeOpenTrainerSession(
+  BuildContext context,
+  TrainerSession session, {
+  TrainerSessionUiMode? mode,
+}) {
+  final resolved = mode ?? ironVibeTrainerSessionUiMode(session);
+  return Navigator.push<void>(
+    context,
+    MaterialPageRoute(
+      builder: (_) => TrainerWorkoutSessionScreen(
+        session: session,
+        mode: resolved,
+        previousSetsAsHints: resolved != TrainerSessionUiMode.history,
+      ),
+    ),
+  );
+}
+
+enum _PlannedSessionAction { start, edit, delete }
+
+Future<bool> ironVibeConfirmDeleteTrainerSessionDialog(
+  BuildContext context, {
+  required bool scheduledNotLogged,
+}) async {
+  final l = AppLocalizations.of(context)!;
+  final result = await showDialog<bool>(
+    context: context,
+    builder: (ctx) {
+      final pal = IronVibePalette.of(ctx);
+      return AlertDialog(
+        backgroundColor: pal.dialog,
+        shape: ironVibeDialogShape(pal),
+        title: Text(
+          scheduledNotLogged ? l.deleteTraining : l.deleteWorkoutTitle,
+          style: TextStyle(
+            color: pal.textPrimary,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(
+          scheduledNotLogged ? l.deleteTrainingQuestion : l.deleteWorkoutMsg,
+          style: TextStyle(color: pal.textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(l.cancel, style: TextStyle(color: pal.textMuted)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(
+              l.delete,
+              style: const TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+  return result == true;
+}
+
+Widget _ironVibeTrainerSectionTitle(BuildContext context, String title) {
+  final pal = IronVibePalette.of(context);
+  return Align(
+    alignment: Alignment.centerLeft,
+    child: Row(
+      children: [
+        Container(
+          width: 3,
+          height: 14,
+          decoration: BoxDecoration(
+            color: kIronVibeAccent,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            ironVibeSentenceCase(title),
+            style: TextStyle(
+              color: pal.textPrimary,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.15,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 class TrainerScreen extends StatefulWidget {
   const TrainerScreen({super.key});
 
@@ -10,15 +132,17 @@ class TrainerScreen extends StatefulWidget {
 class _TrainerScreenState extends State<TrainerScreen> {
   DateTime _focusedMonth = DateTime.now();
   DateTime _selectedDate = DateTime.now();
-  final ScrollController _trainerScrollController = ScrollController();
 
   @override
-  void dispose() {
-    _trainerScrollController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ironVibePurgeExpiredUnloggedTrainerSessionsAndSave();
+      if (mounted) setState(() {});
+    });
   }
 
-  void _addSession() {
+  Future<void> _addSession() async {
     if (clients.isEmpty) {
       showDialog(
         context: context,
@@ -26,16 +150,22 @@ class _TrainerScreenState extends State<TrainerScreen> {
           final pal = IronVibePalette.of(ctx);
           return AlertDialog(
             backgroundColor: pal.dialog,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: pal.borderDefault, width: 0.5),
-              borderRadius: BorderRadius.zero,
+            shape: ironVibeDialogShape(pal),
+            title: Text(
+              AppLocalizations.of(ctx)!.noClientsTitle,
+              style: TextStyle(color: pal.textPrimary),
             ),
-            title: Text(AppLocalizations.of(ctx)!.noClientsTitle, style: TextStyle(color: pal.textPrimary)),
-            content: Text(AppLocalizations.of(ctx)!.noClientsMsg, style: TextStyle(color: pal.textSecondary)),
+            content: Text(
+              AppLocalizations.of(ctx)!.noClientsMsg,
+              style: TextStyle(color: pal.textSecondary),
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: Text(AppLocalizations.of(ctx)!.ok, style: TextStyle(color: pal.textPrimary)),
+                child: Text(
+                  AppLocalizations.of(ctx)!.ok,
+                  style: TextStyle(color: pal.textPrimary),
+                ),
               ),
             ],
           );
@@ -44,113 +174,205 @@ class _TrainerScreenState extends State<TrainerScreen> {
       return;
     }
 
-    Client? selectedClient = clients.first;
-    TimeOfDay selectedTime = const TimeOfDay(hour: 12, minute: 0);
+    Client? selectedClient;
+    final now = DateTime.now();
+    final isToday = ironVibeIsSameCalendarDay(_selectedDate, now);
+    TimeOfDay selectedTime = isToday
+        ? TimeOfDay(hour: now.hour, minute: now.minute)
+        : const TimeOfDay(hour: 12, minute: 0);
     String note = '';
+    var repeatLast = false;
 
-    showDialog(
+    final created = await showDialog<TrainerSession>(
       context: context,
       builder: (dialogCtx) {
         return StatefulBuilder(
-          builder: (context, setState) {
+          builder: (context, setDialogState) {
             final pal = IronVibePalette.of(context);
+            final l = AppLocalizations.of(context)!;
+            final canRepeat = selectedClient != null &&
+                ironVibeLastRepeatableTrainerSession(selectedClient!.name) !=
+                    null;
             return AlertDialog(
               backgroundColor: pal.dialog,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: pal.borderDefault, width: 0.5),
-                borderRadius: BorderRadius.zero,
-              ),
+              shape: ironVibeDialogShape(pal),
               title: Text(
-                AppLocalizations.of(context)!.addTraining,
-                style: TextStyle(color: pal.textPrimary, fontSize: 16, fontWeight: FontWeight.w700),
+                l.addTraining,
+                style: TextStyle(
+                  color: pal.textPrimary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  DropdownButtonFormField<Client>(
-                    initialValue: selectedClient,
-                    dropdownColor: pal.dropdown,
-                    style: TextStyle(color: pal.textPrimary),
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.clientLabel,
-                      labelStyle: TextStyle(color: pal.textMuted),
-                    ),
-                    items: clients.map((c) {
-                      return DropdownMenuItem(
-                        value: c,
-                        child: Text(c.name, style: TextStyle(color: pal.textPrimary)),
-                      );
-                    }).toList(),
-                    onChanged: (val) {
-                      setState(() => selectedClient = val);
-                    },
-                  ),
-                  const SizedBox(height: 15),
-                  InkWell(
-                    onTap: () async {
-                      final time = await showTimePicker(
-                        context: context,
-                        initialTime: selectedTime,
-                        builder: (c2, child) => ironVibeTimePickerTheme(c2, child),
-                      );
-                      if (time != null) {
-                        setState(() => selectedTime = time);
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: pal.borderDefault, width: 0.5),
-                        color: pal.inputFill,
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    DropdownButtonFormField<Client>(
+                      key: ValueKey(selectedClient?.name ?? 'none'),
+                      initialValue: selectedClient,
+                      dropdownColor: pal.dropdown,
+                      style: TextStyle(color: pal.textPrimary),
+                      decoration: InputDecoration(
+                        labelText: l.clientLabel,
+                        labelStyle: TextStyle(color: pal.textMuted),
+                        hintText: l.addSessionPickClient,
+                        hintStyle: TextStyle(color: pal.textHint),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(AppLocalizations.of(context)!.time, style: TextStyle(color: pal.textMuted)),
-                          Text(
-                            '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}',
-                            style: TextStyle(color: pal.textPrimary, fontWeight: FontWeight.bold),
+                      items: clients.map((c) {
+                        return DropdownMenuItem(
+                          value: c,
+                          child: Text(
+                            c.name,
+                            style: TextStyle(color: pal.textPrimary),
                           ),
-                        ],
+                        );
+                      }).toList(),
+                      onChanged: (val) {
+                        setDialogState(() {
+                          selectedClient = val;
+                          if (val == null ||
+                              ironVibeLastRepeatableTrainerSession(val.name) ==
+                                  null) {
+                            repeatLast = false;
+                          }
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    InkWell(
+                      onTap: () async {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: selectedTime,
+                          builder: (c2, child) =>
+                              ironVibeTimePickerTheme(c2, child),
+                        );
+                        if (time != null) {
+                          setDialogState(() => selectedTime = time);
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 15,
+                          horizontal: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: pal.borderSubtle,
+                            width: 0.5,
+                          ),
+                          color: pal.inputFill,
+                          borderRadius: BorderRadius.circular(
+                            kIronVibeRadiusField,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              l.time,
+                              style: TextStyle(color: pal.textMuted),
+                            ),
+                            Text(
+                              '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}',
+                              style: TextStyle(
+                                color: pal.textPrimary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 15),
-                  TextField(
-                    style: TextStyle(color: pal.textPrimary),
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.noteLabel,
-                      labelStyle: TextStyle(color: pal.textMuted),
-                      filled: true,
-                      fillColor: pal.inputFill,
+                    const SizedBox(height: 15),
+                    TextField(
+                      style: TextStyle(color: pal.textPrimary),
+                      decoration: InputDecoration(
+                        labelText: l.noteLabel,
+                        labelStyle: TextStyle(color: pal.textMuted),
+                        filled: true,
+                        fillColor: pal.inputFill,
+                      ),
+                      onChanged: (val) => note = val,
                     ),
-                    onChanged: (val) => note = val,
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        l.repeatLastWorkout,
+                        style: TextStyle(
+                          color: canRepeat ? pal.textPrimary : pal.textMuted,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      value: repeatLast && canRepeat,
+                      activeThumbColor: kIronVibeAccent,
+                      onChanged: canRepeat
+                          ? (val) => setDialogState(() => repeatLast = val)
+                          : null,
+                    ),
+                  ],
+                ),
               ),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(color: pal.textMuted)),
+                  child: Text(
+                    l.cancel,
+                    style: TextStyle(color: pal.textMuted),
+                  ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    if (selectedClient != null) {
-                      final dateTime = DateTime(
-                        _selectedDate.year,
-                        _selectedDate.month,
-                        _selectedDate.day,
-                        selectedTime.hour,
-                        selectedTime.minute,
-                      );
-                      this.setState(() {
-                        trainerSchedule.add(TrainerSession(dateTime, selectedClient!.name, note));
-                      });
-                      DataService.saveData();
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: Text(AppLocalizations.of(context)!.add, style: TextStyle(color: pal.textPrimary, fontWeight: FontWeight.bold)),
+                  onPressed: selectedClient == null
+                      ? null
+                      : () {
+                          final client = selectedClient!;
+                          List<ExerciseLog>? plan;
+                          if (repeatLast) {
+                            final last = ironVibeLastRepeatableTrainerSession(
+                              client.name,
+                            );
+                            if (last == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(l.repeatLastUnavailable),
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                              return;
+                            }
+                            plan = ironVibeTrainerPlanLogsFrom(last);
+                          }
+                          final dateTime = DateTime(
+                            _selectedDate.year,
+                            _selectedDate.month,
+                            _selectedDate.day,
+                            selectedTime.hour,
+                            selectedTime.minute,
+                          );
+                          final session = ironVibeNewTrainerSession(
+                            dateTime: dateTime,
+                            clientName: client.name,
+                            note: note.trim(),
+                            exercises: plan,
+                          );
+                          setState(() {
+                            trainerSchedule.add(session);
+                          });
+                          DataService.saveData();
+                          Navigator.pop(context, session);
+                        },
+                  child: Text(
+                    l.add,
+                    style: TextStyle(
+                      color: selectedClient == null
+                          ? pal.textMuted
+                          : pal.textPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ],
             );
@@ -158,41 +380,58 @@ class _TrainerScreenState extends State<TrainerScreen> {
         );
       },
     );
+    if (!mounted || created == null) return;
+    await ironVibeOpenTrainerSession(
+      context,
+      created,
+      mode: TrainerSessionUiMode.plan,
+    );
+    if (mounted) setState(() {});
   }
 
   List<TrainerSession> _getSessionsForDate(DateTime date) {
-    return trainerSchedule.where((s) =>
-      s.dateTime.year == date.year &&
-      s.dateTime.month == date.month &&
-      s.dateTime.day == date.day
-    ).toList()
-    ..sort((a, b) => a.dateTime.compareTo(b.dateTime));
+    return trainerSchedule
+        .where((s) => ironVibeIsSameCalendarDay(s.dateTime, date))
+        .toList()
+      ..sort((a, b) => a.dateTime.compareTo(b.dateTime));
   }
 
   bool _hasSession(DateTime date) {
-    return trainerSchedule.any((s) =>
-      s.dateTime.year == date.year &&
-      s.dateTime.month == date.month &&
-      s.dateTime.day == date.day
+    return trainerSchedule.any(
+      (s) => ironVibeIsSameCalendarDay(s.dateTime, date),
     );
   }
 
   List<String> _monthNames(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [l.monthJanuary, l.monthFebruary, l.monthMarch, l.monthApril, l.monthMay, l.monthJune, l.monthJuly, l.monthAugust, l.monthSeptember, l.monthOctober, l.monthNovember, l.monthDecember];
+    return [
+      l.monthJanuary,
+      l.monthFebruary,
+      l.monthMarch,
+      l.monthApril,
+      l.monthMay,
+      l.monthJune,
+      l.monthJuly,
+      l.monthAugust,
+      l.monthSeptember,
+      l.monthOctober,
+      l.monthNovember,
+      l.monthDecember,
+    ];
   }
 
   Future<void> _pickMonthYear() async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: _focusedMonth,
+      initialDate: _selectedDate,
       firstDate: DateTime(2020),
       lastDate: DateTime(2030),
       builder: (c, child) => ironVibeDatePickerTheme(c, child),
     );
     if (picked != null) {
       setState(() {
-        _focusedMonth = picked;
+        _selectedDate = picked;
+        _focusedMonth = DateTime(picked.year, picked.month);
       });
     }
   }
@@ -205,10 +444,123 @@ class _TrainerScreenState extends State<TrainerScreen> {
     return DateTime(date.year, date.month, 1).weekday;
   }
 
+  Future<void> _openClients() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ClientListScreen()),
+    );
+    if (mounted) setState(() {});
+  }
+
+  Future<void> _openSession(TrainerSession session) async {
+    if (ironVibeTrainerSessionHasLoggedData(session)) {
+      await ironVibeOpenTrainerSession(context, session);
+      if (mounted) setState(() {});
+      return;
+    }
+
+    final action = await _promptPlannedSessionAction(session);
+    if (!mounted || action == null) return;
+
+    switch (action) {
+      case _PlannedSessionAction.start:
+        await ironVibeOpenTrainerSession(
+          context,
+          session,
+          mode: TrainerSessionUiMode.live,
+        );
+      case _PlannedSessionAction.edit:
+        await ironVibeOpenTrainerSession(
+          context,
+          session,
+          mode: TrainerSessionUiMode.plan,
+        );
+      case _PlannedSessionAction.delete:
+        final confirmed = await ironVibeConfirmDeleteTrainerSessionDialog(
+          context,
+          scheduledNotLogged: true,
+        );
+        if (!confirmed) return;
+        ironVibeRemoveTrainerSession(session);
+        await DataService.saveData();
+        if (mounted) setState(() {});
+        return;
+    }
+    if (mounted) setState(() {});
+  }
+
+  Future<_PlannedSessionAction?> _promptPlannedSessionAction(
+    TrainerSession session,
+  ) {
+    final today = ironVibeDateOnly(DateTime.now());
+    final day = ironVibeDateOnly(session.dateTime);
+    final canStart = day == today;
+    return showDialog<_PlannedSessionAction>(
+      context: context,
+      builder: (ctx) {
+        final pal = IronVibePalette.of(ctx);
+        final l = AppLocalizations.of(ctx)!;
+        return AlertDialog(
+          backgroundColor: pal.dialog,
+          shape: ironVibeDialogShape(pal),
+          title: Text(
+            session.clientName,
+            style: TextStyle(
+              color: pal.textPrimary,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          content: Text(
+            ironVibeTrainerSessionSubtitle(ctx, session),
+            style: TextStyle(color: pal.textSecondary),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(l.cancel, style: TextStyle(color: pal.textMuted)),
+            ),
+            TextButton(
+              onPressed: () =>
+                  Navigator.pop(ctx, _PlannedSessionAction.delete),
+              child: Text(
+                l.delete,
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, _PlannedSessionAction.edit),
+              child: Text(
+                l.editPlan,
+                style: TextStyle(color: pal.textPrimary),
+              ),
+            ),
+            if (canStart)
+              TextButton(
+                onPressed: () =>
+                    Navigator.pop(ctx, _PlannedSessionAction.start),
+                child: Text(
+                  ironVibeSentenceCase(l.startWorkout),
+                  style: TextStyle(
+                    color: pal.textPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final sessions = _getSessionsForDate(_selectedDate);
     final pal = IronVibePalette.of(context);
+    final l = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: SafeArea(
@@ -217,7 +569,6 @@ class _TrainerScreenState extends State<TrainerScreen> {
         left: true,
         right: true,
         child: CustomScrollView(
-          controller: _trainerScrollController,
           slivers: [
             SliverPersistentHeader(
               pinned: true,
@@ -240,19 +591,25 @@ class _TrainerScreenState extends State<TrainerScreen> {
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 16,
+                ),
                 child: TextButton(
                   onPressed: _pickMonthYear,
                   style: TextButton.styleFrom(
                     foregroundColor: pal.textPrimary,
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 16,
+                    ),
                   ),
                   child: Text(
                     '${_monthNames(context)[_focusedMonth.month - 1]} ${_focusedMonth.year}',
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1.2,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.2,
                       color: pal.textPrimary,
                     ),
                   ),
@@ -260,68 +617,52 @@ class _TrainerScreenState extends State<TrainerScreen> {
               ),
             ),
             SliverToBoxAdapter(child: _buildCalendar()),
-            SliverToBoxAdapter(
-              child: Divider(color: pal.borderSubtle, height: 1),
-            ),
             SliverPadding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
               sliver: SliverToBoxAdapter(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SteelButton(
-                      text: AppLocalizations.of(context)!.clientsMenu,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const ClientListScreen()),
-                        );
-                      },
-                      width: double.infinity,
-                      height: 50,
+                    IronVibeNavTile(
+                      icon: Icons.groups_rounded,
+                      label: ironVibeSentenceCase(l.clientsMenu),
+                      horizontal: true,
+                      onPressed: _openClients,
                     ),
-                    const SizedBox(height: 15),
-                    SteelButton(
-                      text: AppLocalizations.of(context)!.addTraining,
+                    const SizedBox(height: 14),
+                    IronVibePrimaryCta(
+                      label: ironVibeSentenceCase(l.addTraining),
+                      icon: Icons.add_rounded,
                       onPressed: _addSession,
-                      width: double.infinity,
-                      height: 50,
-                      fontSize: 13,
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 28),
                     Text(
                       '${_selectedDate.day} ${_monthNames(context)[_selectedDate.month - 1]} ${_selectedDate.year}',
                       style: TextStyle(
                         color: pal.textPrimary,
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
-                        letterSpacing: 1.0,
+                        letterSpacing: 0.2,
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    sessions.isEmpty
-                        ? Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Center(
-                              child: Text(
-                                AppLocalizations.of(context)!.noEntries,
-                                style: TextStyle(color: pal.textMuted),
-                              ),
-                            ),
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              for (int i = 0; i < sessions.length; i++)
-                                _buildTrainerSessionAccordion(
-                                  context,
-                                  sessions[i],
-                                  i + 1,
-                                  hostScroll: _trainerScrollController,
-                                  onChanged: () => setState(() {}),
-                                ),
-                            ],
+                    const SizedBox(height: 16),
+                    if (sessions.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Center(
+                          child: Text(
+                            l.noEntries,
+                            style: TextStyle(color: pal.textMuted),
                           ),
+                        ),
+                      )
+                    else
+                      for (final session in sessions)
+                        _TrainerSessionCard(
+                          session: session,
+                          showClientName: true,
+                          onTap: () => _openSession(session),
+                        ),
                   ],
                 ),
               ),
@@ -339,45 +680,50 @@ class _TrainerScreenState extends State<TrainerScreen> {
     final firstWeekday = _firstWeekdayOfMonth(_focusedMonth);
     final emptyCells = firstWeekday - 1;
     final totalCells = emptyCells + daysInMonth;
+    final pal = IronVibePalette.of(context);
 
-    return Container(
-      padding: const EdgeInsets.only(bottom: 10),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
       child: Center(
-        child: SizedBox(
+        child: Container(
           width: kIronVibeCalendarGridWidth,
-          height: kIronVibeCalendarGridHeight,
-          child: GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            padding: kIronVibeCalendarGridPadding,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 7,
-              mainAxisSpacing: kIronVibeCalendarCellSpacing,
-              crossAxisSpacing: kIronVibeCalendarCellSpacing,
-              childAspectRatio: 1.0,
+          decoration: ironVibeElevatedCardDecoration(pal),
+          child: SizedBox(
+            height: kIronVibeCalendarGridHeight,
+            child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              padding: kIronVibeCalendarGridPadding,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 7,
+                mainAxisSpacing: kIronVibeCalendarCellSpacing,
+                crossAxisSpacing: kIronVibeCalendarCellSpacing,
+                childAspectRatio: 1.0,
+              ),
+              itemCount: totalCells,
+              itemBuilder: (context, index) {
+                if (index < emptyCells) return const SizedBox.shrink();
+
+                final day = index - emptyCells + 1;
+                final date = DateTime(year, month, day);
+                final isSelected = ironVibeIsSameCalendarDay(
+                  date,
+                  _selectedDate,
+                );
+                final hasSession = _hasSession(date);
+
+                return _ironVibeCalendarDayCell(
+                  context,
+                  day: day,
+                  isSelected: isSelected,
+                  hasMark: hasSession,
+                  onTap: () {
+                    setState(() {
+                      _selectedDate = date;
+                    });
+                  },
+                );
+              },
             ),
-            itemCount: totalCells,
-            itemBuilder: (context, index) {
-              if (index < emptyCells) return const SizedBox.shrink();
-
-              final day = index - emptyCells + 1;
-              final date = DateTime(year, month, day);
-              final isSelected = date.year == _selectedDate.year &&
-                  date.month == _selectedDate.month &&
-                  date.day == _selectedDate.day;
-              final hasSession = _hasSession(date);
-
-              return _ironVibeCalendarDayCell(
-                context,
-                day: day,
-                isSelected: isSelected,
-                hasMark: hasSession,
-                onTap: () {
-                  setState(() {
-                    _selectedDate = date;
-                  });
-                },
-              );
-            },
           ),
         ),
       ),
@@ -385,50 +731,204 @@ class _TrainerScreenState extends State<TrainerScreen> {
   }
 }
 
-/// Inline or full-screen editor for a scheduled / past trainer session (same UI everywhere).
+class _TrainerSessionCard extends StatelessWidget {
+  final TrainerSession session;
+  final bool showClientName;
+  final VoidCallback onTap;
+  final String? customTitle;
+
+  const _TrainerSessionCard({
+    required this.session,
+    required this.onTap,
+    this.showClientName = false,
+    this.customTitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final pal = IronVibePalette.of(context);
+    final timeStr =
+        '${session.dateTime.hour.toString().padLeft(2, '0')}:${session.dateTime.minute.toString().padLeft(2, '0')}';
+    final subtitle = ironVibeTrainerSessionSubtitle(context, session);
+    final logged = ironVibeTrainerSessionHasLoggedData(session);
+    final title =
+        customTitle ??
+        (showClientName ? session.clientName : timeStr);
+    final detail = customTitle != null
+        ? subtitle
+        : (showClientName ? '$timeStr · $subtitle' : subtitle);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: IronVibePressScale(
+        onPressed: onTap,
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
+          decoration: ironVibeElevatedCardDecoration(pal),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: pal.textPrimary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      detail,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: pal.textSecondary,
+                        fontSize: 13,
+                      ),
+                    ),
+                    if (session.note.isNotEmpty) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        session.note,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: pal.textMuted,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              Icon(
+                logged
+                    ? Icons.chevron_right_rounded
+                    : Icons.play_arrow_rounded,
+                color: pal.textMuted,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class TrainerSessionEditor extends StatefulWidget {
   final TrainerSession session;
-  /// When false, [Navigator.pop] after save/delete. When true, use [onSaved] / [onDeleted].
-  final bool embedded;
+  final TrainerSessionUiMode mode;
   final ScrollController? hostScrollController;
-  final VoidCallback? onSaved;
-  final VoidCallback? onDeleted;
+  final ActiveWorkoutDraft? restoredDraft;
+  final bool previousSetsAsHints;
+  final VoidCallback? onChanged;
 
   const TrainerSessionEditor({
     super.key,
     required this.session,
-    this.embedded = false,
+    required this.mode,
     this.hostScrollController,
-    this.onSaved,
-    this.onDeleted,
+    this.restoredDraft,
+    this.previousSetsAsHints = false,
+    this.onChanged,
   });
 
   @override
   State<TrainerSessionEditor> createState() => _TrainerSessionEditorState();
 }
 
-class _TrainerSessionEditorState extends State<TrainerSessionEditor> {
+class _TrainerSessionEditorState extends State<TrainerSessionEditor>
+    with WidgetsBindingObserver, IronVibeWorkoutAutoSave {
   late List<ExerciseData> _exercises;
   late bool _isCardio;
+  late final TextEditingController _noteController;
+  bool _suppressPersist = false;
 
   @override
   void initState() {
     super.initState();
-    if (widget.session.exercises.isEmpty) {
+    _noteController = TextEditingController(text: widget.session.note);
+    if (widget.restoredDraft != null) {
+      _isCardio = widget.restoredDraft!.isCardio;
+      _exercises = ironVibeExerciseListFromDraftJson(
+        widget.restoredDraft!.exercisesJson,
+      );
+    } else if (widget.session.exercises.isEmpty) {
       _exercises = [];
       _isCardio = false;
     } else {
       _isCardio = widget.session.exercises.first.isCardio;
-      _exercises = widget.session.exercises.map((log) {
-        final sets = log.sets.map((s) {
-          if (s.isCardio) {
-            return SetData(d: s.duration, i: s.intensity);
-          }
-          return SetData(w: s.weight, r: s.reps, ri: s.rir);
-        }).toList();
-        return ExerciseData(name: log.name, sets: sets, isCardio: log.isCardio);
-      }).toList();
+      _exercises = widget.session.exercises.map(_dataForLog).toList();
     }
+    if (widget.mode == TrainerSessionUiMode.live) {
+      ironVibeStartWorkoutAutoSave(flushDraft: _flushAutoSaveDraft);
+    }
+  }
+
+  @override
+  void dispose() {
+    if (!_suppressPersist) {
+      if (widget.mode == TrainerSessionUiMode.plan) {
+        persistToSession(keepPlanPlaceholders: true);
+        unawaited(DataService.saveData());
+      } else if (widget.mode == TrainerSessionUiMode.history) {
+        persistToSession(keepPlanPlaceholders: false);
+        unawaited(DataService.saveData());
+      }
+    }
+    _noteController.dispose();
+    super.dispose();
+  }
+
+  ExerciseData _dataForLog(ExerciseLog log) {
+    if (widget.mode == TrainerSessionUiMode.history || log.isCardio) {
+      return ironVibeExerciseDataFromLog(log);
+    }
+    if (ironVibeExerciseLogHasLoggedData(log) || !widget.previousSetsAsHints) {
+      return ironVibeExerciseDataFromLog(log);
+    }
+    final last = ironVibeLastExerciseLogFor(
+      log.name,
+      clientName: widget.session.clientName,
+      excludeSession: widget.session,
+    );
+    return ironVibeExerciseDataPlannedWithHints(
+      planned: log,
+      lastLogged: last,
+    );
+  }
+
+  void _flushAutoSaveDraft() {
+    if (!hasDraftWorkout) return;
+    unawaited(
+      DataService.saveActiveWorkoutDraft(
+        ActiveWorkoutDraft(
+          kind: ActiveWorkoutDraftKind.trainer,
+          sessionId: widget.session.id,
+          clientName: widget.session.clientName,
+          sessionDateTime: widget.session.dateTime,
+          sessionNote: _noteController.text.trim(),
+          isCardio: _isCardio,
+          exercisesJson: ironVibeExerciseListToDraftJson(_exercises),
+          savedAt: DateTime.now(),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _clearAutoSaveDraft() async {
+    ironVibeStopWorkoutAutoSave();
+    await DataService.clearActiveWorkoutDraft();
+  }
+
+  void _notifyChanged() {
+    setState(() {});
+    widget.onChanged?.call();
   }
 
   void _scrollHostToEnd() {
@@ -444,164 +944,380 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor> {
     });
   }
 
+  bool get hasDraftWorkout => _exercises.isNotEmpty || _hasAnyInput;
+
+  bool get canSaveWorkout => _logsFromCurrentDraft().isNotEmpty;
+
+  bool get _canStartLive {
+    if (widget.mode != TrainerSessionUiMode.plan) return false;
+    final today = ironVibeDateOnly(DateTime.now());
+    final day = ironVibeDateOnly(widget.session.dateTime);
+    return day == today;
+  }
+
+  bool get _hasAnyInput {
+    if (_noteController.text.trim() != widget.session.note) return true;
+    for (final ex in _exercises) {
+      if (ex.nameController.text.trim().isNotEmpty) return true;
+      for (final s in ex.sets) {
+        if (s.weight.text.trim().isNotEmpty ||
+            s.reps.text.trim().isNotEmpty ||
+            rirIndicatesMeaningfulUserChoice(s.rir.text) ||
+            s.duration.text.trim().isNotEmpty ||
+            s.intensity.text.trim().isNotEmpty) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  IronVibeSessionPrHighlight _sessionPrHighlightForExercise(int index) {
+    if (index < 0 || index >= _exercises.length) {
+      return IronVibeSessionPrHighlight.none;
+    }
+    if (widget.mode == TrainerSessionUiMode.history) {
+      return IronVibeSessionPrHighlight.none;
+    }
+    final ex = _exercises[index];
+    final clientSessions = trainerSchedule.where(
+      (s) => s.clientName == widget.session.clientName,
+    );
+    return ironVibeSessionPrHighlightForDraft(
+      normalizedExerciseName: ex.nameController.text,
+      sessionIsCardio: _isCardio,
+      sets: ex.sets,
+      athleteHistory: null,
+      clientSessions: clientSessions,
+      excludeTrainerSession: widget.session,
+    );
+  }
+
   void _addExercise() {
+    if (_exercises.isNotEmpty) {
+      final last = _exercises.last;
+      final hasName = last.nameController.text.trim().isNotEmpty;
+      final hasSets = last.sets.isNotEmpty;
+      if (!hasName || !hasSets) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.fillCurrentExerciseBeforeAdd,
+            ),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        return;
+      }
+    }
+
     setState(() {
       _exercises.add(ExerciseData());
     });
+    widget.onChanged?.call();
     _scrollHostToEnd();
   }
 
-  void _persistLogsToSession() {
-    List<ExerciseLog> logs = [];
+  void _removeExercise(int index) {
+    if (index < 0 || index >= _exercises.length) return;
+    setState(() {
+      _exercises.removeAt(index);
+    });
+    widget.onChanged?.call();
+  }
 
-    for (var ex in _exercises) {
-      String name = normalizeExerciseName(ex.nameController.text);
+  List<ExerciseLog> _logsFromCurrentDraft({bool keepPlanPlaceholders = false}) {
+    final logs = <ExerciseLog>[];
+
+    for (final ex in _exercises) {
+      final name = normalizeExerciseName(ex.nameController.text);
       if (name.isEmpty) continue;
       ex.nameController.text = name;
-
       ensureExerciseInBank(name);
 
-      List<SetLog> setLogs = [];
-      final setsToProcess = _isCardio && ex.sets.isNotEmpty ? [ex.sets.first] : ex.sets;
-      for (var s in setsToProcess) {
+      final setLogs = <SetLog>[];
+      final setsToProcess = _isCardio && ex.sets.isNotEmpty
+          ? [ex.sets.first]
+          : ex.sets;
+      for (final s in setsToProcess) {
         if (_isCardio) {
-          if (s.duration.text.trim().isNotEmpty || s.intensity.text.trim().isNotEmpty) {
-            setLogs.add(SetLog('', '', '', isCardio: true, duration: s.duration.text.trim(), intensity: s.intensity.text.trim()));
+          if (s.duration.text.trim().isNotEmpty ||
+              s.intensity.text.trim().isNotEmpty) {
+            setLogs.add(
+              SetLog(
+                '',
+                '',
+                '',
+                isCardio: true,
+                duration: s.duration.text.trim(),
+                intensity: s.intensity.text.trim(),
+              ),
+            );
           }
         } else {
           if (s.weight.text.trim().isNotEmpty ||
               s.reps.text.trim().isNotEmpty ||
               rirIndicatesMeaningfulUserChoice(s.rir.text)) {
-            setLogs.add(SetLog(
-              s.weight.text.trim(),
-              s.reps.text.trim(),
-              normalizeRirStored(s.rir.text),
-            ));
+            setLogs.add(
+              SetLog(
+                s.weight.text.trim(),
+                s.reps.text.trim(),
+                normalizeRirStored(s.rir.text),
+              ),
+            );
           }
         }
       }
 
       if (setLogs.isNotEmpty) {
         logs.add(ExerciseLog(name, setLogs, isCardio: _isCardio));
+      } else if (keepPlanPlaceholders) {
+        logs.add(
+          ExerciseLog(
+            name,
+            _isCardio
+                ? [SetLog('', '', '', isCardio: true, duration: '', intensity: '')]
+                : [SetLog('', '', '0')],
+            isCardio: _isCardio,
+          ),
+        );
       }
     }
 
-    setState(() {
-      widget.session.exercises = logs;
-    });
+    return logs;
   }
 
-  void _saveSession() {
-    _persistLogsToSession();
-    DataService.saveData();
-    if (widget.embedded) {
-      widget.onSaved?.call();
-    } else {
-      Navigator.pop(context);
+  List<SetLog> _setLogsFromExerciseData(ExerciseData ex) {
+    final setLogs = <SetLog>[];
+    final setsToProcess = _isCardio && ex.sets.isNotEmpty
+        ? [ex.sets.first]
+        : ex.sets;
+    for (final s in setsToProcess) {
+      if (_isCardio) {
+        if (s.duration.text.trim().isNotEmpty ||
+            s.intensity.text.trim().isNotEmpty) {
+          setLogs.add(
+            SetLog(
+              '',
+              '',
+              '',
+              isCardio: true,
+              duration: s.duration.text.trim(),
+              intensity: s.intensity.text.trim(),
+            ),
+          );
+        }
+      } else {
+        if (s.weight.text.trim().isNotEmpty ||
+            s.reps.text.trim().isNotEmpty ||
+            rirIndicatesMeaningfulUserChoice(s.rir.text)) {
+          setLogs.add(
+            SetLog(
+              s.weight.text.trim(),
+              s.reps.text.trim(),
+              normalizeRirStored(s.rir.text),
+            ),
+          );
+        }
+      }
     }
+    return setLogs;
+  }
+
+  Future<void> _reassignExerciseNameAt(int index) async {
+    if (index < 0 || index >= _exercises.length) return;
+    final picked = await showExerciseReassignPickerDialog(
+      context,
+      initialName: _exercises[index].nameController.text,
+    );
+    if (!mounted) return;
+    if (picked == null) return;
+    final n = normalizeExerciseName(picked);
+    if (n.isEmpty) return;
+
+    final draft = _exercises[index];
+    final setLogs = _setLogsFromExerciseData(draft);
+
+    setState(() {
+      draft.nameController.text = n;
+      ensureExerciseInBank(n);
+      if (widget.previousSetsAsHints && !_isCardio) {
+        ironVibeApplyClientPreviousSetHints(
+          data: draft,
+          clientName: widget.session.clientName,
+          excludeSession: widget.session,
+        );
+      }
+      if (index < widget.session.exercises.length) {
+        final old = widget.session.exercises[index];
+        widget.session.exercises[index] = ExerciseLog(
+          n,
+          setLogs.isNotEmpty ? setLogs : old.sets,
+          isCardio: _isCardio,
+        );
+      }
+    });
+    await DataService.saveData();
+  }
+
+  void persistToSession({required bool keepPlanPlaceholders}) {
+    widget.session.note = _noteController.text.trim();
+    widget.session.exercises = _logsFromCurrentDraft(
+      keepPlanPlaceholders: keepPlanPlaceholders,
+    );
+    ironVibeSyncTrainerSessionInSchedule(widget.session);
+  }
+
+  Future<void> _saveSession({bool celebrate = false}) async {
+    persistToSession(keepPlanPlaceholders: false);
+    unawaited(_clearAutoSaveDraft());
+    if (ironVibeTrainerSessionIsAbandonedStub(widget.session)) {
+      _suppressPersist = true;
+      ironVibeRemoveTrainerSession(widget.session);
+    }
+    DataService.saveData();
+    final didSave = widget.session.exercises.isNotEmpty;
+    if (celebrate && didSave && mounted) {
+      await ironVibeShowWorkoutComplete(context);
+    }
+    if (!mounted) return;
+    Navigator.pop(context);
+  }
+
+  Future<void> _requestSaveSession() async {
+    if (!canSaveWorkout) return;
+    final ok = await ironVibeConfirmFinishWorkout(context);
+    if (!ok || !mounted) return;
+    await _saveSession(celebrate: true);
+  }
+
+  Future<void> saveAndExit() {
+    return _saveSession(celebrate: canSaveWorkout);
+  }
+
+  void persistPlanAndStay() {
+    persistToSession(keepPlanPlaceholders: true);
+    DataService.saveData();
+  }
+
+  void persistHistoryAndStay() {
+    persistToSession(keepPlanPlaceholders: false);
+    DataService.saveData();
+  }
+
+  void discardAutoSavedDraft() {
+    unawaited(_clearAutoSaveDraft());
+  }
+
+  Future<void> _startLiveFromPlan() async {
+    persistToSession(keepPlanPlaceholders: true);
+    DataService.saveData();
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => TrainerWorkoutSessionScreen(
+          session: widget.session,
+          mode: TrainerSessionUiMode.live,
+          previousSetsAsHints: true,
+        ),
+      ),
+    );
   }
 
   bool _isStrictlyFutureSession() {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final sessionDay =
-        DateTime(widget.session.dateTime.year, widget.session.dateTime.month, widget.session.dateTime.day);
+    final today = ironVibeDateOnly(DateTime.now());
+    final sessionDay = ironVibeDateOnly(widget.session.dateTime);
     return sessionDay.isAfter(today);
   }
 
-  void _deleteSession() {
-    final l = AppLocalizations.of(context)!;
-    final useScheduleCopy = _isStrictlyFutureSession();
-    showDialog(
-      context: context,
-      builder: (ctx) {
-        final pal = IronVibePalette.of(ctx);
-        return AlertDialog(
-          backgroundColor: pal.dialog,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: pal.borderDefault, width: 0.5),
-            borderRadius: BorderRadius.zero,
-          ),
-          title: Text(
-            useScheduleCopy ? l.deleteTraining : l.deleteWorkoutTitle,
-            style: TextStyle(color: pal.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          content: Text(
-            useScheduleCopy ? l.deleteTrainingQuestion : l.deleteWorkoutMsg,
-            style: TextStyle(color: pal.textSecondary),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: Text(l.cancel, style: TextStyle(color: pal.textMuted)),
-            ),
-            TextButton(
-              onPressed: () {
-                trainerSchedule.remove(widget.session);
-                DataService.saveData();
-                Navigator.pop(ctx);
-                if (widget.embedded) {
-                  widget.onDeleted?.call();
-                } else {
-                  Navigator.pop(context);
-                }
-              },
-              child: Text(l.delete, style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
-            ),
-          ],
-        );
-      },
+  Future<void> _deleteSession() async {
+    final scheduledNotLogged =
+        !ironVibeTrainerSessionHasLoggedData(widget.session) ||
+        _isStrictlyFutureSession();
+    final confirmed = await ironVibeConfirmDeleteTrainerSessionDialog(
+      context,
+      scheduledNotLogged: scheduledNotLogged,
     );
+    if (!confirmed || !mounted) return;
+    _suppressPersist = true;
+    ironVibeRemoveTrainerSession(widget.session);
+    unawaited(_clearAutoSaveDraft());
+    DataService.saveData();
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     final pal = IronVibePalette.of(context);
-    final segStrTrainer = ironVibeWorkoutTypeSegmentStyle(pal, isStrengthSegment: true, selected: !_isCardio);
-    final segCarTrainer = ironVibeWorkoutTypeSegmentStyle(pal, isStrengthSegment: false, selected: _isCardio);
+    final l = AppLocalizations.of(context)!;
+    final segStrTrainer = ironVibeWorkoutTypeSegmentStyle(
+      pal,
+      isStrengthSegment: true,
+      selected: !_isCardio,
+    );
+    final segCarTrainer = ironVibeWorkoutTypeSegmentStyle(
+      pal,
+      isStrengthSegment: false,
+      selected: _isCardio,
+    );
+    final date = widget.session.dateTime;
+    final timeStr =
+        '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+    final dateStr =
+        '${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (widget.session.note.isNotEmpty) ...[
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(15),
-            margin: const EdgeInsets.only(bottom: 20),
-            decoration: BoxDecoration(
-              color: pal.inputFill,
-              border: Border.all(color: pal.borderDefault, width: 0.5),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.noteLabel,
-                  style: TextStyle(color: pal.textMuted, fontSize: 12, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  widget.session.note,
-                  style: TextStyle(color: pal.textPrimary, fontSize: 16),
-                ),
-              ],
-            ),
+        Text(
+          widget.session.clientName,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: pal.textPrimary,
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0.2,
           ),
-        ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '$dateStr · $timeStr',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: pal.textMuted, fontSize: 13),
+        ),
+        const SizedBox(height: 16),
+        TextField(
+          controller: _noteController,
+          style: TextStyle(color: pal.textPrimary),
+          minLines: 1,
+          maxLines: 3,
+          decoration: InputDecoration(
+            labelText: l.noteLabel,
+            labelStyle: TextStyle(color: pal.textMuted),
+            filled: true,
+            fillColor: pal.inputFill,
+          ),
+          onChanged: (_) => widget.onChanged?.call(),
+        ),
         const SizedBox(height: 16),
         Row(
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: () => setState(() => _isCardio = false),
+                onTap: () {
+                  setState(() => _isCardio = false);
+                  widget.onChanged?.call();
+                },
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
                     color: segStrTrainer.backgroundColor,
-                    border: Border.all(color: pal.borderDefault, width: 0.5),
-                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: pal.borderSubtle, width: 0.5),
+                    borderRadius: BorderRadius.circular(kIronVibeRadiusSegment),
                   ),
                   child: Text(
-                    AppLocalizations.of(context)!.strengthType,
+                    l.strengthType,
                     textAlign: TextAlign.center,
                     style: segStrTrainer.labelStyle,
                   ),
@@ -611,16 +1327,19 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor> {
             const SizedBox(width: 8),
             Expanded(
               child: GestureDetector(
-                onTap: () => setState(() => _isCardio = true),
+                onTap: () {
+                  setState(() => _isCardio = true);
+                  widget.onChanged?.call();
+                },
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
                     color: segCarTrainer.backgroundColor,
-                    border: Border.all(color: pal.borderDefault, width: 0.5),
-                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: pal.borderSubtle, width: 0.5),
+                    borderRadius: BorderRadius.circular(kIronVibeRadiusSegment),
                   ),
                   child: Text(
-                    AppLocalizations.of(context)!.cardioType,
+                    l.cardioType,
                     textAlign: TextAlign.center,
                     style: segCarTrainer.labelStyle,
                   ),
@@ -638,35 +1357,57 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor> {
             return Padding(
               padding: const EdgeInsets.only(bottom: 30),
               child: ExerciseCard(
+                key: ObjectKey(_exercises[index]),
                 data: _exercises[index],
                 forceCardioMode: _isCardio,
                 clientNameForProgress: widget.session.clientName,
                 exerciseIndex: index,
+                onDraftChanged: _notifyChanged,
+                sessionPrHighlight: _sessionPrHighlightForExercise(index),
+                onLongPressReassignExercise: () =>
+                    _reassignExerciseNameAt(index),
+                onRemove: () => _removeExercise(index),
+                previousSetsAsHints: widget.previousSetsAsHints,
+                excludeTrainerSession: widget.session,
               ),
             );
           },
         ),
         const SizedBox(height: 20),
         SteelButton(
-          text: AppLocalizations.of(context)!.addExercise,
+          text: l.addExercise,
+          icon: Icons.add_rounded,
           onPressed: _addExercise,
           width: double.infinity,
-          height: 50,
-          fontSize: 14,
         ),
         const SizedBox(height: 20),
-        SteelButton(
-          text: AppLocalizations.of(context)!.saveWorkout,
-          onPressed: _saveSession,
-          width: double.infinity,
-          height: 70,
-          isBig: true,
-        ),
+        if (widget.mode == TrainerSessionUiMode.live)
+          IgnorePointer(
+            ignoring: !canSaveWorkout,
+            child: Opacity(
+              opacity: canSaveWorkout ? 1.0 : 0.45,
+              child: SteelButton(
+                text: l.finishWorkout,
+                icon: Icons.check_rounded,
+                onPressed: _requestSaveSession,
+                width: double.infinity,
+                isBig: true,
+              ),
+            ),
+          )
+        else if (_canStartLive)
+          SteelButton(
+            text: l.startWorkout,
+            icon: Icons.play_arrow_rounded,
+            onPressed: _startLiveFromPlan,
+            width: double.infinity,
+            isBig: true,
+          ),
         const SizedBox(height: 20),
         TextButton(
           onPressed: _deleteSession,
           child: Text(
-            AppLocalizations.of(context)!.deleteWorkout,
+            l.deleteWorkout,
             style: const TextStyle(
               color: Colors.grey,
               fontSize: 14,
@@ -675,7 +1416,7 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor> {
             ),
           ),
         ),
-        SizedBox(height: widget.embedded ? 8 : 40),
+        const SizedBox(height: 40),
       ],
     );
   }
@@ -683,122 +1424,220 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor> {
 
 class TrainerWorkoutSessionScreen extends StatefulWidget {
   final TrainerSession session;
-  const TrainerWorkoutSessionScreen({super.key, required this.session});
+  final ActiveWorkoutDraft? restoredDraft;
+  final bool previousSetsAsHints;
+  final TrainerSessionUiMode mode;
+
+  const TrainerWorkoutSessionScreen({
+    super.key,
+    required this.session,
+    this.restoredDraft,
+    this.previousSetsAsHints = false,
+    this.mode = TrainerSessionUiMode.live,
+  });
 
   @override
-  State<TrainerWorkoutSessionScreen> createState() => _TrainerWorkoutSessionScreenState();
+  State<TrainerWorkoutSessionScreen> createState() =>
+      _TrainerWorkoutSessionScreenState();
 }
 
-class _TrainerWorkoutSessionScreenState extends State<TrainerWorkoutSessionScreen> {
+enum _TrainerWorkoutSessionExitAction { stay, discard, saveAndLeave }
+
+class _TrainerWorkoutSessionScreenState
+    extends State<TrainerWorkoutSessionScreen> {
   final ScrollController _scrollController = ScrollController();
+  final GlobalKey<_TrainerSessionEditorState> _editorKey =
+      GlobalKey<_TrainerSessionEditorState>();
+
+  bool get _isLive => widget.mode == TrainerSessionUiMode.live;
+
+  @override
+  void initState() {
+    super.initState();
+    if (_isLive) ironVibeSetKeepScreenOn(true);
+  }
 
   @override
   void dispose() {
+    ironVibeSetKeepScreenOn(false);
     _scrollController.dispose();
     super.dispose();
   }
 
+  void _persistQuietly() {
+    final editor = _editorKey.currentState;
+    if (editor == null) return;
+    final stillScheduled = trainerSchedule.any(
+      (s) => _ironVibeSameTrainerSession(s, widget.session),
+    );
+    if (!stillScheduled) return;
+    if (widget.mode == TrainerSessionUiMode.plan) {
+      editor.persistPlanAndStay();
+    } else if (widget.mode == TrainerSessionUiMode.history) {
+      editor.persistHistoryAndStay();
+    }
+  }
+
+  void _leaveLiveWithoutSaving() {
+    _editorKey.currentState?.discardAutoSavedDraft();
+    unawaited(ironVibeDiscardAbandonedTrainerSession(widget.session));
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final editorState = _editorKey.currentState;
+    final hasData =
+        editorState?.hasDraftWorkout ?? widget.session.exercises.isNotEmpty;
     return Scaffold(
-      body: SafeArea(
-        top: true,
-        bottom: true,
-        left: true,
-        right: true,
-        child: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          behavior: HitTestBehavior.translucent,
-          child: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: IronVibePinnedHeaderDelegate(
-                  extent: kIronVibePinnedHeaderExtent,
-                  child: _ironVibeTopBarMaterial(
-                    context,
-                    showStopwatch: true,
-                    leading: _ironVibeHeaderIconButton(
+      body: PopScope(
+        canPop: !_isLive || !hasData,
+        onPopInvokedWithResult: (didPop, result) async {
+          if (didPop) {
+            if (!_isLive) {
+              _persistQuietly();
+            } else {
+              _editorKey.currentState?.discardAutoSavedDraft();
+              unawaited(
+                ironVibeDiscardAbandonedTrainerSession(widget.session),
+              );
+            }
+            return;
+          }
+          if (!_isLive) {
+            _persistQuietly();
+            Navigator.of(context).pop();
+            return;
+          }
+          if (!hasData) {
+            _leaveLiveWithoutSaving();
+            return;
+          }
+          final l = AppLocalizations.of(context)!;
+          final action = await showDialog<_TrainerWorkoutSessionExitAction>(
+            context: context,
+            builder: (ctx) {
+              final dpal = IronVibePalette.of(ctx);
+              return AlertDialog(
+                backgroundColor: dpal.dialog,
+                shape: ironVibeDialogShape(dpal),
+                title: Text(
+                  l.clientProfileUnsavedTitle,
+                  style: TextStyle(
+                    color: dpal.textPrimary,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                content: Text(
+                  l.clientProfileUnsavedMessage,
+                  style: TextStyle(color: dpal.textSecondary),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(
+                      ctx,
+                      _TrainerWorkoutSessionExitAction.stay,
+                    ),
+                    child: Text(
+                      l.clientProfileStay,
+                      style: TextStyle(color: dpal.textMuted),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(
+                      ctx,
+                      _TrainerWorkoutSessionExitAction.discard,
+                    ),
+                    child: Text(
+                      l.clientProfileDiscard,
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(
+                      ctx,
+                      _TrainerWorkoutSessionExitAction.saveAndLeave,
+                    ),
+                    child: Text(
+                      l.clientProfileSaveAndLeave,
+                      style: TextStyle(
+                        color: dpal.textPrimary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+          if (!context.mounted) return;
+          switch (action) {
+            case _TrainerWorkoutSessionExitAction.stay:
+            case null:
+              break;
+            case _TrainerWorkoutSessionExitAction.discard:
+              _leaveLiveWithoutSaving();
+              break;
+            case _TrainerWorkoutSessionExitAction.saveAndLeave:
+              await _editorKey.currentState?.saveAndExit();
+              break;
+          }
+        },
+        child: SafeArea(
+          top: true,
+          bottom: true,
+          left: true,
+          right: true,
+          child: GestureDetector(
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            behavior: HitTestBehavior.translucent,
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: IronVibePinnedHeaderDelegate(
+                    extent: _isLive
+                        ? kIronVibePinnedHeaderExtent
+                        : kIronVibePinnedHeaderExtentLogoOnly,
+                    child: _ironVibeTopBarMaterial(
                       context,
-                      icon: Icons.arrow_back,
-                      onPressed: () => Navigator.pop(context),
+                      showStopwatch: _isLive,
+                      leading: _ironVibeHeaderIconButton(
+                        context,
+                        icon: Icons.arrow_back,
+                        onPressed: () => Navigator.maybePop(context),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-                sliver: SliverToBoxAdapter(
-                  child: TrainerSessionEditor(
-                    session: widget.session,
-                    embedded: false,
-                    hostScrollController: _scrollController,
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+                  sliver: SliverToBoxAdapter(
+                    child: TrainerSessionEditor(
+                      key: _editorKey,
+                      session: widget.session,
+                      mode: widget.mode,
+                      hostScrollController: _scrollController,
+                      restoredDraft: widget.restoredDraft,
+                      previousSetsAsHints: widget.previousSetsAsHints,
+                      onChanged: () {
+                        if (mounted) setState(() {});
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-}
-
-Widget _buildTrainerSessionAccordion(
-  BuildContext context,
-  TrainerSession session,
-  int number, {
-  required ScrollController hostScroll,
-  required VoidCallback onChanged,
-  String? customTitle,
-}) {
-  final l = AppLocalizations.of(context)!;
-  final pal = IronVibePalette.of(context);
-  final timeStr =
-      '${session.dateTime.hour.toString().padLeft(2, '0')}:${session.dateTime.minute.toString().padLeft(2, '0')}';
-  final exerciseCount = session.exercises.length;
-  final title = customTitle ??
-      '${l.workoutNumberPrefix}$number · $timeStr · $exerciseCount · ${session.clientName}';
-  return Container(
-    key: ObjectKey(session),
-    margin: const EdgeInsets.only(bottom: 12),
-    decoration: BoxDecoration(
-      color: pal.card,
-      border: Border.all(color: pal.borderSubtle, width: 0.5),
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: Theme(
-      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        initiallyExpanded: false,
-        tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-        iconColor: pal.textMuted,
-        collapsedIconColor: pal.textMuted,
-        title: Text(
-          title,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: pal.textPrimary,
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.5,
-          ),
-        ),
-        children: [
-          TrainerSessionEditor(
-            session: session,
-            embedded: true,
-            hostScrollController: hostScroll,
-            onSaved: onChanged,
-            onDeleted: onChanged,
-          ),
-        ],
-      ),
-    ),
-  );
 }
 
 class ClientListScreen extends StatefulWidget {
@@ -818,13 +1657,14 @@ class _ClientListScreenState extends State<ClientListScreen> {
         final pal = IronVibePalette.of(ctx);
         return AlertDialog(
           backgroundColor: pal.dialog,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: pal.borderDefault, width: 0.5),
-            borderRadius: BorderRadius.zero,
-          ),
+          shape: ironVibeDialogShape(pal),
           title: Text(
             AppLocalizations.of(ctx)!.newClient,
-            style: TextStyle(color: pal.textPrimary, fontSize: 16, fontWeight: FontWeight.w700),
+            style: TextStyle(
+              color: pal.textPrimary,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -855,7 +1695,10 @@ class _ClientListScreenState extends State<ClientListScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text(AppLocalizations.of(ctx)!.cancel, style: TextStyle(color: pal.textMuted)),
+              child: Text(
+                AppLocalizations.of(ctx)!.cancel,
+                style: TextStyle(color: pal.textMuted),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -867,7 +1710,13 @@ class _ClientListScreenState extends State<ClientListScreen> {
                   Navigator.pop(ctx);
                 }
               },
-              child: Text(AppLocalizations.of(ctx)!.add, style: TextStyle(color: pal.textPrimary, fontWeight: FontWeight.bold)),
+              child: Text(
+                AppLocalizations.of(ctx)!.add,
+                style: TextStyle(
+                  color: pal.textPrimary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         );
@@ -875,8 +1724,27 @@ class _ClientListScreenState extends State<ClientListScreen> {
     );
   }
 
+  String _clientMeta(BuildContext context, Client client) {
+    final l = AppLocalizations.of(context)!;
+    final last = ironVibeLastLoggedTrainerSessionForClient(client.name);
+    final next = ironVibeNextTrainerSessionForClient(client.name);
+    final lastText = last == null
+        ? l.clientNeverTrained
+        : l.clientLastSession(
+            ironVibeRelativeSessionWhen(context, last.dateTime),
+          );
+    final nextText = next == null
+        ? l.clientNoUpcoming
+        : l.clientNextSession(
+            ironVibeRelativeSessionWhen(context, next.dateTime),
+          );
+    return '$lastText · $nextText';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final pal = IronVibePalette.of(context);
+    final l = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(
         top: true,
@@ -895,72 +1763,90 @@ class _ClientListScreenState extends State<ClientListScreen> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(20),
-                itemCount: clients.length,
-              itemBuilder: (context, index) {
-                final client = clients[index];
-                final listPal = IronVibePalette.of(context);
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: InkWell(
-                    onTap: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ClientProfileScreen(client: client),
+              child: clients.isEmpty
+                  ? Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Text(
+                          l.trainerClientsEmpty,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: pal.textMuted, fontSize: 14),
                         ),
-                      );
-                      setState(() {});
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        color: listPal.card,
-                        border: Border.all(color: listPal.borderSubtle, width: 0.5),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            client.name,
-                            style: TextStyle(
-                              color: listPal.textPrimary,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          if (client.goal.isNotEmpty) ...[
-                            const SizedBox(height: 4),
-                            Text(
-                              client.goal,
-                              style: TextStyle(
-                                color: listPal.textSecondary,
-                                fontSize: 13,
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.all(20),
+                      itemCount: clients.length,
+                      itemBuilder: (context, index) {
+                        final client = clients[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: IronVibePressScale(
+                            onPressed: () async {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ClientProfileScreen(client: client),
+                                ),
+                              );
+                              setState(() {});
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(15),
+                              decoration: ironVibeElevatedCardDecoration(pal),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    client.name,
+                                    style: TextStyle(
+                                      color: pal.textPrimary,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  if (client.goal.isNotEmpty) ...[
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      client.goal,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: pal.textSecondary,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ],
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    _clientMeta(context, client),
+                                    style: TextStyle(
+                                      color: pal.textMuted,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ],
-                      ),
+                          ),
+                        );
+                      },
                     ),
-                  ),
-                );
-              },
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SteelButton(
-              text: AppLocalizations.of(context)!.addClient,
-              onPressed: _addClient,
-              width: double.infinity,
-              height: 50,
-              fontSize: 14,
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: SteelButton(
+                text: l.addClient,
+                icon: Icons.person_add_rounded,
+                onPressed: _addClient,
+                width: double.infinity,
+                isBig: true,
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-        ],
-      ),
+            const SizedBox(height: 8),
+          ],
+        ),
       ),
     );
   }
@@ -981,7 +1867,6 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
   late TextEditingController _weightController;
   late TextEditingController _heightController;
   late TextEditingController _notesController;
-  final ScrollController _profileScrollController = ScrollController();
 
   @override
   void initState() {
@@ -990,6 +1875,10 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
     _weightController = TextEditingController(text: widget.client.weight);
     _heightController = TextEditingController(text: widget.client.height);
     _notesController = TextEditingController(text: widget.client.notes);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ironVibePurgeExpiredUnloggedTrainerSessionsAndSave();
+      if (mounted) setState(() {});
+    });
   }
 
   @override
@@ -998,7 +1887,6 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
     _weightController.dispose();
     _heightController.dispose();
     _notesController.dispose();
-    _profileScrollController.dispose();
     super.dispose();
   }
 
@@ -1027,13 +1915,14 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
         final dpal = IronVibePalette.of(ctx);
         return AlertDialog(
           backgroundColor: dpal.dialog,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: dpal.borderDefault, width: 0.5),
-            borderRadius: BorderRadius.zero,
-          ),
+          shape: ironVibeDialogShape(dpal),
           title: Text(
             l.clientProfileUnsavedTitle,
-            style: TextStyle(color: dpal.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: dpal.textPrimary,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           content: Text(
             l.clientProfileUnsavedMessage,
@@ -1041,19 +1930,34 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(ctx, _ClientProfileUnsavedAction.stay),
-              child: Text(l.clientProfileStay, style: TextStyle(color: dpal.textMuted)),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, _ClientProfileUnsavedAction.discard),
+              onPressed: () =>
+                  Navigator.pop(ctx, _ClientProfileUnsavedAction.stay),
               child: Text(
-                l.clientProfileDiscard,
-                style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                l.clientProfileStay,
+                style: TextStyle(color: dpal.textMuted),
               ),
             ),
             TextButton(
-              onPressed: () => Navigator.pop(ctx, _ClientProfileUnsavedAction.saveAndLeave),
-              child: Text(l.clientProfileSaveAndLeave, style: TextStyle(color: dpal.textPrimary, fontWeight: FontWeight.w600)),
+              onPressed: () =>
+                  Navigator.pop(ctx, _ClientProfileUnsavedAction.discard),
+              child: Text(
+                l.clientProfileDiscard,
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () =>
+                  Navigator.pop(ctx, _ClientProfileUnsavedAction.saveAndLeave),
+              child: Text(
+                l.clientProfileSaveAndLeave,
+                style: TextStyle(
+                  color: dpal.textPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ],
         );
@@ -1068,13 +1972,14 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
         final pal = IronVibePalette.of(ctx);
         return AlertDialog(
           backgroundColor: pal.dialog,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: pal.borderDefault, width: 0.5),
-            borderRadius: BorderRadius.zero,
-          ),
+          shape: ironVibeDialogShape(pal),
           title: Text(
             AppLocalizations.of(ctx)!.deleteClientTitle,
-            style: TextStyle(color: pal.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: pal.textPrimary,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           content: Text(
             AppLocalizations.of(ctx)!.deleteClientMsg,
@@ -1083,25 +1988,30 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text(AppLocalizations.of(ctx)!.cancel, style: TextStyle(color: pal.textMuted)),
+              child: Text(
+                AppLocalizations.of(ctx)!.cancel,
+                style: TextStyle(color: pal.textMuted),
+              ),
             ),
             TextButton(
               onPressed: () {
-                final now = DateTime.now();
-                final today = DateTime(now.year, now.month, now.day);
-
+                final today = ironVibeDateOnly(DateTime.now());
                 trainerSchedule.removeWhere((s) {
-                  final sDate = DateTime(s.dateTime.year, s.dateTime.month, s.dateTime.day);
-                  return s.clientName == widget.client.name && !sDate.isBefore(today);
+                  return s.clientName == widget.client.name &&
+                      !ironVibeDateOnly(s.dateTime).isBefore(today);
                 });
-
                 clients.remove(widget.client);
                 DataService.saveData();
-
                 Navigator.pop(ctx);
                 Navigator.pop(context);
               },
-              child: Text(AppLocalizations.of(ctx)!.delete, style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+              child: Text(
+                AppLocalizations.of(ctx)!.delete,
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         );
@@ -1109,24 +2019,145 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
     );
   }
 
+  InputDecoration _fieldDecoration(IronVibePalette pal, {String? hint, String? label}) {
+    return InputDecoration(
+      hintText: hint,
+      labelText: label,
+      alignLabelWithHint: hint != null,
+      hintStyle: TextStyle(color: pal.textHint),
+      labelStyle: TextStyle(color: pal.textMuted),
+      filled: true,
+      fillColor: pal.inputFill,
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: pal.borderSubtle, width: 0.5),
+        borderRadius: BorderRadius.circular(kIronVibeRadiusField),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: kIronVibeAccent, width: 1.6),
+        borderRadius: BorderRadius.circular(kIronVibeRadiusField),
+      ),
+    );
+  }
+
+  TrainerSession? _abandonedTodayStub() {
+    final now = DateTime.now();
+    for (final s in trainerSchedule) {
+      if (s.clientName != widget.client.name) continue;
+      if (!ironVibeIsSameCalendarDay(s.dateTime, now)) continue;
+      if (ironVibeTrainerSessionIsAbandonedStub(s)) return s;
+    }
+    return null;
+  }
+
+  Future<void> _openTodaySession({required bool repeatLast}) async {
+    final l = AppLocalizations.of(context)!;
+    if (repeatLast) {
+      final last = ironVibeLastRepeatableTrainerSession(widget.client.name);
+      if (last == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l.repeatLastUnavailable),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        return;
+      }
+      final existing = _abandonedTodayStub();
+      if (existing != null) {
+        existing.exercises = ironVibeTrainerPlanLogsFrom(last);
+        await DataService.saveData();
+        if (!mounted) return;
+        await ironVibeOpenTrainerSession(
+          context,
+          existing,
+          mode: TrainerSessionUiMode.live,
+        );
+        if (mounted) setState(() {});
+        return;
+      }
+      final session = ironVibeNewTrainerSession(
+        dateTime: DateTime.now(),
+        clientName: widget.client.name,
+        exercises: ironVibeTrainerPlanLogsFrom(last),
+      );
+      trainerSchedule.add(session);
+      await DataService.saveData();
+      if (!mounted) return;
+      await ironVibeOpenTrainerSession(
+        context,
+        session,
+        mode: TrainerSessionUiMode.live,
+      );
+      if (mounted) setState(() {});
+      return;
+    }
+
+    final existing = _abandonedTodayStub();
+    if (existing != null) {
+      await ironVibeOpenTrainerSession(
+        context,
+        existing,
+        mode: TrainerSessionUiMode.live,
+      );
+      if (mounted) setState(() {});
+      return;
+    }
+    final session = ironVibeNewTrainerSession(
+      dateTime: DateTime.now(),
+      clientName: widget.client.name,
+    );
+    trainerSchedule.add(session);
+    await DataService.saveData();
+    if (!mounted) return;
+    await ironVibeOpenTrainerSession(
+      context,
+      session,
+      mode: TrainerSessionUiMode.live,
+    );
+    if (mounted) setState(() {});
+  }
+
+  String _trainerHistoryMonthKey(BuildContext context, DateTime dt) {
+    final l = AppLocalizations.of(context)!;
+    final months = [
+      l.monthJanuary,
+      l.monthFebruary,
+      l.monthMarch,
+      l.monthApril,
+      l.monthMay,
+      l.monthJune,
+      l.monthJuly,
+      l.monthAugust,
+      l.monthSeptember,
+      l.monthOctober,
+      l.monthNovember,
+      l.monthDecember,
+    ];
+    return '${ironVibeSentenceCase(months[dt.month - 1])} ${dt.year}';
+  }
+
   @override
   Widget build(BuildContext context) {
-    final history = trainerSchedule
-        .where((s) => s.clientName == widget.client.name)
-        .toList()
-        ..sort((a, b) => b.dateTime.compareTo(a.dateTime));
+    final history =
+        trainerSchedule
+            .where((s) => s.clientName == widget.client.name)
+            .where(ironVibeTrainerSessionHasLoggedData)
+            .toList()
+          ..sort((a, b) => b.dateTime.compareTo(a.dateTime));
 
-    Map<String, List<TrainerSession>> groupedHistory = {};
-    for (var session in history) {
+    final groupedHistory = <String, List<TrainerSession>>{};
+    for (final session in history) {
       final key = _trainerHistoryMonthKey(context, session.dateTime);
-      if (!groupedHistory.containsKey(key)) {
-        groupedHistory[key] = [];
-      }
-      groupedHistory[key]!.add(session);
+      groupedHistory.putIfAbsent(key, () => []).add(session);
     }
 
     final pal = IronVibePalette.of(context);
+    final l = AppLocalizations.of(context)!;
     final dirty = _isDirty;
+    final last = ironVibeLastLoggedTrainerSessionForClient(widget.client.name);
+    final next = ironVibeNextTrainerSessionForClient(widget.client.name);
+    final canRepeat =
+        ironVibeLastRepeatableTrainerSession(widget.client.name) != null;
 
     return PopScope(
       canPop: !dirty,
@@ -1151,275 +2182,263 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
         }
       },
       child: Scaffold(
-      body: SafeArea(
-        top: true,
-        bottom: true,
-        left: true,
-        right: true,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _ironVibeTopBarMaterial(
-              context,
-              leading: _ironVibeHeaderIconButton(
+        body: SafeArea(
+          top: true,
+          bottom: true,
+          left: true,
+          right: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _ironVibeTopBarMaterial(
                 context,
-                icon: Icons.arrow_back,
-                onPressed: () => Navigator.maybePop(context),
+                leading: _ironVibeHeaderIconButton(
+                  context,
+                  icon: Icons.arrow_back,
+                  onPressed: () => Navigator.maybePop(context),
+                ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
                   children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        controller: _profileScrollController,
-                        child: Column(
-                          children: [
-                            _buildSectionTitle(context, AppLocalizations.of(context)!.clientProfileSectionGoal),
+                    Text(
+                      widget.client.name,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: pal.textPrimary,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      last == null
+                          ? l.clientNeverTrained
+                          : l.clientLastSession(
+                              ironVibeRelativeSessionWhen(
+                                context,
+                                last.dateTime,
+                              ),
+                            ),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: pal.textSecondary, fontSize: 13),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      next == null
+                          ? l.clientNoUpcoming
+                          : l.clientNextSession(
+                              ironVibeRelativeSessionWhen(
+                                context,
+                                next.dateTime,
+                              ),
+                            ),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: pal.textMuted, fontSize: 13),
+                    ),
+                    const SizedBox(height: 20),
+                    IronVibePrimaryCta(
+                      label: ironVibeSentenceCase(l.startWorkout),
+                      icon: Icons.play_arrow_rounded,
+                      onPressed: () => _openTodaySession(repeatLast: false),
+                    ),
+                    if (canRepeat) ...[
+                      const SizedBox(height: 12),
+                      IronVibeSecondaryCta(
+                        label: ironVibeSentenceCase(l.repeatLastWorkout),
+                        icon: Icons.replay_rounded,
+                        onPressed: () => _openTodaySession(repeatLast: true),
+                      ),
+                    ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 24,
+                        horizontal: 12,
+                      ),
+                      child: ironVibeFadeRule(pal),
+                    ),
+                    IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            child: IronVibeNavTile(
+                              icon: Icons.show_chart_rounded,
+                              label: ironVibeSentenceCase(l.personalProgress),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PersonalProgressScreen(
+                                      clientName: widget.client.name,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: IronVibeNavTile(
+                              icon: Icons.star_rounded,
+                              label: ironVibeSentenceCase(l.favoriteExercises),
+                              onPressed: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => FavoriteExercisesScreen(
+                                      clientName: widget.client.name,
+                                    ),
+                                  ),
+                                );
+                                if (mounted) setState(() {});
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 28),
+                    _ironVibeTrainerSectionTitle(
+                      context,
+                      l.clientProfileDetails,
+                    ),
                     const SizedBox(height: 10),
                     TextField(
                       controller: _goalController,
                       style: TextStyle(color: pal.textPrimary),
-                      minLines: 8,
-                      maxLines: 16,
+                      minLines: 3,
+                      maxLines: 8,
                       keyboardType: TextInputType.multiline,
                       textInputAction: TextInputAction.newline,
-                      decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context)!.clientGoal,
-                        alignLabelWithHint: true,
-                        hintStyle: TextStyle(color: pal.textHint),
-                        filled: true,
-                        fillColor: pal.inputFill,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: pal.borderDefault, width: 0.5),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: pal.borderDefault, width: 0.5),
-                        ),
+                      decoration: _fieldDecoration(
+                        pal,
+                        hint: l.clientGoal,
                       ),
                       onChanged: (_) => setState(() {}),
                     ),
-                    const SizedBox(height: 30),
-                    _buildSectionTitle(context, AppLocalizations.of(context)!.clientProfileSectionAnthropometry),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 12),
                     Row(
                       children: [
                         Expanded(
                           child: TextField(
                             controller: _weightController,
-                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
                             style: TextStyle(color: pal.textPrimary),
-                            decoration: InputDecoration(
-                              labelText: AppLocalizations.of(context)!.clientWeight,
-                              labelStyle: TextStyle(color: pal.textMuted),
-                              filled: true,
-                              fillColor: pal.inputFill,
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: pal.borderDefault, width: 0.5),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: pal.borderDefault, width: 0.5),
-                              ),
+                            decoration: _fieldDecoration(
+                              pal,
+                              label: l.clientWeight,
                             ),
                             onChanged: (_) => setState(() {}),
                           ),
                         ),
-                        const SizedBox(width: 20),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: TextField(
                             controller: _heightController,
-                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
                             style: TextStyle(color: pal.textPrimary),
-                            decoration: InputDecoration(
-                              labelText: AppLocalizations.of(context)!.clientHeight,
-                              labelStyle: TextStyle(color: pal.textMuted),
-                              filled: true,
-                              fillColor: pal.inputFill,
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: pal.borderDefault, width: 0.5),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: pal.borderDefault, width: 0.5),
-                              ),
+                            decoration: _fieldDecoration(
+                              pal,
+                              label: l.clientHeight,
                             ),
                             onChanged: (_) => setState(() {}),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 30),
-                    _buildSectionTitle(context, AppLocalizations.of(context)!.clientProfileSectionTrainerNotes),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 12),
                     TextField(
                       controller: _notesController,
                       style: TextStyle(color: pal.textPrimary),
-                      maxLines: 4,
-                      decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context)!.clientTrainerNotesHint,
-                        hintStyle: TextStyle(color: pal.textHint),
-                        filled: true,
-                        fillColor: pal.inputFill,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: pal.borderDefault, width: 0.5),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: pal.borderDefault, width: 0.5),
-                        ),
+                      minLines: 2,
+                      maxLines: 5,
+                      decoration: _fieldDecoration(
+                        pal,
+                        hint: l.clientTrainerNotesHint,
                       ),
                       onChanged: (_) => setState(() {}),
                     ),
-                    const SizedBox(height: 24),
-                    Center(
-                      child: SteelButton(
-                        text: AppLocalizations.of(context)!.personalProgress,
-                        width: 280,
-                        height: 50,
-                        fontSize: 12,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  PersonalProgressScreen(clientName: widget.client.name),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 14),
-                    Center(
-                      child: IgnorePointer(
-                        ignoring: !dirty,
-                        child: Opacity(
-                          opacity: dirty ? 1.0 : 0.45,
-                          child: SteelButton(
-                            text: AppLocalizations.of(context)!.saveClientChanges,
-                            width: 280,
-                            height: 50,
-                            fontSize: 12,
-                            onPressed: _saveChanges,
-                          ),
+                    const SizedBox(height: 16),
+                    IgnorePointer(
+                      ignoring: !dirty,
+                      child: Opacity(
+                        opacity: dirty ? 1.0 : 0.45,
+                        child: SteelButton(
+                          text: l.saveClientChanges,
+                          icon: Icons.check_rounded,
+                          width: double.infinity,
+                          isBig: true,
+                          onPressed: _saveChanges,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 30),
-                    _buildSectionTitle(context, AppLocalizations.of(context)!.clientProfileSectionWorkoutHistory),
+                    const SizedBox(height: 28),
+                    _ironVibeTrainerSectionTitle(
+                      context,
+                      l.clientProfileSectionWorkoutHistory,
+                    ),
                     const SizedBox(height: 10),
                     if (groupedHistory.isEmpty)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 20),
                         child: Text(
-                          AppLocalizations.of(context)!.clientWorkoutHistoryEmpty,
+                          l.clientWorkoutHistoryEmpty,
                           style: TextStyle(color: pal.textMuted),
                         ),
                       )
                     else
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: groupedHistory.length,
-                        itemBuilder: (context, index) {
-                          String monthKey = groupedHistory.keys.elementAt(index);
-                          List<TrainerSession> sessions = groupedHistory[monthKey]!;
-                          
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                child: Text(
-                                  monthKey,
-                                  style: TextStyle(color: pal.textMuted, fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              ...sessions.asMap().entries.map((entry) {
-                                final session = entry.value;
-                                final idx = entry.key + 1;
-                                final timeStr =
-                                    '${session.dateTime.hour.toString().padLeft(2, '0')}:${session.dateTime.minute.toString().padLeft(2, '0')}';
-                                final exCount = session.exercises.length;
-                                final dateStr =
-                                    '${session.dateTime.day.toString().padLeft(2, '0')}.${session.dateTime.month.toString().padLeft(2, '0')}.${session.dateTime.year}';
-                                final noteShort = session.note.isEmpty
-                                    ? AppLocalizations.of(context)!.trainerSessionDefaultTitle
-                                    : session.note;
-                                final customTitle = '$dateStr · $timeStr · $exCount · $noteShort';
-                                return _buildTrainerSessionAccordion(
-                                  context,
-                                  session,
-                                  idx,
-                                  hostScroll: _profileScrollController,
-                                  customTitle: customTitle,
-                                  onChanged: () => setState(() {}),
-                                );
-                              }),
-                              const SizedBox(height: 10),
-                            ],
-                          );
-                        },
-                      ),
-                          ],
+                      for (final monthKey in groupedHistory.keys) ...[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text(
+                            monthKey,
+                            style: TextStyle(
+                              color: pal.textMuted,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        for (final session in groupedHistory[monthKey]!)
+                          _TrainerSessionCard(
+                            session: session,
+                            customTitle:
+                                '${session.dateTime.day.toString().padLeft(2, '0')}.${session.dateTime.month.toString().padLeft(2, '0')}.${session.dateTime.year} · ${session.dateTime.hour.toString().padLeft(2, '0')}:${session.dateTime.minute.toString().padLeft(2, '0')}',
+                            onTap: () async {
+                              await ironVibeOpenTrainerSession(
+                                context,
+                                session,
+                              );
+                              if (mounted) setState(() {});
+                            },
+                          ),
+                      ],
+                    const SizedBox(height: 16),
+                    TextButton(
+                      onPressed: _deleteClient,
+                      child: Text(
+                        l.deleteClientBtn,
+                        style: TextStyle(
+                          color: pal.textMuted,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 1.0,
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            TextButton(
-              onPressed: _deleteClient,
-              child: Text(
-                AppLocalizations.of(context)!.deleteClientBtn,
-                style: TextStyle(
-                  color: pal.textMuted,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 1.0,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-    );
-  }
-
-  Widget _buildSectionTitle(BuildContext context, String title) {
-    final pal = IronVibePalette.of(context);
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        title,
-        style: TextStyle(
-          color: pal.textMuted,
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 1.0,
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  String _trainerHistoryMonthKey(BuildContext context, DateTime dt) {
-    final l = AppLocalizations.of(context)!;
-    final months = [
-      l.monthJanuary,
-      l.monthFebruary,
-      l.monthMarch,
-      l.monthApril,
-      l.monthMay,
-      l.monthJune,
-      l.monthJuly,
-      l.monthAugust,
-      l.monthSeptember,
-      l.monthOctober,
-      l.monthNovember,
-      l.monthDecember,
-    ];
-    return '${months[dt.month - 1].toUpperCase()} ${dt.year}';
   }
 }

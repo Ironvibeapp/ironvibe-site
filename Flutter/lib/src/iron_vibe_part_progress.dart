@@ -1,9 +1,12 @@
 part of 'package:fitness_app/main.dart';
 
-/// One row per calendar day. [maxWeight] = highest weight in a single set that day;
-/// [reps] = highest rep count in a single set that day (independent of which set had the max weight).
+/// One row per calendar day.
+/// [maxWeight] = highest weight in a single set that day.
+/// [reps] = highest rep count in a single set that day (independent of max weight set).
+/// [volumeKg] = sum of weight × reps for sets where both fields are valid.
 /// [clientName] null = my workouts; non-null = trainer view for that client only.
-List<({DateTime date, double maxWeight, int reps})> _getProgressDataForExercise(String exerciseName, {String? clientName}) {
+List<({DateTime date, double maxWeight, int reps, double volumeKg})>
+_getProgressDataForExercise(String exerciseName, {String? clientName}) {
   final name = normalizeExerciseName(exerciseName);
   if (name.isEmpty) return [];
   final Map<DateTime, List<({double w, int r})>> byDate = {};
@@ -29,7 +32,11 @@ List<({DateTime date, double maxWeight, int reps})> _getProgressDataForExercise(
   } else {
     final sessions = trainerSchedule.where((s) => s.clientName == clientName);
     for (final session in sessions) {
-      final d = DateTime(session.dateTime.year, session.dateTime.month, session.dateTime.day);
+      final d = DateTime(
+        session.dateTime.year,
+        session.dateTime.month,
+        session.dateTime.day,
+      );
       for (final ex in session.exercises) {
         if (normalizeExerciseName(ex.name) != name || ex.isCardio) continue;
         addSetsForDay(d, ex.sets);
@@ -37,18 +44,22 @@ List<({DateTime date, double maxWeight, int reps})> _getProgressDataForExercise(
     }
   }
 
-  final out = <({DateTime date, double maxWeight, int reps})>[];
+  final out =
+      <({DateTime date, double maxWeight, int reps, double volumeKg})>[];
   for (final e in byDate.entries) {
     final sets = e.value;
     if (sets.isEmpty) continue;
     var maxW = 0.0;
     var repBest = 0;
+    var dayVolume = 0.0;
     for (final t in sets) {
       if (t.w > maxW) maxW = t.w;
       if (t.r > repBest) repBest = t.r;
+      final v = (t.w > 0 && t.r > 0) ? (t.w * t.r) : 0.0;
+      dayVolume += v;
     }
 
-    out.add((date: e.key, maxWeight: maxW, reps: repBest));
+    out.add((date: e.key, maxWeight: maxW, reps: repBest, volumeKg: dayVolume));
   }
   out.sort((a, b) => a.date.compareTo(b.date));
   return out;
@@ -61,26 +72,50 @@ class _ProgressBottomSheet extends StatefulWidget {
   final double height;
   final String? clientName;
 
-  const _ProgressBottomSheet({required this.exerciseName, required this.height, this.clientName});
+  const _ProgressBottomSheet({
+    required this.exerciseName,
+    required this.height,
+    this.clientName,
+  });
 
   @override
   State<_ProgressBottomSheet> createState() => _ProgressBottomSheetState();
 }
 
 class _ProgressBottomSheetState extends State<_ProgressBottomSheet> {
-  _ProgressFilter _filter = _ProgressFilter.month;
+  _ProgressFilter _filter = _ProgressFilter.all;
 
-  List<({DateTime date, double maxWeight, int reps})> get _allData =>
-      _getProgressDataForExercise(widget.exerciseName, clientName: widget.clientName);
+  List<({DateTime date, double maxWeight, int reps, double volumeKg})>
+  get _allData => _getProgressDataForExercise(
+    widget.exerciseName,
+    clientName: widget.clientName,
+  );
 
-  List<({DateTime date, double maxWeight, int reps})> get _filteredData {
+  List<({DateTime date, double maxWeight, int reps, double volumeKg})>
+  get _filteredData {
     final data = _allData;
     final now = DateTime.now();
+    final monthStart = DateTime(now.year, now.month, 1);
+    final monthEndExclusive = DateTime(now.year, now.month + 1, 1);
+    final yearStart = DateTime(now.year, 1, 1);
+    final yearEndExclusive = DateTime(now.year + 1, 1, 1);
     switch (_filter) {
       case _ProgressFilter.month:
-        return data.where((e) => e.date.year == now.year && e.date.month == now.month).toList();
+        return data
+            .where(
+              (e) =>
+                  !e.date.isBefore(monthStart) &&
+                  e.date.isBefore(monthEndExclusive),
+            )
+            .toList();
       case _ProgressFilter.year:
-        return data.where((e) => e.date.year == now.year).toList();
+        return data
+            .where(
+              (e) =>
+                  !e.date.isBefore(yearStart) &&
+                  e.date.isBefore(yearEndExclusive),
+            )
+            .toList();
       case _ProgressFilter.all:
         return data;
     }
@@ -151,7 +186,11 @@ class _FilterChip extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  const _FilterChip({required this.label, required this.selected, required this.onTap});
+  const _FilterChip({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -165,10 +204,10 @@ class _FilterChip extends StatelessWidget {
           decoration: BoxDecoration(
             color: selected ? pal.chipSelected : Colors.transparent,
             border: Border.all(
-              color: selected ? pal.borderDefault : pal.borderSubtle,
-              width: 0.5,
+              color: selected ? kIronVibeAccent.withValues(alpha: 0.75) : pal.borderSubtle,
+              width: selected ? 1.1 : 0.5,
             ),
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(100),
           ),
           child: Text(
             label,
@@ -197,7 +236,8 @@ double _progressChartBottomXInterval(double maxX) {
 }
 
 class _ProgressChart extends StatelessWidget {
-  final List<({DateTime date, double maxWeight, int reps})> data;
+  final List<({DateTime date, double maxWeight, int reps, double volumeKg})>
+  data;
   final AppLocalizations locale;
 
   const _ProgressChart({required this.data, required this.locale});
@@ -216,13 +256,19 @@ class _ProgressChart extends StatelessWidget {
   Widget build(BuildContext context) {
     if (data.isEmpty) return const SizedBox.shrink();
     final pal = IronVibePalette.of(context);
-    final maxW = data.map((e) => e.maxWeight).fold<double>(0, (double a, double b) => a > b ? a : b);
+    final maxW = data
+        .map((e) => e.maxWeight)
+        .fold<double>(0, (double a, double b) => a > b ? a : b);
     final maxR = data.map((e) => e.reps).fold<int>(0, (a, b) => a > b ? a : b);
+    final maxV = data
+        .map((e) => e.volumeKg)
+        .fold<double>(0, (double a, double b) => a > b ? a : b);
 
     /// Две независимые серии: одна ось X (время), Y нормализован; слева подписи — вес, справа — повторы.
     const norm = 100.0;
     final denomW = maxW > _eps ? maxW : 1.0;
     final denomR = maxR > 0 ? maxR.toDouble() : 1.0;
+    final denomV = maxV > _eps ? maxV : 1.0;
 
     final baseDay = _dayOnly(data.first.date);
     double xForIndex(int i) {
@@ -254,6 +300,10 @@ class _ProgressChart extends StatelessWidget {
       data.length,
       (i) => FlSpot(xForIndex(i), (data[i].reps / denomR) * norm),
     );
+    final volumeSpots = List<FlSpot>.generate(
+      data.length,
+      (i) => FlSpot(xForIndex(i), (data[i].volumeKg / denomV) * norm),
+    );
 
     final dateFormat = DateFormat.yMMMMd(locale.localeName);
 
@@ -263,8 +313,18 @@ class _ProgressChart extends StatelessWidget {
       final pt = data[xi];
       final wStr = _formatWeightTick(pt.maxWeight);
       final base = TextStyle(color: pal.textPrimary, fontSize: 12);
-      final emphasisW = base.copyWith(color: kProgressChartWeightColor, fontWeight: FontWeight.w800);
-      final emphasisR = base.copyWith(color: kProgressChartRepsColor, fontWeight: FontWeight.w800);
+      final emphasisW = base.copyWith(
+        color: kProgressChartWeightColor,
+        fontWeight: FontWeight.w800,
+      );
+      final emphasisR = base.copyWith(
+        color: kProgressChartRepsColor,
+        fontWeight: FontWeight.w800,
+      );
+      final emphasisV = base.copyWith(
+        color: kProgressChartVolumeColor,
+        fontWeight: FontWeight.w800,
+      );
       final item = LineTooltipItem(
         '',
         base,
@@ -274,6 +334,11 @@ class _ProgressChart extends StatelessWidget {
           TextSpan(text: '  ·  ', style: base),
           TextSpan(text: '${pt.reps}', style: emphasisR),
           TextSpan(text: ' ${locale.reps}', style: base),
+          TextSpan(text: '\n', style: base),
+          TextSpan(text: locale.totalVolume, style: base),
+          TextSpan(text: ': ', style: base),
+          TextSpan(text: ironVibeFormatKgTon(pt.volumeKg), style: emphasisV),
+          TextSpan(text: ' ${locale.kg}', style: base),
         ],
       );
       return List<LineTooltipItem?>.generate(
@@ -286,11 +351,15 @@ class _ProgressChart extends StatelessWidget {
       show: true,
       drawVerticalLine: true,
       drawHorizontalLine: true,
-      getDrawingHorizontalLine: (value) => FlLine(color: pal.borderSubtle, strokeWidth: 0.5),
-      getDrawingVerticalLine: (value) => FlLine(color: pal.borderSubtle, strokeWidth: 0.5),
+      getDrawingHorizontalLine: (value) =>
+          FlLine(color: pal.borderSubtle, strokeWidth: 0.5),
+      getDrawingVerticalLine: (value) =>
+          FlLine(color: pal.borderSubtle, strokeWidth: 0.5),
     );
 
-    final hiddenTop = const AxisTitles(sideTitles: SideTitles(showTitles: false));
+    final hiddenTop = const AxisTitles(
+      sideTitles: SideTitles(showTitles: false),
+    );
 
     final touch = LineTouchData(
       touchSpotThreshold: 28,
@@ -303,40 +372,58 @@ class _ProgressChart extends StatelessWidget {
     );
 
     LineChartBarData weightBar(Color c, double r) => LineChartBarData(
-          spots: weightSpots,
-          isCurved: false,
+      spots: weightSpots,
+      isCurved: false,
+      color: c,
+      barWidth: 2.5,
+      isStrokeCapRound: true,
+      dotData: FlDotData(
+        show: true,
+        getDotPainter: (spot, xPercentage, bar, index) => FlDotCirclePainter(
+          radius: r,
           color: c,
-          barWidth: 2.5,
-          isStrokeCapRound: true,
-          dotData: FlDotData(
-            show: true,
-            getDotPainter: (spot, xPercentage, bar, index) => FlDotCirclePainter(
-              radius: r,
-              color: c,
-              strokeWidth: 1,
-              strokeColor: pal.borderDefault,
-            ),
-          ),
-          belowBarData: BarAreaData(show: false),
-        );
+          strokeWidth: 1,
+          strokeColor: pal.borderDefault,
+        ),
+      ),
+      belowBarData: BarAreaData(show: false),
+    );
 
     LineChartBarData repsBar(Color c, double r) => LineChartBarData(
-          spots: repsSpots,
-          isCurved: false,
+      spots: repsSpots,
+      isCurved: false,
+      color: c,
+      barWidth: 2.5,
+      isStrokeCapRound: true,
+      dotData: FlDotData(
+        show: true,
+        getDotPainter: (spot, xPercentage, bar, index) => FlDotCirclePainter(
+          radius: r,
           color: c,
-          barWidth: 2.5,
-          isStrokeCapRound: true,
-          dotData: FlDotData(
-            show: true,
-            getDotPainter: (spot, xPercentage, bar, index) => FlDotCirclePainter(
-              radius: r,
-              color: c,
-              strokeWidth: 1.25,
-              strokeColor: pal.borderDefault,
-            ),
-          ),
-          belowBarData: BarAreaData(show: false),
-        );
+          strokeWidth: 1.25,
+          strokeColor: pal.borderDefault,
+        ),
+      ),
+      belowBarData: BarAreaData(show: false),
+    );
+
+    LineChartBarData volumeBar(Color c, double r) => LineChartBarData(
+      spots: volumeSpots,
+      isCurved: false,
+      color: c,
+      barWidth: 2.25,
+      isStrokeCapRound: true,
+      dotData: FlDotData(
+        show: true,
+        getDotPainter: (spot, xPercentage, bar, index) => FlDotCirclePainter(
+          radius: r,
+          color: c,
+          strokeWidth: 1,
+          strokeColor: pal.borderDefault,
+        ),
+      ),
+      belowBarData: BarAreaData(show: false),
+    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -368,13 +455,18 @@ class _ProgressChart extends StatelessWidget {
                   axisNameSize: 22,
                   sideTitles: SideTitles(
                     showTitles: maxW > _eps,
-                    reservedSize: maxW > _eps ? _kProgressChartLeftAxisReserve : 8,
+                    reservedSize: maxW > _eps
+                        ? _kProgressChartLeftAxisReserve
+                        : 8,
                     interval: 25,
                     getTitlesWidget: (value, meta) {
                       final w = (value / norm) * denomW;
                       return Text(
                         _formatWeightTick(w),
-                        style: TextStyle(color: pal.textSecondary, fontSize: 10),
+                        style: TextStyle(
+                          color: pal.textSecondary,
+                          fontSize: 10,
+                        ),
                       );
                     },
                   ),
@@ -396,14 +488,18 @@ class _ProgressChart extends StatelessWidget {
                   axisNameSize: 22,
                   sideTitles: SideTitles(
                     showTitles: maxR > 0,
-                    reservedSize: maxR > 0 ? _kProgressChartRightAxisReserve : 8,
+                    reservedSize: maxR > 0
+                        ? _kProgressChartRightAxisReserve
+                        : 8,
                     interval: 25,
                     getTitlesWidget: (value, meta) {
                       final r = (value / norm) * denomR;
                       return Text(
                         '${r.round()}',
                         style: TextStyle(
-                          color: kProgressChartRepsColor.withValues(alpha: 0.92),
+                          color: kProgressChartRepsColor.withValues(
+                            alpha: 0.92,
+                          ),
                           fontSize: 10,
                         ),
                       );
@@ -427,7 +523,9 @@ class _ProgressChart extends StatelessWidget {
                           bestI = i;
                         }
                       }
-                      if (bestI == null || bestDx > 0.55) return const SizedBox.shrink();
+                      if (bestI == null || bestDx > 0.55) {
+                        return const SizedBox.shrink();
+                      }
                       final d = data[bestI].date;
                       return Padding(
                         padding: const EdgeInsets.only(top: 4),
@@ -444,6 +542,7 @@ class _ProgressChart extends StatelessWidget {
               lineBarsData: [
                 weightBar(kProgressChartWeightColor, 5),
                 repsBar(kProgressChartRepsColor, 4),
+                volumeBar(kProgressChartVolumeColor, 3.6),
               ],
               lineTouchData: touch,
             ),
@@ -451,8 +550,11 @@ class _ProgressChart extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        Wrap(
+          alignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 20,
+          runSpacing: 6,
           children: [
             Container(
               width: 10,
@@ -464,22 +566,19 @@ class _ProgressChart extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Flexible(
-              child: Text(
-                locale.progressChartWeightLegend,
-                locale: Localizations.localeOf(context),
-                style: TextStyle(
-                  color: pal.textSecondary,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.12,
-                  height: 1.2,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+            Text(
+              locale.progressChartWeightLegend,
+              locale: Localizations.localeOf(context),
+              style: TextStyle(
+                color: pal.textSecondary,
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.12,
+                height: 1.2,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(width: 20),
             Container(
               width: 10,
               height: 10,
@@ -493,7 +592,29 @@ class _ProgressChart extends StatelessWidget {
             Text(
               locale.repsHeader,
               locale: Localizations.localeOf(context),
-              style: TextStyle(color: pal.textSecondary, fontSize: 11, letterSpacing: 0.2),
+              style: TextStyle(
+                color: pal.textSecondary,
+                fontSize: 11,
+                letterSpacing: 0.2,
+              ),
+            ),
+            Container(
+              width: 10,
+              height: 10,
+              decoration: BoxDecoration(
+                color: kProgressChartVolumeColor,
+                borderRadius: BorderRadius.circular(2),
+                border: Border.all(color: pal.chartLegendBorder),
+              ),
+            ),
+            Text(
+              locale.progressChartVolumeLegend,
+              locale: Localizations.localeOf(context),
+              style: TextStyle(
+                color: pal.textSecondary,
+                fontSize: 11,
+                letterSpacing: 0.2,
+              ),
             ),
           ],
         ),

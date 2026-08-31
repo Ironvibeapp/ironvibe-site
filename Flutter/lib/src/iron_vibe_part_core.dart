@@ -1,5 +1,8 @@
 part of 'package:fitness_app/main.dart';
 
+/// Keep at 1 so older app builds can still import backups. Muscle-group tags are
+/// an additive JSON field (`exerciseMuscleGroups`) and a separate prefs key —
+/// workout history schema is unchanged.
 const int _kExportDataVersion = 1;
 
 String _jsonString(dynamic value) {
@@ -34,7 +37,10 @@ String _jsonPickString(Map<String, dynamic> json, List<String> preferredKeys) {
   return '';
 }
 
-dynamic _jsonValueForKeys(Map<String, dynamic> json, List<String> preferredKeys) {
+dynamic _jsonValueForKeys(
+  Map<String, dynamic> json,
+  List<String> preferredKeys,
+) {
   for (final want in preferredKeys) {
     final wl = want.toLowerCase();
     for (final e in json.entries) {
@@ -68,7 +74,10 @@ bool _jsonPickBool(Map<String, dynamic> json, List<String> preferredKeys) {
   return false;
 }
 
-SetLog? _setLogFromDecoded(dynamic item, {required bool parentExerciseIsCardio}) {
+SetLog? _setLogFromDecoded(
+  dynamic item, {
+  required bool parentExerciseIsCardio,
+}) {
   if (item is List) {
     if (item.isEmpty) return null;
     if (parentExerciseIsCardio && item.length >= 2) {
@@ -116,6 +125,30 @@ String ironVibeFormatKgTon(double kg) {
   return s;
 }
 
+/// Total workout tonnage (kg): sum of weight × reps for all valid strength sets.
+double ironVibeWorkoutVolumeKgFromExercises(Iterable<ExerciseLog> exercises) {
+  var sum = 0.0;
+  for (final ex in exercises) {
+    if (ex.isCardio) continue;
+    for (final set in ex.sets) {
+      if (set.isCardio) continue;
+      final v = ironVibeVolumeKgFromFields(set.weight, set.reps);
+      if (v != null) sum += v;
+    }
+  }
+  return sum;
+}
+
+/// Compact localized label used in history/calendar titles.
+String ironVibeWorkoutVolumeLabel(
+  AppLocalizations l,
+  Iterable<ExerciseLog> exercises,
+) {
+  final kg = ironVibeWorkoutVolumeKgFromExercises(exercises);
+  if (kg <= 0) return '${l.volumeShort}: —';
+  return '${l.volumeShort}: ${ironVibeFormatKgTon(kg)} ${l.kg}';
+}
+
 /// Заголовок колонки «Вес» в строке вес / повторы / RIR: единицы на выбор пользователя.
 String ironVibeWeightColumnTitle(AppLocalizations l) =>
     '${l.weightHeader} (${l.weightUnitsChoiceShort})';
@@ -138,9 +171,27 @@ void ensureExerciseInBank(String rawName) {
   exerciseBank.add(n);
 }
 
+bool ironVibeIsExerciseInBank(String rawName) {
+  final n = normalizeExerciseName(rawName);
+  if (n.isEmpty) return false;
+  return exerciseBank.any((e) => normalizeExerciseName(e) == n);
+}
+
+/// Убирает имя из подсказок, избранного и таблицы личного прогресса.
+/// Записи в сохранённых тренировках не трогаем.
+void ironVibeRemoveExerciseFromBank(String rawName) {
+  final n = normalizeExerciseName(rawName);
+  if (n.isEmpty) return;
+  exerciseBank.removeWhere((e) => normalizeExerciseName(e) == n);
+  ironVibeRemoveFavoriteExerciseEverywhere(n);
+}
+
 class _UpperCaseExerciseNameInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     final t = newValue.text.toUpperCase();
     return TextEditingValue(
       text: t,
@@ -163,16 +214,34 @@ List<String> _dedupeNormalizedExerciseBank(Iterable<String> raw) {
 
 WorkoutLog _normalizeWorkoutLogExerciseNames(WorkoutLog w) {
   final exs = w.exercises
-      .map((ex) => ExerciseLog(normalizeExerciseName(ex.name), ex.sets, isCardio: ex.isCardio))
+      .map(
+        (ex) => ExerciseLog(
+          normalizeExerciseName(ex.name),
+          ex.sets,
+          isCardio: ex.isCardio,
+        ),
+      )
       .toList();
   return WorkoutLog(w.date, exs, id: w.id);
 }
 
 TrainerSession _normalizeTrainerSessionExerciseNames(TrainerSession s) {
   final exs = s.exercises
-      .map((ex) => ExerciseLog(normalizeExerciseName(ex.name), ex.sets, isCardio: ex.isCardio))
+      .map(
+        (ex) => ExerciseLog(
+          normalizeExerciseName(ex.name),
+          ex.sets,
+          isCardio: ex.isCardio,
+        ),
+      )
       .toList();
-  return TrainerSession(s.dateTime, s.clientName, s.note, exercises: exs, id: s.id);
+  return TrainerSession(
+    s.dateTime,
+    s.clientName,
+    s.note,
+    exercises: exs,
+    id: s.id,
+  );
 }
 
 /// Top-level for [compute]: encode payload to JSON string (runs off main thread).
@@ -180,15 +249,21 @@ String _encodeJsonPayload(Map<String, dynamic> payload) {
   return const JsonEncoder.withIndent('  ').convert(payload);
 }
 
-Future<void> _cleanOldExportFiles(Directory directory, String globPattern) async {
+Future<void> _cleanOldExportFiles(
+  Directory directory,
+  String globPattern,
+) async {
   try {
     final prefix = globPattern.replaceAll('*', '').split('.').first;
-    final suffix = globPattern.contains('.') ? '.${globPattern.split('.').last}' : '';
+    final suffix = globPattern.contains('.')
+        ? '.${globPattern.split('.').last}'
+        : '';
     final files = directory.listSync();
     for (final e in files) {
       if (e is File) {
         final name = e.path.split(Platform.pathSeparator).last;
-        if (name.startsWith(prefix) && (suffix.isEmpty || name.endsWith(suffix))) {
+        if (name.startsWith(prefix) &&
+            (suffix.isEmpty || name.endsWith(suffix))) {
           try {
             await e.delete();
           } catch (_) {}
@@ -205,17 +280,20 @@ Future<void> _deleteExportFile(String path) async {
   } catch (_) {}
 }
 
-/// Семейное правило версий: … 1.4.8+48, 1.4.9+49 …
-const String kAppVersion = '1.4.9';
-const int kAppBuildNumber = 49;
+/// Семейное правило версий: … 1.6.4+64, 1.6.5+65, 1.6.6+66 …
+const String kAppVersion = '1.6.6';
+const int kAppBuildNumber = 66;
 
 /// График прогресса: вес (красный) и повторы (как цвет фокуса полей).
 const Color kProgressChartWeightColor = Color(0xFFFF1744);
 const Color kProgressChartRepsColor = Color(0xFF00E5FF);
+const Color kProgressChartVolumeColor = Color(0xFFFFD54F);
 
 const String _kPrefsKeyLightTheme = 'ironvibe_light_theme';
 
-final ValueNotifier<ThemeMode> ironVibeThemeMode = ValueNotifier<ThemeMode>(ThemeMode.light);
+final ValueNotifier<ThemeMode> ironVibeThemeMode = ValueNotifier<ThemeMode>(
+  ThemeMode.light,
+);
 
 Future<void> ironVibeLoadThemePreference() async {
   final prefs = await SharedPreferences.getInstance();
@@ -237,6 +315,64 @@ SystemUiOverlayStyle ironVibeSystemOverlayFor(ThemeMode mode) {
     systemNavigationBarColor: Colors.transparent,
     systemNavigationBarDividerColor: Colors.transparent,
     statusBarIconBrightness: dark ? Brightness.light : Brightness.dark,
-    systemNavigationBarIconBrightness: dark ? Brightness.light : Brightness.dark,
+    systemNavigationBarIconBrightness: dark
+        ? Brightness.light
+        : Brightness.dark,
   );
+}
+
+const MethodChannel _kIronVibeAndroidScreenChannel = MethodChannel(
+  'com.ironvibe.app/screen',
+);
+
+/// [FLAG_KEEP_SCREEN_ON] через окно Activity; без `WAKE_LOCK` и без новых разрешений.
+Future<void> ironVibeSetKeepScreenOn(bool on) async {
+  if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
+  try {
+    await _kIronVibeAndroidScreenChannel.invokeMethod<void>(
+      'setKeepScreenOn',
+      on,
+    );
+  } catch (_) {}
+}
+
+/// Периодическое автосохранение черновика активной тренировки (раз в минуту + при сворачивании).
+mixin IronVibeWorkoutAutoSave<T extends StatefulWidget> on State<T>, WidgetsBindingObserver {
+  Timer? _ironVibeAutoSaveTimer;
+  VoidCallback? _ironVibeAutoSaveFlush;
+  bool _ironVibeAutoSaveActive = false;
+
+  void ironVibeStartWorkoutAutoSave({required VoidCallback flushDraft}) {
+    _ironVibeAutoSaveFlush = flushDraft;
+    _ironVibeAutoSaveActive = true;
+    WidgetsBinding.instance.addObserver(this);
+    _ironVibeAutoSaveTimer?.cancel();
+    _ironVibeAutoSaveTimer = Timer.periodic(const Duration(minutes: 1), (_) {
+      if (_ironVibeAutoSaveActive) _ironVibeAutoSaveFlush?.call();
+    });
+  }
+
+  void ironVibeStopWorkoutAutoSave({bool removeObserver = true}) {
+    _ironVibeAutoSaveActive = false;
+    _ironVibeAutoSaveTimer?.cancel();
+    _ironVibeAutoSaveTimer = null;
+    if (removeObserver) {
+      WidgetsBinding.instance.removeObserver(this);
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (!_ironVibeAutoSaveActive) return;
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
+      _ironVibeAutoSaveFlush?.call();
+    }
+  }
+
+  @override
+  void dispose() {
+    ironVibeStopWorkoutAutoSave();
+    super.dispose();
+  }
 }

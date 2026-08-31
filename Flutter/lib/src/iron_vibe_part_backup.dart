@@ -1,4 +1,4 @@
-﻿part of 'package:fitness_app/main.dart';
+part of 'package:fitness_app/main.dart';
 
 Future<void> _exportToJson(BuildContext context, bool isTrainer) async {
   final locale = AppLocalizations.of(context)!;
@@ -18,7 +18,10 @@ Future<void> _exportToJson(BuildContext context, bool isTrainer) async {
     final Map<String, dynamic> payload = {
       'version': _kExportDataVersion,
       'exerciseBank': exerciseBank,
-      if (!isTrainer) 'workoutHistory': workoutHistory.map((e) => e.toJson()).toList(),
+      if (!isTrainer)
+        'workoutHistory': workoutHistory.map((e) => e.toJson()).toList(),
+      if (!isTrainer) 'favoriteExercises': ironVibeAthleteFavoriteExercises,
+      'exerciseMuscleGroups': ironVibeExerciseMuscleGroupsToJsonMap(),
       if (isTrainer) ...{
         'clients': clients.map((e) => e.toJson()).toList(),
         'trainerSchedule': trainerSchedule.map((e) => e.toJson()).toList(),
@@ -44,7 +47,8 @@ Future<void> _exportToJson(BuildContext context, bool isTrainer) async {
 
     final directory = await getTemporaryDirectory();
     final now = DateTime.now();
-    final datePart = '${now.year}_${now.month.toString().padLeft(2, '0')}_${now.day.toString().padLeft(2, '0')}';
+    final datePart =
+        '${now.year}_${now.month.toString().padLeft(2, '0')}_${now.day.toString().padLeft(2, '0')}';
     final baseName = isTrainer ? 'IronVibe_Backup_Coach' : 'IronVibe_Backup';
     await _cleanOldExportFiles(directory, 'IronVibe_Backup*.json');
     final safeFileName = '${baseName}_$datePart.json';
@@ -162,8 +166,14 @@ Future<void> _importFromJson(BuildContext context, bool isTrainer) async {
       return;
     }
 
-    final existingWorkoutIds = workoutHistory.map((w) => w.id).whereType<String>().toSet();
-    final existingSessionIds = trainerSchedule.map((s) => s.id).whereType<String>().toSet();
+    final existingWorkoutIds = workoutHistory
+        .map((w) => w.id)
+        .whereType<String>()
+        .toSet();
+    final existingSessionIds = trainerSchedule
+        .map((s) => s.id)
+        .whereType<String>()
+        .toSet();
     final existingClientNames = clients.map((c) => c.name).toSet();
 
     try {
@@ -202,13 +212,42 @@ Future<void> _importFromJson(BuildContext context, bool isTrainer) async {
 
       final bank = data['exerciseBank'] as List? ?? [];
       for (var name in bank) {
-        final s = normalizeExerciseName(name is String ? name : name.toString());
+        final s = normalizeExerciseName(
+          name is String ? name : name.toString(),
+        );
         if (s.isNotEmpty) ensureExerciseInBank(s);
       }
 
+      if (!isTrainer) {
+        final favorites = data['favoriteExercises'] as List? ?? [];
+        for (var name in favorites) {
+          final s = normalizeExerciseName(
+            name is String ? name : name.toString(),
+          );
+          if (s.isEmpty) continue;
+          if (!ironVibeAthleteFavoriteExercises.any(
+            (e) => normalizeExerciseName(e) == s,
+          )) {
+            ironVibeAthleteFavoriteExercises.add(s);
+          }
+        }
+      }
+
+      ironVibeMergeMuscleGroupsFromBackup(data['exerciseMuscleGroups']);
+
       exerciseBank = _dedupeNormalizedExerciseBank(exerciseBank);
-      workoutHistory = workoutHistory.map(_normalizeWorkoutLogExerciseNames).toList();
-      trainerSchedule = trainerSchedule.map(_normalizeTrainerSessionExerciseNames).toList();
+      ironVibeAthleteFavoriteExercises =
+          _dedupeNormalizedExerciseBank(ironVibeAthleteFavoriteExercises);
+      for (final client in clients) {
+        client.favoriteExercises =
+            _dedupeNormalizedExerciseBank(client.favoriteExercises);
+      }
+      workoutHistory = workoutHistory
+          .map(_normalizeWorkoutLogExerciseNames)
+          .toList();
+      trainerSchedule = trainerSchedule
+          .map(_normalizeTrainerSessionExerciseNames)
+          .toList();
 
       if (!isTrainer) {
         workoutHistory.sort((a, b) => a.date.compareTo(b.date));
@@ -247,27 +286,34 @@ Future<void> _importFromJson(BuildContext context, bool isTrainer) async {
 
 void _showStatistics(BuildContext context, bool isTrainer) {
   final now = DateTime.now();
+  final monthStart = DateTime(now.year, now.month, 1);
+  final monthEndExclusive = DateTime(now.year, now.month + 1, 1);
+  final yearStart = DateTime(now.year, 1, 1);
+  final yearEndExclusive = DateTime(now.year + 1, 1, 1);
   int monthCount = 0;
   int yearCount = 0;
   int totalCount = 0;
 
   if (isTrainer) {
-    totalCount = trainerSchedule.length;
-    for (var s in trainerSchedule) {
-      if (s.dateTime.year == now.year && s.dateTime.month == now.month) {
+    final logged = trainerSchedule.where(ironVibeTrainerSessionHasLoggedData);
+    totalCount = logged.length;
+    for (var s in logged) {
+      if (!s.dateTime.isBefore(monthStart) &&
+          s.dateTime.isBefore(monthEndExclusive)) {
         monthCount++;
       }
-      if (s.dateTime.year == now.year) {
+      if (!s.dateTime.isBefore(yearStart) &&
+          s.dateTime.isBefore(yearEndExclusive)) {
         yearCount++;
       }
     }
   } else {
     totalCount = workoutHistory.length;
     for (var w in workoutHistory) {
-      if (w.date.year == now.year && w.date.month == now.month) {
+      if (!w.date.isBefore(monthStart) && w.date.isBefore(monthEndExclusive)) {
         monthCount++;
       }
-      if (w.date.year == now.year) {
+      if (!w.date.isBefore(yearStart) && w.date.isBefore(yearEndExclusive)) {
         yearCount++;
       }
     }
@@ -279,40 +325,51 @@ void _showStatistics(BuildContext context, bool isTrainer) {
       final pal = IronVibePalette.of(ctx);
       return AlertDialog(
         backgroundColor: pal.dialog,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: pal.borderDefault, width: 0.5),
-          borderRadius: BorderRadius.zero,
-        ),
+        shape: ironVibeDialogShape(pal),
         title: Center(
           child: Text(
             AppLocalizations.of(ctx)!.statistics,
-            style: TextStyle(color: pal.textPrimary, fontWeight: FontWeight.bold, letterSpacing: 2.0),
+            style: TextStyle(
+              color: pal.textPrimary,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2.0,
+            ),
           ),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(height: 10),
-            _buildStatItem(ctx, AppLocalizations.of(ctx)!.monthStats, '$monthCount'),
+            _buildStatItem(
+              ctx,
+              AppLocalizations.of(ctx)!.monthStats,
+              '$monthCount',
+            ),
             const SizedBox(height: 20),
-            _buildStatItem(ctx, AppLocalizations.of(ctx)!.yearStats, '$yearCount'),
+            _buildStatItem(
+              ctx,
+              AppLocalizations.of(ctx)!.yearStats,
+              '$yearCount',
+            ),
             const SizedBox(height: 20),
-            _buildStatItem(ctx, AppLocalizations.of(ctx)!.allTimeStats, '$totalCount'),
+            _buildStatItem(
+              ctx,
+              AppLocalizations.of(ctx)!.allTimeStats,
+              '$totalCount',
+            ),
             const SizedBox(height: 40),
             SteelButton(
               text: AppLocalizations.of(ctx)!.exportHistory,
+              icon: Icons.ios_share_rounded,
               onPressed: () => _exportToJson(ctx, isTrainer),
               width: double.infinity,
-              height: 45,
-              fontSize: 11,
             ),
             const SizedBox(height: 10),
             SteelButton(
               text: AppLocalizations.of(ctx)!.importData,
+              icon: Icons.download_rounded,
               onPressed: () => _importFromJson(ctx, isTrainer),
               width: double.infinity,
-              height: 45,
-              fontSize: 11,
             ),
             const SizedBox(height: 10),
           ],
@@ -320,7 +377,10 @@ void _showStatistics(BuildContext context, bool isTrainer) {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text(AppLocalizations.of(ctx)!.close, style: TextStyle(color: pal.textPrimary)),
+            child: Text(
+              AppLocalizations.of(ctx)!.close,
+              style: TextStyle(color: pal.textPrimary),
+            ),
           ),
         ],
       );
@@ -330,7 +390,9 @@ void _showStatistics(BuildContext context, bool isTrainer) {
 
 Widget _buildStatItem(BuildContext context, String label, String value) {
   final pal = IronVibePalette.of(context);
-  final bigColor = pal.brightness == Brightness.dark ? const Color(0xFFB0BEC5) : pal.iconPrimary;
+  final bigColor = pal.brightness == Brightness.dark
+      ? const Color(0xFFB0BEC5)
+      : pal.iconPrimary;
   return Column(
     children: [
       Text(

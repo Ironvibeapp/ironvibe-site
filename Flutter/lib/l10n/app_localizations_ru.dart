@@ -27,6 +27,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get renameExerciseEmpty => 'Название не может быть пустым';
 
   @override
+  String get reassignHistoryExerciseTitle => 'Сменить упражнение';
+
+  @override
+  String get reassignHistoryExerciseBody =>
+      'Меняется только эта тренировка. Подходы сохраняются; график прогресса учитывает новое название упражнения.';
+
+  @override
   String get delete => 'Удалить';
 
   @override
@@ -118,16 +125,100 @@ class AppLocalizationsRu extends AppLocalizations {
   String get volumeShort => 'ОБЪЁМ';
 
   @override
-  String get addSet => '+ ДОБАВИТЬ ПОДХОД';
+  String get addSet => 'ДОБАВИТЬ ПОДХОД';
 
   @override
-  String get addExercise => '+ ДОБАВИТЬ УПРАЖНЕНИЕ';
+  String get addExercise => 'ДОБАВИТЬ УПРАЖНЕНИЕ';
 
   @override
   String get finishWorkout => 'ЗАВЕРШИТЬ ТРЕНИРОВКУ';
 
   @override
+  String get finishWorkoutConfirmTitle => 'Завершить тренировку?';
+
+  @override
+  String get finishWorkoutConfirmBody => 'Тренировка будет сохранена.';
+
+  @override
+  String get finishWorkoutConfirmAction => 'Завершить';
+
+  @override
+  String get workoutCompleteTitle => 'Тренировка сохранена';
+
+  @override
   String get startWorkout => 'НАЧАТЬ ТРЕНИРОВКУ';
+
+  @override
+  String get quickWorkout => 'БЫСТРАЯ ТРЕНИРОВКА';
+
+  @override
+  String get quickWorkoutFullBody => 'ВСЁ ТЕЛО';
+
+  @override
+  String get quickWorkoutInsufficientTitle => 'Недостаточно данных';
+
+  @override
+  String get quickWorkoutInsufficientBody =>
+      'Для быстрой тренировки нужны упражнения на грудь, спину, одну группу ног (перед или зад бедра) и одно на плечи, руки или кор. Отметьте группы в личном прогрессе — или просто логируйте: приложение спросит при вводе нового упражнения.';
+
+  @override
+  String get quickWorkoutOpenProgress => 'ОТКРЫТЬ ЛИЧНЫЙ ПРОГРЕСС';
+
+  @override
+  String get quickWorkoutPreviewTitle => 'БЫСТРАЯ ТРЕНИРОВКА · ВСЁ ТЕЛО';
+
+  @override
+  String get quickWorkoutStart => 'НАЧАТЬ';
+
+  @override
+  String get quickWorkoutSwap => 'Заменить';
+
+  @override
+  String get quickWorkoutNoAlternatives =>
+      'Других упражнений в этой группе нет';
+
+  @override
+  String get muscleGroupPromptTitle => 'Группа мышц';
+
+  @override
+  String get muscleGroupPromptBody =>
+      'Нужно для быстрой тренировки на всё тело.';
+
+  @override
+  String get muscleGroupLater => 'Позже';
+
+  @override
+  String get muscleGroupClear => 'Сбросить';
+
+  @override
+  String get muscleGroupSkip => 'Не для быстрой тренировки';
+
+  @override
+  String get muscleGroupChest => 'Грудь';
+
+  @override
+  String get muscleGroupBack => 'Спина';
+
+  @override
+  String get muscleGroupShoulders => 'Плечи';
+
+  @override
+  String get muscleGroupCore => 'Кор';
+
+  @override
+  String get muscleGroupQuads => 'Переднее бедро';
+
+  @override
+  String get muscleGroupHamstrings => 'Заднее бедро';
+
+  @override
+  String get muscleGroupArmFlex => 'Сгибание рук';
+
+  @override
+  String get muscleGroupArmExt => 'Разгибание рук';
+
+  @override
+  String get muscleGroupUntagged => '—';
 
   @override
   String get calendarWorkouts => 'КАЛЕНДАРЬ ТРЕНИРОВОК';
@@ -148,13 +239,23 @@ class AppLocalizationsRu extends AppLocalizations {
   String get personalProgressEmpty => 'В тренировках пока нет упражнений';
 
   @override
+  String get favoriteExercises => 'ЛЮБИМЫЕ УПРАЖНЕНИЯ';
+
+  @override
+  String get favoriteExercisesEmpty => 'Пока нет любимых упражнений';
+
+  @override
+  String get buildWorkoutFromFavorites => 'СОБРАТЬ ТРЕНИРОВКУ';
+
+  @override
   String get exerciseHint => 'Введите название упражнения';
 
   @override
   String get deleteFromHistory => 'Удалить из истории?';
 
   @override
-  String get deleteExerciseHint => 'больше не будет в подсказках.';
+  String get deleteExerciseHint =>
+      'больше не будет в подсказках и в личном прогрессе.';
 
   @override
   String get exerciseDeleted => 'удалено';
@@ -169,6 +270,13 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get removeSetWithDataConfirm =>
       'Удалить подход с данными? Это действие нельзя отменить.';
+
+  @override
+  String get removeExerciseFromWorkout => 'Удалить упражнение';
+
+  @override
+  String get removeExerciseFromWorkoutConfirm =>
+      'Удалить это упражнение из тренировки? Это действие нельзя отменить.';
 
   @override
   String get deleteClientTitle => 'УДАЛИТЬ КЛИЕНТА';
@@ -224,6 +332,23 @@ class AppLocalizationsRu extends AppLocalizations {
   String get clientProfileSaveAndLeave => 'Сохранить и выйти';
 
   @override
+  String get workoutRecoveryTitle => 'Тренировка прервана';
+
+  @override
+  String get workoutRecoveryMessage =>
+      'Предыдущая тренировка завершилась некорректно. Продолжить с сохранённых данных или удалить черновик.';
+
+  @override
+  String get workoutRecoveryContinue => 'Продолжить тренировку';
+
+  @override
+  String get workoutRecoveryDelete => 'Удалить тренировку';
+
+  @override
+  String get workoutRecoverySessionMissing =>
+      'Запланированная тренировка клиента была удалена. Черновик очищен.';
+
+  @override
   String get fillCurrentExerciseBeforeAdd =>
       'Сначала заполните текущее упражнение.';
 
@@ -238,6 +363,11 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String exerciseNumberedTitleWithName(int n, String exerciseName) {
     return 'Упражнение №$n: $exerciseName';
+  }
+
+  @override
+  String exerciseNumberLabel(int n) {
+    return '№$n';
   }
 
   @override
@@ -263,6 +393,69 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get addTraining => 'ДОБАВИТЬ ТРЕНИРОВКУ';
+
+  @override
+  String get repeatLastWorkout => 'Повторить прошлую тренировку';
+
+  @override
+  String get repeatLastUnavailable =>
+      'У этого клиента ещё нет тренировки, которую можно повторить.';
+
+  @override
+  String get editPlan => 'Изменить план';
+
+  @override
+  String get trainerSessionEmpty => 'Ещё не запланирована';
+
+  @override
+  String trainerSessionPlanned(int n) {
+    return 'План: $n';
+  }
+
+  @override
+  String get trainerClientsEmpty =>
+      'Пока нет клиентов. Добавьте кого-нибудь, чтобы ставить тренировки.';
+
+  @override
+  String get clientNeverTrained => 'Тренировок пока нет';
+
+  @override
+  String get clientNoUpcoming => 'Нет ближайшей сессии';
+
+  @override
+  String clientLastSession(String when) {
+    return 'Прошлая: $when';
+  }
+
+  @override
+  String clientNextSession(String when) {
+    return 'Следующая: $when';
+  }
+
+  @override
+  String get clientSessionToday => 'сегодня';
+
+  @override
+  String get clientSessionYesterday => 'вчера';
+
+  @override
+  String get clientSessionTomorrow => 'завтра';
+
+  @override
+  String clientSessionDaysAgo(int n) {
+    return '$n дн. назад';
+  }
+
+  @override
+  String clientSessionInDays(int n) {
+    return 'через $n дн.';
+  }
+
+  @override
+  String get clientProfileDetails => 'Профиль';
+
+  @override
+  String get addSessionPickClient => 'Выберите клиента';
 
   @override
   String get clientLabel => 'Клиент';
@@ -299,6 +492,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get progressChartWeightLegend => 'Вес — кг / lb (как вносите)';
+
+  @override
+  String get progressChartVolumeLegend => 'Объём (тоннаж)';
 
   @override
   String get repsHeader => 'Повторени⁠я';
@@ -478,7 +674,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noteLabel => 'Заметка';
 
   @override
-  String get addClient => '+ ДОБАВИТЬ КЛИЕНТА';
+  String get addClient => 'ДОБАВИТЬ КЛИЕНТА';
 
   @override
   String get workoutsToday => 'ТРЕНИРОВКИ СЕГОДНЯ';
@@ -503,7 +699,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionPhilosophy =>
-      'В IronVibe намеренно нет готовых списков из тысяч упражнений и зашитых «программ». Приложение не учит тренироваться — для этого есть YouTube и живой тренер — оно помогает вести статистику так, как удобно именно вам. Вы сами вводите названия движений своими словами, а не выбираете из чужого каталога. Чем дольше пользуетесь, тем естественнее становится интерфейс: приложение подстраивается под ваши привычки, а не вы под него.';
+      'В IronVibe намеренно нет готовых списков из тысяч упражнений и зашитых «программ». Приложение не учит тренироваться — для этого есть YouTube и живой тренер — оно помогает вести статистику так, как удобно именно вам. Вы сами вводите названия движений своими словами. При желании можно пометить мышечную группу — тогда приложение соберёт быструю тренировку на всё тело из ваших же упражнений. Чем дольше пользуетесь, тем естественнее становится интерфейс: приложение подстраивается под ваши привычки, а не вы под него.';
 
   @override
   String get instructionSectionSetControl => 'Управление подходом';
@@ -513,14 +709,14 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionSetMinusDesc =>
-      'Удаляет последний подход. Если в строке есть данные, приложение запросит подтверждение.';
+      'Удаляет последний подход. Если в строке уже есть вес, повторы или запас — сначала спросит подтверждение. Пустую строку убирает сразу. Если подход остался один: в текущей тренировке строка очищается, в сохранённой истории удаляется всё упражнение.';
 
   @override
   String get instructionSetPlusLabel => 'Плюс';
 
   @override
   String get instructionSetPlusDesc =>
-      'Добавляет новую строку подхода в текущем упражнении.';
+      'Добавляет пустую строку нового подхода в текущем упражнении.';
 
   @override
   String get instructionSetProgressLabel => 'Временная шкала';
@@ -534,7 +730,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionProgressChartIntro =>
-      'Две независимые кривые по датам: красный — максимальный вес в одном подходе за день; голубой — максимум повторений в одном подходе. Слева шкала веса, справа — повторов.';
+      'Три независимые кривые по датам: красный — максимальный вес в одном подходе за день; голубой — максимум повторений в одном подходе; жёлтый — объём упражнения (сумма «вес × повторы» за день). Слева шкала веса, справа — повторов; жёлтая линия нормализована для сравнения тренда.';
 
   @override
   String get instructionProgressLineWeightLabel => 'Вес';
@@ -551,6 +747,14 @@ class AppLocalizationsRu extends AppLocalizations {
       'Голубая линия — больше всего повторений за один подход в этот день (не обязательно с макс. весом).';
 
   @override
+  String get instructionProgressLineVolumeDesc =>
+      'Жёлтая линия — дневной объём (тоннаж): сумма «вес × повторы» по подходам, где заполнены оба поля.';
+
+  @override
+  String get instructionProgressChartSessionHighlight =>
+      'Во время активной тренировки кнопка графика под подходами может подсвечиваться теми же цветами, что и линии: красный — если вы превысили прежний рекорд по весу в одном подходе; жёлтый — если суммарный объём упражнения выше лучшего за прошлые тренировки; голубой — если упражнение без веса и сумма повторов по всем подходам выше прошлого максимума. Если выполняется несколько условий, приоритет: красный, затем жёлтый, затем голубой. Подсветка только в текущей тренировке, в сохранённой истории её нет.';
+
+  @override
   String get instructionSectionWorkout => 'Тренировка';
 
   @override
@@ -558,7 +762,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionAddExerciseBody =>
-      'Создаёт новый блок для другого вида занятий.';
+      'Добавляет новый блок. Сначала укажите название текущего упражнения — если поле пустое, приложение напомнит.';
 
   @override
   String get instructionSectionExerciseNameTools => 'Название упражнения';
@@ -575,7 +779,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionRemoveFromBankDesc =>
-      'Когда открыт список подсказок под полем названия, нажмите крестик у строки, чтобы удалить это имя из вашей личной «базы» упражнений.';
+      'Когда открыт список подсказок под полем названия, нажмите крестик у строки — или красный крестик в личном прогрессе, — чтобы убрать это имя из подсказок и из таблицы прогресса. Сохранённые тренировки не меняются.';
 
   @override
   String get instructionSectionInputs => 'Данные';
@@ -584,7 +788,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get instructionWeightTitle => 'Вес';
 
   @override
-  String get instructionWeightBody => 'Вес снаряда или оборудования.';
+  String get instructionWeightBody =>
+      'Вес снаряда или оборудования. Вводите число в кг или lb — как вам удобно. Приложение единицы не пересчитывает.';
 
   @override
   String get instructionRepsTitle => 'Повторы';
@@ -619,7 +824,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionPersonalProgressIntro =>
-      'Раздел «Личный прогресс» нужен, чтобы отслеживать успехи по каждому упражнению отдельно: в таблице собраны все движения из сохранённой истории, удобно сравнивать показатели. Строка поиска сразу находит нужное название. Открыть можно с главного экрана тренировки (кнопка под календарём) или из профиля клиента.';
+      'Одна таблица по всем движениям из сохранённых тренировок: лучший подход, оценка 1ПМ и максимальный объём. Поиск сразу находит название. Звезда добавляет упражнение в избранное; маленькая метка под именем задаёт мышечную группу; красный крестик убирает имя из подсказок и из этой таблицы (сохранённые тренировки не меняются). Открыть можно из меню тренировок или из профиля клиента.';
 
   @override
   String get instructionSectionSaving => 'Сохранение';
@@ -629,7 +834,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionFinishBody =>
-      'Сохраняет всю тренировку в историю. Пока вы не нажали эту кнопку, данные не зафиксированы.';
+      'Подтверждает и записывает тренировку в историю. Если выйти раньше, можно сохранить, удалить черновик или остаться. Если приложение прервалось, черновик сохраняется сам.';
 
   @override
   String get instructionSectionCardio => 'Кардио и интенсивность';
@@ -701,12 +906,273 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionNavHistoryDesc =>
-      'Просмотр завершённых тренировок в календаре и сводной статистики по иконке графика в панели приложения.';
+      'В календаре/истории у каждой тренировки показан тоннаж. Объём тренировки — один из лучших индикаторов гипертрофии: чем больше качественного объёма, тем больше мышц вы строите.';
 
   @override
   String get instructionNavImportExportTitle => 'Импорт / экспорт';
 
   @override
   String get instructionNavImportExportDesc =>
-      'Резервная копия и перенос данных через экспорт и импорт JSON в окне статистики.';
+      'Резервная копия и перенос данных через экспорт и импорт JSON в окне статистики. В копию входят история, список упражнений, избранное и метки мышечных групп. Тренерская копия отдельна от личной истории.';
+
+  @override
+  String get instructionSectionHome => 'Главный экран';
+
+  @override
+  String get instructionThemeTitle => 'Тема';
+
+  @override
+  String get instructionThemeDesc =>
+      'Переключатель солнце / луна на главном экране меняет светлую и тёмную тему. Выбор запоминается.';
+
+  @override
+  String get instructionTrainSelfTitle => 'Тренирую себя';
+
+  @override
+  String get instructionTrainSelfDesc =>
+      'Свои тренировки, календарь, личный прогресс, избранное, шкала ритма (как часто вы тренируетесь) и быстрая тренировка на всё тело из упражнений с метками групп.';
+
+  @override
+  String get instructionTrainOthersTitle => 'Тренирую других';
+
+  @override
+  String get instructionTrainOthersDesc =>
+      'Режим тренера: клиенты, расписание и отдельная история на каждого. У каждого клиента свои таблица прогресса и избранное.';
+
+  @override
+  String get instructionSectionAthleteMenu => 'Ваши тренировки';
+
+  @override
+  String get instructionStartWorkoutTitle => 'Начать тренировку';
+
+  @override
+  String get instructionStartWorkoutDesc =>
+      'Открывает пустую сессию — прошлую тренировку не копирует. Добавляйте упражнения, записывайте подходы и завершите, чтобы сохранить.';
+
+  @override
+  String get instructionQuickWorkoutTitle => 'Быстрая тренировка';
+
+  @override
+  String get instructionQuickWorkoutDesc =>
+      'Собирает тренировку на всё тело из 4 упражнений: грудь, спина, одна половина ног (перед или зад бедра — не оба в один день) и одно на плечи, руки или кор — какая группа дольше не тренировалась. Сначала избранные. Прошлые вес и повторы показаны серым как минимум, который нужно преодолеть — каждый подход вы вводите сами.';
+
+  @override
+  String get instructionCalendarMenuTitle => 'Календарь тренировок';
+
+  @override
+  String get instructionCalendarMenuDesc =>
+      'Видно, в какие дни вы тренировались; можно открыть сохранённую сессию или добавить тренировку на выбранную дату и время — в том числе в прошлые дни.';
+
+  @override
+  String get instructionPersonalProgressMenuDesc =>
+      'Таблица лучших подходов, оценки 1ПМ и максимального объёма. Здесь же звезда избранного и метка мышечной группы.';
+
+  @override
+  String get instructionFavoritesMenuTitle => 'Избранные упражнения';
+
+  @override
+  String get instructionFavoritesMenuDesc =>
+      'Список отмеченных звёздочкой. Отметьте нужные и нажмите «Собрать тренировку» — сессия начнётся в этом порядке. Прошлые вес и повторы показаны серым как минимум, который нужно преодолеть.';
+
+  @override
+  String get instructionSectionRhythm => 'Ритм тренировок';
+
+  @override
+  String get instructionRhythmIntro =>
+      'После нескольких силовых тренировок вверху экрана тренировок появляется шкала. Она показывает, сколько дней в неделю вы тренировались в среднем за последние четыре недели. Дни только с кардио не считаются. Это снимок плотности, а не цель, которую приложение требует достичь.';
+
+  @override
+  String get instructionRhythmGaugeTitle => 'Дней в неделю';
+
+  @override
+  String get instructionRhythmGaugeDesc =>
+      'Дуга заполняется от 1 до 6 дней в неделю. Холодный стальной оттенок — более спокойный ритм, тёплые тона — выше плотность. Шкала появляется, когда в этом четырёхнедельном окне есть хотя бы три силовых дня.';
+
+  @override
+  String get instructionRhythmDeloadTitle => 'Напоминание о лёгкой неделе';
+
+  @override
+  String get instructionRhythmDeloadDesc =>
+      'Если вы тренируетесь примерно два с половиной дня в неделю или чаще несколько недель подряд без более лёгкой недели, приложение может предложить снизить тоннаж и повторения примерно на 30% на одну неделю. Чем больше дней в неделю, тем раньше появится напоминание. Это напоминание, не предписание. Не чаще одного раза в неделю.';
+
+  @override
+  String get instructionSectionFavorites => 'Избранное';
+
+  @override
+  String get instructionFavoriteStarTitle => 'Звезда';
+
+  @override
+  String get instructionFavoriteStarDesc =>
+      'В «Личном прогрессе» нажмите звезду рядом с упражнением, чтобы добавить или убрать его из избранного. Избранные остаются вверху таблицы.';
+
+  @override
+  String get instructionBuildFromFavoritesTitle => 'Собрать тренировку';
+
+  @override
+  String get instructionBuildFromFavoritesDesc =>
+      'На экране избранного отметьте упражнения. Кнопка появляется, когда выбрано хотя бы одно. Прошлые вес и повторы показаны серым как минимум, который нужно преодолеть — каждый подход вы вводите сами. Для клиента то же действие открывает сессию этого человека.';
+
+  @override
+  String get instructionSectionMuscleGroups =>
+      'Мышечные группы и быстрая тренировка';
+
+  @override
+  String get instructionMuscleGroupsIntro =>
+      'Группы — необязательные метки к вашим названиям упражнений. Это не каталог: они нужны только быстрой тренировке, чтобы собрать сбалансированный микс на всё тело. Восемь групп: грудь, спина, плечи, корпус, передняя поверхность бедра, задняя поверхность бедра, сгибание рук, разгибание рук.';
+
+  @override
+  String get instructionMuscleGroupTagTitle => 'Как пометить';
+
+  @override
+  String get instructionMuscleGroupTagDesc =>
+      'Когда вы впервые вводите новое название, приложение спрашивает группу. Можно нажать «Позже» или «Не для быстрой тренировки», если движение не должно попадать в микс на всё тело. Метку под именем в «Личном прогрессе» или избранном можно сменить или снять.';
+
+  @override
+  String get instructionQuickWorkoutHowTitle => 'Как собирается быстрая сессия';
+
+  @override
+  String get instructionQuickWorkoutHowDesc =>
+      'Четыре слота: грудь, спина, одна половина ног, затем плечи/руки/кор по давности. В предпросмотре слот можно заменить другим упражнением той же группы. Если мало — добавьте упражнения сами.';
+
+  @override
+  String get instructionStrengthCardioTitle => 'Сила / кардио';
+
+  @override
+  String get instructionStrengthCardioDesc =>
+      'Переключатель вверху сессии. Сила: вес, повторы, запас (RIR). Кардио: только время и интенсивность — поле дистанции нет.';
+
+  @override
+  String get instructionPreviousHintsTitle => 'Серые цифры прошлой сессии';
+
+  @override
+  String get instructionPreviousHintsDesc =>
+      'Когда тренер выбирает упражнение в сессии клиента, быстрой тренировке или сборке из избранного, прошлые вес и повторы показаны серым — это минимум, который нужно преодолеть, а не уже записанный подход. В историю попадают только числа, которые вы ввели сами.';
+
+  @override
+  String get instructionRemoveExerciseTitle => 'Убрать из этой тренировки';
+
+  @override
+  String get instructionRemoveExerciseDesc =>
+      'Удаляет блок только из текущей сессии. Сохранённая история не меняется, пока вы не завершите тренировку.';
+
+  @override
+  String get instructionReassignExerciseTitle => 'Сменить упражнение в истории';
+
+  @override
+  String get instructionReassignExerciseDesc =>
+      'В сохранённой тренировке блок можно переназначить на другое имя. Меняется только эта сессия; графики пойдут по новому имени. Подходы остаются как были.';
+
+  @override
+  String get instructionAutoSaveTitle => 'Прерванная тренировка';
+
+  @override
+  String get instructionAutoSaveDesc =>
+      'Если приложение закрылось посреди сессии, оно предложит продолжить с того же места или удалить несохранённый черновик.';
+
+  @override
+  String get instructionSectionCalendar => 'Календарь';
+
+  @override
+  String get instructionCalendarAddTitle => 'Добавить на дату';
+
+  @override
+  String get instructionCalendarAddDesc =>
+      'Выберите день и добавьте тренировку на выбранное время. Удобно, если нужно внести пропущенную сессию.';
+
+  @override
+  String get instructionSectionTrainer => 'Режим тренера';
+
+  @override
+  String get instructionTrainerIntro =>
+      '«Тренирую других» — для тренеров. Добавляйте клиентов, ставьте сессии, планируйте упражнения заранее и ведите тренировки отдельно по каждому человеку. Повтор прошлой сессии — по желанию. Экспорт и импорт тренерских данных отделены от личной истории. Удаление клиента снимает будущие сессии, но прошлые тренировки остаются для отчётности.';
+
+  @override
+  String get instructionClientsTitle => 'Клиенты';
+
+  @override
+  String get instructionClientsDesc =>
+      'Добавление, правка и удаление клиентов. В списке видны прошлая и следующая сессии. В профиле: цель, вес, рост и закрытые заметки тренера.';
+
+  @override
+  String get instructionClientProfileTitle => 'Профиль клиента';
+
+  @override
+  String get instructionClientProfileDesc =>
+      'Из профиля начинается сегодняшняя пустая живая сессия. Серые цифры прошлого раза появляются только после выбора упражнения. В истории — только завершённые тренировки. Планируйте на другие даты в календаре. Прогресс и избранное — на том же экране. Несохранённые правки профиля спрашивают подтверждение перед выходом.';
+
+  @override
+  String get instructionTrainerPlanTitle => 'Спланировать сессию';
+
+  @override
+  String get instructionTrainerPlanDesc =>
+      'План только из календаря тренера: выберите клиента и дату, затем упражнения. Прошлые вес и повторы — серые подсказки. Запланированная сессия со значком «плей»: нажмите, чтобы начать (сегодня) или удалить. В историю попадают только завершённые. План с прошедшей датой удаляется.';
+
+  @override
+  String get instructionTrainerRepeatTitle => 'Повторить прошлую тренировку';
+
+  @override
+  String get instructionTrainerRepeatDesc =>
+      'По желанию. Из профиля клиента или переключателем при добавлении сессии в календаре. Копирует упражнения прошлой сессии в сегодняшнюю живую тренировку или в новый план; прошлые вес и повторы — серые подсказки, а не готовые подходы.';
+
+  @override
+  String get rhythmPerWeek => 'в неделю';
+
+  @override
+  String get deloadNudgeTitle => 'Неделя полегче?';
+
+  @override
+  String deloadNudgeBody(String rate, int weeks) {
+    return 'Вы тренируетесь около $rate дней в неделю уже примерно $weeks нед. Это напоминание, не предписание. При таком ритме часто стоит снизить тоннаж и повторения примерно на 30% на неделю.';
+  }
+
+  @override
+  String get deloadNudgeLater => 'Не сейчас';
+
+  @override
+  String get deloadNudgeOk => 'Понятно';
+
+  @override
+  String get instructionHubManifest =>
+      'Без встроенного каталога и готовых программ. Вы сами называете упражнения — приложение ведёт статистику так, как вам удобно.';
+
+  @override
+  String get instructionChapterStartTitle => 'С чего начать';
+
+  @override
+  String get instructionChapterStartBlurb =>
+      'Главный экран, как вы тренируетесь, и почему приложение не учит вас тренироваться.';
+
+  @override
+  String get instructionChapterToolsTitle => 'Инструменты';
+
+  @override
+  String get instructionChapterToolsBlurb =>
+      'Ритм, избранное, группы мышц и быстрая тренировка.';
+
+  @override
+  String get instructionChapterSessionTitle => 'На тренировке';
+
+  @override
+  String get instructionChapterSessionBlurb =>
+      'Подходы, поля, кардио, сохранение и секундомер.';
+
+  @override
+  String get instructionChapterProgressTitle => 'Прогресс и данные';
+
+  @override
+  String get instructionChapterProgressBlurb =>
+      'Личные рекорды, график, календарь, история и резервная копия.';
+
+  @override
+  String get instructionChapterCoachTitle => 'Режим тренера';
+
+  @override
+  String get instructionChapterCoachBlurb =>
+      'Клиенты, профили, план сессии и повтор тренировки.';
+
+  @override
+  String get instructionSearchHint => 'Поиск по инструкции';
+
+  @override
+  String get instructionSearchEmpty => 'Ничего не найдено.';
 }

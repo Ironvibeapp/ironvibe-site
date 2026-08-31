@@ -150,6 +150,18 @@ abstract class AppLocalizations {
   /// **'Name cannot be empty'**
   String get renameExerciseEmpty;
 
+  /// No description provided for @reassignHistoryExerciseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change exercise'**
+  String get reassignHistoryExerciseTitle;
+
+  /// No description provided for @reassignHistoryExerciseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Only this workout changes. Your sets stay the same; progress charts follow the new exercise name.'**
+  String get reassignHistoryExerciseBody;
+
   /// No description provided for @delete.
   ///
   /// In en, this message translates to:
@@ -333,13 +345,13 @@ abstract class AppLocalizations {
   /// No description provided for @addSet.
   ///
   /// In en, this message translates to:
-  /// **'+ ADD SET'**
+  /// **'ADD SET'**
   String get addSet;
 
   /// No description provided for @addExercise.
   ///
   /// In en, this message translates to:
-  /// **'+ ADD EXERCISE'**
+  /// **'ADD EXERCISE'**
   String get addExercise;
 
   /// No description provided for @finishWorkout.
@@ -348,11 +360,173 @@ abstract class AppLocalizations {
   /// **'FINISH WORKOUT'**
   String get finishWorkout;
 
+  /// No description provided for @finishWorkoutConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish workout?'**
+  String get finishWorkoutConfirmTitle;
+
+  /// No description provided for @finishWorkoutConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The workout will be saved.'**
+  String get finishWorkoutConfirmBody;
+
+  /// No description provided for @finishWorkoutConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get finishWorkoutConfirmAction;
+
+  /// No description provided for @workoutCompleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Workout saved'**
+  String get workoutCompleteTitle;
+
   /// No description provided for @startWorkout.
   ///
   /// In en, this message translates to:
   /// **'START WORKOUT'**
   String get startWorkout;
+
+  /// No description provided for @quickWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'QUICK WORKOUT'**
+  String get quickWorkout;
+
+  /// No description provided for @quickWorkoutFullBody.
+  ///
+  /// In en, this message translates to:
+  /// **'FULL BODY'**
+  String get quickWorkoutFullBody;
+
+  /// No description provided for @quickWorkoutInsufficientTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough data'**
+  String get quickWorkoutInsufficientTitle;
+
+  /// No description provided for @quickWorkoutInsufficientBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A quick workout needs tagged exercises for chest, back, one leg group (front or rear thigh), and one of shoulders, arms, or core. Mark groups in Personal Progress — or keep logging: the app will ask when you enter a new exercise.'**
+  String get quickWorkoutInsufficientBody;
+
+  /// No description provided for @quickWorkoutOpenProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'OPEN PERSONAL PROGRESS'**
+  String get quickWorkoutOpenProgress;
+
+  /// No description provided for @quickWorkoutPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'QUICK WORKOUT · FULL BODY'**
+  String get quickWorkoutPreviewTitle;
+
+  /// No description provided for @quickWorkoutStart.
+  ///
+  /// In en, this message translates to:
+  /// **'START'**
+  String get quickWorkoutStart;
+
+  /// No description provided for @quickWorkoutSwap.
+  ///
+  /// In en, this message translates to:
+  /// **'Swap'**
+  String get quickWorkoutSwap;
+
+  /// No description provided for @quickWorkoutNoAlternatives.
+  ///
+  /// In en, this message translates to:
+  /// **'No other exercise in this group'**
+  String get quickWorkoutNoAlternatives;
+
+  /// No description provided for @muscleGroupPromptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscle group'**
+  String get muscleGroupPromptTitle;
+
+  /// No description provided for @muscleGroupPromptBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Used to build a quick full-body workout.'**
+  String get muscleGroupPromptBody;
+
+  /// No description provided for @muscleGroupLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get muscleGroupLater;
+
+  /// No description provided for @muscleGroupClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get muscleGroupClear;
+
+  /// No description provided for @muscleGroupSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Not for quick workout'**
+  String get muscleGroupSkip;
+
+  /// No description provided for @muscleGroupChest.
+  ///
+  /// In en, this message translates to:
+  /// **'Chest'**
+  String get muscleGroupChest;
+
+  /// No description provided for @muscleGroupBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get muscleGroupBack;
+
+  /// No description provided for @muscleGroupShoulders.
+  ///
+  /// In en, this message translates to:
+  /// **'Shoulders'**
+  String get muscleGroupShoulders;
+
+  /// No description provided for @muscleGroupCore.
+  ///
+  /// In en, this message translates to:
+  /// **'Core'**
+  String get muscleGroupCore;
+
+  /// No description provided for @muscleGroupQuads.
+  ///
+  /// In en, this message translates to:
+  /// **'Front thigh'**
+  String get muscleGroupQuads;
+
+  /// No description provided for @muscleGroupHamstrings.
+  ///
+  /// In en, this message translates to:
+  /// **'Rear thigh'**
+  String get muscleGroupHamstrings;
+
+  /// No description provided for @muscleGroupArmFlex.
+  ///
+  /// In en, this message translates to:
+  /// **'Arm curl'**
+  String get muscleGroupArmFlex;
+
+  /// No description provided for @muscleGroupArmExt.
+  ///
+  /// In en, this message translates to:
+  /// **'Arm extension'**
+  String get muscleGroupArmExt;
+
+  /// No description provided for @muscleGroupUntagged.
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get muscleGroupUntagged;
 
   /// No description provided for @calendarWorkouts.
   ///
@@ -390,6 +564,24 @@ abstract class AppLocalizations {
   /// **'No exercises in workouts yet'**
   String get personalProgressEmpty;
 
+  /// No description provided for @favoriteExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'FAVORITE EXERCISES'**
+  String get favoriteExercises;
+
+  /// No description provided for @favoriteExercisesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No favorite exercises yet'**
+  String get favoriteExercisesEmpty;
+
+  /// No description provided for @buildWorkoutFromFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'BUILD WORKOUT'**
+  String get buildWorkoutFromFavorites;
+
   /// No description provided for @exerciseHint.
   ///
   /// In en, this message translates to:
@@ -405,7 +597,7 @@ abstract class AppLocalizations {
   /// No description provided for @deleteExerciseHint.
   ///
   /// In en, this message translates to:
-  /// **'will no longer appear in suggestions.'**
+  /// **'will no longer appear in suggestions or Personal Progress.'**
   String get deleteExerciseHint;
 
   /// No description provided for @exerciseDeleted.
@@ -431,6 +623,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete set with data? This action cannot be undone.'**
   String get removeSetWithDataConfirm;
+
+  /// No description provided for @removeExerciseFromWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove exercise'**
+  String get removeExerciseFromWorkout;
+
+  /// No description provided for @removeExerciseFromWorkoutConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this exercise from the workout? This cannot be undone.'**
+  String get removeExerciseFromWorkoutConfirm;
 
   /// No description provided for @deleteClientTitle.
   ///
@@ -534,6 +738,36 @@ abstract class AppLocalizations {
   /// **'Save and leave'**
   String get clientProfileSaveAndLeave;
 
+  /// No description provided for @workoutRecoveryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Workout interrupted'**
+  String get workoutRecoveryTitle;
+
+  /// No description provided for @workoutRecoveryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your previous workout ended unexpectedly. Continue where you left off or delete the unsaved data.'**
+  String get workoutRecoveryMessage;
+
+  /// No description provided for @workoutRecoveryContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue workout'**
+  String get workoutRecoveryContinue;
+
+  /// No description provided for @workoutRecoveryDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete workout'**
+  String get workoutRecoveryDelete;
+
+  /// No description provided for @workoutRecoverySessionMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'The scheduled client workout was removed. The unsaved draft has been cleared.'**
+  String get workoutRecoverySessionMissing;
+
   /// No description provided for @fillCurrentExerciseBeforeAdd.
   ///
   /// In en, this message translates to:
@@ -557,6 +791,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Exercise #{n}: {exerciseName}'**
   String exerciseNumberedTitleWithName(int n, String exerciseName);
+
+  /// No description provided for @exerciseNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'#{n}'**
+  String exerciseNumberLabel(int n);
 
   /// No description provided for @clientProfileSectionGoal.
   ///
@@ -605,6 +845,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ADD WORKOUT'**
   String get addTraining;
+
+  /// No description provided for @repeatLastWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat last workout'**
+  String get repeatLastWorkout;
+
+  /// No description provided for @repeatLastUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This client has no previous workout to repeat.'**
+  String get repeatLastUnavailable;
+
+  /// No description provided for @editPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit plan'**
+  String get editPlan;
+
+  /// No description provided for @trainerSessionEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Not planned yet'**
+  String get trainerSessionEmpty;
+
+  /// No description provided for @trainerSessionPlanned.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} planned'**
+  String trainerSessionPlanned(int n);
+
+  /// No description provided for @trainerClientsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No clients yet. Add someone to start scheduling.'**
+  String get trainerClientsEmpty;
+
+  /// No description provided for @clientNeverTrained.
+  ///
+  /// In en, this message translates to:
+  /// **'No workouts yet'**
+  String get clientNeverTrained;
+
+  /// No description provided for @clientNoUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'No upcoming session'**
+  String get clientNoUpcoming;
+
+  /// No description provided for @clientLastSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Last: {when}'**
+  String clientLastSession(String when);
+
+  /// No description provided for @clientNextSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Next: {when}'**
+  String clientNextSession(String when);
+
+  /// No description provided for @clientSessionToday.
+  ///
+  /// In en, this message translates to:
+  /// **'today'**
+  String get clientSessionToday;
+
+  /// No description provided for @clientSessionYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'yesterday'**
+  String get clientSessionYesterday;
+
+  /// No description provided for @clientSessionTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'tomorrow'**
+  String get clientSessionTomorrow;
+
+  /// No description provided for @clientSessionDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} days ago'**
+  String clientSessionDaysAgo(int n);
+
+  /// No description provided for @clientSessionInDays.
+  ///
+  /// In en, this message translates to:
+  /// **'in {n} days'**
+  String clientSessionInDays(int n);
+
+  /// No description provided for @clientProfileDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get clientProfileDetails;
+
+  /// No description provided for @addSessionPickClient.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a client'**
+  String get addSessionPickClient;
 
   /// No description provided for @clientLabel.
   ///
@@ -677,6 +1019,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Weight — kg / lb (your choice)'**
   String get progressChartWeightLegend;
+
+  /// No description provided for @progressChartVolumeLegend.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume (tonnage)'**
+  String get progressChartVolumeLegend;
 
   /// No description provided for @repsHeader.
   ///
@@ -1035,7 +1383,7 @@ abstract class AppLocalizations {
   /// No description provided for @addClient.
   ///
   /// In en, this message translates to:
-  /// **'+ ADD CLIENT'**
+  /// **'ADD CLIENT'**
   String get addClient;
 
   /// No description provided for @workoutsToday.
@@ -1083,7 +1431,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionPhilosophy.
   ///
   /// In en, this message translates to:
-  /// **'IronVibe deliberately ships without a built-in exercise catalog or preset \"programs.\" It is not here to teach you how to train—YouTube and real coaches already do that—but to help you keep stats exactly the way you like. You type exercise names yourself, in your own words, instead of hunting through a massive list. The longer you use it, the more it feels like home: the app learns your habits and adapts to you, not the other way around.'**
+  /// **'IronVibe deliberately ships without a built-in exercise catalog or preset \"programs.\" It is not here to teach you how to train—YouTube and real coaches already do that—but to help you keep stats exactly the way you like. You type exercise names yourself, in your own words. Optionally tag a muscle group so the app can assemble a quick full-body session from your own list. The longer you use it, the more it feels like home: the app learns your habits and adapts to you, not the other way around.'**
   String get instructionPhilosophy;
 
   /// No description provided for @instructionSectionSetControl.
@@ -1101,7 +1449,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionSetMinusDesc.
   ///
   /// In en, this message translates to:
-  /// **'Removes the last set. If it contains logged data, the app asks for confirmation.'**
+  /// **'Removes the last set. If that row already has weight, reps, or RIR, the app asks for confirmation. An empty row is removed right away. If only one set remains: in the current workout the row is cleared; in saved history the whole exercise is deleted.'**
   String get instructionSetMinusDesc;
 
   /// No description provided for @instructionSetPlusLabel.
@@ -1113,7 +1461,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionSetPlusDesc.
   ///
   /// In en, this message translates to:
-  /// **'Adds a new set row to the current exercise.'**
+  /// **'Adds a new empty set row to this exercise.'**
   String get instructionSetPlusDesc;
 
   /// No description provided for @instructionSetProgressLabel.
@@ -1137,7 +1485,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionProgressChartIntro.
   ///
   /// In en, this message translates to:
-  /// **'Two independent trends by date: red — heaviest single set that day; cyan — most reps in any single set that day. Left axis: weight; right axis: reps.'**
+  /// **'Three independent trends by date: red — heaviest single set that day; cyan — most reps in any single set that day; yellow — exercise volume (sum of weight × reps for that day). Left axis: weight; right axis: reps; yellow is shown as a normalized trend.'**
   String get instructionProgressChartIntro;
 
   /// No description provided for @instructionProgressLineWeightLabel.
@@ -1164,6 +1512,18 @@ abstract class AppLocalizations {
   /// **'Cyan line: maximum reps in one set that day (not tied to the heaviest weight).'**
   String get instructionProgressLineRepsDesc;
 
+  /// No description provided for @instructionProgressLineVolumeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Yellow line: daily exercise volume (tonnage), calculated as the sum of weight × reps for sets where both values are logged.'**
+  String get instructionProgressLineVolumeDesc;
+
+  /// No description provided for @instructionProgressChartSessionHighlight.
+  ///
+  /// In en, this message translates to:
+  /// **'During an active workout, the chart button under the sets may tint in the same colors as the graph: red if you beat your previous best weight in a single set; yellow if total exercise volume beats your past best for that movement; cyan if the exercise is bodyweight-only and your total reps (sum across all sets) beat your past best. If several apply, priority is red, then yellow, then cyan. The tint appears only while you are logging the current workout—not in saved history.'**
+  String get instructionProgressChartSessionHighlight;
+
   /// No description provided for @instructionSectionWorkout.
   ///
   /// In en, this message translates to:
@@ -1179,7 +1539,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionAddExerciseBody.
   ///
   /// In en, this message translates to:
-  /// **'Creates a new block for another movement.'**
+  /// **'Adds a new block. Name the current exercise first — the app will remind you if that field is still empty.'**
   String get instructionAddExerciseBody;
 
   /// No description provided for @instructionSectionExerciseNameTools.
@@ -1209,7 +1569,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionRemoveFromBankDesc.
   ///
   /// In en, this message translates to:
-  /// **'When the suggestions list is open under the name field, tap the X on a row to remove that name from your personal exercise list (the bank).'**
+  /// **'When the suggestions list is open under the name field, tap the X on a row — or the red X in Personal Progress — to remove that name from suggestions and the progress table. Saved workouts stay unchanged.'**
   String get instructionRemoveFromBankDesc;
 
   /// No description provided for @instructionSectionInputs.
@@ -1227,7 +1587,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionWeightBody.
   ///
   /// In en, this message translates to:
-  /// **'Load on the bar or equipment you train with.'**
+  /// **'Load on the bar or equipment. Type the number in kg or lb — whichever you use. The app does not convert units.'**
   String get instructionWeightBody;
 
   /// No description provided for @instructionRepsTitle.
@@ -1287,7 +1647,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionPersonalProgressIntro.
   ///
   /// In en, this message translates to:
-  /// **'Personal Progress is for tracking strength gains exercise by exercise. Everything you have logged in saved workouts appears in one table, so you can compare at a glance; use the search field to find a movement right away. Open it from your home flow (the button under the workout calendar) or from a client profile when you train other people.'**
+  /// **'One table of every movement from saved workouts: best set, estimated 1RM, and max volume. Search to find a name. Star favorites; tap the small chip under the name to tag a muscle group; the red X removes the name from suggestions and this table (saved workouts stay). Open it from your training menu or a client profile.'**
   String get instructionPersonalProgressIntro;
 
   /// No description provided for @instructionSectionSaving.
@@ -1305,7 +1665,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionFinishBody.
   ///
   /// In en, this message translates to:
-  /// **'Saves the entire session to history. Until you tap it, nothing is recorded.'**
+  /// **'Confirms and writes the session to history. If you leave earlier, you can save, discard, or stay. A draft is also kept automatically if the app is interrupted.'**
   String get instructionFinishBody;
 
   /// No description provided for @instructionSectionCardio.
@@ -1431,7 +1791,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionNavHistoryDesc.
   ///
   /// In en, this message translates to:
-  /// **'View completed workouts on the calendar and open aggregated statistics from the chart icon in the app bars.'**
+  /// **'In calendar/history each workout shows total tonnage. Workout volume is one of the best indicators of hypertrophy: the more quality volume you accumulate, the more muscle you can build.'**
   String get instructionNavHistoryDesc;
 
   /// No description provided for @instructionNavImportExportTitle.
@@ -1443,8 +1803,458 @@ abstract class AppLocalizations {
   /// No description provided for @instructionNavImportExportDesc.
   ///
   /// In en, this message translates to:
-  /// **'Back up or transfer your data using JSON export and import in the statistics dialog.'**
+  /// **'Back up or transfer your data using JSON export and import in the statistics dialog. Backups include workout history, your exercise list, favorites, and muscle-group tags. Coach backups are separate from personal history.'**
   String get instructionNavImportExportDesc;
+
+  /// No description provided for @instructionSectionHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get instructionSectionHome;
+
+  /// No description provided for @instructionThemeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get instructionThemeTitle;
+
+  /// No description provided for @instructionThemeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The sun / moon switch on the home screen toggles light and dark. Your choice is remembered.'**
+  String get instructionThemeDesc;
+
+  /// No description provided for @instructionTrainSelfTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'I train myself'**
+  String get instructionTrainSelfTitle;
+
+  /// No description provided for @instructionTrainSelfDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your own workouts, calendar, personal progress, favorites, a rhythm gauge of how often you train, and a full-body quick workout built from your tagged exercises.'**
+  String get instructionTrainSelfDesc;
+
+  /// No description provided for @instructionTrainOthersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'I train others'**
+  String get instructionTrainOthersTitle;
+
+  /// No description provided for @instructionTrainOthersDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Coach mode: clients, a schedule, and a separate history per person. Each client has their own progress table and favorites.'**
+  String get instructionTrainOthersDesc;
+
+  /// No description provided for @instructionSectionAthleteMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Your training'**
+  String get instructionSectionAthleteMenu;
+
+  /// No description provided for @instructionStartWorkoutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start workout'**
+  String get instructionStartWorkoutTitle;
+
+  /// No description provided for @instructionStartWorkoutDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens an empty session — it does not copy the last workout. Add exercises, log sets, then finish to save.'**
+  String get instructionStartWorkoutDesc;
+
+  /// No description provided for @instructionQuickWorkoutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick workout'**
+  String get instructionQuickWorkoutTitle;
+
+  /// No description provided for @instructionQuickWorkoutDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Assembles a 4-exercise full-body session: chest, back, one leg movement (front or rear thigh — never both), and one accessory for shoulders, arms, or core, whichever you have trained least recently. Prefers favorites. Last weights and reps appear greyed as a target to beat — you log each set yourself.'**
+  String get instructionQuickWorkoutDesc;
+
+  /// No description provided for @instructionCalendarMenuTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Workout calendar'**
+  String get instructionCalendarMenuTitle;
+
+  /// No description provided for @instructionCalendarMenuDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'See which days you trained, open a saved session, or add a workout on a chosen date and time — including past days.'**
+  String get instructionCalendarMenuDesc;
+
+  /// No description provided for @instructionPersonalProgressMenuDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A table of your best sets, estimated 1RM, and max volume. Star favorites and tag muscle groups here.'**
+  String get instructionPersonalProgressMenuDesc;
+
+  /// No description provided for @instructionFavoritesMenuTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite exercises'**
+  String get instructionFavoritesMenuTitle;
+
+  /// No description provided for @instructionFavoritesMenuDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your starred list. Tick the ones you want and tap Build workout to start a session in that order. Last weights and reps appear greyed as a target to beat.'**
+  String get instructionFavoritesMenuDesc;
+
+  /// No description provided for @instructionSectionRhythm.
+  ///
+  /// In en, this message translates to:
+  /// **'Training rhythm'**
+  String get instructionSectionRhythm;
+
+  /// No description provided for @instructionRhythmIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'After a few strength sessions, a gauge appears at the top of your training screen. It shows how many days per week you have trained on average over the last four weeks. Cardio-only days are not counted. The number is a snapshot of your density — not a target the app expects you to hit.'**
+  String get instructionRhythmIntro;
+
+  /// No description provided for @instructionRhythmGaugeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Days per week'**
+  String get instructionRhythmGaugeTitle;
+
+  /// No description provided for @instructionRhythmGaugeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The arc fills from 1 to 6 days per week. Cooler steel means a lighter pace; warmer tones mean higher density. The gauge appears once you have at least three strength days in that four-week window.'**
+  String get instructionRhythmGaugeDesc;
+
+  /// No description provided for @instructionRhythmDeloadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lighter week reminder'**
+  String get instructionRhythmDeloadTitle;
+
+  /// No description provided for @instructionRhythmDeloadDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'If you have been training about two and a half days a week or more for several weeks without a lighter week, the app may suggest cutting tonnage and reps by about 30% for one week. The more days per week, the sooner that reminder. It is a reminder, not a prescription. You will see it at most once per week.'**
+  String get instructionRhythmDeloadDesc;
+
+  /// No description provided for @instructionSectionFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get instructionSectionFavorites;
+
+  /// No description provided for @instructionFavoriteStarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Star'**
+  String get instructionFavoriteStarTitle;
+
+  /// No description provided for @instructionFavoriteStarDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'In Personal Progress, tap the star next to an exercise to add or remove it from favorites. Favorites stay at the top of the table.'**
+  String get instructionFavoriteStarDesc;
+
+  /// No description provided for @instructionBuildFromFavoritesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Build workout'**
+  String get instructionBuildFromFavoritesTitle;
+
+  /// No description provided for @instructionBuildFromFavoritesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'On the favorites screen, tick the exercises you want. The button appears when at least one is selected. Last weights and reps appear greyed as a target to beat — you log each set yourself. For a client, the same action starts a session for that person.'**
+  String get instructionBuildFromFavoritesDesc;
+
+  /// No description provided for @instructionSectionMuscleGroups.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscle groups & quick workout'**
+  String get instructionSectionMuscleGroups;
+
+  /// No description provided for @instructionMuscleGroupsIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Groups are optional labels you attach to your own exercise names. They are not a catalog: they only help Quick workout pick a balanced full-body mix. Eight groups: chest, back, shoulders, core, front thigh, rear thigh, arm curl, arm extension.'**
+  String get instructionMuscleGroupsIntro;
+
+  /// No description provided for @instructionMuscleGroupTagTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to tag'**
+  String get instructionMuscleGroupTagTitle;
+
+  /// No description provided for @instructionMuscleGroupTagDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'When you first enter a new exercise name, the app asks for a group. You can skip with Later, or mark Not for quick workout if you do not want that movement in a full-body mix. Tap the small chip under the name in Personal Progress or Favorites to change or clear it.'**
+  String get instructionMuscleGroupTagDesc;
+
+  /// No description provided for @instructionQuickWorkoutHowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How a quick session is built'**
+  String get instructionQuickWorkoutHowTitle;
+
+  /// No description provided for @instructionQuickWorkoutHowDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Four slots: chest, back, one half of the legs, then shoulders/arms/core by recency. A preview lets you swap any slot for another exercise in the same group. Add more yourself if you want a longer session.'**
+  String get instructionQuickWorkoutHowDesc;
+
+  /// No description provided for @instructionStrengthCardioTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Strength / Cardio'**
+  String get instructionStrengthCardioTitle;
+
+  /// No description provided for @instructionStrengthCardioDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch at the top of the session. Strength: weight, reps, RIR. Cardio: time and intensity only — no distance field.'**
+  String get instructionStrengthCardioDesc;
+
+  /// No description provided for @instructionPreviousHintsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Grey last-session numbers'**
+  String get instructionPreviousHintsTitle;
+
+  /// No description provided for @instructionPreviousHintsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'When you pick an exercise in a client session, a quick workout, or a session built from favorites, last logged weights and reps show as grey placeholders — a minimum to beat, not a finished set. Only numbers you type are saved to history.'**
+  String get instructionPreviousHintsDesc;
+
+  /// No description provided for @instructionRemoveExerciseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from this workout'**
+  String get instructionRemoveExerciseTitle;
+
+  /// No description provided for @instructionRemoveExerciseDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Removes that block from the current session only. Saved history is not affected until you finish.'**
+  String get instructionRemoveExerciseDesc;
+
+  /// No description provided for @instructionReassignExerciseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change exercise in history'**
+  String get instructionReassignExerciseTitle;
+
+  /// No description provided for @instructionReassignExerciseDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'In a saved workout you can reassign a block to a different name. Only that session changes; charts follow the new name. Sets stay as they were.'**
+  String get instructionReassignExerciseDesc;
+
+  /// No description provided for @instructionAutoSaveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Interrupted workout'**
+  String get instructionAutoSaveTitle;
+
+  /// No description provided for @instructionAutoSaveDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'If the app closes mid-session, it offers to continue where you left off or delete the unsaved draft.'**
+  String get instructionAutoSaveDesc;
+
+  /// No description provided for @instructionSectionCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get instructionSectionCalendar;
+
+  /// No description provided for @instructionCalendarAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add on a date'**
+  String get instructionCalendarAddTitle;
+
+  /// No description provided for @instructionCalendarAddDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a day, then add a workout at a chosen time. Useful for logging a missed session.'**
+  String get instructionCalendarAddDesc;
+
+  /// No description provided for @instructionSectionTrainer.
+  ///
+  /// In en, this message translates to:
+  /// **'Coach mode'**
+  String get instructionSectionTrainer;
+
+  /// No description provided for @instructionTrainerIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'I train others is for coaches. Add clients, schedule sessions, plan exercises ahead of time, and log workouts per person. Repeating the last session is optional. Export and import for coach data is separate from your personal history. Deleting a client removes future sessions but keeps past workouts for reporting.'**
+  String get instructionTrainerIntro;
+
+  /// No description provided for @instructionClientsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clients'**
+  String get instructionClientsTitle;
+
+  /// No description provided for @instructionClientsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Add, edit, or delete clients. The list shows the last and next session. Profile fields: goal, weight, height, and private coach notes.'**
+  String get instructionClientsDesc;
+
+  /// No description provided for @instructionClientProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Client profile'**
+  String get instructionClientProfileTitle;
+
+  /// No description provided for @instructionClientProfileDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Start today\'s session from the profile: an empty live workout. Grey last-session numbers appear only after you pick an exercise. History lists completed workouts only. Plan future sessions on the calendar. Progress and favorites are on the same screen. Unsaved profile edits ask before you leave.'**
+  String get instructionClientProfileDesc;
+
+  /// No description provided for @instructionTrainerPlanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan a session'**
+  String get instructionTrainerPlanTitle;
+
+  /// No description provided for @instructionTrainerPlanDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan only from the coach calendar: pick a client and date, then name exercises. Previous weights and reps appear grey as a hint. A planned session shows a play icon. Tap it to start (today) or delete. Only finished workouts go to history. A plan whose date has already passed is removed.'**
+  String get instructionTrainerPlanDesc;
+
+  /// No description provided for @instructionTrainerRepeatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat last workout'**
+  String get instructionTrainerRepeatTitle;
+
+  /// No description provided for @instructionTrainerRepeatDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. From the client profile, or as a switch when adding a session on the calendar. Copies the last session\'s exercises into today\'s live workout or a new plan; previous weights and reps show as grey hints, not as finished sets.'**
+  String get instructionTrainerRepeatDesc;
+
+  /// No description provided for @rhythmPerWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'per week'**
+  String get rhythmPerWeek;
+
+  /// No description provided for @deloadNudgeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A lighter week?'**
+  String get deloadNudgeTitle;
+
+  /// No description provided for @deloadNudgeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve been training about {rate} days a week for roughly {weeks} weeks. This is a reminder, not a prescription. At this density a lighter week — about 30% less tonnage and reps — is often worth considering.'**
+  String deloadNudgeBody(String rate, int weeks);
+
+  /// No description provided for @deloadNudgeLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get deloadNudgeLater;
+
+  /// No description provided for @deloadNudgeOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get deloadNudgeOk;
+
+  /// No description provided for @instructionHubManifest.
+  ///
+  /// In en, this message translates to:
+  /// **'No built-in catalog or preset programs. You name exercises yourself; the app keeps stats your way.'**
+  String get instructionHubManifest;
+
+  /// No description provided for @instructionChapterStartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting started'**
+  String get instructionChapterStartTitle;
+
+  /// No description provided for @instructionChapterStartBlurb.
+  ///
+  /// In en, this message translates to:
+  /// **'Home screen, how you train, and why the app stays out of your way.'**
+  String get instructionChapterStartBlurb;
+
+  /// No description provided for @instructionChapterToolsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Training tools'**
+  String get instructionChapterToolsTitle;
+
+  /// No description provided for @instructionChapterToolsBlurb.
+  ///
+  /// In en, this message translates to:
+  /// **'Rhythm gauge, favorites, muscle tags, and quick workout.'**
+  String get instructionChapterToolsBlurb;
+
+  /// No description provided for @instructionChapterSessionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'In session'**
+  String get instructionChapterSessionTitle;
+
+  /// No description provided for @instructionChapterSessionBlurb.
+  ///
+  /// In en, this message translates to:
+  /// **'Logging sets, fields, cardio, saving, and the stopwatch.'**
+  String get instructionChapterSessionBlurb;
+
+  /// No description provided for @instructionChapterProgressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress and data'**
+  String get instructionChapterProgressTitle;
+
+  /// No description provided for @instructionChapterProgressBlurb.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal records, the chart, calendar, history, and backup.'**
+  String get instructionChapterProgressBlurb;
+
+  /// No description provided for @instructionChapterCoachTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coach mode'**
+  String get instructionChapterCoachTitle;
+
+  /// No description provided for @instructionChapterCoachBlurb.
+  ///
+  /// In en, this message translates to:
+  /// **'Clients, profiles, planned sessions, and repeating a workout.'**
+  String get instructionChapterCoachBlurb;
+
+  /// No description provided for @instructionSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search the guide'**
+  String get instructionSearchHint;
+
+  /// No description provided for @instructionSearchEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing matches that search.'**
+  String get instructionSearchEmpty;
 }
 
 class _AppLocalizationsDelegate

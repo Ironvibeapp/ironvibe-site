@@ -14,9 +14,9 @@ final class IronVibeTimerSounds {
 
   static Future<void> initialize() => _initFuture ??= _doInit();
 
-  static Future<void> _doInit() async {
-    await AudioPlayer.global.setAudioContext(
-      AudioContext(
+  /// Короткие сигналы: transient may duck + MediaPlayer, чтобы по [onCompletion] вызывался
+  /// [stop] → [FocusManager.handleStop] / abandonAudioFocusRequest на Android.
+  static AudioContext get _timerAudioContext => AudioContext(
         android: const AudioContextAndroid(
           contentType: AndroidContentType.sonification,
           usageType: AndroidUsageType.assistanceSonification,
@@ -26,12 +26,29 @@ final class IronVibeTimerSounds {
           category: AVAudioSessionCategory.playback,
           options: const {AVAudioSessionOptions.mixWithOthers},
         ),
-      ),
-    );
-    await _tickPlayer.setReleaseMode(ReleaseMode.release);
-    await _phasePlayer.setReleaseMode(ReleaseMode.release);
-    await _tickPlayer.setPlayerMode(PlayerMode.lowLatency);
-    await _phasePlayer.setPlayerMode(PlayerMode.lowLatency);
+      );
+
+  /// Статические [AudioPlayer] регистрируются в нативе при загрузке класса с дефолтным
+  /// [AndroidAudioFocus.gain] (полный захват). Глобальный [AudioPlayer.global.setAudioContext]
+  /// меняет только шаблон для **новых** плееров — у тикера остаётся старый фокус, из‑за чего
+  /// после бипа не отрабатывает ожидаемое освобождение и ducking «залипает». Поэтому после
+  /// [stop] обязательно [setAudioContext] на каждый экземпляр и явно [PlayerMode.mediaPlayer]
+  /// ([PlayerMode.lowLatency] / SoundPool не даёт onCompletion → нет abandon).
+  static Future<void> _doInit() async {
+    final ctx = _timerAudioContext;
+    await AudioPlayer.global.setAudioContext(ctx);
+    await _tickPlayer.setReleaseMode(ReleaseMode.stop);
+    await _phasePlayer.setReleaseMode(ReleaseMode.stop);
+    await _tickPlayer.setPlayerMode(PlayerMode.mediaPlayer);
+    await _phasePlayer.setPlayerMode(PlayerMode.mediaPlayer);
+    try {
+      await _tickPlayer.stop();
+    } catch (_) {}
+    try {
+      await _phasePlayer.stop();
+    } catch (_) {}
+    await _tickPlayer.setAudioContext(ctx);
+    await _phasePlayer.setAudioContext(ctx);
   }
 
   static void playTick() {
@@ -42,7 +59,7 @@ final class IronVibeTimerSounds {
     await initialize();
     try {
       await _tickPlayer.stop();
-      await _tickPlayer.play(AssetSource('sounds/timer_tick.wav'), mode: PlayerMode.lowLatency, volume: 0.88);
+      await _tickPlayer.play(AssetSource('sounds/timer_tick.wav'), volume: 0.88);
     } catch (e, st) {
       assert(() {
         debugPrint('IronVibeTimerSounds.playTick: $e\n$st');
@@ -62,7 +79,7 @@ final class IronVibeTimerSounds {
     await initialize();
     try {
       await _phasePlayer.stop();
-      await _phasePlayer.play(AssetSource('sounds/timer_phase.wav'), mode: PlayerMode.lowLatency, volume: 0.92);
+      await _phasePlayer.play(AssetSource('sounds/timer_phase.wav'), volume: 0.92);
     } catch (e, st) {
       assert(() {
         debugPrint('IronVibeTimerSounds.playPhase: $e\n$st');

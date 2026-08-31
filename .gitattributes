@@ -1,0 +1,21 @@
+# GitHub language stats should reflect the app, not the landing pages.
+ar/** linguist-vendored
+de/** linguist-vendored
+en/** linguist-vendored
+es/** linguist-vendored
+fr/** linguist-vendored
+hi/** linguist-vendored
+it/** linguist-vendored
+pt/** linguist-vendored
+ru/** linguist-vendored
+zh/** linguist-vendored
+privacy/** linguist-vendored
+donate/** linguist-vendored
+screenshots/** linguist-vendored
+images/** linguist-vendored
+*.css linguist-vendored
+safe-html.js linguist-vendored
+theme-toggle.js linguist-vendored
+screenshots-lightbox.js linguist-vendored
+consent-banner.js linguist-vendored
+vendor/** linguist-vendored

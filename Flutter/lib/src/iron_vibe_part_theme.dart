@@ -1,5 +1,100 @@
 part of 'package:fitness_app/main.dart';
 
+/// Скругления UI: карточки / поля / диалоги — одно семейство, капсулы кнопок не трогаем.
+const double kIronVibeRadiusCard = 16;
+const double kIronVibeRadiusField = 8;
+const double kIronVibeRadiusDialog = 14;
+const double kIronVibeRadiusSegment = 10;
+const double kIronVibeRadiusChip = 8;
+
+/// Медь / латунь — единый акцент приложения (CTA, иконки, выделения).
+const Color kIronVibeAccent = Color(0xFFC4A06A);
+
+const double kIronVibeCtaHeight = 56;
+const double kIronVibeCtaIconSize = 22;
+const double kIronVibeCtaFontSize = 15;
+
+String ironVibeSentenceCase(String raw) {
+  if (raw.isEmpty) return raw;
+  final lower = raw.toLowerCase();
+  if (lower == raw) return raw;
+  for (var i = 0; i < lower.length; i++) {
+    final ch = lower[i];
+    if (ch.toUpperCase() != ch.toLowerCase()) {
+      return '${lower.substring(0, i)}${ch.toUpperCase()}${lower.substring(i + 1)}';
+    }
+  }
+  return lower;
+}
+
+List<Color> ironVibeMetalGradientColors({required bool isDark}) {
+  return isDark
+      ? const [Color(0xFF454D59), Color(0xFF262A30)]
+      : const [Color(0xFFC9D0DC), Color(0xFF98A4B4)];
+}
+
+List<Color> ironVibePrimaryCtaGradientColors({required bool isDark}) {
+  return isDark
+      ? const [Color(0xFFE4E8F0), Color(0xFF9AA3B2)]
+      : const [Color(0xFF4A5364), Color(0xFF1F2530)];
+}
+
+Color ironVibeMetalBorderColor({required bool isDark}) {
+  return isDark ? const Color(0x4DFFFFFF) : const Color(0x55000000);
+}
+
+Widget ironVibeFadeRule(IronVibePalette pal) {
+  return DecoratedBox(
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          pal.borderSubtle.withValues(alpha: 0),
+          pal.borderSubtle,
+          pal.borderSubtle.withValues(alpha: 0),
+        ],
+      ),
+    ),
+    child: const SizedBox(height: 1, width: double.infinity),
+  );
+}
+
+ShapeBorder ironVibeDialogShape(IronVibePalette pal) {
+  return RoundedRectangleBorder(
+    side: BorderSide(color: pal.borderSubtle, width: 0.5),
+    borderRadius: BorderRadius.circular(kIronVibeRadiusDialog),
+  );
+}
+
+List<BoxShadow> ironVibeCardShadow({required bool isDark}) {
+  return isDark
+      ? [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.40),
+            offset: const Offset(0, 4),
+            blurRadius: 14,
+          ),
+        ]
+      : [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            offset: const Offset(0, 3),
+            blurRadius: 12,
+          ),
+        ];
+}
+
+BoxDecoration ironVibeElevatedCardDecoration(
+  IronVibePalette pal, {
+  Color? color,
+}) {
+  return BoxDecoration(
+    color: color ?? pal.card,
+    borderRadius: BorderRadius.circular(kIronVibeRadiusCard),
+    border: Border.all(color: pal.borderSubtle, width: 0.5),
+    boxShadow: ironVibeCardShadow(isDark: pal.brightness == Brightness.dark),
+  );
+}
+
 /// Палитра UI: светлая и тёмная тема через [ThemeExtension].
 @immutable
 class IronVibePalette extends ThemeExtension<IronVibePalette> {
@@ -364,12 +459,16 @@ ThemeData ironVibeBuildTheme(Brightness brightness) {
       hintStyle: TextStyle(color: p.textHint, fontSize: 13),
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.zero,
-        borderSide: BorderSide(color: p.borderDefault, width: 1.0),
+        borderRadius: BorderRadius.circular(kIronVibeRadiusField),
+        borderSide: BorderSide(color: p.borderSubtle, width: 0.5),
       ),
-      focusedBorder: const OutlineInputBorder(
-        borderRadius: BorderRadius.zero,
-        borderSide: BorderSide(color: Color(0xFF00E5FF), width: 1.6),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(kIronVibeRadiusField),
+        borderSide: BorderSide(color: kIronVibeAccent, width: 1.6),
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(kIronVibeRadiusField),
+        borderSide: BorderSide(color: p.borderSubtle, width: 0.5),
       ),
     ),
   );
@@ -397,7 +496,7 @@ Widget _ironVibeCalendarDayCell(
       decoration: BoxDecoration(
         color: isSelected ? pal.calendarCellSelected : Colors.transparent,
         shape: BoxShape.circle,
-        border: isSelected ? Border.all(color: pal.calendarMark, width: 1) : null,
+        border: isSelected ? Border.all(color: kIronVibeAccent, width: 1.1) : null,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

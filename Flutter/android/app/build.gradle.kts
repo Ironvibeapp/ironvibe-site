@@ -15,7 +15,6 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.ironvibe.app"
-    // 36: required by current Flutter plugins; targetSdk stays 35 (Android 15)
     compileSdk = 36
     ndkVersion = "28.2.13676358"
 
@@ -30,8 +29,8 @@ android {
 
     defaultConfig {
         applicationId = "com.ironvibe.app"
-        minSdk = flutter.minSdkVersion
-        targetSdk = 35
+        minSdk = 24
+        targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
@@ -50,6 +49,8 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = true
+            isShrinkResources = true
         }
     }
 
@@ -65,7 +66,7 @@ flutter {
 }
 
 dependencies {
-    // Theme.Material3.* in styles.xml + enableEdgeToEdge() (Android 15)
+    // Theme.Material3.* in styles.xml + enableEdgeToEdge() (Android 16+)
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.activity:activity-ktx:1.9.3")
 }

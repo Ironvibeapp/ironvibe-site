@@ -27,6 +27,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get renameExerciseEmpty => 'El nombre no puede estar vacío';
 
   @override
+  String get reassignHistoryExerciseTitle => 'Cambiar ejercicio';
+
+  @override
+  String get reassignHistoryExerciseBody =>
+      'Solo cambia este entreno. Las series se mantienen; el progreso sigue el nuevo nombre del ejercicio.';
+
+  @override
   String get delete => 'Eliminar';
 
   @override
@@ -119,16 +126,100 @@ class AppLocalizationsEs extends AppLocalizations {
   String get volumeShort => 'VOL.';
 
   @override
-  String get addSet => '+ AÑADIR SERIE';
+  String get addSet => 'AÑADIR SERIE';
 
   @override
-  String get addExercise => '+ AÑADIR EJERCICIO';
+  String get addExercise => 'AÑADIR EJERCICIO';
 
   @override
   String get finishWorkout => 'FINALIZAR ENTRENAMIENTO';
 
   @override
+  String get finishWorkoutConfirmTitle => '¿Terminar entrenamiento?';
+
+  @override
+  String get finishWorkoutConfirmBody => 'El entrenamiento se guardará.';
+
+  @override
+  String get finishWorkoutConfirmAction => 'Terminar';
+
+  @override
+  String get workoutCompleteTitle => 'Entrenamiento guardado';
+
+  @override
   String get startWorkout => 'INICIAR ENTRENAMIENTO';
+
+  @override
+  String get quickWorkout => 'ENTRENO RÁPIDO';
+
+  @override
+  String get quickWorkoutFullBody => 'CUERPO COMPLETO';
+
+  @override
+  String get quickWorkoutInsufficientTitle => 'Datos insuficientes';
+
+  @override
+  String get quickWorkoutInsufficientBody =>
+      'Un entreno rápido necesita ejercicios de pecho, espalda, un grupo de pierna (muslo anterior o posterior) y uno de hombros, brazos o core. Márcalos en Progreso personal — o sigue registrando: la app preguntará al introducir un ejercicio nuevo.';
+
+  @override
+  String get quickWorkoutOpenProgress => 'ABRIR PROGRESO PERSONAL';
+
+  @override
+  String get quickWorkoutPreviewTitle => 'ENTRENO RÁPIDO · CUERPO COMPLETO';
+
+  @override
+  String get quickWorkoutStart => 'EMPEZAR';
+
+  @override
+  String get quickWorkoutSwap => 'Cambiar';
+
+  @override
+  String get quickWorkoutNoAlternatives =>
+      'No hay otro ejercicio en este grupo';
+
+  @override
+  String get muscleGroupPromptTitle => 'Grupo muscular';
+
+  @override
+  String get muscleGroupPromptBody =>
+      'Sirve para el entreno rápido de cuerpo completo.';
+
+  @override
+  String get muscleGroupLater => 'Más tarde';
+
+  @override
+  String get muscleGroupClear => 'Quitar';
+
+  @override
+  String get muscleGroupSkip => 'No para entreno rápido';
+
+  @override
+  String get muscleGroupChest => 'Pecho';
+
+  @override
+  String get muscleGroupBack => 'Espalda';
+
+  @override
+  String get muscleGroupShoulders => 'Hombros';
+
+  @override
+  String get muscleGroupCore => 'Core';
+
+  @override
+  String get muscleGroupQuads => 'Muslo anterior';
+
+  @override
+  String get muscleGroupHamstrings => 'Muslo posterior';
+
+  @override
+  String get muscleGroupArmFlex => 'Flexión de brazos';
+
+  @override
+  String get muscleGroupArmExt => 'Extensión de brazos';
+
+  @override
+  String get muscleGroupUntagged => '—';
 
   @override
   String get calendarWorkouts => 'CALENDARIO DE ENTRENAMIENTOS';
@@ -149,13 +240,23 @@ class AppLocalizationsEs extends AppLocalizations {
   String get personalProgressEmpty => 'Aún no hay ejercicios en los entrenos';
 
   @override
+  String get favoriteExercises => 'EJERCICIOS FAVORITOS';
+
+  @override
+  String get favoriteExercisesEmpty => 'Aún no hay ejercicios favoritos';
+
+  @override
+  String get buildWorkoutFromFavorites => 'ARMAR ENTRENO';
+
+  @override
   String get exerciseHint => 'Introduce el nombre del ejercicio';
 
   @override
   String get deleteFromHistory => '¿Eliminar del historial?';
 
   @override
-  String get deleteExerciseHint => 'ya no aparecerá en las sugerencias.';
+  String get deleteExerciseHint =>
+      'ya no aparecerá en las sugerencias ni en el progreso personal.';
 
   @override
   String get exerciseDeleted => 'eliminado';
@@ -170,6 +271,13 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get removeSetWithDataConfirm =>
       '¿Eliminar serie con datos? Esta acción no se puede deshacer.';
+
+  @override
+  String get removeExerciseFromWorkout => 'Quitar ejercicio';
+
+  @override
+  String get removeExerciseFromWorkoutConfirm =>
+      '¿Quitar este ejercicio del entrenamiento? Esta acción no se puede deshacer.';
 
   @override
   String get deleteClientTitle => 'ELIMINAR CLIENTE';
@@ -225,6 +333,23 @@ class AppLocalizationsEs extends AppLocalizations {
   String get clientProfileSaveAndLeave => 'Guardar y salir';
 
   @override
+  String get workoutRecoveryTitle => 'Entrenamiento interrumpido';
+
+  @override
+  String get workoutRecoveryMessage =>
+      'Tu entrenamiento anterior terminó de forma inesperada. Continúa donde lo dejaste o elimina los datos no guardados.';
+
+  @override
+  String get workoutRecoveryContinue => 'Continuar entrenamiento';
+
+  @override
+  String get workoutRecoveryDelete => 'Eliminar entrenamiento';
+
+  @override
+  String get workoutRecoverySessionMissing =>
+      'Se eliminó el entrenamiento programado del cliente. El borrador no guardado se ha borrado.';
+
+  @override
   String get fillCurrentExerciseBeforeAdd =>
       'Termina el ejercicio actual antes de añadir otro.';
 
@@ -239,6 +364,11 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String exerciseNumberedTitleWithName(int n, String exerciseName) {
     return 'Ejercicio n.º $n: $exerciseName';
+  }
+
+  @override
+  String exerciseNumberLabel(int n) {
+    return 'n.º $n';
   }
 
   @override
@@ -264,6 +394,69 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get addTraining => 'AÑADIR ENTRENAMIENTO';
+
+  @override
+  String get repeatLastWorkout => 'Repetir el último entreno';
+
+  @override
+  String get repeatLastUnavailable =>
+      'Este cliente aún no tiene un entreno para repetir.';
+
+  @override
+  String get editPlan => 'Editar plan';
+
+  @override
+  String get trainerSessionEmpty => 'Aún no planificado';
+
+  @override
+  String trainerSessionPlanned(int n) {
+    return '$n planificados';
+  }
+
+  @override
+  String get trainerClientsEmpty =>
+      'Aún no hay clientes. Añade a alguien para empezar a programar.';
+
+  @override
+  String get clientNeverTrained => 'Aún no hay entrenos';
+
+  @override
+  String get clientNoUpcoming => 'Sin sesión próxima';
+
+  @override
+  String clientLastSession(String when) {
+    return 'Último: $when';
+  }
+
+  @override
+  String clientNextSession(String when) {
+    return 'Próximo: $when';
+  }
+
+  @override
+  String get clientSessionToday => 'hoy';
+
+  @override
+  String get clientSessionYesterday => 'ayer';
+
+  @override
+  String get clientSessionTomorrow => 'mañana';
+
+  @override
+  String clientSessionDaysAgo(int n) {
+    return 'hace $n días';
+  }
+
+  @override
+  String clientSessionInDays(int n) {
+    return 'en $n días';
+  }
+
+  @override
+  String get clientProfileDetails => 'Perfil';
+
+  @override
+  String get addSessionPickClient => 'Elige un cliente';
 
   @override
   String get clientLabel => 'Cliente';
@@ -300,6 +493,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get progressChartWeightLegend => 'Peso — kg / lb (como anotas)';
+
+  @override
+  String get progressChartVolumeLegend => 'Volumen (tonelaje)';
 
   @override
   String get repsHeader => 'Repeticiones';
@@ -480,7 +676,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get noteLabel => 'Nota';
 
   @override
-  String get addClient => '+ AÑADIR CLIENTE';
+  String get addClient => 'AÑADIR CLIENTE';
 
   @override
   String get workoutsToday => 'ENTRENAMIENTOS DE HOY';
@@ -505,7 +701,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get instructionPhilosophy =>
-      'IronVibe no trae una biblioteca de ejercicios fija ni programas impuestos: es deliberado. No te enseña a entrenar — para eso están YouTube y un entrenador — solo te ayuda a llevar tus datos a tu manera. Escribes tú los nombres de los ejercicios, como los llamas, en lugar de elegir de una lista enorme. Cuanto más la usas, más cómoda se siente: la app se adapta a ti, no al revés.';
+      'IronVibe no trae una biblioteca de ejercicios fija ni programas impuestos: es deliberado. No te enseña a entrenar — para eso están YouTube y un entrenador — solo te ayuda a llevar tus datos a tu manera. Escribes tú los nombres de los ejercicios. Si quieres, marcas un grupo muscular para que la app arme un entreno rápido de cuerpo completo con tu propia lista. Cuanto más la usas, más cómoda se siente: la app se adapta a ti, no al revés.';
 
   @override
   String get instructionSectionSetControl => 'Control de series';
@@ -515,14 +711,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get instructionSetMinusDesc =>
-      'Elimina la ultima serie. Si contiene datos, la app pide confirmacion.';
+      'Elimina la última serie. Si la fila ya tiene peso, repeticiones o RIR, la app pide confirmación. Una fila vacía se quita al momento. Si queda solo una serie: en el entrenamiento actual se vacía la fila; en el historial guardado se elimina todo el ejercicio.';
 
   @override
   String get instructionSetPlusLabel => 'Más';
 
   @override
   String get instructionSetPlusDesc =>
-      'Añade una nueva fila de serie al ejercicio en curso.';
+      'Añade una nueva fila de serie vacía a este ejercicio.';
 
   @override
   String get instructionSetProgressLabel => 'Cronología';
@@ -536,7 +732,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get instructionProgressChartIntro =>
-      'Dos tendencias independientes por fecha: rojo —serie mas pesada del dia (kg/lb); cyan — mas repeticiones en una serie (cualquier peso). Eje izquierdo: peso; derecho: repeticiones.';
+      'Tres tendencias independientes por fecha: rojo — serie mas pesada del dia; cyan — mas repeticiones en una serie; amarillo — volumen del ejercicio (suma de peso × repeticiones del dia). Eje izquierdo: peso; derecho: repeticiones; la linea amarilla se muestra normalizada.';
 
   @override
   String get instructionProgressLineWeightLabel => 'Peso';
@@ -553,6 +749,14 @@ class AppLocalizationsEs extends AppLocalizations {
       'Linea cyan: maximo de repeticiones en una serie ese dia (no ligado al peso maximo).';
 
   @override
+  String get instructionProgressLineVolumeDesc =>
+      'Linea amarilla: volumen diario del ejercicio (tonelaje), calculado como la suma de peso × repeticiones en series con ambos valores.';
+
+  @override
+  String get instructionProgressChartSessionHighlight =>
+      'Durante un entreno activo el boton del grafico bajo las series puede teñirse como las curvas: rojo si superas tu mejor peso en una serie; amarillo si el volumen total del ejercicio supera tu mejor marca anterior; cian si el ejercicio es sin peso y la suma de repeticiones de todas las series supera tu maximo anterior. Si varias condiciones se cumplen, la prioridad es rojo, luego amarillo, luego cian. Solo mientras registras el entreno actual, no en el historial guardado.';
+
+  @override
   String get instructionSectionWorkout => 'Entrenamiento';
 
   @override
@@ -560,7 +764,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get instructionAddExerciseBody =>
-      'Crea un nuevo bloque para otro tipo de trabajo.';
+      'Añade un bloque nuevo. Primero pon nombre al ejercicio actual: la app te avisa si el campo sigue vacío.';
 
   @override
   String get instructionSectionExerciseNameTools => 'Nombre del ejercicio';
@@ -577,7 +781,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get instructionRemoveFromBankDesc =>
-      'Con la lista de sugerencias abierta bajo el nombre, pulse la X de una fila para quitar ese nombre de su lista personal (banco).';
+      'Con la lista de sugerencias abierta bajo el nombre, pulse la X de una fila — o la X roja en Progreso personal — para quitar ese nombre de las sugerencias y de la tabla de progreso. Los entrenos guardados no cambian.';
 
   @override
   String get instructionSectionInputs => 'Datos';
@@ -586,7 +790,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get instructionWeightTitle => 'Peso';
 
   @override
-  String get instructionWeightBody => 'Peso de la carga (kg/lb).';
+  String get instructionWeightBody =>
+      'Peso de la carga. Escribe el número en kg o lb, como entrenes. La app no convierte unidades.';
 
   @override
   String get instructionRepsTitle => 'Repeticiones';
@@ -621,7 +826,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get instructionPersonalProgressIntro =>
-      'Progreso personal sirve para seguir el avance ejercicio a ejercicio: en una tabla aparecen todos los movimientos guardados en el historial para compararlos rápido. El buscador muestra al momento el nombre que necesitas. Acceso desde el inicio de entrenamiento (botón bajo el calendario) o el perfil del cliente.';
+      'Una tabla con todos los movimientos de los entrenos guardados: mejor serie, 1RM estimado y volumen máximo. El buscador encuentra el nombre al momento. La estrella marca favoritos; el chip bajo el nombre asigna el grupo muscular; la X roja quita el nombre de sugerencias y de esta tabla (los entrenos guardados no cambian). Acceso desde el menú de entrenamiento o el perfil del cliente.';
 
   @override
   String get instructionSectionSaving => 'Guardado';
@@ -631,7 +836,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get instructionFinishBody =>
-      'Guarda todo el entrenamiento en el historial. Hasta pulsarlo, los datos no quedan registrados.';
+      'Confirma y guarda la sesión en el historial. Si sales antes, puedes guardar, descartar o quedarte. Si la app se interrumpe, el borrador se conserva solo.';
 
   @override
   String get instructionSectionCardio => 'Cardio e intensidad';
@@ -703,12 +908,275 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get instructionNavHistoryDesc =>
-      'Entrenamientos terminados en el calendario y estadisticas desde el icono de grafico en las barras.';
+      'En calendario/historial cada entrenamiento muestra el tonelaje total. El volumen de entrenamiento es uno de los mejores indicadores de hipertrofia: cuanto mas volumen de calidad acumulas, mas musculo construyes.';
 
   @override
   String get instructionNavImportExportTitle => 'Importar / exportar';
 
   @override
   String get instructionNavImportExportDesc =>
-      'Copia de seguridad o traslado con exportacion e importacion JSON en el dialogo de estadisticas.';
+      'Copia de seguridad o traslado con exportación e importación JSON en el diálogo de estadísticas. La copia incluye historial, lista de ejercicios, favoritos y etiquetas de grupo muscular. La copia del entrenador es independiente del historial personal.';
+
+  @override
+  String get instructionSectionHome => 'Inicio';
+
+  @override
+  String get instructionThemeTitle => 'Tema';
+
+  @override
+  String get instructionThemeDesc =>
+      'El interruptor sol / luna en la pantalla de inicio cambia entre claro y oscuro. La elección se recuerda.';
+
+  @override
+  String get instructionTrainSelfTitle => 'Entreno yo';
+
+  @override
+  String get instructionTrainSelfDesc =>
+      'Tus entrenos, calendario, progreso personal, favoritos, un indicador de ritmo de cuánto entrenas y un entreno rápido de cuerpo completo a partir de tus ejercicios etiquetados.';
+
+  @override
+  String get instructionTrainOthersTitle => 'Entreno a otros';
+
+  @override
+  String get instructionTrainOthersDesc =>
+      'Modo entrenador: clientes, agenda e historial aparte por persona. Cada cliente tiene su tabla de progreso y sus favoritos.';
+
+  @override
+  String get instructionSectionAthleteMenu => 'Tu entrenamiento';
+
+  @override
+  String get instructionStartWorkoutTitle => 'Empezar entreno';
+
+  @override
+  String get instructionStartWorkoutDesc =>
+      'Abre una sesión vacía — no copia el último entreno. Añade ejercicios, registra series y finaliza para guardar.';
+
+  @override
+  String get instructionQuickWorkoutTitle => 'Entreno rápido';
+
+  @override
+  String get instructionQuickWorkoutDesc =>
+      'Arma una sesión de cuerpo completo con 4 ejercicios: pecho, espalda, una mitad de pierna (muslo anterior o posterior — nunca ambos) y uno de hombros, brazos o core, el que más tiempo lleves sin entrenar. Prefiere favoritos. Los últimos pesos y repeticiones aparecen en gris como mínimo a superar — cada serie la registras tú.';
+
+  @override
+  String get instructionCalendarMenuTitle => 'Calendario de entrenos';
+
+  @override
+  String get instructionCalendarMenuDesc =>
+      'Ves qué días entrenaste, abres una sesión guardada o añades un entreno en una fecha y hora concretas — también en días pasados.';
+
+  @override
+  String get instructionPersonalProgressMenuDesc =>
+      'Tabla de mejores series, 1RM estimado y volumen máximo. Aquí marcas favoritos y el grupo muscular.';
+
+  @override
+  String get instructionFavoritesMenuTitle => 'Ejercicios favoritos';
+
+  @override
+  String get instructionFavoritesMenuDesc =>
+      'Tu lista con estrella. Marca los que quieras y pulsa Armar entreno para empezar en ese orden. Los últimos pesos y repeticiones aparecen en gris como mínimo a superar.';
+
+  @override
+  String get instructionSectionRhythm => 'Ritmo de entrenamiento';
+
+  @override
+  String get instructionRhythmIntro =>
+      'Tras unas cuantas sesiones de fuerza, arriba en tu pantalla de entrenamiento aparece un indicador. Muestra cuántos días por semana has entrenado de media en las últimas cuatro semanas. Los días solo de cardio no cuentan. El número es una foto de tu densidad, no un objetivo que la app te imponga.';
+
+  @override
+  String get instructionRhythmGaugeTitle => 'Días por semana';
+
+  @override
+  String get instructionRhythmGaugeDesc =>
+      'El arco se llena de 1 a 6 días por semana. El acero frío indica un ritmo más suave; los tonos cálidos, más densidad. El indicador aparece cuando hay al menos tres días de fuerza en esa ventana de cuatro semanas.';
+
+  @override
+  String get instructionRhythmDeloadTitle => 'Recordatorio de semana más suave';
+
+  @override
+  String get instructionRhythmDeloadDesc =>
+      'Si llevas unos dos días y medio por semana o más durante varias semanas sin una semana más ligera, la app puede sugerir bajar tonelaje y repeticiones un 30 % durante una semana. Cuantos más días por semana, antes llega el recordatorio. Es un recordatorio, no una receta. Como máximo una vez por semana.';
+
+  @override
+  String get instructionSectionFavorites => 'Favoritos';
+
+  @override
+  String get instructionFavoriteStarTitle => 'Estrella';
+
+  @override
+  String get instructionFavoriteStarDesc =>
+      'En Progreso personal, pulsa la estrella junto a un ejercicio para añadirlo o quitarlo de favoritos. Los favoritos se quedan arriba en la tabla.';
+
+  @override
+  String get instructionBuildFromFavoritesTitle => 'Armar entreno';
+
+  @override
+  String get instructionBuildFromFavoritesDesc =>
+      'En la pantalla de favoritos marca los ejercicios. El botón aparece cuando hay al menos uno seleccionado. Los últimos pesos y repeticiones aparecen en gris como mínimo a superar — cada serie la registras tú. En un cliente, la misma acción inicia una sesión para esa persona.';
+
+  @override
+  String get instructionSectionMuscleGroups =>
+      'Grupos musculares y entreno rápido';
+
+  @override
+  String get instructionMuscleGroupsIntro =>
+      'Los grupos son etiquetas opcionales sobre tus propios nombres de ejercicio. No son un catálogo: solo ayudan al entreno rápido a elegir un mix equilibrado de cuerpo completo. Ocho grupos: pecho, espalda, hombros, core, muslo anterior, muslo posterior, flexión de brazos, extensión de brazos.';
+
+  @override
+  String get instructionMuscleGroupTagTitle => 'Cómo etiquetar';
+
+  @override
+  String get instructionMuscleGroupTagDesc =>
+      'La primera vez que escribes un nombre nuevo, la app pide un grupo. Puedes pulsar Más tarde o marcar No para entreno rápido si no quieres ese movimiento en el mix. El chip bajo el nombre en Progreso o Favoritos cambia o quita la etiqueta.';
+
+  @override
+  String get instructionQuickWorkoutHowTitle => 'Cómo se arma la sesión rápida';
+
+  @override
+  String get instructionQuickWorkoutHowDesc =>
+      'Cuatro huecos: pecho, espalda, una mitad de pierna, luego hombros/brazos/core según antigüedad. En la vista previa puedes cambiar cualquier hueco por otro ejercicio del mismo grupo. Si es poco, añade ejercicios tú.';
+
+  @override
+  String get instructionStrengthCardioTitle => 'Fuerza / Cardio';
+
+  @override
+  String get instructionStrengthCardioDesc =>
+      'Cambio arriba de la sesión. Fuerza: peso, repeticiones, RIR. Cardio: solo tiempo e intensidad — no hay campo de distancia.';
+
+  @override
+  String get instructionPreviousHintsTitle =>
+      'Cifras grises de la sesión anterior';
+
+  @override
+  String get instructionPreviousHintsDesc =>
+      'Cuando eliges un ejercicio en una sesión de cliente, un entreno rápido o una sesión desde favoritos, los últimos pesos y repeticiones aparecen en gris — un mínimo a superar, no una serie ya registrada. En el historial solo entran los números que escribes tú.';
+
+  @override
+  String get instructionRemoveExerciseTitle => 'Quitar de este entreno';
+
+  @override
+  String get instructionRemoveExerciseDesc =>
+      'Quita ese bloque solo de la sesión actual. El historial guardado no cambia hasta que finalices.';
+
+  @override
+  String get instructionReassignExerciseTitle =>
+      'Cambiar ejercicio en el historial';
+
+  @override
+  String get instructionReassignExerciseDesc =>
+      'En un entreno guardado puedes reasignar un bloque a otro nombre. Solo cambia esa sesión; las gráficas siguen el nombre nuevo. Las series quedan igual.';
+
+  @override
+  String get instructionAutoSaveTitle => 'Entreno interrumpido';
+
+  @override
+  String get instructionAutoSaveDesc =>
+      'Si la app se cierra a mitad de sesión, ofrece continuar donde lo dejaste o borrar el borrador no guardado.';
+
+  @override
+  String get instructionSectionCalendar => 'Calendario';
+
+  @override
+  String get instructionCalendarAddTitle => 'Añadir en una fecha';
+
+  @override
+  String get instructionCalendarAddDesc =>
+      'Elige un día y añade un entreno a la hora que quieras. Útil para registrar una sesión que se te pasó.';
+
+  @override
+  String get instructionSectionTrainer => 'Modo entrenador';
+
+  @override
+  String get instructionTrainerIntro =>
+      '«Entreno a otros» es para entrenadores. Añade clientes, programa sesiones, planifica ejercicios de antemano y registra entrenos por persona. Repetir la última sesión es opcional. Exportar e importar datos de entrenador es independiente del historial personal. Al borrar un cliente se quitan las sesiones futuras; los entrenos pasados se quedan para el informe.';
+
+  @override
+  String get instructionClientsTitle => 'Clientes';
+
+  @override
+  String get instructionClientsDesc =>
+      'Añadir, editar o eliminar clientes. La lista muestra la última y la próxima sesión. Campos del perfil: objetivo, peso, altura y notas privadas del entrenador.';
+
+  @override
+  String get instructionClientProfileTitle => 'Perfil del cliente';
+
+  @override
+  String get instructionClientProfileDesc =>
+      'Desde el perfil empieza una sesión de hoy vacía. Los números grises de la última vez aparecen solo al elegir un ejercicio. El historial muestra solo entrenos terminados. Planifica fechas futuras en el calendario. Progreso y favoritos están en la misma pantalla. Los cambios de perfil sin guardar piden confirmación al salir.';
+
+  @override
+  String get instructionTrainerPlanTitle => 'Planificar una sesión';
+
+  @override
+  String get instructionTrainerPlanDesc =>
+      'Planifica solo desde el calendario del entrenador: elige cliente y fecha, luego los ejercicios. Los pesos y repeticiones anteriores aparecen en gris como pista. La sesión planificada tiene un icono de play: tócala para empezar (hoy) o borrar. Al historial solo van los entrenos terminados. Un plan con fecha pasada se elimina.';
+
+  @override
+  String get instructionTrainerRepeatTitle => 'Repetir el último entreno';
+
+  @override
+  String get instructionTrainerRepeatDesc =>
+      'Opcional. Desde el perfil del cliente, o con el interruptor al añadir una sesión en el calendario. Copia los ejercicios de la última sesión al entreno en vivo de hoy o a un plan nuevo; los pesos y repeticiones anteriores son pistas grises, no series terminadas.';
+
+  @override
+  String get rhythmPerWeek => 'por semana';
+
+  @override
+  String get deloadNudgeTitle => '¿Una semana más suave?';
+
+  @override
+  String deloadNudgeBody(String rate, int weeks) {
+    return 'Llevas unos $rate días por semana desde hace unas $weeks semanas. Es un recordatorio, no una receta. Con este ritmo suele ayudar bajar tonelaje y repeticiones un 30 % durante una semana.';
+  }
+
+  @override
+  String get deloadNudgeLater => 'Ahora no';
+
+  @override
+  String get deloadNudgeOk => 'Entendido';
+
+  @override
+  String get instructionHubManifest =>
+      'Sin catálogo ni programas predefinidos. Tú pones los nombres; la app guarda las estadísticas a tu manera.';
+
+  @override
+  String get instructionChapterStartTitle => 'Primeros pasos';
+
+  @override
+  String get instructionChapterStartBlurb =>
+      'Pantalla de inicio, cómo entrenas y por qué la app no te dice cómo hacerlo.';
+
+  @override
+  String get instructionChapterToolsTitle => 'Herramientas';
+
+  @override
+  String get instructionChapterToolsBlurb =>
+      'Ritmo, favoritos, grupos musculares y entrenamiento rápido.';
+
+  @override
+  String get instructionChapterSessionTitle => 'En la sesión';
+
+  @override
+  String get instructionChapterSessionBlurb =>
+      'Series, campos, cardio, guardar y el cronómetro.';
+
+  @override
+  String get instructionChapterProgressTitle => 'Progreso y datos';
+
+  @override
+  String get instructionChapterProgressBlurb =>
+      'Marcas personales, gráfico, calendario, historial y copia de seguridad.';
+
+  @override
+  String get instructionChapterCoachTitle => 'Modo entrenador';
+
+  @override
+  String get instructionChapterCoachBlurb =>
+      'Clientes, perfiles, sesiones planificadas y repetir un entrenamiento.';
+
+  @override
+  String get instructionSearchHint => 'Buscar en la guía';
+
+  @override
+  String get instructionSearchEmpty => 'Nada coincide con esa búsqueda.';
 }

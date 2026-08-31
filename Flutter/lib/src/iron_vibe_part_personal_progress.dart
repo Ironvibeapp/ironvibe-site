@@ -45,6 +45,10 @@ double _ironVibeStrengthTonForExercise(ExerciseLog ex) {
   return t;
 }
 
+bool _ironVibeExerciseIsCardio(ExerciseLog ex) {
+  return ex.isCardio || (ex.sets.isNotEmpty && ex.sets.first.isCardio);
+}
+
 void _ironVibePersonalProgressUpdateBest(Map<String, _PersonalProgressAgg> map, ExerciseLog ex) {
   final key = normalizeExerciseName(ex.name);
   if (key.isEmpty) return;
@@ -78,6 +82,7 @@ List<PersonalProgressRow> ironVibePersonalProgressRows({String? clientName}) {
   void processSession(List<ExerciseLog> exercises) {
     final sessionTons = <String, double>{};
     for (final ex in exercises) {
+      if (_ironVibeExerciseIsCardio(ex)) continue;
       final key = normalizeExerciseName(ex.name);
       if (key.isEmpty) continue;
       sessionTons[key] = (sessionTons[key] ?? 0) + _ironVibeStrengthTonForExercise(ex);
@@ -99,22 +104,53 @@ List<PersonalProgressRow> ironVibePersonalProgressRows({String? clientName}) {
     }
   }
 
-  return map.entries.map((e) {
-    final a = e.value;
-    final treatAsCardio = a.sawOnlyCardioLogs && !a.hasWeightedBest && a.maxBodyReps == 0;
-    return PersonalProgressRow(
-      name: e.key,
-      treatAsCardio: treatAsCardio,
-      hasWeightedBestSet: a.hasWeightedBest,
-      bestWeight: a.bestW,
-      bestReps: a.bestR,
-      maxBodyReps: a.maxBodyReps,
-      maxSessionTon: a.maxSessionTon,
-      oneRmFromBestSetKg:
-          a.hasWeightedBest ? ironVibeEpleyOneRmKg(a.bestW, a.bestR.toDouble()) : null,
-    );
-  }).toList()
-    ..sort((a, b) => a.name.compareTo(b.name));
+  return map.entries
+      .map((e) {
+        final a = e.value;
+        final treatAsCardio =
+            a.sawOnlyCardioLogs && !a.hasWeightedBest && a.maxBodyReps == 0;
+        return PersonalProgressRow(
+          name: e.key,
+          treatAsCardio: treatAsCardio,
+          hasWeightedBestSet: a.hasWeightedBest,
+          bestWeight: a.bestW,
+          bestReps: a.bestR,
+          maxBodyReps: a.maxBodyReps,
+          maxSessionTon: a.maxSessionTon,
+          oneRmFromBestSetKg:
+              a.hasWeightedBest ? ironVibeEpleyOneRmKg(a.bestW, a.bestR.toDouble()) : null,
+        );
+      })
+      .where((row) => !row.treatAsCardio)
+      .where((row) => ironVibeIsExerciseInBank(row.name))
+      .toList()
+    ..sort((a, b) => _ironVibePersonalProgressRowOrder(a, b, clientName: clientName));
+}
+
+int _ironVibePersonalProgressFavoriteIndex(String name, {String? clientName}) {
+  final key = normalizeExerciseName(name);
+  final favorites = ironVibeFavoriteExerciseNames(clientName: clientName);
+  for (var i = 0; i < favorites.length; i++) {
+    if (normalizeExerciseName(favorites[i]) == key) return i;
+  }
+  return favorites.length;
+}
+
+int _ironVibePersonalProgressRowOrder(
+  PersonalProgressRow a,
+  PersonalProgressRow b, {
+  String? clientName,
+}) {
+  final aFavorite = _ironVibePersonalProgressFavoriteIndex(
+    a.name,
+    clientName: clientName,
+  );
+  final bFavorite = _ironVibePersonalProgressFavoriteIndex(
+    b.name,
+    clientName: clientName,
+  );
+  if (aFavorite != bFavorite) return aFavorite.compareTo(bFavorite);
+  return a.name.compareTo(b.name);
 }
 
 String _ironVibeFmtWeightForUi(double w) {
@@ -126,7 +162,7 @@ String _ironVibeFmtWeightForUi(double w) {
 String _personalProgressBestSetText(PersonalProgressRow r) {
   if (r.treatAsCardio) return '—';
   if (r.hasWeightedBestSet) {
-    return '${_ironVibeFmtWeightForUi(r.bestWeight)} × ${r.bestReps}';
+    return '${_ironVibeFmtWeightForUi(r.bestWeight)}×${r.bestReps}';
   }
   if (r.maxBodyReps > 0) return '×${r.maxBodyReps}';
   return '—';
@@ -140,24 +176,86 @@ String _personalProgressMaxVolumeText(PersonalProgressRow r) {
 String _personalProgressOneRmText(PersonalProgressRow r) {
   final v = r.oneRmFromBestSetKg;
   if (r.treatAsCardio || v == null) return '—';
-  return '≈ ${v.toStringAsFixed(1)}';
+  return _ironVibeFmtWeightForUi(v);
+}
+
+Widget _personalProgressNameWithGroupCell(
+  String name,
+  IronVibePalette pal, {
+  required VoidCallback onGroupChanged,
+  VoidCallback? onRemove,
+}) {
+  final nameText = Text(
+    name,
+    textAlign: TextAlign.left,
+    softWrap: true,
+    style: TextStyle(
+      color: pal.textPrimary,
+      fontSize: 11.5,
+      fontWeight: FontWeight.w600,
+      height: 1.2,
+      letterSpacing: 0.08,
+    ),
+    maxLines: 4,
+    overflow: TextOverflow.ellipsis,
+  );
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(5, 7, 4, 7),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (onRemove == null)
+          nameText
+        else
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: nameText),
+              GestureDetector(
+                onTap: onRemove,
+                behavior: HitTestBehavior.opaque,
+                child: const Padding(
+                  padding: EdgeInsets.only(left: 4, top: 1, bottom: 2),
+                  child: Icon(
+                    Icons.close,
+                    size: 16,
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ironVibeMuscleGroupChip(
+          exerciseName: name,
+          onChanged: onGroupChanged,
+        ),
+      ],
+    ),
+  );
 }
 
 Widget _personalProgressHeaderCell(String text, IronVibePalette pal, {required TextAlign align}) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
-    child: Text(
-      text,
-      textAlign: align,
-      style: TextStyle(
-        color: pal.textSecondary,
-        fontSize: 9.5,
-        fontWeight: FontWeight.w800,
-        letterSpacing: 0.35,
-        height: 1.15,
+    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+    child: FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: align == TextAlign.right
+          ? Alignment.centerRight
+          : Alignment.centerLeft,
+      child: Text(
+        text,
+        textAlign: align,
+        maxLines: 1,
+        softWrap: false,
+        style: TextStyle(
+          color: pal.textSecondary,
+          fontSize: 9,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0.12,
+          height: 1.1,
+        ),
       ),
-      maxLines: 3,
-      overflow: TextOverflow.ellipsis,
     ),
   );
 }
@@ -168,21 +266,82 @@ Widget _personalProgressDataCell(
   required TextAlign align,
   required bool nameColumn,
 }) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 9),
-    child: Text(
-      text,
-      textAlign: align,
-      softWrap: true,
-      style: TextStyle(
-        color: nameColumn ? pal.textPrimary : pal.textSecondary,
-        fontSize: nameColumn ? 12 : 10.5,
-        fontWeight: nameColumn ? FontWeight.w600 : FontWeight.w500,
-        height: 1.2,
-        letterSpacing: nameColumn ? 0.12 : 0,
+  if (nameColumn) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 9),
+      child: Text(
+        text,
+        textAlign: align,
+        softWrap: true,
+        style: TextStyle(
+          color: pal.textPrimary,
+          fontSize: 11.5,
+          fontWeight: FontWeight.w600,
+          height: 1.2,
+          letterSpacing: 0.08,
+        ),
+        maxLines: 4,
+        overflow: TextOverflow.ellipsis,
       ),
-      maxLines: nameColumn ? 4 : 2,
-      overflow: TextOverflow.ellipsis,
+    );
+  }
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+    child: FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: align == TextAlign.right
+          ? Alignment.centerRight
+          : Alignment.centerLeft,
+      child: Text(
+        text,
+        textAlign: align,
+        maxLines: 1,
+        softWrap: false,
+        style: TextStyle(
+          color: pal.textSecondary,
+          fontSize: 10.5,
+          fontWeight: FontWeight.w500,
+          height: 1.1,
+        ),
+      ),
+    ),
+  );
+}
+
+Widget _personalProgressRankCell({
+  required IronVibePalette pal,
+  required AppLocalizations l,
+  required int number,
+  required bool isFavorite,
+  required VoidCallback onToggleFavorite,
+}) {
+  const gold = kIronVibeAccent;
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        GestureDetector(
+          onTap: onToggleFavorite,
+          behavior: HitTestBehavior.opaque,
+          child: Icon(
+            isFavorite ? Icons.star : Icons.star_border,
+            size: 15,
+            color: gold,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          l.exerciseNumberLabel(number),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: pal.textMuted,
+            fontSize: 10,
+            fontWeight: FontWeight.w600,
+            height: 1.05,
+          ),
+        ),
+      ],
     ),
   );
 }
@@ -191,10 +350,14 @@ Widget _personalProgressTable({
   required IronVibePalette pal,
   required AppLocalizations l,
   required List<PersonalProgressRow> filtered,
+  String? clientName,
+  required Future<void> Function(String exerciseName) onToggleFavorite,
+  required Future<void> Function(String exerciseName) onRemove,
+  required VoidCallback onMuscleGroupChanged,
 }) {
-  const edge = 1.0;
+  const edge = 0.5;
   const inner = 0.5;
-  final outer = pal.borderDefault;
+  final outer = pal.borderSubtle;
   final grid = pal.borderSubtle;
 
   final header = TableRow(
@@ -203,6 +366,7 @@ Widget _personalProgressTable({
       border: Border(bottom: BorderSide(color: outer, width: edge)),
     ),
     children: [
+      _personalProgressHeaderCell('', pal, align: TextAlign.right),
       _personalProgressHeaderCell(l.exerciseHeader, pal, align: TextAlign.left),
       _personalProgressHeaderCell(l.personalProgressBestSet, pal, align: TextAlign.right),
       _personalProgressHeaderCell(l.oneRm, pal, align: TextAlign.right),
@@ -222,11 +386,21 @@ Widget _personalProgressTable({
               : null,
         ),
         children: [
-          _personalProgressDataCell(
+          _personalProgressRankCell(
+            pal: pal,
+            l: l,
+            number: i + 1,
+            isFavorite: ironVibeIsFavoriteExercise(
+              filtered[i].name,
+              clientName: clientName,
+            ),
+            onToggleFavorite: () => onToggleFavorite(filtered[i].name),
+          ),
+          _personalProgressNameWithGroupCell(
             filtered[i].name,
             pal,
-            align: TextAlign.left,
-            nameColumn: true,
+            onGroupChanged: onMuscleGroupChanged,
+            onRemove: () => onRemove(filtered[i].name),
           ),
           _personalProgressDataCell(
             _personalProgressBestSetText(filtered[i]),
@@ -250,7 +424,9 @@ Widget _personalProgressTable({
       ),
   ];
 
-  return Table(
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(kIronVibeRadiusCard),
+    child: Table(
     border: TableBorder(
       top: BorderSide(color: outer, width: edge),
       bottom: BorderSide(color: outer, width: edge),
@@ -260,13 +436,15 @@ Widget _personalProgressTable({
       verticalInside: BorderSide(color: grid, width: inner),
     ),
     columnWidths: const <int, TableColumnWidth>{
-      0: FlexColumnWidth(2.55),
-      1: FlexColumnWidth(1.0),
-      2: FlexColumnWidth(0.92),
-      3: FlexColumnWidth(1.0),
+      0: IntrinsicColumnWidth(),
+      1: FlexColumnWidth(2.5),
+      2: FlexColumnWidth(1.2),
+      3: FlexColumnWidth(1.05),
+      4: FlexColumnWidth(1.15),
     },
     defaultVerticalAlignment: TableCellVerticalAlignment.middle,
     children: body,
+  ),
   );
 }
 
@@ -286,6 +464,22 @@ class _PersonalProgressScreenState extends State<PersonalProgressScreen> {
   void dispose() {
     _search.dispose();
     super.dispose();
+  }
+
+  Future<void> _toggleFavorite(String exerciseName) async {
+    await ironVibeToggleFavoriteExercise(
+      exerciseName,
+      clientName: widget.clientName,
+    );
+    if (mounted) setState(() {});
+  }
+
+  Future<void> _removeFromProgress(String exerciseName) async {
+    final removed = await showRemoveExerciseFromBankDialog(
+      context,
+      exerciseName,
+    );
+    if (removed && mounted) setState(() {});
   }
 
   @override
@@ -317,13 +511,13 @@ class _PersonalProgressScreenState extends State<PersonalProgressScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
               child: Text(
-                l.personalProgress,
+                ironVibeSentenceCase(l.personalProgress),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: pal.textPrimary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.05,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.2,
                 ),
               ),
             ),
@@ -341,10 +535,12 @@ class _PersonalProgressScreenState extends State<PersonalProgressScreen> {
                   isDense: true,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: pal.borderDefault, width: 0.5),
+                    borderSide: BorderSide(color: pal.borderSubtle, width: 0.5),
+                    borderRadius: BorderRadius.circular(kIronVibeRadiusField),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: pal.borderDefault, width: 0.5),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: kIronVibeAccent, width: 1.6),
+                    borderRadius: BorderRadius.all(Radius.circular(kIronVibeRadiusField)),
                   ),
                   prefixIcon: Icon(Icons.search, color: pal.textMuted, size: 22),
                 ),
@@ -368,13 +564,19 @@ class _PersonalProgressScreenState extends State<PersonalProgressScreen> {
                         final w = constraints.maxWidth;
                         return Scrollbar(
                           child: SingleChildScrollView(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
+                            padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
                             child: SizedBox(
                               width: w,
                               child: _personalProgressTable(
                                 pal: pal,
                                 l: l,
                                 filtered: filtered,
+                                clientName: widget.clientName,
+                                onToggleFavorite: _toggleFavorite,
+                                onRemove: _removeFromProgress,
+                                onMuscleGroupChanged: () {
+                                  if (mounted) setState(() {});
+                                },
                               ),
                             ),
                           ),

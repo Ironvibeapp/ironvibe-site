@@ -25,7 +25,7 @@
     var folder = dark ? "dark" : "light";
     document.querySelectorAll("[data-screenshot]").forEach(function (el) {
       var n = el.getAttribute("data-screenshot");
-      if (!n) return;
+      if (!n || !/^\d+$/.test(n)) return;
       /* Query string ties decoded image to theme (avoids stale bitmap when swapping light/dark). */
       var url = "../screenshots/" + folder + "/" + n + ".jpg?v=" + folder;
       el.setAttribute("data-lightbox", url);

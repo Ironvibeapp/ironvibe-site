@@ -1,46 +1,31 @@
-# Сборка App Bundle (AAB) для Google Play
+# Play / release builds
 
-Рекомендуемая сборка — с выносом отладочной информации и обфускацией (минимальный размер AAB/APK):
+From `Flutter/` (where `pubspec.yaml` lives):
 
 ```powershell
 flutter build appbundle --release --obfuscate --split-debug-info=build/app/outputs/symbols
+flutter build apk --release --obfuscate --split-debug-info=build/app/outputs/symbols
 ```
 
-Готовый AAB: `build\app\outputs\bundle\release\app-release.aab`.  
-Символы для разбора крашей: `build\app\outputs\symbols\` (хранить отдельно).
+Outputs:
 
----
+- `build/app/outputs/bundle/release/app-release.aab`
+- `build/app/outputs/flutter-apk/app-release.apk`
 
-## Окружение (обязательно для Windows)
+Keep `build/app/outputs/symbols/` privately for crash deobfuscation.
 
-Чтобы Gradle корректно выполнял strip нативных библиотек, в сессии сборки должны быть заданы переменные:
+## Signing
 
-| Переменная          | Пример значения |
-|---------------------|------------------|
-| `JAVA_HOME`         | `C:\Program Files\Android\Android Studio\jbr` |
-| `ANDROID_HOME`      | `C:\Users\<user>\AppData\Local\Android\Sdk` |
-| `ANDROID_NDK_HOME`  | `C:\Users\<user>\AppData\Local\Android\Sdk\ndk\28.2.13676358` |
+Release signing reads `android/key.properties` (gitignored) and a local `.jks` keystore. Those files must never be committed.
 
-В `android/app/build.gradle.kts` явно указана версия NDK: `ndkVersion = "28.2.13676358"`.  
-Если у вас установлена другая версия NDK, замените на свою (папка в `Sdk\ndk\<версия>`).
+## Windows environment
 
----
+Gradle needs NDK on PATH for native `.so` stripping:
 
-## Полный цикл (из корня Flutter, где лежит pubspec.yaml)
+| Variable | Example |
+| --- | --- |
+| `JAVA_HOME` | Android Studio JBR |
+| `ANDROID_HOME` | Android SDK |
+| `ANDROID_NDK_HOME` | `$ANDROID_HOME/ndk/28.2.13676358` |
 
-```powershell
-$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
-$env:ANDROID_HOME = "C:\Users\user\AppData\Local\Android\Sdk"
-$env:ANDROID_NDK_HOME = "$env:ANDROID_HOME\ndk\28.2.13676358"
-$env:Path = "$env:ANDROID_HOME\cmdline-tools\latest\bin;$env:ANDROID_HOME\platform-tools;$env:JAVA_HOME\bin;$env:Path"
-
-cd C:\Users\user\Desktop\fitnessapp\Flutter
-
-flutter clean
-cd android; .\gradlew clean; cd ..
-
-flutter pub get
-flutter build appbundle --release --obfuscate --split-debug-info=build/app/outputs/symbols
-```
-
-Костыль `keepDebugSymbols` в `build.gradle.kts` не используется — strip выполняется штатно при корректном `ANDROID_NDK_HOME` и `ndkVersion`.
+`android/app/build.gradle.kts` pins `ndkVersion = "28.2.13676358"`. Use the NDK version you actually have installed.

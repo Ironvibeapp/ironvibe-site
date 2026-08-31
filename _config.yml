@@ -1,0 +1,13 @@
+# GitHub Pages (Jekyll): publish the marketing site, not the Flutter app source.
+exclude:
+  - Flutter
+  - README.md
+  - LICENSE
+  - SECURITY.md
+  - CONTRIBUTING.md
+  - .gitignore
+  - .gitattributes
+  - .github
+  - .vscode
+  - .idea
+  - .continue

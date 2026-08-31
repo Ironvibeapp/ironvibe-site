@@ -74,7 +74,8 @@
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="../../vendor/qrious.min.js"></script>
+    <script src="../../safe-html.js"></script>
     <script>
         (function() {
             var scope = 'donate';
@@ -83,7 +84,7 @@
                 var strings = t[scope] || {};
                 function get(key) { var parts = key.split('.'); var v = t; for (var i = 0; i < parts.length && v; i++) v = v[parts[i]]; return v != null ? String(v) : ''; }
                 document.querySelectorAll('[data-i18n]').forEach(function(el){ var key = el.getAttribute('data-i18n'); if (!key || key.indexOf(scope + '.') !== 0) return; var val = get(key); if (val) el.textContent = val; });
-                document.querySelectorAll('[data-i18n-html]').forEach(function(el){ var key = el.getAttribute('data-i18n-html'); if (!key || key.indexOf(scope + '.') !== 0) return; var val = get(key); if (val) el.innerHTML = val; });
+                document.querySelectorAll('[data-i18n-html]').forEach(function(el){ var key = el.getAttribute('data-i18n-html'); if (!key || key.indexOf(scope + '.') !== 0) return; var val = get(key); if (val) el.innerHTML = (window.ironVibeSafeHtml ? window.ironVibeSafeHtml(val) : ""); });
                 document.querySelectorAll('[data-i18n-aria]').forEach(function(el){ var key = el.getAttribute('data-i18n-aria'); if (!key || key.indexOf(scope + '.') !== 0) return; var val = get(key); if (val) el.setAttribute('aria-label', val); });
                 if (strings.metaTitle) document.title = strings.metaTitle;
                 var privacyRights = (t.privacy && t.privacy.footerRights) ? t.privacy.footerRights : '';

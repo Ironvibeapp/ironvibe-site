@@ -101,7 +101,7 @@
             <p class="iv-text-soft text-xs mt-4 lang-list flex flex-wrap justify-center gap-x-2 gap-y-1"><a href="/en/">EN</a> · <a href="/ru/">RU</a> · <a href="/ar/">AR</a> · <a href="/de/">DE</a> · <a href="/es/">ES</a> · <a href="/fr/">FR</a> · <a href="/hi/">HI</a> · <a href="/it/">IT</a> · <a href="/pt/">PT</a> · <a href="/zh/">ZH</a></p>
         </div>
     </footer>
-
+    <script src="../../safe-html.js"></script>
     <script>
         (function() {
             var scope = 'privacy';
@@ -110,7 +110,7 @@
                 var strings = t[scope] || {};
                 function get(key) { var parts = key.split('.'); var v = t; for (var i = 0; i < parts.length && v; i++) v = v[parts[i]]; return v != null ? String(v) : ''; }
                 document.querySelectorAll('[data-i18n]').forEach(function(el){ var key = el.getAttribute('data-i18n'); if (!key || key.indexOf(scope + '.') !== 0) return; var val = get(key); if (val) el.textContent = val; });
-                document.querySelectorAll('[data-i18n-html]').forEach(function(el){ var key = el.getAttribute('data-i18n-html'); if (!key || key.indexOf(scope + '.') !== 0) return; var val = get(key); if (val) el.innerHTML = val; });
+                document.querySelectorAll('[data-i18n-html]').forEach(function(el){ var key = el.getAttribute('data-i18n-html'); if (!key || key.indexOf(scope + '.') !== 0) return; var val = get(key); if (val) el.innerHTML = (window.ironVibeSafeHtml ? window.ironVibeSafeHtml(val) : ""); });
                 if (strings.metaTitle) document.title = strings.metaTitle;
                 var themeBtn = document.querySelector('[data-theme-toggle]');
                 if (themeBtn) {
