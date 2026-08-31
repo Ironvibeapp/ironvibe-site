@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo-icon.png" alt="IronVibe" width="160" />
+  <img src="logo-light.svg" alt="IronVibe" width="160" />
 </p>
 
 <h1 align="center">IronVibe</h1>

@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>(function(){try{var t=localStorage.getItem('ironvibe-site-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
     <title data-i18n="home.metaTitle">IronVibe</title>
-    <link rel="icon" href="../favicon.ico" sizes="any">
-    <link rel="icon" type="image/svg+xml" href="../favicon.svg?v=20">
+    <link rel="icon" href="../favicon.ico?v=21" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg?v=21">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png?v=21">
     <link rel="apple-touch-icon" href="../apple-touch-icon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../theme.css?v=170">
+    <link rel="stylesheet" href="../theme.css?v=171">
     <style>
          .logo-hero { width: 8.2rem; height: 11.5rem; }
         @media (min-width: 768px) {  .logo-hero { width: 11.1rem; height: 15.5rem; } }
@@ -21,7 +22,10 @@
     <nav class="iv-nav sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
             <a href="./" class="iv-nav-brand text-lg">
-                <img src="../logo-icon.svg?v=20" alt="" class="iv-nav-mark" width="32" height="32" />
+                <span class="iv-nav-mark" aria-hidden="true">
+                    <img src="../logo-nav-light.svg?v=21" alt="" class="iv-logo iv-logo--on-light" width="20" height="28" />
+                    <img src="../logo-nav-dark.svg?v=21" alt="" class="iv-logo iv-logo--on-dark" width="20" height="28" />
+                </span>
                 <span>IRONVIBE</span>
             </a>
             <div class="flex items-center gap-2 shrink-0">
@@ -36,8 +40,8 @@
         <div class="z-10 flex flex-col items-center">
             <div class="flex items-center justify-center mb-8">
                 <div class="logo-hero">
-                    <img src="../logo-light.svg?v=20" alt="IronVibe" class="iv-logo iv-logo--on-light" width="200" height="280" />
-                    <img src="../logo-dark.svg?v=20" alt="" class="iv-logo iv-logo--on-dark" width="200" height="280" aria-hidden="true" />
+                    <img src="../logo-light.svg?v=21" alt="IronVibe" class="iv-logo iv-logo--on-light" width="200" height="280" />
+                    <img src="../logo-dark.svg?v=21" alt="" class="iv-logo iv-logo--on-dark" width="200" height="280" aria-hidden="true" />
                 </div>
             </div>
             <h1 class="text-5xl md:text-7xl font-black tracking-widest mb-2 steel-text">IRONVIBE</h1>
@@ -238,8 +242,8 @@
     <footer class="py-10 text-center iv-border-t">
         <div class="flex justify-center mb-6">
             <div class="logo-footer">
-                <img src="../logo-light.svg?v=20" alt="IronVibe" class="iv-logo iv-logo--on-light" width="200" height="280" />
-                <img src="../logo-dark.svg?v=20" alt="" class="iv-logo iv-logo--on-dark" width="200" height="280" aria-hidden="true" />
+                <img src="../logo-light.svg?v=21" alt="IronVibe" class="iv-logo iv-logo--on-light" width="200" height="280" />
+                <img src="../logo-dark.svg?v=21" alt="" class="iv-logo iv-logo--on-dark" width="200" height="280" aria-hidden="true" />
             </div>
         </div>
         <p class="iv-text-soft text-sm" data-i18n="home.footerRights">© 2026 IronVibe. All rights reserved.</p>
