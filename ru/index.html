@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>(function(){try{var t=localStorage.getItem('ironvibe-site-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
     <title data-i18n="home.metaTitle">IronVibe</title>
-    <link rel="icon" type="image/png" href="../logo-icon.png?v=16">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg?v=17">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../theme.css?v=166">
+    <link rel="stylesheet" href="../theme.css?v=167">
     <style>
         .logo-hero { width: 11rem; height: 11rem; }
         @media (min-width: 768px) { .logo-hero { width: 15rem; height: 15rem; } }
@@ -30,7 +30,10 @@
         <div class="absolute top-0 left-0 w-full h-full iv-hero-bg -z-10"></div>
         <div class="z-10 flex flex-col items-center">
             <div class="flex items-center justify-center mb-8">
-                <img src="../logo_final.png?v=16" alt="IronVibe" class="logo-hero object-contain object-center" />
+                <div class="logo-hero iv-logo-slot">
+                    <img src="../logo-light.svg?v=17" alt="IronVibe" class="iv-logo-light" width="256" height="256" />
+                    <img src="../logo-dark.svg?v=17" alt="" class="iv-logo-dark" width="256" height="256" aria-hidden="true" />
+                </div>
             </div>
             <h1 class="text-5xl md:text-7xl font-black tracking-widest mb-2 steel-text">IRONVIBE</h1>
             <p class="text-lg md:text-xl slogan-text max-w-2xl mx-auto mb-10" data-i18n="home.slogan">YOUR WORKOUT VIBE</p>
@@ -210,7 +213,10 @@
 
     <footer class="py-10 text-center iv-border-t">
         <div class="flex justify-center mb-6">
-            <img src="../logo_final.png?v=16" alt="IronVibe" class="logo-footer object-contain object-center" />
+            <div class="logo-footer iv-logo-slot">
+                <img src="../logo-light.svg?v=17" alt="IronVibe" class="iv-logo-light" width="256" height="256" />
+                <img src="../logo-dark.svg?v=17" alt="" class="iv-logo-dark" width="256" height="256" aria-hidden="true" />
+            </div>
         </div>
         <p class="iv-text-soft text-sm" data-i18n="home.footerRights">© 2026 IronVibe. All rights reserved.</p>
         <p class="iv-prose text-sm mt-2">

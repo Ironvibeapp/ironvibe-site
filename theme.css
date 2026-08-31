@@ -172,6 +172,31 @@ body.iv-site ::selection {
   background: radial-gradient(ellipse at center, var(--iv-hero-glow) 0%, var(--iv-page) 45%, var(--iv-page) 100%);
 }
 
+/* Themed mark: light = dark steel, dark = pale steel. No black plate. */
+.iv-logo-slot {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+}
+.iv-logo-slot img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: transparent;
+}
+.iv-logo-slot .iv-logo-dark {
+  opacity: 0;
+  pointer-events: none;
+}
+html[data-theme="dark"] .iv-logo-slot .iv-logo-light {
+  opacity: 0;
+}
+html[data-theme="dark"] .iv-logo-slot .iv-logo-dark {
+  opacity: 1;
+}
+
 .iv-section-tint {
   background-color: var(--iv-section);
 }
@@ -269,7 +294,7 @@ body.iv-site ::selection {
   border-radius: 9999px;
   background: linear-gradient(180deg, var(--iv-cta-from) 0%, var(--iv-cta-to) 100%);
   color: var(--iv-cta-text);
-  border: 1.1px solid var(--iv-cta-border);
+  border: 1.5px solid var(--iv-accent);
   font-weight: 800;
   letter-spacing: 0.04em;
   font-size: 0.95rem;
