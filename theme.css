@@ -1,69 +1,89 @@
-/* IronVibe landing — light by default; html[data-theme="dark"] for dark */
+/* IronVibe landing — tokens aligned with Flutter IronVibePalette / kIronVibeAccent */
 
 :root {
-  --iv-page: #f4f6f9;
-  --iv-text: #1b1f26;
-  --iv-text-muted: #5c6475;
-  --iv-text-soft: #6b7280;
-  --iv-nav-bg: rgba(255, 255, 255, 0.94);
-  --iv-nav-border: rgba(15, 23, 42, 0.08);
-  --iv-link: #2563eb;
-  --iv-link-hover: #1d4ed8;
-  --iv-card: rgba(255, 255, 255, 0.92);
-  --iv-card-border: rgba(15, 23, 42, 0.08);
-  --iv-card-hover: rgba(241, 245, 249, 0.95);
-  --iv-section: #e8ecf2;
+  --iv-page: #f3f5f9;
+  --iv-text: #2a3140;
+  --iv-text-muted: #5f6878;
+  --iv-text-soft: #737d8c;
+  --iv-nav-bg: rgba(251, 252, 254, 0.94);
+  --iv-nav-border: rgba(0, 0, 0, 0.08);
+  --iv-accent: #c4a06a;
+  --iv-accent-strong: #8f6b3a;
+  --iv-link: #8f6b3a;
+  --iv-link-hover: #6e522c;
+  --iv-card: #fefefe;
+  --iv-card-border: rgba(0, 0, 0, 0.1);
+  --iv-card-hover: #fbfcfe;
+  --iv-section: #e6ebf3;
   --iv-section-alt: #eef1f6;
-  --iv-donate-panel: #ffffff;
-  --iv-donate-inner: #f8fafc;
-  --iv-hero-glow: rgba(148, 163, 184, 0.25);
-  --iv-steel-from: #1b1f26;
-  --iv-steel-to: #5c6475;
-  --iv-slogan-from: #374151;
-  --iv-slogan-to: #6b7280;
-  --iv-icon-circle: #f1f5f9;
-  --iv-icon-circle-border: rgba(15, 23, 42, 0.1);
-  --iv-feature-icon: #334155;
-  --iv-heading: #0f172a;
-  --iv-lightbox-bg: rgba(15, 23, 42, 0.88);
+  --iv-donate-panel: #fefefe;
+  --iv-donate-inner: #f0f2f7;
+  --iv-hero-glow: rgba(196, 160, 106, 0.2);
+  --iv-steel-from: #2a3140;
+  --iv-steel-to: #5f6878;
+  --iv-slogan-from: #3a4354;
+  --iv-slogan-to: #8a93a3;
+  --iv-icon-circle: transparent;
+  --iv-icon-circle-border: rgba(0, 0, 0, 0.33);
+  --iv-icon-metal-from: #c9d0dc;
+  --iv-icon-metal-to: #98a4b4;
+  --iv-feature-icon: #3a4354;
+  --iv-heading: #2a3140;
+  --iv-lightbox-bg: rgba(18, 18, 18, 0.88);
   --iv-phone-frame: #0a0a0a;
   --iv-phone-bezel: #252525;
-  --iv-ring: rgba(37, 99, 235, 0.35);
-  --iv-theme-btn-bg: rgba(15, 23, 42, 0.06);
-  --iv-theme-btn-border: rgba(15, 23, 42, 0.12);
-  --iv-theme-btn-hover: rgba(15, 23, 42, 0.1);
+  --iv-ring: rgba(196, 160, 106, 0.45);
+  --iv-theme-btn-bg: rgba(42, 49, 64, 0.06);
+  --iv-theme-btn-border: rgba(42, 49, 64, 0.12);
+  --iv-theme-btn-hover: rgba(42, 49, 64, 0.1);
+  --iv-cta-from: #4a5364;
+  --iv-cta-to: #1f2530;
+  --iv-cta-text: #f4f6fa;
+  --iv-cta-border: rgba(196, 160, 106, 0.55);
+  --iv-cta-shadow: rgba(0, 0, 0, 0.22);
+  --iv-card-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
 }
 
 html[data-theme="dark"] {
   --iv-page: #121212;
-  --iv-text: #e8e8e8;
-  --iv-text-muted: #b8bcc4;
-  --iv-text-soft: #9ca3af;
+  --iv-text: #ffffff;
+  --iv-text-muted: rgba(255, 255, 255, 0.7);
+  --iv-text-soft: rgba(255, 255, 255, 0.54);
   --iv-nav-bg: rgba(18, 18, 18, 0.94);
-  --iv-nav-border: rgba(255, 255, 255, 0.1);
-  --iv-link: #60a5fa;
-  --iv-link-hover: #93c5fd;
-  --iv-card: rgba(30, 33, 38, 0.72);
-  --iv-card-border: rgba(255, 255, 255, 0.1);
-  --iv-card-hover: rgba(30, 33, 38, 0.95);
-  --iv-section: #181818;
+  --iv-nav-border: rgba(255, 255, 255, 0.12);
+  --iv-accent: #c4a06a;
+  --iv-accent-strong: #d4b07a;
+  --iv-link: #d4b07a;
+  --iv-link-hover: #e4c89a;
+  --iv-card: rgba(26, 30, 36, 0.92);
+  --iv-card-border: rgba(255, 255, 255, 0.12);
+  --iv-card-hover: rgba(26, 30, 36, 0.98);
+  --iv-section: #1a1e24;
   --iv-section-alt: #151515;
-  --iv-donate-panel: #151515;
-  --iv-donate-inner: #151515;
-  --iv-hero-glow: rgba(55, 65, 81, 0.2);
+  --iv-donate-panel: #1a1e24;
+  --iv-donate-inner: #121212;
+  --iv-hero-glow: rgba(196, 160, 106, 0.12);
   --iv-steel-from: #ffffff;
-  --iv-steel-to: #a0a0a0;
-  --iv-slogan-from: #e5e5e5;
-  --iv-slogan-to: #9ca3af;
-  --iv-icon-circle: #1f2937;
-  --iv-icon-circle-border: rgba(255, 255, 255, 0.1);
+  --iv-steel-to: #9aa3b2;
+  --iv-slogan-from: #e4e8f0;
+  --iv-slogan-to: #9aa3b2;
+  --iv-icon-circle: transparent;
+  --iv-icon-circle-border: rgba(255, 255, 255, 0.3);
+  --iv-icon-metal-from: #454d59;
+  --iv-icon-metal-to: #262a30;
   --iv-feature-icon: #ffffff;
   --iv-heading: #ffffff;
   --iv-lightbox-bg: rgba(0, 0, 0, 0.85);
-  --iv-ring: rgba(255, 255, 255, 0.45);
+  --iv-ring: rgba(196, 160, 106, 0.5);
   --iv-theme-btn-bg: rgba(255, 255, 255, 0.06);
   --iv-theme-btn-border: rgba(255, 255, 255, 0.12);
   --iv-theme-btn-hover: rgba(255, 255, 255, 0.1);
+  --iv-cta-from: #e4e8f0;
+  --iv-cta-to: #9aa3b2;
+  --iv-cta-text: #1a1e24;
+  --iv-cta-border: rgba(196, 160, 106, 0.42);
+  --iv-cta-shadow: rgba(0, 0, 0, 0.4);
+  --iv-card-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 
 body.iv-site {
@@ -71,6 +91,11 @@ body.iv-site {
   background-color: var(--iv-page);
   color: var(--iv-text);
   transition: background-color 0.22s ease, color 0.22s ease;
+}
+
+body.iv-site ::selection {
+  background: rgba(196, 160, 106, 0.35);
+  color: var(--iv-heading);
 }
 
 .iv-privacy-body a:not(.iv-nav-brand):not(.iv-muted-link),
@@ -101,12 +126,15 @@ body.iv-site {
 .glass-panel {
   background: var(--iv-card);
   backdrop-filter: blur(10px);
-  border: 1px solid var(--iv-card-border);
-  transition: background-color 0.22s ease, border-color 0.22s ease;
+  border: 0.5px solid var(--iv-card-border);
+  border-radius: 16px;
+  box-shadow: var(--iv-card-shadow);
+  transition: background-color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
 }
 
 .glass-panel:hover {
   background: var(--iv-card-hover);
+  border-color: rgba(196, 160, 106, 0.38);
 }
 
 .iv-nav {
@@ -121,10 +149,7 @@ body.iv-site {
   letter-spacing: 0.1em;
 }
 .iv-nav-brand:hover {
-  color: var(--iv-heading);
-}
-html[data-theme="dark"] .iv-nav-brand:hover {
-  color: #fff;
+  color: var(--iv-accent-strong);
 }
 
 .iv-nav-link {
@@ -133,17 +158,14 @@ html[data-theme="dark"] .iv-nav-brand:hover {
   line-height: 1.25rem;
 }
 .iv-nav-link:hover {
-  color: var(--iv-text-muted);
-}
-html[data-theme="dark"] .iv-nav-link:hover {
-  color: #e5e7eb;
+  color: var(--iv-accent-strong);
 }
 
 .iv-muted-link {
   color: var(--iv-text-muted);
 }
 .iv-muted-link:hover {
-  color: var(--iv-text);
+  color: var(--iv-accent-strong);
 }
 
 .iv-hero-bg {
@@ -160,8 +182,9 @@ html[data-theme="dark"] .iv-nav-link:hover {
 }
 
 .iv-feature-icon-wrap {
-  background-color: var(--iv-icon-circle);
+  background: linear-gradient(180deg, var(--iv-icon-metal-from) 0%, var(--iv-icon-metal-to) 100%);
   border: 1px solid var(--iv-icon-circle-border);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
 }
 .iv-feature-icon-wrap svg {
   color: var(--iv-feature-icon);
@@ -213,10 +236,8 @@ html[data-theme="dark"] .iv-nav-link:hover {
 }
 .iv-theme-toggle:hover {
   background: var(--iv-theme-btn-hover);
-  color: var(--iv-heading);
-}
-html[data-theme="dark"] .iv-theme-toggle:hover {
-  color: #fff;
+  color: var(--iv-accent-strong);
+  border-color: rgba(196, 160, 106, 0.4);
 }
 .iv-theme-toggle:focus {
   outline: none;
@@ -233,7 +254,9 @@ html[data-theme="dark"] .iv-theme-toggle:hover {
 .iv-phone-shell {
   background: var(--iv-phone-frame);
   border-color: #1a1a1a;
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.35);
+  box-shadow:
+    0 20px 40px -10px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(196, 160, 106, 0.12);
 }
 .iv-phone-notch {
   background: var(--iv-phone-frame);
@@ -241,20 +264,30 @@ html[data-theme="dark"] .iv-theme-toggle:hover {
 }
 
 .iv-btn-primary-like {
-  background: var(--iv-section);
-  color: var(--iv-text);
-  border: 1px solid var(--iv-nav-border);
+  min-height: 3.25rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, var(--iv-cta-from) 0%, var(--iv-cta-to) 100%);
+  color: var(--iv-cta-text);
+  border: 1.1px solid var(--iv-cta-border);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  font-size: 0.95rem;
+  line-height: 1.1;
+  box-shadow: 0 8px 18px var(--iv-cta-shadow);
 }
 .iv-btn-primary-like:hover {
-  background: var(--iv-card-hover);
+  filter: brightness(1.06);
+  background: linear-gradient(180deg, var(--iv-cta-from) 0%, var(--iv-cta-to) 100%);
 }
 html[data-theme="dark"] .iv-btn-primary-like {
-  background: #1f2937;
-  color: #e5e7eb;
-  border-color: rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, var(--iv-cta-from) 0%, var(--iv-cta-to) 100%);
+  color: var(--iv-cta-text);
+  border-color: var(--iv-cta-border);
 }
 html[data-theme="dark"] .iv-btn-primary-like:hover {
-  background: #374151;
+  filter: brightness(1.05);
+  background: linear-gradient(180deg, var(--iv-cta-from) 0%, var(--iv-cta-to) 100%);
 }
 
 .iv-donate-toggle {
@@ -264,6 +297,7 @@ html[data-theme="dark"] .iv-btn-primary-like:hover {
 }
 .iv-donate-toggle:hover {
   background: var(--iv-theme-btn-hover);
+  border-color: rgba(196, 160, 106, 0.35);
 }
 
 .iv-donate-panel {
@@ -274,6 +308,7 @@ html[data-theme="dark"] .iv-btn-primary-like:hover {
 .iv-donate-row {
   border-color: var(--iv-nav-border);
   background: var(--iv-donate-inner);
+  border-radius: 8px;
 }
 
 .iv-icon-btn {
@@ -283,6 +318,8 @@ html[data-theme="dark"] .iv-btn-primary-like:hover {
 }
 .iv-icon-btn:hover {
   background: var(--iv-theme-btn-hover);
+  color: var(--iv-accent-strong);
+  border-color: rgba(196, 160, 106, 0.4);
 }
 
 .iv-tooltip {
@@ -467,13 +504,13 @@ html[data-theme="dark"] .iv-legend-roll.iv-legend-roll--alpha-squad .iv-alpha-tg
   padding: 0.55rem 0.75rem;
   font-family: "Roboto", sans-serif;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #0f172a;
-  background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0.35rem;
+  color: #1a1e24;
+  background: linear-gradient(180deg, #e4e8f0 0%, #9aa3b2 100%);
+  border: 1.1px solid rgba(196, 160, 106, 0.55);
+  border-radius: 9999px;
   cursor: pointer;
   transition: filter 0.2s ease, transform 0.15s ease;
 }

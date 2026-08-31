@@ -12,7 +12,7 @@
 
   function urlForIndex(i) {
     var f = themeFolder();
-    return "../screenshots/" + f + "/" + i + ".jpg?v=" + f;
+    return "../screenshots/" + f + "/" + i + ".jpg?v=166-" + f;
   }
 
   function applyIndex(i) {
