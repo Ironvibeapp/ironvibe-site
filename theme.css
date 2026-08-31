@@ -352,9 +352,11 @@ body.iv-site a.iv-btn-primary-like {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+  width: 14.5rem;
   min-height: 3.5rem;
   height: 3.5rem;
-  padding: 0 1.85rem;
+  padding: 0 1.25rem;
   border-radius: 9999px;
   background-color: transparent !important;
   background-image: linear-gradient(180deg, var(--iv-cta-from) 0%, var(--iv-cta-to) 100%) !important;
@@ -364,7 +366,24 @@ body.iv-site a.iv-btn-primary-like {
   letter-spacing: 0.04em;
   font-size: 0.9375rem;
   line-height: 1;
+  white-space: nowrap;
   box-shadow: 0 8px 18px var(--iv-cta-shadow);
+}
+body.iv-site a.iv-play-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 14.5rem;
+  height: 3.5rem;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  flex-shrink: 0;
+}
+body.iv-site a.iv-play-badge img {
+  height: 5.6rem;
+  width: auto;
+  max-width: none;
 }
 body.iv-site a.iv-btn-primary-like:hover {
   filter: brightness(1.06);
