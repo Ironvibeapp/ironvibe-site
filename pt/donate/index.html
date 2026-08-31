@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>(function(){try{var t=localStorage.getItem('ironvibe-site-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
     <title data-i18n="donate.metaTitle">Support IronVibe — Donate</title>
-    <link rel="icon" type="image/svg+xml" href="../../favicon.svg?v=18">
+    <link rel="icon" href="../../favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg?v=20">
+    <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../theme.css?v=168">
+    <link rel="stylesheet" href="../../theme.css?v=170">
     <style>
         .logo-footer { width: 4rem; height: 4rem; }
     </style>
@@ -16,7 +18,10 @@
 <body class="min-h-screen flex flex-col iv-site iv-donate-body opacity-0 transition-opacity duration-300">
     <nav class="iv-nav sticky top-0 z-50">
         <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
-            <a href="../" class="iv-nav-brand">IRONVIBE</a>
+            <a href="../" class="iv-nav-brand">
+                <img src="../../logo-icon.svg?v=20" alt="" class="iv-nav-mark" width="32" height="32" />
+                <span>IRONVIBE</span>
+            </a>
             <div class="flex items-center gap-2 shrink-0">
                 <button type="button" class="iv-theme-toggle" data-theme-toggle data-aria-dark="" data-aria-light="" aria-pressed="false" aria-label=""></button>
                 <a href="../" class="iv-nav-link" data-i18n="donate.backToHome">← Back to home</a>

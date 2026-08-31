@@ -1,3 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32">
-  <image width="32" height="32" href="logo-icon.png" xlink:href="logo-icon.png" preserveAspectRatio="xMidYMid meet"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <rect width="200" height="200" rx="44" fill="#121212"/>
+  <g transform="translate(42.86 20.00) scale(0.57143)">
+  <circle fill="none" stroke="#C4A06A" stroke-width="4.01" stroke-linecap="butt" stroke-linejoin="miter" cx="100.20" cy="15.69" r="13.98"/>
+  <circle fill="none" stroke="#E8ECF2" stroke-width="3.34" stroke-linecap="butt" stroke-linejoin="miter" cx="100.20" cy="15.69" r="8.16"/>
+  <path fill="none" stroke="#E8ECF2" stroke-width="3.34" stroke-linecap="butt" stroke-linejoin="miter" d="M 93.14 29.02 V 69.02"/>
+  <path fill="none" stroke="#E8ECF2" stroke-width="3.34" stroke-linecap="butt" stroke-linejoin="miter" d="M 106.86 29.02 V 69.02"/>
+  <path fill="none" stroke="#E8ECF2" stroke-width="3.34" stroke-linecap="butt" stroke-linejoin="miter" d="M 68.24 70.59 Q 100.20 68.24 132.16 70.59"/>
+  <path fill="none" stroke="#E8ECF2" stroke-width="3.34" stroke-linecap="butt" stroke-linejoin="miter" d="M 89.22 86.27 V 250.98 L 100.20 279.22 L 110.78 250.98 V 86.27"/>
+  <path fill="none" stroke="#E8ECF2" stroke-width="3.34" stroke-linecap="butt" stroke-linejoin="miter" d="M 100.20 87.84 V 250.98"/>
+  <path fill="none" stroke="#E8ECF2" stroke-width="3.34" stroke-linecap="butt" stroke-linejoin="miter" d="M 0.78 64.71 L 43.14 64.71"/>
+  <path fill="none" stroke="#E8ECF2" stroke-width="3.34" stroke-linecap="butt" stroke-linejoin="miter" d="M 3.92 69.80 L 83.14 244.71"/>
+  <path fill="none" stroke="#E8ECF2" stroke-width="3.34" stroke-linecap="butt" stroke-linejoin="miter" d="M 43.92 69.80 L 83.92 245.49"/>
+  <path fill="none" stroke="#E8ECF2" stroke-width="3.34" stroke-linecap="butt" stroke-linejoin="miter" d="M 199.61 64.71 L 157.25 64.71"/>
+  <path fill="none" stroke="#E8ECF2" stroke-width="3.34" stroke-linecap="butt" stroke-linejoin="miter" d="M 196.47 69.80 L 117.25 244.71"/>
+  <path fill="none" stroke="#E8ECF2" stroke-width="3.34" stroke-linecap="butt" stroke-linejoin="miter" d="M 156.47 69.80 L 116.47 245.49"/>
+  </g>
 </svg>

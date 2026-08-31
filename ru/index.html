@@ -5,20 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>(function(){try{var t=localStorage.getItem('ironvibe-site-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
     <title data-i18n="home.metaTitle">IronVibe</title>
-    <link rel="icon" type="image/svg+xml" href="../favicon.svg?v=18">
+    <link rel="icon" href="../favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg?v=20">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../theme.css?v=168">
+    <link rel="stylesheet" href="../theme.css?v=170">
     <style>
-        .logo-hero { width: 11rem; height: 11rem; }
-        @media (min-width: 768px) { .logo-hero { width: 15rem; height: 15rem; } }
-        .logo-footer { width: 4rem; height: 4rem; }
+         .logo-hero { width: 8.2rem; height: 11.5rem; }
+        @media (min-width: 768px) {  .logo-hero { width: 11.1rem; height: 15.5rem; } }
+         .logo-footer { width: 2.86rem; height: 4rem; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen iv-site opacity-0 transition-opacity duration-300">
     <nav class="iv-nav sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-            <a href="./" class="iv-nav-brand text-lg">IRONVIBE</a>
+            <a href="./" class="iv-nav-brand text-lg">
+                <img src="../logo-icon.svg?v=20" alt="" class="iv-nav-mark" width="32" height="32" />
+                <span>IRONVIBE</span>
+            </a>
             <div class="flex items-center gap-2 shrink-0">
                 <button type="button" class="iv-theme-toggle" data-theme-toggle data-aria-dark="" data-aria-light="" aria-pressed="false" aria-label=""></button>
                 <a href="privacy/" class="iv-nav-link transition-colors" data-i18n="home.navPrivacy">Privacy Policy</a>
@@ -31,11 +36,13 @@
         <div class="z-10 flex flex-col items-center">
             <div class="flex items-center justify-center mb-8">
                 <div class="logo-hero">
-                    <img src="../logo.png?v=18" alt="IronVibe" class="iv-logo" width="256" height="256" />
+                    <img src="../logo-light.svg?v=20" alt="IronVibe" class="iv-logo iv-logo--on-light" width="200" height="280" />
+                    <img src="../logo-dark.svg?v=20" alt="" class="iv-logo iv-logo--on-dark" width="200" height="280" aria-hidden="true" />
                 </div>
             </div>
             <h1 class="text-5xl md:text-7xl font-black tracking-widest mb-2 steel-text">IRONVIBE</h1>
-            <p class="text-lg md:text-xl slogan-text max-w-2xl mx-auto mb-10" data-i18n="home.slogan">YOUR WORKOUT VIBE</p>
+            <p class="text-lg md:text-xl slogan-text max-w-2xl mx-auto mb-3" data-i18n="home.slogan">YOUR WORKOUT VIBE</p>
+            <div class="iv-fade-rule" aria-hidden="true"></div>
             <p class="iv-prose max-w-xl mx-auto mb-3" data-i18n="home.philosophy1"></p>
             <p class="iv-prose max-w-xl mx-auto mb-12" data-i18n="home.philosophy2"></p>
             <div class="flex flex-col sm:flex-row flex-wrap items-center sm:items-end justify-center gap-8 md:gap-12 w-full max-w-xl md:max-w-3xl mx-auto px-2">
@@ -53,17 +60,7 @@
     </header>
 
     <section class="py-20 px-4 iv-section-tint">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="glass-panel p-8 rounded-xl text-center transition duration-300">
-                <div class="iv-feature-icon-wrap w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-6">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M12 4v4m0 8v4m4-8h4M4 12h4M12 7a5 5 0 100 10 5 5 0 000-10z"/>
-                    </svg>
-                </div>
-                <h3 class="text-2xl font-bold mb-3 iv-feature-title" data-i18n="home.feature1Title">Simplicity and focus</h3>
-                <p class="iv-prose" data-i18n="home.feature1Desc"></p>
-            </div>
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div class="glass-panel p-8 rounded-xl text-center transition duration-300">
                 <div class="iv-feature-icon-wrap w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-6">
                     <svg class="w-8 h-8" viewBox="0 0 64 64" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -71,15 +68,43 @@
                         <path stroke-width="2.5" d="M9.47 47.02c-.38 0-.75-.14-1.04-.43-.57-.57-.57-1.5 0-2.08 5.04-5.04 11.08-4.12 16.4-3.31 5.09.77 9.9 1.5 13.88-2.49 3.99-3.99 3.26-8.79 2.49-13.88-.81-5.33-1.72-11.37 3.31-16.4.57-.57 1.5-.57 2.08 0s.57 1.5 0 2.08c-3.99 3.99-3.26 8.79-2.49 13.88.81 5.33 1.72 11.37-3.31 16.4-5.04 5.04-11.07 4.12-16.4 3.31-5.09-.77-9.9-1.5-13.88 2.49-.28.29-.66.43-1.04.43Z"/>
                     </svg>
                 </div>
-                <h3 class="text-2xl font-bold mb-3 iv-feature-title" data-i18n="home.feature2Title">Trainer or athlete</h3>
+                <h3 class="text-2xl font-bold mb-3 iv-feature-title" data-i18n="home.feature1Title">Athlete or trainer</h3>
+                <p class="iv-prose" data-i18n="home.feature1Desc"></p>
+            </div>
+            <div class="glass-panel p-8 rounded-xl text-center transition duration-300">
+                <div class="iv-feature-icon-wrap w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-6">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19V9m5 10V5m5 14v-8m5 8V7"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 iv-feature-title" data-i18n="home.feature2Title">Personal progress</h3>
                 <p class="iv-prose" data-i18n="home.feature2Desc"></p>
             </div>
             <div class="glass-panel p-8 rounded-xl text-center transition duration-300">
                 <div class="iv-feature-icon-wrap w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-6">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5h9m-9 4h6m-6 4h9m-9 4h6M5 5h.01M5 9h.01M5 13h.01M5 17h.01"/></svg>
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3.5l2.4 4.86 5.36.78-3.88 3.78.92 5.34L12 15.77 7.2 18.26l.92-5.34L4.24 9.14l5.36-.78L12 3.5z"/></svg>
                 </div>
-                <h3 class="text-2xl font-bold mb-3 iv-feature-title" data-i18n="home.feature3Title">Your rules</h3>
+                <h3 class="text-2xl font-bold mb-3 iv-feature-title" data-i18n="home.feature3Title">Favorites and muscle tags</h3>
                 <p class="iv-prose" data-i18n="home.feature3Desc"></p>
+            </div>
+            <div class="glass-panel p-8 rounded-xl text-center transition duration-300">
+                <div class="iv-feature-icon-wrap w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-6">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h10M4 12h16M4 17h8M16 5l4 2.5L16 10"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 iv-feature-title" data-i18n="home.feature4Title">No borrowed catalog</h3>
+                <p class="iv-prose" data-i18n="home.feature4Desc"></p>
+            </div>
+            <div class="glass-panel p-8 rounded-xl text-center transition duration-300">
+                <div class="iv-feature-icon-wrap w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-6">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v4m0 8v4m4-8h4M4 12h4M12 7a5 5 0 100 10 5 5 0 000-10z"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 iv-feature-title" data-i18n="home.feature5Title">Offline on your phone</h3>
+                <p class="iv-prose" data-i18n="home.feature5Desc"></p>
+            </div>
+            <div class="glass-panel p-8 rounded-xl text-center transition duration-300">
+                <div class="iv-feature-icon-wrap w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-6">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v10m0 0l-3.5-3.5M12 14l3.5-3.5M5 18h14"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 iv-feature-title" data-i18n="home.feature6Title">Backup when you want</h3>
+                <p class="iv-prose" data-i18n="home.feature6Desc"></p>
             </div>
         </div>
     </section>
@@ -213,7 +238,8 @@
     <footer class="py-10 text-center iv-border-t">
         <div class="flex justify-center mb-6">
             <div class="logo-footer">
-                <img src="../logo.png?v=18" alt="IronVibe" class="iv-logo" width="256" height="256" />
+                <img src="../logo-light.svg?v=20" alt="IronVibe" class="iv-logo iv-logo--on-light" width="200" height="280" />
+                <img src="../logo-dark.svg?v=20" alt="" class="iv-logo iv-logo--on-dark" width="200" height="280" aria-hidden="true" />
             </div>
         </div>
         <p class="iv-text-soft text-sm" data-i18n="home.footerRights">© 2026 IronVibe. All rights reserved.</p>

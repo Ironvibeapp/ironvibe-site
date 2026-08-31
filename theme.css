@@ -18,7 +18,10 @@
   --iv-section-alt: #eef1f6;
   --iv-donate-panel: #fefefe;
   --iv-donate-inner: #f0f2f7;
-  --iv-hero-glow: rgba(196, 160, 106, 0.34);
+  --iv-hero-glow: rgba(196, 160, 106, 0.28);
+  --iv-hero-steel: rgba(42, 49, 64, 0.06);
+  --iv-logo-on-light: block;
+  --iv-logo-on-dark: none;
   --iv-steel-from: #2a3140;
   --iv-steel-to: #5f6878;
   --iv-slogan-from: #3a4354;
@@ -62,7 +65,10 @@ html[data-theme="dark"] {
   --iv-section-alt: #151515;
   --iv-donate-panel: #1a1e24;
   --iv-donate-inner: #121212;
-  --iv-hero-glow: rgba(196, 160, 106, 0.2);
+  --iv-hero-glow: rgba(196, 160, 106, 0.22);
+  --iv-hero-steel: rgba(232, 236, 242, 0.04);
+  --iv-logo-on-light: none;
+  --iv-logo-on-dark: block;
   --iv-steel-from: #ffffff;
   --iv-steel-to: #9aa3b2;
   --iv-slogan-from: #e4e8f0;
@@ -145,12 +151,22 @@ body.iv-site .glass-panel:hover {
 }
 
 .iv-nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
   color: var(--iv-text-secondary, var(--iv-text-muted));
   font-weight: 700;
   letter-spacing: 0.1em;
 }
 .iv-nav-brand:hover {
   color: var(--iv-accent-strong);
+}
+.iv-nav-mark {
+  display: block;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 0.42rem;
+  flex-shrink: 0;
 }
 
 .iv-nav-link {
@@ -170,16 +186,32 @@ body.iv-site .glass-panel:hover {
 }
 
 .iv-hero-bg {
-  background: radial-gradient(ellipse at center, var(--iv-hero-glow) 0%, var(--iv-page) 45%, var(--iv-page) 100%);
+  background:
+    radial-gradient(ellipse at center, var(--iv-hero-glow) 0%, transparent 42%),
+    radial-gradient(ellipse at 50% 0%, var(--iv-hero-steel) 0%, var(--iv-page) 55%);
 }
 
-/* Sketch 16 raster, black plate knocked out. Same light mark in both themes. */
+.iv-fade-rule {
+  width: min(12rem, 50vw);
+  height: 1px;
+  margin: 0.35rem auto 1.75rem;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--iv-accent) 50%,
+    transparent 100%
+  );
+  opacity: 0.7;
+}
+
+/* Monoline mark: steel stroke on light, silver on dark. Gold pommel ring. */
 .logo-hero,
 .logo-footer {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  position: relative;
 }
 .iv-logo {
   display: block;
@@ -187,20 +219,18 @@ body.iv-site .glass-panel:hover {
   height: 100%;
   object-fit: contain;
   background: transparent;
-  filter:
-    drop-shadow(0 8px 16px rgba(42, 49, 64, 0.22))
-    drop-shadow(0 0 22px rgba(196, 160, 106, 0.38));
 }
-html[data-theme="dark"] .iv-logo {
-  filter: drop-shadow(0 0 18px rgba(196, 160, 106, 0.28));
+.iv-logo--on-light {
+  display: var(--iv-logo-on-light);
+  filter: drop-shadow(0 4px 10px rgba(42, 49, 64, 0.12));
 }
-.logo-footer .iv-logo {
-  filter:
-    drop-shadow(0 2px 6px rgba(42, 49, 64, 0.2))
-    drop-shadow(0 0 10px rgba(196, 160, 106, 0.22));
+.iv-logo--on-dark {
+  display: var(--iv-logo-on-dark);
+  filter: drop-shadow(0 0 12px rgba(196, 160, 106, 0.18));
 }
-html[data-theme="dark"] .logo-footer .iv-logo {
-  filter: drop-shadow(0 0 10px rgba(196, 160, 106, 0.2));
+.logo-footer .iv-logo--on-light,
+.logo-footer .iv-logo--on-dark {
+  filter: none;
 }
 
 .iv-section-tint {
