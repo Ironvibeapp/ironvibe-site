@@ -145,7 +145,11 @@ class _AthleteScreenState extends State<AthleteScreen>
                                 if (rhythm.hasGauge) ...[
                                   IronVibeEnter(
                                     animation: _stagger(0.0, 0.46),
-                                    child: _AthleteRhythmCard(snapshot: rhythm),
+                                    child: IronVibeRhythmCard(
+                                      snapshot: rhythm,
+                                      onTap: () =>
+                                          ironVibeOpenRhythmInsight(context),
+                                    ),
                                   ),
                                   const SizedBox(height: 28),
                                 ],
@@ -196,60 +200,60 @@ class _AthleteScreenState extends State<AthleteScreen>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.stretch,
                                       children: [
-                                      Expanded(
-                                        child: IronVibeNavTile(
-                                          icon: Icons.calendar_month_rounded,
-                                          label: ironVibeSentenceCase(
-                                            l.calendarWorkouts,
+                                        Expanded(
+                                          child: IronVibeNavTile(
+                                            icon: Icons.calendar_month_rounded,
+                                            label: ironVibeSentenceCase(
+                                              l.calendarWorkouts,
+                                            ),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const CalendarScreen(),
+                                                ),
+                                              );
+                                            },
                                           ),
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const CalendarScreen(),
-                                              ),
-                                            );
-                                          },
                                         ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: IronVibeNavTile(
-                                          icon: Icons.show_chart_rounded,
-                                          label: ironVibeSentenceCase(
-                                            l.personalProgress,
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: IronVibeNavTile(
+                                            icon: Icons.show_chart_rounded,
+                                            label: ironVibeSentenceCase(
+                                              l.personalProgress,
+                                            ),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const PersonalProgressScreen(),
+                                                ),
+                                              );
+                                            },
                                           ),
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const PersonalProgressScreen(),
-                                              ),
-                                            );
-                                          },
                                         ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: IronVibeNavTile(
-                                          icon: Icons.star_rounded,
-                                          label: ironVibeSentenceCase(
-                                            l.favoriteExercises,
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: IronVibeNavTile(
+                                            icon: Icons.star_rounded,
+                                            label: ironVibeSentenceCase(
+                                              l.favoriteExercises,
+                                            ),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const FavoriteExercisesScreen(),
+                                                ),
+                                              );
+                                            },
                                           ),
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const FavoriteExercisesScreen(),
-                                              ),
-                                            );
-                                          },
                                         ),
-                                      ),
-                                    ],
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -267,162 +271,6 @@ class _AthleteScreenState extends State<AthleteScreen>
         ),
       ),
     );
-  }
-}
-
-class _AthleteRhythmCard extends StatelessWidget {
-  final IronVibeRhythmSnapshot snapshot;
-
-  const _AthleteRhythmCard({required this.snapshot});
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context)!;
-    final pal = IronVibePalette.of(context);
-    final isDark = pal.brightness == Brightness.dark;
-    final locale = Localizations.localeOf(context).toString();
-    final rate = NumberFormat('#0.0', locale).format(snapshot.daysPerWeek);
-    final zone = ironVibeRhythmZoneColor(snapshot.daysPerWeek);
-    final steelFill = isDark
-        ? const Color(0xFF8A93A3)
-        : const Color(0xFF98A4B4);
-    return Container(
-      padding: const EdgeInsets.fromLTRB(18, 10, 18, 8),
-      decoration: ironVibeElevatedCardDecoration(pal),
-      child: SizedBox(
-        height: 128,
-        width: double.infinity,
-        child: TweenAnimationBuilder<double>(
-          tween: Tween(begin: 1.0, end: snapshot.daysPerWeek.clamp(1.0, 6.0)),
-          duration: const Duration(milliseconds: 900),
-          curve: Curves.easeOutCubic,
-          builder: (context, value, _) {
-            return CustomPaint(
-              painter: _AthleteRhythmGaugePainter(
-                needleAt: value,
-                trackColor: pal.borderSubtle,
-                fillColor: steelFill,
-                tickColor: pal.textMuted,
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        rate,
-                        style: TextStyle(
-                          color: zone,
-                          fontSize: 32,
-                          fontWeight: FontWeight.w800,
-                          height: 1.0,
-                          letterSpacing: 0.4,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        l.rhythmPerWeek,
-                        style: TextStyle(
-                          color: pal.textSecondary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.3,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class _AthleteRhythmGaugePainter extends CustomPainter {
-  final double needleAt;
-  final Color trackColor;
-  final Color fillColor;
-  final Color tickColor;
-
-  _AthleteRhythmGaugePainter({
-    required this.needleAt,
-    required this.trackColor,
-    required this.fillColor,
-    required this.tickColor,
-  });
-
-  static const _start = math.pi;
-  static const _sweep = math.pi;
-
-  double _t(double v) => ((v.clamp(1.0, 6.0) - 1.0) / 5.0);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final c = Offset(size.width / 2, size.height - 10);
-    final radius = math.min(size.width * 0.40, size.height * 0.68);
-    final rect = Rect.fromCircle(center: c, radius: radius);
-
-    final track = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 11
-      ..strokeCap = StrokeCap.round
-      ..color = trackColor;
-    canvas.drawArc(rect, _start, _sweep, false, track);
-
-    final fillSweep = _sweep * _t(needleAt);
-    if (fillSweep > 0) {
-      canvas.drawArc(
-        rect,
-        _start,
-        fillSweep,
-        false,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 9
-          ..strokeCap = StrokeCap.round
-          ..color = fillColor,
-      );
-    }
-
-    final tickPaint = Paint()
-      ..color = tickColor
-      ..strokeWidth = 1.4
-      ..strokeCap = StrokeCap.round;
-    for (var v = 1; v <= 6; v++) {
-      final a = _start + _sweep * _t(v.toDouble());
-      final dir = Offset(math.cos(a), math.sin(a));
-      canvas.drawLine(
-        c + dir * (radius - 16),
-        c + dir * (radius + 3),
-        tickPaint,
-      );
-    }
-
-    final needleA = _start + _sweep * _t(needleAt);
-    final dir = Offset(math.cos(needleA), math.sin(needleA));
-    final needleColor = ironVibeRhythmZoneColor(needleAt);
-    canvas.drawLine(
-      c - dir * 8,
-      c + dir * (radius - 18),
-      Paint()
-        ..color = needleColor
-        ..strokeWidth = 2.4
-        ..strokeCap = StrokeCap.round,
-    );
-    canvas.drawCircle(c, 5.5, Paint()..color = needleColor);
-    canvas.drawCircle(c, 2.2, Paint()..color = const Color(0xFFF4F6FA));
-  }
-
-  @override
-  bool shouldRepaint(covariant _AthleteRhythmGaugePainter old) {
-    return old.needleAt != needleAt ||
-        old.trackColor != trackColor ||
-        old.fillColor != fillColor ||
-        old.tickColor != tickColor;
   }
 }
 
@@ -484,7 +332,11 @@ class _WorkoutSessionScreenState extends State<WorkoutSessionScreen>
       for (final log in logs) {
         final normalized = normalizeExerciseName(log.name);
         if (normalized.isEmpty) continue;
-        final source = ExerciseLog(normalized, log.sets, isCardio: log.isCardio);
+        final source = ExerciseLog(
+          normalized,
+          log.sets,
+          isCardio: log.isCardio,
+        );
         _exercises.add(
           widget.previousSetsAsHints
               ? ironVibeExerciseDataFromPreviousAsHints(source)
@@ -502,24 +354,25 @@ class _WorkoutSessionScreenState extends State<WorkoutSessionScreen>
     }
   }
 
-  void _flushAutoSaveDraft() {
-    if (!_hasDraftWorkout) return;
-    unawaited(
-      DataService.saveActiveWorkoutDraft(
-        ActiveWorkoutDraft(
-          kind: ActiveWorkoutDraftKind.personal,
-          targetDate: widget.targetDate ?? widget.restoredDraft?.targetDate,
-          isCardio: _isCardio,
-          exercisesJson: ironVibeExerciseListToDraftJson(_exercises),
-          savedAt: DateTime.now(),
-        ),
-      ),
-    );
-  }
-
   Future<void> _clearAutoSaveDraft() async {
     ironVibeStopWorkoutAutoSave();
+    await _draftWrite;
     await DataService.clearActiveWorkoutDraft();
+  }
+
+  Future<void>? _draftWrite;
+
+  void _flushAutoSaveDraft() {
+    if (!_hasDraftWorkout) return;
+    _draftWrite = DataService.saveActiveWorkoutDraft(
+      ActiveWorkoutDraft(
+        kind: ActiveWorkoutDraftKind.personal,
+        targetDate: widget.targetDate ?? widget.restoredDraft?.targetDate,
+        isCardio: _isCardio,
+        exercisesJson: ironVibeExerciseListToDraftJson(_exercises),
+        savedAt: DateTime.now(),
+      ),
+    );
   }
 
   @override
@@ -652,22 +505,32 @@ class _WorkoutSessionScreenState extends State<WorkoutSessionScreen>
     );
   }
 
+  Future<void> _setSessionCardio(bool cardio) async {
+    if (_isCardio == cardio) return;
+    if (ironVibeDraftHasOpposingModeInput(
+      _exercises,
+      switchingToCardio: cardio,
+    )) {
+      final ok = await ironVibeConfirmSwitchWorkoutType(context);
+      if (!ok || !mounted) return;
+    }
+    setState(() => _isCardio = cardio);
+  }
+
   Future<void> _finishWorkout({bool celebrate = false}) async {
     final logs = _logsFromCurrentDraft();
-    for (var ex in _exercises) {
-      final name = normalizeExerciseName(ex.nameController.text);
-      if (name.isNotEmpty) {
-        ex.nameController.text = name;
-        ensureExerciseInBank(name);
-      }
+    for (final log in logs) {
+      ensureExerciseInBank(log.name);
     }
 
     if (logs.isNotEmpty) {
-      workoutHistory.add(WorkoutLog(widget.targetDate ?? DateTime.now(), logs));
+      workoutHistory.add(
+        ironVibeNewWorkoutLog(widget.targetDate ?? DateTime.now(), logs),
+      );
     }
 
-    unawaited(_clearAutoSaveDraft());
-    DataService.saveData();
+    await _clearAutoSaveDraft();
+    await DataService.saveData();
 
     if (celebrate && logs.isNotEmpty && mounted) {
       await ironVibeShowWorkoutComplete(context);
@@ -769,11 +632,23 @@ class _WorkoutSessionScreenState extends State<WorkoutSessionScreen>
           case null:
             break;
           case _WorkoutSessionExitAction.discard:
-            unawaited(_clearAutoSaveDraft());
+            await _clearAutoSaveDraft();
+            if (!context.mounted) return;
             _exercises.clear();
             Navigator.of(context).pop();
             break;
           case _WorkoutSessionExitAction.saveAndLeave:
+            if (!_canFinishWorkout) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    AppLocalizations.of(context)!.saveWorkoutNothingToSave,
+                  ),
+                  duration: const Duration(seconds: 2),
+                ),
+              );
+              break;
+            }
             await _finishWorkout(celebrate: true);
             break;
         }
@@ -815,7 +690,7 @@ class _WorkoutSessionScreenState extends State<WorkoutSessionScreen>
                           children: [
                             Expanded(
                               child: GestureDetector(
-                                onTap: () => setState(() => _isCardio = false),
+                                onTap: () => _setSessionCardio(false),
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 12,
@@ -823,12 +698,12 @@ class _WorkoutSessionScreenState extends State<WorkoutSessionScreen>
                                   decoration: BoxDecoration(
                                     color: segStrAthlete.backgroundColor,
                                     border: Border.all(
-                                    color: pal.borderSubtle,
-                                    width: 0.5,
-                                  ),
-                                  borderRadius: BorderRadius.circular(
-                                    kIronVibeRadiusSegment,
-                                  ),
+                                      color: pal.borderSubtle,
+                                      width: 0.5,
+                                    ),
+                                    borderRadius: BorderRadius.circular(
+                                      kIronVibeRadiusSegment,
+                                    ),
                                   ),
                                   child: Text(
                                     AppLocalizations.of(context)!.strengthType,
@@ -841,7 +716,7 @@ class _WorkoutSessionScreenState extends State<WorkoutSessionScreen>
                             const SizedBox(width: 8),
                             Expanded(
                               child: GestureDetector(
-                                onTap: () => setState(() => _isCardio = true),
+                                onTap: () => _setSessionCardio(true),
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 12,
@@ -849,12 +724,12 @@ class _WorkoutSessionScreenState extends State<WorkoutSessionScreen>
                                   decoration: BoxDecoration(
                                     color: segCarAthlete.backgroundColor,
                                     border: Border.all(
-                                    color: pal.borderSubtle,
-                                    width: 0.5,
-                                  ),
-                                  borderRadius: BorderRadius.circular(
-                                    kIronVibeRadiusSegment,
-                                  ),
+                                      color: pal.borderSubtle,
+                                      width: 0.5,
+                                    ),
+                                    borderRadius: BorderRadius.circular(
+                                      kIronVibeRadiusSegment,
+                                    ),
                                   ),
                                   child: Text(
                                     AppLocalizations.of(context)!.cardioType,
@@ -972,6 +847,18 @@ class _CalendarScreenState extends State<CalendarScreen> {
         _focusedMonth = DateTime(picked.year, picked.month);
       });
     }
+  }
+
+  void _onCalendarMonthChanged(DateTime month) {
+    final focused = DateTime(month.year, month.month);
+    if (focused.year == _focusedMonth.year &&
+        focused.month == _focusedMonth.month) {
+      return;
+    }
+    setState(() {
+      _focusedMonth = focused;
+      _selectedDate = ironVibeAlignSelectedDateToMonth(_selectedDate, focused);
+    });
   }
 
   Future<void> _addWorkoutOnSelectedDate() async {
@@ -1117,60 +1004,66 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   Widget _buildCalendarGrid() {
-    final year = _focusedMonth.year;
-    final month = _focusedMonth.month;
-    final daysCount = _daysInMonth(_focusedMonth);
-    final firstWeekday = _firstWeekdayOfMonth(_focusedMonth);
-    final emptyCells = firstWeekday - 1;
-    final totalCells = emptyCells + daysCount;
-
     final pal = IronVibePalette.of(context);
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
       child: Center(
         child: Container(
           width: kIronVibeCalendarGridWidth,
+          clipBehavior: Clip.antiAlias,
           decoration: ironVibeElevatedCardDecoration(pal),
           child: SizedBox(
             height: kIronVibeCalendarGridHeight,
-            child: GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            padding: kIronVibeCalendarGridPadding,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 7,
-              mainAxisSpacing: kIronVibeCalendarCellSpacing,
-              crossAxisSpacing: kIronVibeCalendarCellSpacing,
-              childAspectRatio: 1.0,
+            child: _IronVibeMonthPageView(
+              month: _focusedMonth,
+              onMonthChanged: _onCalendarMonthChanged,
+              monthBuilder: (context, month) => _calendarGridForMonth(month),
             ),
-            itemCount: totalCells,
-            itemBuilder: (context, index) {
-              if (index < emptyCells) {
-                return const SizedBox.shrink();
-              }
-              final day = index - emptyCells + 1;
-              final date = DateTime(year, month, day);
-              final hasWorkout = _getWorkoutsForDate(date).isNotEmpty;
-              final isSelected =
-                  date.year == _selectedDate.year &&
-                  date.month == _selectedDate.month &&
-                  date.day == _selectedDate.day;
-
-              return _ironVibeCalendarDayCell(
-                context,
-                day: day,
-                isSelected: isSelected,
-                hasMark: hasWorkout,
-                onTap: () {
-                  setState(() {
-                    _selectedDate = date;
-                  });
-                },
-              );
-            },
           ),
         ),
-        ),
       ),
+    );
+  }
+
+  Widget _calendarGridForMonth(DateTime month) {
+    final year = month.year;
+    final monthNumber = month.month;
+    final daysCount = _daysInMonth(month);
+    final firstWeekday = _firstWeekdayOfMonth(month);
+    final emptyCells = firstWeekday - 1;
+    final totalCells = emptyCells + daysCount;
+
+    return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      padding: kIronVibeCalendarGridPadding,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 7,
+        mainAxisSpacing: kIronVibeCalendarCellSpacing,
+        crossAxisSpacing: kIronVibeCalendarCellSpacing,
+        childAspectRatio: 1.0,
+      ),
+      itemCount: totalCells,
+      itemBuilder: (context, index) {
+        if (index < emptyCells) {
+          return const SizedBox.shrink();
+        }
+        final day = index - emptyCells + 1;
+        final date = DateTime(year, monthNumber, day);
+        final hasWorkout = _getWorkoutsForDate(date).isNotEmpty;
+        final isSelected = ironVibeIsSameCalendarDay(date, _selectedDate);
+
+        return _ironVibeCalendarDayCell(
+          context,
+          day: day,
+          isSelected: isSelected,
+          hasMark: hasWorkout,
+          onTap: () {
+            setState(() {
+              _selectedDate = date;
+            });
+          },
+        );
+      },
     );
   }
 
@@ -1201,20 +1094,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
     setState(() {
       if (isCardio) {
         workout.exercises.add(
-          ExerciseLog(
-            '',
-            [
-              SetLog(
-                '',
-                '',
-                '',
-                isCardio: true,
-                duration: '',
-                intensity: '',
-              ),
-            ],
-            isCardio: true,
-          ),
+          ExerciseLog('', [
+            SetLog('', '', '', isCardio: true, duration: '', intensity: ''),
+          ], isCardio: true),
         );
       } else {
         workout.exercises.add(ExerciseLog('', [SetLog('', '', '0')]));
@@ -1232,6 +1114,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           return Padding(
             padding: const EdgeInsets.only(bottom: 30),
             child: _EditableHistoryExerciseBlock(
+              key: ObjectKey(entry.value),
               workout: workout,
               exerciseIndex: exIndex,
               onDataChanged: () => setState(() {}),
@@ -1353,6 +1236,7 @@ class _EditableHistoryExerciseBlock extends StatefulWidget {
   final VoidCallback onDataChanged;
 
   const _EditableHistoryExerciseBlock({
+    super.key,
     required this.workout,
     required this.exerciseIndex,
     required this.onDataChanged,
@@ -1400,6 +1284,15 @@ class _EditableHistoryExerciseBlockState
       sets: _setDataList,
       isCardio: false,
     );
+  }
+
+  @override
+  void didUpdateWidget(covariant _EditableHistoryExerciseBlock oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.exerciseIndex >= widget.workout.exercises.length) return;
+    final next = widget.workout.exercises[widget.exerciseIndex];
+    if (identical(next, _exercise)) return;
+    _exercise = next;
   }
 
   Future<void> _pickExerciseName() async {
@@ -1518,6 +1411,9 @@ class _EditableHistoryExerciseBlockState
       exList.removeAt(widget.exerciseIndex);
       _setDataList.clear();
     });
+    if (exList.isEmpty) {
+      workoutHistory.remove(widget.workout);
+    }
     DataService.saveData();
     widget.onDataChanged();
   }
@@ -1582,144 +1478,144 @@ class _EditableHistoryExerciseBlockState
         color: pal.exerciseCardBg,
       ),
       child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          onTap: ex.name.trim().isEmpty ? _pickExerciseName : null,
-          onLongPress: _pickExerciseName,
-          child: Text(
-            ex.name.trim().isEmpty
-                ? locale.exerciseNumberedTitle(widget.exerciseIndex + 1)
-                : locale.exerciseNumberedTitleWithName(
-                    widget.exerciseIndex + 1,
-                    ex.name.trim(),
-                  ),
-            style: TextStyle(
-              color: ex.name.trim().isEmpty ? pal.textMuted : pal.textPrimary,
-              fontSize: 15,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 1.0,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: ex.name.trim().isEmpty ? _pickExerciseName : null,
+            onLongPress: _pickExerciseName,
+            child: Text(
+              ex.name.trim().isEmpty
+                  ? locale.exerciseNumberedTitle(widget.exerciseIndex + 1)
+                  : locale.exerciseNumberedTitleWithName(
+                      widget.exerciseIndex + 1,
+                      ex.name.trim(),
+                    ),
+              style: TextStyle(
+                color: ex.name.trim().isEmpty ? pal.textMuted : pal.textPrimary,
+                fontSize: 15,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.0,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
           ),
-        ),
-        if (!isCardio)
-          ironVibeMuscleGroupChip(
-            exerciseName: ex.name,
-            onChanged: () {
-              if (mounted) setState(() {});
-              widget.onDataChanged();
-            },
-          ),
-        const SizedBox(height: 12),
-        if (isCardio) ...[
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Row(
+          if (!isCardio)
+            ironVibeMuscleGroupChip(
+              exerciseName: ex.name,
+              onChanged: () {
+                if (mounted) setState(() {});
+                widget.onDataChanged();
+              },
+            ),
+          const SizedBox(height: 12),
+          if (isCardio) ...[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      locale.timeMin,
+                      textAlign: TextAlign.center,
+                      style: headerStyle.copyWith(letterSpacing: 1.0),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      locale.intensityHeader,
+                      textAlign: TextAlign.center,
+                      style: headerStyle.copyWith(letterSpacing: 1.0),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: SetRow(
+                data: _setDataList.isNotEmpty
+                    ? _setDataList.first
+                    : SetData(d: '', i: ''),
+                isCardio: true,
+              ),
+            ),
+          ] else ...[
+            Row(
               children: [
                 Expanded(
                   child: Text(
-                    locale.timeMin,
+                    ironVibeWeightColumnTitle(locale),
                     textAlign: TextAlign.center,
-                    style: headerStyle.copyWith(letterSpacing: 1.0),
+                    locale: Localizations.localeOf(context),
+                    style: headerStyle.copyWith(
+                      fontSize: 9,
+                      letterSpacing: 0.15,
+                      height: 1.15,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    locale.intensityHeader,
+                    locale.repsHeader,
                     textAlign: TextAlign.center,
+                    locale: Localizations.localeOf(context),
+                    style: headerStyle,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    locale.rirHeader,
+                    textAlign: TextAlign.center,
+                    locale: Localizations.localeOf(context),
                     style: headerStyle.copyWith(letterSpacing: 1.0),
                   ),
                 ),
+                const SizedBox(width: 8),
+                const SizedBox(width: _kExerciseVolumeColumnWidth),
               ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: SetRow(
-              data: _setDataList.isNotEmpty
-                  ? _setDataList.first
-                  : SetData(d: '', i: ''),
-              isCardio: true,
+            ..._setDataList.map(
+              (setData) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: SetRow(data: setData, isCardio: false),
+              ),
             ),
-          ),
-        ] else ...[
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  ironVibeWeightColumnTitle(locale),
-                  textAlign: TextAlign.center,
-                  locale: Localizations.localeOf(context),
-                  style: headerStyle.copyWith(
-                    fontSize: 9,
-                    letterSpacing: 0.15,
-                    height: 1.15,
+            const SizedBox(height: 12),
+            _exerciseSetActionsRow(
+              context: context,
+              volumeData: _volumeMirror,
+              onRemove: () => _removeHistorySet(context),
+              onAdd: _addHistorySet,
+              onProgress: () {
+                final name = normalizeExerciseName(ex.name);
+                if (name.isEmpty) return;
+                final pal = IronVibePalette.of(context);
+                showModalBottomSheet<void>(
+                  context: context,
+                  backgroundColor: pal.sheetModal,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(12),
+                    ),
+                    side: BorderSide(color: pal.borderSubtle, width: 0.5),
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  locale.repsHeader,
-                  textAlign: TextAlign.center,
-                  locale: Localizations.localeOf(context),
-                  style: headerStyle,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  locale.rirHeader,
-                  textAlign: TextAlign.center,
-                  locale: Localizations.localeOf(context),
-                  style: headerStyle.copyWith(letterSpacing: 1.0),
-                ),
-              ),
-              const SizedBox(width: 8),
-              const SizedBox(width: _kExerciseVolumeColumnWidth),
-            ],
-          ),
-          ..._setDataList.map(
-            (setData) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: SetRow(data: setData, isCardio: false),
+                  isScrollControlled: true,
+                  builder: (ctx) => _ProgressBottomSheet(
+                    exerciseName: name,
+                    height: MediaQuery.of(context).size.height * 0.55,
+                    clientName: null,
+                  ),
+                );
+              },
             ),
-          ),
-          const SizedBox(height: 12),
-          _exerciseSetActionsRow(
-            context: context,
-            volumeData: _volumeMirror,
-            onRemove: () => _removeHistorySet(context),
-            onAdd: _addHistorySet,
-            onProgress: () {
-              final name = normalizeExerciseName(ex.name);
-              if (name.isEmpty) return;
-              final pal = IronVibePalette.of(context);
-              showModalBottomSheet<void>(
-                context: context,
-                backgroundColor: pal.sheetModal,
-                shape: RoundedRectangleBorder(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(12),
-                  ),
-                  side: BorderSide(color: pal.borderSubtle, width: 0.5),
-                ),
-                isScrollControlled: true,
-                builder: (ctx) => _ProgressBottomSheet(
-                  exerciseName: name,
-                  height: MediaQuery.of(context).size.height * 0.55,
-                  clientName: null,
-                ),
-              );
-            },
-          ),
+          ],
         ],
-      ],
       ),
     );
   }

@@ -190,6 +190,8 @@ class WorkoutTimerController extends ChangeNotifier {
         }
       }
       countdownTotalMs = countdownRemainingMs;
+      running = true;
+      _startMotor();
       notifyListeners();
       return;
     }

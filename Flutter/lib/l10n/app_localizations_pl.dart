@@ -93,6 +93,38 @@ class AppLocalizationsPl extends AppLocalizations {
       'Blad: wybrano nieprawidlowy plik kopii zapasowej';
 
   @override
+  String get importAthlete => 'IMPORTUJ ATLETE';
+
+  @override
+  String importAthleteFound(int count) {
+    return 'Znaleziono zapisy $count treningow atlety, ktorego nie ma na liscie.';
+  }
+
+  @override
+  String get importAthleteBackupOwn => 'NAJPIERW ZAPISZ MOJE DANE';
+
+  @override
+  String get importAthleteDecline => 'Nie dodawaj';
+
+  @override
+  String get importAthleteSuccess => 'Atleta dodany';
+
+  @override
+  String get importAthleteNotAthleteFile =>
+      'Ten plik nie jest historia treningow atlety.';
+
+  @override
+  String get importAthleteEmpty => 'W tym pliku nie znaleziono treningow.';
+
+  @override
+  String get importAthleteAlreadyImported =>
+      'Te treningi sa juz na tym urzadzeniu.';
+
+  @override
+  String get importAthleteUseDedicatedButton =>
+      'To wyglada na historie atlety. Uzyj Importuj atlete.';
+
+  @override
   String get shareText => 'Historia treningow IronVibe';
 
   @override
@@ -145,6 +177,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get workoutCompleteTitle => 'Trening zapisany';
+
+  @override
+  String get planChangesSavedTitle => 'Zmiany zapisane';
 
   @override
   String get startWorkout => 'ROZPOCZNIJ TRENING';
@@ -301,6 +336,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get clientName => 'Imie';
 
   @override
+  String get clientNameCannotChange => 'Imienia nie da sie pozniej zmienic.';
+
+  @override
+  String get clientNameTaken => 'To imie jest juz zajete. Wybierz inne.';
+
+  @override
   String get clientGoal => 'Cel';
 
   @override
@@ -351,6 +392,23 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get fillCurrentExerciseBeforeAdd =>
       'Najpierw uzupełnij bieżące ćwiczenie, zanim dodasz kolejne.';
+
+  @override
+  String get switchWorkoutTypeTitle => 'Zmienić typ treningu?';
+
+  @override
+  String get switchWorkoutTypeBody =>
+      'Serie drugiego typu nie zostaną zapisane w tym treningu.';
+
+  @override
+  String get switchWorkoutTypeConfirm => 'Zmień';
+
+  @override
+  String get saveWorkoutNothingToSave =>
+      'Nie ma jeszcze nic do zapisania. Dodaj ciężar i powtórzenia albo czas cardio.';
+
+  @override
+  String get importedHistoryBadge => 'Import';
 
   @override
   String get clientWorkoutHistoryEmpty => 'Brak treningów';
@@ -913,7 +971,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get instructionNavImportExportDesc =>
-      'Kopia lub przeniesienie danych przez eksport i import JSON w oknie statystyk. Kopia zawiera historię, listę ćwiczeń, ulubione i znaczniki grup mięśniowych. Kopia trenerska jest oddzielona od osobistej historii.';
+      'Kopia lub przeniesienie danych przez eksport i import JSON w oknie statystyk. Kopia zawiera historię, listę ćwiczeń, ulubione i znaczniki grup mięśniowych. Kopia trenerska jest oddzielona od osobistej historii. Trener moze tez zaimportowac historie atlety jako nowego klienta bez mieszania nazw cwiczen.';
 
   @override
   String get instructionSectionHome => 'Ekran główny';
@@ -979,22 +1037,22 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get instructionRhythmIntro =>
-      'Po kilku treningach siłowych na górze ekranu treningów pojawia się wskaźnik. Pokazuje, ile dni w tygodniu trenowałeś średnio przez ostatnie cztery tygodnie. Dni wyłącznie cardio się nie liczą. To migawka gęstości, nie cel, którego aplikacja od ciebie wymaga.';
+      'Po kilku treningach siłowych na górze ekranu treningów pojawia się wskaźnik. Pokazuje, ile dni w tygodniu trenowałeś średnio przez ostatnie cztery tygodnie. Dni wyłącznie cardio się nie liczą. To migawka gęstości, nie cel, którego aplikacja od ciebie wymaga. Stuknij, aby zobaczyć notatkę o rytmie i o tym, czym jest tydzień aktywnego wypoczynku.';
 
   @override
   String get instructionRhythmGaugeTitle => 'Dni w tygodniu';
 
   @override
   String get instructionRhythmGaugeDesc =>
-      'Łuk wypełnia się od 1 do 6 dni w tygodniu. Chłodna stal oznacza spokojniejsze tempo, cieplejsze tony — większą gęstość. Wskaźnik pojawia się, gdy w tym czterotygodniowym oknie są co najmniej trzy dni siłowe.';
+      'Łuk wypełnia się od 1 do 6 dni w tygodniu. Kolor idzie od stali przez złoto do rdzy, gdy gęstość rośnie. Wskaźnik pojawia się, gdy w tym czterotygodniowym oknie są co najmniej trzy dni siłowe.';
 
   @override
   String get instructionRhythmDeloadTitle =>
-      'Przypomnienie o lżejszym tygodniu';
+      'Przypomnienie o tygodniu aktywnego wypoczynku';
 
   @override
   String get instructionRhythmDeloadDesc =>
-      'Jeśli trenujesz około dwóch i pół dnia w tygodniu lub częściej przez kilka tygodni bez lżejszego tygodnia, aplikacja może zasugerować zejście z tonażem i powtórzeniami o około 30% na tydzień. Im więcej dni w tygodniu, tym wcześniej pojawi się przypomnienie. To przypomnienie, nie zalecenie medyczne. Najwyżej raz w tygodniu.';
+      'Jeśli trenujesz około dwóch i pół dnia w tygodniu lub częściej przez kilka tygodni bez tygodnia aktywnego wypoczynku, aplikacja może przypomnieć, że czasem przydaje się krótki tydzień aktywnego wypoczynku — około 30% mniej tonażu i powtórzeń. Im więcej dni w tygodniu, tym wcześniej pojawi się przypomnienie. To przypomnienie, nie zalecenie medyczne. Najwyżej raz w tygodniu i tylko w Twoim trybie treningu — nie automatycznie u podopiecznych. Stuknij wskaźnik klienta, aby zobaczyć tę samą notatkę.';
 
   @override
   String get instructionSectionFavorites => 'Ulubione';
@@ -1099,7 +1157,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get instructionClientProfileDesc =>
-      'Z profilu startuje pusta dzisiejsza sesja. Szare liczby z ostatniego razu pojawiają się dopiero po wyborze ćwiczenia. Historia pokazuje tylko ukończone treningi. Planuj przyszłe daty w kalendarzu. Postępy i ulubione są na tym samym ekranie. Niezapisane zmiany profilu pytają przed wyjściem.';
+      'Z profilu startuje pusta dzisiejsza sesja. Szare liczby z ostatniego razu pojawiają się dopiero po wyborze ćwiczenia. Historia pokazuje tylko ukończone treningi. Planuj przyszłe daty w kalendarzu. Postępy i ulubione są na tym samym ekranie. Gdy siłowych dni jest dość, wskaźnik pokazuje, jak często trenują; stuknij, aby zobaczyć notatkę o rytmie i odpoczynku. Niezapisane zmiany profilu pytają przed wyjściem.';
 
   @override
   String get instructionTrainerPlanTitle => 'Zaplanuj sesję';
@@ -1116,14 +1174,31 @@ class AppLocalizationsPl extends AppLocalizations {
       'Opcjonalnie. Z profilu klienta albo przełącznikiem przy dodawaniu sesji w kalendarzu. Kopiuje ćwiczenia z ostatniej sesji do dzisiejszego treningu na żywo lub do nowego planu; poprzednie ciężary i powtórzenia to szare podpowiedzi, nie gotowe serie.';
 
   @override
+  String get printSession => 'Drukuj';
+
+  @override
+  String get printSessionEmpty =>
+      'Na razie nie ma czego drukować. Zapisz przynajmniej jedną serię.';
+
+  @override
+  String get printSessionShareText => 'Sesja IronVibe';
+
+  @override
+  String get instructionPrintSessionTitle => 'Druk sesji';
+
+  @override
+  String get instructionPrintSessionDesc =>
+      'W ukończonym treningu klienta ikona druku w nagłówku składa kartkę A4 z tego dnia tak, jak został zapisany. Udostępnij, zapisz lub wydrukuj z systemowego arkusza.';
+
+  @override
   String get rhythmPerWeek => 'tygodniowo';
 
   @override
-  String get deloadNudgeTitle => 'Lżejszy tydzień?';
+  String get deloadNudgeTitle => 'Tydzień aktywnego wypoczynku?';
 
   @override
   String deloadNudgeBody(String rate, int weeks) {
-    return 'Trenujesz około $rate dni w tygodniu od mniej więcej $weeks tyg. To przypomnienie, nie zalecenie medyczne. Przy takim rytmie często warto zejść z tonażem i powtórzeniami o około 30% na tydzień.';
+    return 'Trenujesz około $rate dni w tygodniu od mniej więcej $weeks tyg. To przypomnienie, że czasem przydaje się krótki tydzień aktywnego wypoczynku — około 30% mniej tonażu i powtórzeń. Nie zalecenie.';
   }
 
   @override
@@ -1131,6 +1206,84 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get deloadNudgeOk => 'Rozumiem';
+
+  @override
+  String get backupNudgeTitle => 'Zapisać kopię?';
+
+  @override
+  String get backupNudgeBody =>
+      'Dane są tylko na tym urządzeniu. Jeśli je zgubisz albo padnie pamięć, historia zniknie. Udostępnij kopię teraz albo odłóż o 28 dni.';
+
+  @override
+  String get backupNudgeShare => 'Udostępnij';
+
+  @override
+  String get backupNudgeLater => 'Później';
+
+  @override
+  String get rhythmInsightTitle => 'Rytm treningów';
+
+  @override
+  String rhythmInsightRateYou(String rate) {
+    return 'Przez ostatnie cztery tygodnie trenujesz około $rate dni w tygodniu.';
+  }
+
+  @override
+  String rhythmInsightRateClient(String name, String rate) {
+    return '$name trenuje około $rate dni w tygodniu przez ostatnie cztery tygodnie.';
+  }
+
+  @override
+  String get rhythmInsightWindow =>
+      'Liczą się tylko dni siłowe. Dni wyłącznie cardio odpadają. To migawka gęstości, nie cel.';
+
+  @override
+  String get rhythmInsightWhatTitle => 'Tydzień aktywnego wypoczynku';
+
+  @override
+  String get rhythmInsightWhatBody =>
+      'Świadomie obniżasz obciążenie, żeby się zregenerować, nie tracąc formy: te same treningi, ale około 30–50% mniej objętości. Albo odpuszczasz siłowe i zostajesz w ruchu.';
+
+  @override
+  String get rhythmInsightAdviceLight =>
+      'Teraz rytm jest spokojny. Jeśli sesje nie są ekstremalne, tak można iść bardzo długo bez planowanego tygodnia aktywnego wypoczynku.';
+
+  @override
+  String get rhythmInsightAdviceSteady =>
+      'Teraz to stały rytm. Jeśli treningi są ciężkie, tydzień aktywnego wypoczynku co kilka miesięcy często wystarcza.';
+
+  @override
+  String get rhythmInsightAdviceDense =>
+      'Teraz grafik jest gęsty. Jeśli sesje są intensywne, tydzień aktywnego wypoczynku co dwa–trzy miesiące warto mieć z tyłu głowy.';
+
+  @override
+  String get rhythmInsightAdviceVeryDense =>
+      'Teraz prawie codziennie. Jeśli obciążenie jest wysokie, tydzień aktywnego wypoczynku mniej więcej raz w miesiącu wielu uważa za rozsądny.';
+
+  @override
+  String get rhythmInsightPraiseSteady =>
+      'Brawo. Właśnie na takim rytmie trzymają się długie postępy.';
+
+  @override
+  String get rhythmInsightPraiseDense =>
+      'Naprawdę oddany sprawie. Tak trzymać.';
+
+  @override
+  String get rhythmInsightPraiseVeryDense =>
+      'Wygląda na to, że próbujesz odblokować tajemne możliwości organizmu.';
+
+  @override
+  String get rhythmInsightRecentLighter =>
+      'W ostatnich danych widać już tydzień aktywnego wypoczynku.';
+
+  @override
+  String rhythmInsightAccumulation(int weeks) {
+    return 'Około $weeks tyg. w takiej gęstości bez tygodnia aktywnego wypoczynku.';
+  }
+
+  @override
+  String get rhythmInsightDisclaimer =>
+      'To notatka informacyjna, nie zalecenie. Przypomina tylko, że czasem przydaje się krótki tydzień aktywnego wypoczynku. Jeśli czujesz się dobrze — nic nie musisz zmieniać.';
 
   @override
   String get instructionHubManifest =>

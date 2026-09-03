@@ -15,6 +15,11 @@ class WorkoutLog {
   };
 
   factory WorkoutLog.fromJson(Map<String, dynamic> json) {
+    final dateRaw = _jsonString(json['date']).trim();
+    final date = DateTime.tryParse(dateRaw);
+    if (date == null) {
+      throw FormatException('WorkoutLog missing date');
+    }
     final exercises = <ExerciseLog>[];
     final rawList = json['exercises'];
     if (rawList is List) {
@@ -24,9 +29,9 @@ class WorkoutLog {
       }
     }
     return WorkoutLog(
-      DateTime.tryParse(_jsonString(json['date'])) ?? DateTime.now(),
+      date,
       exercises,
-      id: json['id'] as String?,
+      id: _jsonOptionalId(json['id']),
     );
   }
 }
@@ -131,6 +136,7 @@ class SetLog {
 }
 
 class Client {
+  String? id;
   String name;
   String goal;
   String weight;
@@ -140,6 +146,7 @@ class Client {
   Client(
     this.name,
     this.goal, {
+    this.id,
     this.weight = '',
     this.height = '',
     this.notes = '',
@@ -147,6 +154,7 @@ class Client {
   }) : favoriteExercises = favoriteExercises ?? [];
 
   Map<String, dynamic> toJson() => {
+    if (id != null) 'id': id,
     'name': name,
     'goal': goal,
     'weight': weight,
@@ -168,6 +176,7 @@ class Client {
     return Client(
       _jsonString(json['name']),
       _jsonString(json['goal']),
+      id: _jsonOptionalId(json['id']),
       weight: _jsonString(json['weight']),
       height: _jsonString(json['height']),
       notes: _jsonString(json['notes']),
@@ -176,20 +185,89 @@ class Client {
   }
 }
 
+String ironVibeClientNameKey(String raw) => raw.trim().toLowerCase();
+
+bool ironVibeClientNameTaken(String raw, {Iterable<Client>? among}) {
+  final key = ironVibeClientNameKey(raw);
+  if (key.isEmpty) return false;
+  for (final c in among ?? clients) {
+    if (ironVibeClientNameKey(c.name) == key) return true;
+  }
+  return false;
+}
+
+Client? ironVibeFindClient({String? name, String? id}) {
+  final idKey = id?.trim();
+  if (idKey != null && idKey.isNotEmpty) {
+    for (final c in clients) {
+      if (c.id == idKey) return c;
+    }
+  }
+  if (name == null) return null;
+  final key = ironVibeClientNameKey(name);
+  if (key.isEmpty) return null;
+  for (final c in clients) {
+    if (ironVibeClientNameKey(c.name) == key) return c;
+  }
+  return null;
+}
+
+bool ironVibeSessionBelongsToClient(
+  TrainerSession s, {
+  String? clientName,
+  String? clientId,
+}) {
+  final idKey = clientId?.trim();
+  if (idKey != null && idKey.isNotEmpty && s.clientId != null && s.clientId == idKey) {
+    return true;
+  }
+  if (clientName == null) return false;
+  return ironVibeClientNameKey(s.clientName) == ironVibeClientNameKey(clientName);
+}
+
+bool ironVibeSessionBelongsToClientRecord(TrainerSession s, Client client) {
+  return ironVibeSessionBelongsToClient(
+    s,
+    clientName: client.name,
+    clientId: client.id,
+  );
+}
+
 class TrainerSession {
   final DateTime dateTime;
   final String clientName;
+  String? clientId;
   String note;
   List<ExerciseLog> exercises;
   String? id;
-  TrainerSession(this.dateTime, this.clientName, this.note, {this.exercises = const [], this.id});
+  bool isLiveCurrent;
+  bool isScheduledPlan;
+  bool isCompleted;
+  bool isImportedHistory;
+  TrainerSession(
+    this.dateTime,
+    this.clientName,
+    this.note, {
+    this.exercises = const [],
+    this.id,
+    this.clientId,
+    this.isLiveCurrent = false,
+    this.isScheduledPlan = false,
+    this.isCompleted = false,
+    this.isImportedHistory = false,
+  });
 
   Map<String, dynamic> toJson() => {
     if (id != null) 'id': id,
     'dateTime': dateTime.toIso8601String(),
     'clientName': clientName,
+    if (clientId != null) 'clientId': clientId,
     'note': note,
     'exercises': exercises.map((e) => e.toJson()).toList(),
+    if (isLiveCurrent) 'isLiveCurrent': true,
+    if (isScheduledPlan) 'isScheduledPlan': true,
+    'isCompleted': isCompleted,
+    if (isImportedHistory) 'isImportedHistory': true,
   };
 
   factory TrainerSession.fromJson(Map<String, dynamic> json) {
@@ -201,12 +279,40 @@ class TrainerSession {
         if (m != null) exercises.add(ExerciseLog.fromJson(m));
       }
     }
+    final dateRaw = _jsonString(json['dateTime']).trim();
+    final dateTime = DateTime.tryParse(dateRaw);
+    if (dateTime == null) {
+      throw FormatException('TrainerSession missing dateTime');
+    }
+    final today = ironVibeDateOnly(DateTime.now());
+    final day = ironVibeDateOnly(dateTime);
+    final hasLogged = exercises.any(ironVibeExerciseLogHasLoggedData);
+    final isScheduledPlan = json['isScheduledPlan'] == true;
+    final bool isCompleted;
+    if (day.isAfter(today)) {
+      isCompleted = false;
+    } else if (json.containsKey('isCompleted')) {
+      isCompleted = json['isCompleted'] == true;
+    } else if (!hasLogged) {
+      isCompleted = false;
+    } else if (day.isBefore(today)) {
+      isCompleted = true;
+    } else {
+      // Today, no archive flag: a calendar plan with typed numbers is not
+      // finished. A live session started from the profile is.
+      isCompleted = !isScheduledPlan;
+    }
     return TrainerSession(
-      DateTime.tryParse(_jsonString(json['dateTime'])) ?? DateTime.now(),
+      dateTime,
       _jsonString(json['clientName']),
       _jsonString(json['note']),
       exercises: exercises,
-      id: json['id'] as String?,
+      id: _jsonOptionalId(json['id']),
+      clientId: _jsonOptionalId(json['clientId']),
+      isLiveCurrent: json['isLiveCurrent'] == true,
+      isScheduledPlan: isScheduledPlan,
+      isCompleted: isCompleted,
+      isImportedHistory: json['isImportedHistory'] == true,
     );
   }
 }
@@ -231,6 +337,17 @@ bool ironVibeExerciseLogHasLoggedData(ExerciseLog e) =>
 bool ironVibeTrainerSessionHasLoggedData(TrainerSession s) =>
     s.exercises.any(ironVibeExerciseLogHasLoggedData);
 
+bool ironVibeTrainerSessionIsCompleted(TrainerSession s) {
+  if (!s.isCompleted) return false;
+  return !ironVibeDateOnly(s.dateTime).isAfter(ironVibeDateOnly(DateTime.now()));
+}
+
+bool ironVibeTrainerSessionCountsAsWork(TrainerSession s) =>
+    ironVibeTrainerSessionIsCompleted(s) && !s.isImportedHistory;
+
+bool ironVibeTrainerSessionInClientHistory(TrainerSession s) =>
+    ironVibeTrainerSessionIsCompleted(s);
+
 int ironVibeTrainerSessionNamedExerciseCount(TrainerSession s) => s.exercises
     .where((e) => normalizeExerciseName(e.name).isNotEmpty)
     .length;
@@ -241,13 +358,50 @@ bool ironVibeTrainerSessionHasPlan(TrainerSession s) =>
 enum TrainerSessionUiMode { live, plan, history }
 
 TrainerSessionUiMode ironVibeTrainerSessionUiMode(TrainerSession session) {
-  if (ironVibeTrainerSessionHasLoggedData(session)) {
+  final today = ironVibeDateOnly(DateTime.now());
+  final day = ironVibeDateOnly(session.dateTime);
+  if (day.isAfter(today)) return TrainerSessionUiMode.plan;
+  if (ironVibeTrainerSessionIsCompleted(session)) {
     return TrainerSessionUiMode.history;
+  }
+  if (session.isLiveCurrent && !day.isBefore(today)) {
+    return TrainerSessionUiMode.live;
   }
   return TrainerSessionUiMode.plan;
 }
 
+bool ironVibeNormalizeFutureTrainerPlans() {
+  final today = ironVibeDateOnly(DateTime.now());
+  var changed = false;
+  for (final s in trainerSchedule) {
+    final day = ironVibeDateOnly(s.dateTime);
+    if (day.isAfter(today)) {
+      if (s.isCompleted) {
+        s.isCompleted = false;
+        changed = true;
+      }
+      if (s.isLiveCurrent) {
+        s.isLiveCurrent = false;
+        changed = true;
+      }
+      continue;
+    }
+    if (!s.isScheduledPlan || !s.isCompleted) continue;
+    if (day.isBefore(today)) {
+      s.isScheduledPlan = false;
+      changed = true;
+    } else {
+      // Today: a hanging calendar plan is not history. Finish clears
+      // isScheduledPlan, so a real completion is not undone here.
+      s.isCompleted = false;
+      changed = true;
+    }
+  }
+  return changed;
+}
+
 bool ironVibePurgeExpiredUnloggedTrainerSessions() {
+  var changed = ironVibeNormalizeFutureTrainerPlans();
   final today = ironVibeDateOnly(DateTime.now());
   final protectedId =
       activeWorkoutDraft?.kind == ActiveWorkoutDraftKind.trainer
@@ -255,13 +409,14 @@ bool ironVibePurgeExpiredUnloggedTrainerSessions() {
       : null;
   final before = trainerSchedule.length;
   trainerSchedule.removeWhere((s) {
-    if (ironVibeTrainerSessionHasLoggedData(s)) return false;
+    if (ironVibeTrainerSessionIsCompleted(s)) return false;
     if (protectedId != null && s.id != null && s.id == protectedId) {
       return false;
     }
+    if (!ironVibeTrainerSessionIsAbandonedStub(s)) return false;
     return ironVibeDateOnly(s.dateTime).isBefore(today);
   });
-  return trainerSchedule.length < before;
+  return changed || trainerSchedule.length < before;
 }
 
 Future<bool> ironVibePurgeExpiredUnloggedTrainerSessionsAndSave() async {
@@ -270,18 +425,30 @@ Future<bool> ironVibePurgeExpiredUnloggedTrainerSessionsAndSave() async {
   return true;
 }
 
+WorkoutLog ironVibeNewWorkoutLog(DateTime date, List<ExerciseLog> exercises) {
+  return WorkoutLog(date, exercises, id: ironVibeNewEntityId());
+}
+
 TrainerSession ironVibeNewTrainerSession({
   required DateTime dateTime,
   required String clientName,
+  String? clientId,
   String note = '',
   List<ExerciseLog>? exercises,
+  bool isLiveCurrent = false,
+  bool isScheduledPlan = false,
+  bool isCompleted = false,
 }) {
   return TrainerSession(
     dateTime,
     clientName,
     note,
     exercises: exercises ?? const [],
-    id: const Uuid().v4(),
+    id: ironVibeNewEntityId(),
+    clientId: clientId ?? ironVibeFindClient(name: clientName)?.id,
+    isLiveCurrent: isLiveCurrent,
+    isScheduledPlan: isScheduledPlan,
+    isCompleted: isCompleted,
   );
 }
 
@@ -310,8 +477,72 @@ void ironVibeSyncTrainerSessionInSchedule(TrainerSession session) {
     if (identical(s, session)) return;
     s.note = session.note;
     s.exercises = session.exercises;
+    s.clientId = session.clientId;
+    s.isLiveCurrent = session.isLiveCurrent;
+    s.isScheduledPlan = session.isScheduledPlan;
+    s.isCompleted = session.isCompleted;
+    s.isImportedHistory = session.isImportedHistory;
     return;
   }
+}
+
+void ironVibeMarkTrainerSessionLiveCurrent(TrainerSession session) {
+  for (final s in trainerSchedule) {
+    if (!ironVibeSessionBelongsToClient(
+      s,
+      clientName: session.clientName,
+      clientId: session.clientId,
+    )) {
+      continue;
+    }
+    s.isLiveCurrent = identical(s, session) || _ironVibeSameTrainerSession(s, session);
+  }
+  session.isLiveCurrent = true;
+}
+
+TrainerSession? ironVibeLiveCurrentTrainerSessionForClient(
+  String clientName, {
+  String? clientId,
+}) {
+  final name = clientName.trim();
+  if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) return null;
+  for (final s in trainerSchedule) {
+    if (!ironVibeSessionBelongsToClient(
+      s,
+      clientName: name,
+      clientId: clientId,
+    )) {
+      continue;
+    }
+    if (!s.isLiveCurrent) continue;
+    if (ironVibeTrainerSessionIsCompleted(s)) continue;
+    if (!ironVibeIsSameCalendarDay(s.dateTime, DateTime.now())) continue;
+    return s;
+  }
+  return null;
+}
+
+TrainerSession? ironVibeTodaysIncompleteTrainerSessionForClient(
+  String clientName, {
+  String? clientId,
+}) {
+  final name = clientName.trim();
+  if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) return null;
+  TrainerSession? best;
+  for (final s in trainerSchedule) {
+    if (!ironVibeSessionBelongsToClient(
+      s,
+      clientName: name,
+      clientId: clientId,
+    )) {
+      continue;
+    }
+    if (ironVibeTrainerSessionIsCompleted(s)) continue;
+    if (!ironVibeIsSameCalendarDay(s.dateTime, DateTime.now())) continue;
+    if (s.isLiveCurrent) return s;
+    best ??= s;
+  }
+  return best;
 }
 
 Future<void> ironVibeDiscardAbandonedTrainerSession(
@@ -322,17 +553,40 @@ Future<void> ironVibeDiscardAbandonedTrainerSession(
   await DataService.saveData();
 }
 
+Future<void> ironVibeRevertOrDiscardLiveTrainerSession(
+  TrainerSession session,
+) async {
+  if (ironVibeTrainerSessionIsCompleted(session)) return;
+  if (session.isScheduledPlan) {
+    session.isLiveCurrent = false;
+    ironVibeSyncTrainerSessionInSchedule(session);
+    await DataService.saveData();
+    return;
+  }
+  ironVibeRemoveTrainerSession(session);
+  await DataService.saveData();
+}
+
 TrainerSession? ironVibeLastLoggedTrainerSessionForClient(
   String clientName, {
+  String? clientId,
   TrainerSession? exclude,
 }) {
   final name = clientName.trim();
-  if (name.isEmpty) return null;
+  if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) return null;
   TrainerSession? best;
+  final today = ironVibeDateOnly(DateTime.now());
   for (final s in trainerSchedule) {
-    if (s.clientName != name) continue;
+    if (!ironVibeSessionBelongsToClient(
+      s,
+      clientName: name,
+      clientId: clientId,
+    )) {
+      continue;
+    }
     if (exclude != null && _ironVibeSameTrainerSession(s, exclude)) continue;
-    if (!ironVibeTrainerSessionHasLoggedData(s)) continue;
+    if (!ironVibeTrainerSessionCountsAsWork(s)) continue;
+    if (ironVibeDateOnly(s.dateTime).isAfter(today)) continue;
     if (best == null || s.dateTime.isAfter(best.dateTime)) best = s;
   }
   return best;
@@ -340,35 +594,66 @@ TrainerSession? ironVibeLastLoggedTrainerSessionForClient(
 
 TrainerSession? ironVibeLastRepeatableTrainerSession(
   String clientName, {
+  String? clientId,
   TrainerSession? exclude,
 }) {
-  final logged = ironVibeLastLoggedTrainerSessionForClient(
-    clientName,
-    exclude: exclude,
-  );
-  if (logged != null) return logged;
   final name = clientName.trim();
-  if (name.isEmpty) return null;
+  if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) return null;
+  final today = ironVibeDateOnly(DateTime.now());
+  TrainerSession? bestLogged;
+  for (final s in trainerSchedule) {
+    if (!ironVibeSessionBelongsToClient(
+      s,
+      clientName: name,
+      clientId: clientId,
+    )) {
+      continue;
+    }
+    if (exclude != null && _ironVibeSameTrainerSession(s, exclude)) continue;
+    if (s.isImportedHistory) continue;
+    if (!ironVibeTrainerSessionIsCompleted(s)) continue;
+    if (ironVibeDateOnly(s.dateTime).isAfter(today)) continue;
+    if (bestLogged == null || s.dateTime.isAfter(bestLogged.dateTime)) {
+      bestLogged = s;
+    }
+  }
+  if (bestLogged != null) return bestLogged;
   TrainerSession? best;
   for (final s in trainerSchedule) {
-    if (s.clientName != name) continue;
+    if (!ironVibeSessionBelongsToClient(
+      s,
+      clientName: name,
+      clientId: clientId,
+    )) {
+      continue;
+    }
     if (exclude != null && _ironVibeSameTrainerSession(s, exclude)) continue;
+    if (s.isImportedHistory) continue;
     if (!ironVibeTrainerSessionHasPlan(s)) continue;
     if (best == null || s.dateTime.isAfter(best.dateTime)) best = s;
   }
   return best;
 }
 
-TrainerSession? ironVibeNextTrainerSessionForClient(String clientName) {
+TrainerSession? ironVibeNextTrainerSessionForClient(
+  String clientName, {
+  String? clientId,
+}) {
   final name = clientName.trim();
-  if (name.isEmpty) return null;
+  if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) return null;
   final today = ironVibeDateOnly(DateTime.now());
   TrainerSession? best;
   for (final s in trainerSchedule) {
-    if (s.clientName != name) continue;
+    if (!ironVibeSessionBelongsToClient(
+      s,
+      clientName: name,
+      clientId: clientId,
+    )) {
+      continue;
+    }
     final day = ironVibeDateOnly(s.dateTime);
+    if (ironVibeTrainerSessionIsCompleted(s)) continue;
     if (day.isBefore(today)) continue;
-    if (day == today && ironVibeTrainerSessionHasLoggedData(s)) continue;
     if (best == null || s.dateTime.isBefore(best.dateTime)) best = s;
   }
   return best;
@@ -463,6 +748,7 @@ class ActiveWorkoutDraft {
   final DateTime? targetDate;
   final String? sessionId;
   final String? clientName;
+  final String? clientId;
   final DateTime? sessionDateTime;
   final String? sessionNote;
   final bool isCardio;
@@ -474,6 +760,7 @@ class ActiveWorkoutDraft {
     this.targetDate,
     this.sessionId,
     this.clientName,
+    this.clientId,
     this.sessionDateTime,
     this.sessionNote,
     required this.isCardio,
@@ -490,6 +777,7 @@ class ActiveWorkoutDraft {
     if (targetDate != null) 'targetDate': targetDate!.toIso8601String(),
     if (sessionId != null) 'sessionId': sessionId,
     if (clientName != null) 'clientName': clientName,
+    if (clientId != null) 'clientId': clientId,
     if (sessionDateTime != null) 'sessionDateTime': sessionDateTime!.toIso8601String(),
     if (sessionNote != null) 'sessionNote': sessionNote,
     'isCardio': isCardio,
@@ -507,10 +795,11 @@ class ActiveWorkoutDraft {
     return ActiveWorkoutDraft(
       kind: kind,
       targetDate: DateTime.tryParse(_jsonString(json['targetDate'])),
-      sessionId: json['sessionId'] as String?,
+      sessionId: _jsonOptionalId(json['sessionId']),
       clientName: _jsonString(json['clientName']).isEmpty
           ? null
           : _jsonString(json['clientName']),
+      clientId: _jsonOptionalId(json['clientId']),
       sessionDateTime: DateTime.tryParse(_jsonString(json['sessionDateTime'])),
       sessionNote: _jsonString(json['sessionNote']).isEmpty
           ? null
@@ -523,6 +812,80 @@ class ActiveWorkoutDraft {
 }
 
 ActiveWorkoutDraft? activeWorkoutDraft;
+
+String ironVibeWorkoutContentFingerprint(WorkoutLog w) {
+  final parts = <String>[w.date.toIso8601String()];
+  for (final ex in w.exercises) {
+    parts.add(normalizeExerciseName(ex.name));
+    parts.add('${ex.sets.length}');
+    for (final s in ex.sets) {
+      parts.add(
+        '${s.weight}|${s.reps}|${s.rir}|${s.isCardio}|${s.duration}|${s.intensity}',
+      );
+    }
+  }
+  return parts.join('~');
+}
+
+String ironVibeWorkoutIdentityKey(WorkoutLog w) {
+  final id = w.id?.trim();
+  if (id != null && id.isNotEmpty) return 'id:$id';
+  return 'fp:${ironVibeWorkoutContentFingerprint(w)}';
+}
+
+String ironVibeTrainerSessionContentFingerprint(TrainerSession s) {
+  final parts = <String>[
+    s.dateTime.toIso8601String(),
+    ironVibeClientNameKey(s.clientName),
+    s.note,
+  ];
+  for (final ex in s.exercises) {
+    parts.add(normalizeExerciseName(ex.name));
+    parts.add('${ex.sets.length}');
+    for (final set in ex.sets) {
+      parts.add(
+        '${set.weight}|${set.reps}|${set.rir}|${set.isCardio}|${set.duration}|${set.intensity}',
+      );
+    }
+  }
+  return parts.join('~');
+}
+
+String ironVibeTrainerSessionIdentityKey(TrainerSession s) {
+  final id = s.id?.trim();
+  if (id != null && id.isNotEmpty) return 'id:$id';
+  return 'fp:${ironVibeTrainerSessionContentFingerprint(s)}';
+}
+
+bool ironVibeEnsurePersistentIds() {
+  var changed = false;
+  for (final w in workoutHistory) {
+    if (w.id == null || w.id!.trim().isEmpty) {
+      w.id = ironVibeNewEntityId();
+      changed = true;
+    }
+  }
+  for (final c in clients) {
+    if (c.id == null || c.id!.trim().isEmpty) {
+      c.id = ironVibeNewEntityId();
+      changed = true;
+    }
+  }
+  for (final s in trainerSchedule) {
+    if (s.id == null || s.id!.trim().isEmpty) {
+      s.id = ironVibeNewEntityId();
+      changed = true;
+    }
+    if (s.clientId == null || s.clientId!.trim().isEmpty) {
+      final client = ironVibeFindClient(name: s.clientName);
+      if (client?.id != null) {
+        s.clientId = client!.id;
+        changed = true;
+      }
+    }
+  }
+  return changed;
+}
 
 class DataService {
   static const String _keyExerciseBank = 'exerciseBank';
@@ -601,6 +964,8 @@ class DataService {
     workoutHistory = workoutHistory.map(_normalizeWorkoutLogExerciseNames).toList();
     trainerSchedule = trainerSchedule.map(_normalizeTrainerSessionExerciseNames).toList();
     ironVibePurgeExpiredUnloggedTrainerSessions();
+    ironVibeEnsurePersistentIds();
+    ironVibeRebuildExerciseBankFromCompletedWorkouts();
     await saveData();
   }
 
@@ -643,14 +1008,22 @@ class DataService {
 
 TrainerSession? ironVibeFindTrainerSessionForDraft(ActiveWorkoutDraft draft) {
   if (draft.kind != ActiveWorkoutDraftKind.trainer) return null;
-  if (draft.sessionId != null) {
+  final sessionId = draft.sessionId?.trim();
+  if (sessionId != null && sessionId.isNotEmpty) {
     for (final s in trainerSchedule) {
-      if (s.id == draft.sessionId) return s;
+      if (s.id == sessionId) return s;
     }
+    return null;
   }
   if (draft.sessionDateTime != null && draft.clientName != null) {
     for (final s in trainerSchedule) {
-      if (s.clientName != draft.clientName) continue;
+      if (!ironVibeSessionBelongsToClient(
+        s,
+        clientName: draft.clientName,
+        clientId: draft.clientId,
+      )) {
+        continue;
+      }
       if (s.dateTime.year == draft.sessionDateTime!.year &&
           s.dateTime.month == draft.sessionDateTime!.month &&
           s.dateTime.day == draft.sessionDateTime!.day &&

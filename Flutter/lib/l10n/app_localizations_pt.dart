@@ -93,6 +93,39 @@ class AppLocalizationsPt extends AppLocalizations {
       'Erro: ficheiro de cópia de segurança inválido selecionado';
 
   @override
+  String get importAthlete => 'IMPORTAR ATLETA';
+
+  @override
+  String importAthleteFound(int count) {
+    return 'Foram encontrados registos de $count treinos de um atleta que não está na lista.';
+  }
+
+  @override
+  String get importAthleteBackupOwn => 'GUARDAR OS MEUS DADOS PRIMEIRO';
+
+  @override
+  String get importAthleteDecline => 'Não adicionar';
+
+  @override
+  String get importAthleteSuccess => 'Atleta adicionado';
+
+  @override
+  String get importAthleteNotAthleteFile =>
+      'Este ficheiro não é um histórico de treinos de atleta.';
+
+  @override
+  String get importAthleteEmpty =>
+      'Não foram encontrados treinos neste ficheiro.';
+
+  @override
+  String get importAthleteAlreadyImported =>
+      'Estes treinos já estão neste dispositivo.';
+
+  @override
+  String get importAthleteUseDedicatedButton =>
+      'Isto parece o histórico de um atleta. Use Importar atleta.';
+
+  @override
   String get shareText => 'Histórico de treinos IronVibe';
 
   @override
@@ -145,6 +178,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get workoutCompleteTitle => 'Treino salvo';
+
+  @override
+  String get planChangesSavedTitle => 'Alterações salvas';
 
   @override
   String get startWorkout => 'INICIAR TREINO';
@@ -301,6 +337,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get clientName => 'Nome';
 
   @override
+  String get clientNameCannotChange => 'O nome não pode ser alterado depois.';
+
+  @override
+  String get clientNameTaken => 'Este nome já está em uso. Escolha outro.';
+
+  @override
   String get clientGoal => 'Objetivo';
 
   @override
@@ -351,6 +393,23 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get fillCurrentExerciseBeforeAdd =>
       'Conclua o exercício atual antes de adicionar outro.';
+
+  @override
+  String get switchWorkoutTypeTitle => 'Mudar o tipo de treino?';
+
+  @override
+  String get switchWorkoutTypeBody =>
+      'As séries do outro tipo não serão salvas neste treino.';
+
+  @override
+  String get switchWorkoutTypeConfirm => 'Mudar';
+
+  @override
+  String get saveWorkoutNothingToSave =>
+      'Ainda não há o que salvar. Adicione peso e repetições, ou duração de cardio.';
+
+  @override
+  String get importedHistoryBadge => 'Importado';
 
   @override
   String get clientWorkoutHistoryEmpty => 'Nenhum treino ainda';
@@ -913,7 +972,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get instructionNavImportExportDesc =>
-      'Backup ou transferência com exportação e importação JSON na janela de estatísticas. A cópia inclui histórico, lista de exercícios, favoritos e etiquetas de grupo muscular. O backup de treinador é separado do histórico pessoal.';
+      'Backup ou transferência com exportação e importação JSON na janela de estatísticas. A cópia inclui histórico, lista de exercícios, favoritos e etiquetas de grupo muscular. O backup de treinador é separado do histórico pessoal. Um treinador também pode importar o histórico de um atleta como novo cliente sem misturar os nomes dos exercícios.';
 
   @override
   String get instructionSectionHome => 'Início';
@@ -979,21 +1038,22 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get instructionRhythmIntro =>
-      'Após algumas sessões de força, aparece no topo do ecrã de treino um indicador. Mostra quantos dias por semana treinaste em média nas últimas quatro semanas. Dias só de cardio não contam. O número é um retrato da tua densidade, não um objetivo que a app te impõe.';
+      'Após algumas sessões de força, aparece no topo do ecrã de treino um indicador. Mostra quantos dias por semana treinaste em média nas últimas quatro semanas. Dias só de cardio não contam. O número é um retrato da tua densidade, não um objetivo que a app te impõe. Toca para uma nota sobre o teu ritmo e o que é uma semana de recuperação ativa.';
 
   @override
   String get instructionRhythmGaugeTitle => 'Dias por semana';
 
   @override
   String get instructionRhythmGaugeDesc =>
-      'O arco enche de 1 a 6 dias por semana. O aço mais frio indica um ritmo mais leve; tons mais quentes, maior densidade. O indicador aparece quando há pelo menos três dias de força nessa janela de quatro semanas.';
+      'O arco enche de 1 a 6 dias por semana. A cor vai do aço ao ouro e à ferrugem quando a densidade sobe. O indicador aparece quando há pelo menos três dias de força nessa janela de quatro semanas.';
 
   @override
-  String get instructionRhythmDeloadTitle => 'Lembrete de semana mais leve';
+  String get instructionRhythmDeloadTitle =>
+      'Lembrete de semana de recuperação ativa';
 
   @override
   String get instructionRhythmDeloadDesc =>
-      'Se treinas cerca de dois dias e meio por semana ou mais durante várias semanas sem uma semana mais leve, a app pode sugerir baixar a tonelagem e as repetições cerca de 30% durante uma semana. Quanto mais dias por semana, mais cedo chega o lembrete. É um lembrete, não uma prescrição. No máximo uma vez por semana.';
+      'Se treinas cerca de dois dias e meio por semana ou mais durante várias semanas sem uma semana de recuperação ativa, a app pode lembrar que às vezes é útil uma semana curta de recuperação ativa — cerca de 30% menos de tonelagem e repetições. Quanto mais dias por semana, mais cedo chega o lembrete. É um lembrete, não uma prescrição. No máximo uma vez por semana, e só no teu modo de treino — não automaticamente para clientes. Toca no indicador de um cliente para a mesma nota.';
 
   @override
   String get instructionSectionFavorites => 'Favoritos';
@@ -1100,7 +1160,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get instructionClientProfileDesc =>
-      'No perfil começa uma sessão de hoje vazia. Os números cinzentos da última vez aparecem só depois de escolheres um exercício. O histórico mostra só treinos concluídos. Planeia datas futuras no calendário. Progresso e favoritos estão no mesmo ecrã. Alterações de perfil por gravar pedem confirmação ao sair.';
+      'No perfil começa uma sessão de hoje vazia. Os números cinzentos da última vez aparecem só depois de escolheres um exercício. O histórico mostra só treinos concluídos. Planeia datas futuras no calendário. Progresso e favoritos estão no mesmo ecrã. Se houver força recente suficiente, um indicador mostra com que frequência treina; toca para uma nota sobre ritmo e descanso. Alterações de perfil por gravar pedem confirmação ao sair.';
 
   @override
   String get instructionTrainerPlanTitle => 'Planear uma sessão';
@@ -1117,14 +1177,31 @@ class AppLocalizationsPt extends AppLocalizations {
       'Opcional. No perfil do cliente, ou como interruptor ao adicionar uma sessão no calendário. Copia os exercícios da última sessão para o treino ao vivo de hoje ou para um plano novo; pesos e repetições anteriores são dicas cinzentas, não séries já feitas.';
 
   @override
+  String get printSession => 'Imprimir';
+
+  @override
+  String get printSessionEmpty =>
+      'Ainda não há nada para imprimir. Regista pelo menos uma série.';
+
+  @override
+  String get printSessionShareText => 'Sessão IronVibe';
+
+  @override
+  String get instructionPrintSessionTitle => 'Imprimir uma sessão';
+
+  @override
+  String get instructionPrintSessionDesc =>
+      'Num treino de cliente concluído, o ícone de impressão no cabeçalho monta uma folha A4 desse dia tal como foi registado. Partilha, guarda ou imprime a partir da folha do sistema.';
+
+  @override
   String get rhythmPerWeek => 'por semana';
 
   @override
-  String get deloadNudgeTitle => 'Uma semana mais leve?';
+  String get deloadNudgeTitle => 'Uma semana de recuperação ativa?';
 
   @override
   String deloadNudgeBody(String rate, int weeks) {
-    return 'Treinas cerca de $rate dias por semana há cerca de $weeks semanas. É um lembrete, não uma prescrição. Neste ritmo costuma valer baixar a tonelagem e as repetições cerca de 30% durante uma semana.';
+    return 'Treinas cerca de $rate dias por semana há cerca de $weeks semanas. É um lembrete de que às vezes é útil uma semana curta de recuperação ativa — cerca de 30% menos de tonelagem e repetições. Não é uma prescrição.';
   }
 
   @override
@@ -1132,6 +1209,83 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get deloadNudgeOk => 'Entendi';
+
+  @override
+  String get backupNudgeTitle => 'Guardar uma cópia?';
+
+  @override
+  String get backupNudgeBody =>
+      'Os teus dados ficam só neste dispositivo. Se o perderes ou o armazenamento falhar, o histórico desaparece. Partilha uma cópia agora ou adia 28 dias.';
+
+  @override
+  String get backupNudgeShare => 'Partilhar';
+
+  @override
+  String get backupNudgeLater => 'Mais tarde';
+
+  @override
+  String get rhythmInsightTitle => 'Ritmo de treino';
+
+  @override
+  String rhythmInsightRateYou(String rate) {
+    return 'Nas últimas quatro semanas treinas cerca de $rate dias por semana.';
+  }
+
+  @override
+  String rhythmInsightRateClient(String name, String rate) {
+    return '$name treina cerca de $rate dias por semana nas últimas quatro semanas.';
+  }
+
+  @override
+  String get rhythmInsightWindow =>
+      'Só contam os dias de força. Dias só de cardio não entram. É um retrato da densidade, não um objetivo.';
+
+  @override
+  String get rhythmInsightWhatTitle => 'Semana de recuperação ativa';
+
+  @override
+  String get rhythmInsightWhatBody =>
+      'Baixas a carga de propósito para recuperar sem perder forma: os mesmos treinos, mas cerca de 30–50% menos volume. Ou saltas os dias de força e ficas em movimento.';
+
+  @override
+  String get rhythmInsightAdviceLight =>
+      'Agora o ritmo está calmo. Se as sessões não forem extremas, dá para ir muito tempo sem uma semana de recuperação ativa planeada.';
+
+  @override
+  String get rhythmInsightAdviceSteady =>
+      'Agora é um ritmo estável. Se o trabalho é duro, uma semana de recuperação ativa de uns em uns meses costuma chegar.';
+
+  @override
+  String get rhythmInsightAdviceDense =>
+      'Agora o calendário está denso. Se as sessões são intensas, uma semana de recuperação ativa a cada dois ou três meses convém ter em mente.';
+
+  @override
+  String get rhythmInsightAdviceVeryDense =>
+      'Agora é quase todos os dias. Se a carga é alta, uma semana de recuperação ativa cerca de uma vez por mês muitos consideram razoável.';
+
+  @override
+  String get rhythmInsightPraiseSteady =>
+      'Bem. É exactamente neste ritmo que se sustentam os progressos longos.';
+
+  @override
+  String get rhythmInsightPraiseDense => 'Mesmo dedicado. Continua assim.';
+
+  @override
+  String get rhythmInsightPraiseVeryDense =>
+      'Parece que estás a tentar desbloquear as capacidades secretas do teu organismo.';
+
+  @override
+  String get rhythmInsightRecentLighter =>
+      'Nos dados recentes já se vê uma semana de recuperação ativa.';
+
+  @override
+  String rhythmInsightAccumulation(int weeks) {
+    return 'Cerca de $weeks semanas nesta densidade sem uma semana de recuperação ativa.';
+  }
+
+  @override
+  String get rhythmInsightDisclaimer =>
+      'É uma nota de referência, não uma prescrição. Só lembra que às vezes é útil uma semana curta de recuperação ativa. Se te sentes bem, não precisas de mudar nada.';
 
   @override
   String get instructionHubManifest =>

@@ -16,8 +16,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-# Версия как у IronVibe: … 1.6.6+66, 1.6.7+67, 1.6.8+68 …
-version: 1.6.8+68
+# Версия как у IronVibe: … 1.7.4+74, 1.7.5+75 …
+version: 1.7.5+75
 
 environment:
   sdk: ^3.11.0
@@ -48,6 +48,8 @@ dependencies:
   file_picker: ^10.3.10
   uuid: ^4.5.1
   audioplayers: ^6.6.0
+  flutter_svg: ^2.2.3
+  pdf: ^3.11.3
 
 dev_dependencies:
   flutter_test:
@@ -97,8 +99,14 @@ flutter:
     - assets/
     - assets/app_icon.png
     - assets/logo_final.png
+    - assets/logo_on_light.svg
+    - assets/logo_on_dark.svg
     - assets/sounds/timer_tick.wav
     - assets/sounds/timer_phase.wav
+    - assets/rhythm_smirk.png
+    - assets/fonts/NotoSans-Regular.ttf
+    - assets/fonts/NotoSans-Bold.ttf
+    - assets/fonts/NotoSansSC-Regular.ttf
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

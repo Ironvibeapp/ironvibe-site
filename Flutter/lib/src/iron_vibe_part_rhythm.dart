@@ -12,9 +12,7 @@ DateTime _rhythmMondayOf(DateTime d) {
   return day.subtract(Duration(days: day.weekday - 1));
 }
 
-double? _rhythmParseNum(String raw) {
-  return double.tryParse(raw.trim().replaceAll(',', '.'));
-}
+double? _rhythmParseNum(String raw) => ironVibeParseQuantity(raw);
 
 /// Силовая нагрузка за календарный день. Кардио полностью игнорируется.
 class IronVibeDayLoad {
@@ -53,6 +51,38 @@ class IronVibeRhythmSnapshot {
       !recentDeload &&
       deloadEveryWeeks != null &&
       accumulationWeeks + 0.001 >= deloadEveryWeeks!;
+}
+
+enum IronVibeRhythmAdviceBand { light, steady, dense, veryDense }
+
+IronVibeRhythmAdviceBand ironVibeRhythmAdviceBand(IronVibeRhythmSnapshot snap) {
+  if (!snap.deloadIndicated) return IronVibeRhythmAdviceBand.light;
+  final d = snap.daysPerWeek;
+  if (d < 4.0) return IronVibeRhythmAdviceBand.steady;
+  if (d < 5.0) return IronVibeRhythmAdviceBand.dense;
+  return IronVibeRhythmAdviceBand.veryDense;
+}
+
+Iterable<WorkoutLog> ironVibeRhythmHistoryFor({String? clientName}) {
+  final scoped = clientName?.trim();
+  if (scoped == null || scoped.isEmpty) return workoutHistory;
+  return trainerSchedule
+      .where(
+        (s) =>
+            ironVibeSessionBelongsToClient(s, clientName: scoped) &&
+            ironVibeTrainerSessionInClientHistory(s),
+      )
+      .map((s) => WorkoutLog(s.dateTime, s.exercises, id: s.id));
+}
+
+IronVibeRhythmSnapshot ironVibeComputeRhythmFor({
+  String? clientName,
+  DateTime? now,
+}) {
+  return ironVibeComputeRhythm(
+    ironVibeRhythmHistoryFor(clientName: clientName),
+    now: now,
+  );
 }
 
 class _RhythmWeekLoad {
@@ -111,16 +141,25 @@ double ironVibeDeloadIntervalWeeks(double daysPerWeek) {
   return t.clamp(5.0, 16.0);
 }
 
+const Color kIronVibeRhythmSteel = Color(0xFF9AA0A8);
+const Color kIronVibeRhythmRust = Color(0xFFB85A48);
+const Color kIronVibeRhythmRustDeep = Color(0xFF8F3A32);
+
+/// 1 — muted steel, 3 — palette gold, 6 — dense rust. No plateau, no mid-range lift.
 Color ironVibeRhythmZoneColor(double daysPerWeek) {
   final x = daysPerWeek.clamp(1.0, 6.0);
-  const steel = Color(0xFF8B919A);
-  const copper = kIronVibeAccent;
-  const brass = Color(0xFFD4B07A);
-  const rust = Color(0xFFB85A48);
-  if (x <= 2) return Color.lerp(steel, copper, x - 1)!;
-  if (x <= 4) return copper;
-  if (x <= 5) return Color.lerp(copper, brass, x - 4)!;
-  return Color.lerp(brass, rust, x - 5)!;
+  const gold = kIronVibeAccent;
+  if (x <= 3.0) {
+    return Color.lerp(kIronVibeRhythmSteel, gold, (x - 1.0) / 2.0)!;
+  }
+  if (x <= 4.5) {
+    return Color.lerp(gold, kIronVibeRhythmRust, (x - 3.0) / 1.5)!;
+  }
+  return Color.lerp(
+    kIronVibeRhythmRust,
+    kIronVibeRhythmRustDeep,
+    (x - 4.5) / 1.5,
+  )!;
 }
 
 bool _rhythmWeekLooksLikeDeload(
@@ -137,7 +176,8 @@ bool _rhythmWeekLooksLikeDeload(
   final hasTonnage = baseT >= 50;
   final hasReps = baseR >= 10;
   if (!hasTonnage && !hasReps) return week.days <= 1;
-  final tDropped = !hasTonnage || week.tonnage <= baseT * _kRhythmDeloadVolumeKeep;
+  final tDropped =
+      !hasTonnage || week.tonnage <= baseT * _kRhythmDeloadVolumeKeep;
   final rDropped = !hasReps || week.reps <= baseR * _kRhythmDeloadVolumeKeep;
   return tDropped && rDropped;
 }
@@ -172,7 +212,9 @@ IronVibeRhythmSnapshot ironVibeComputeRhythm(
   DateTime? now,
 }) {
   final today = _rhythmDateOnly(now ?? DateTime.now());
-  final windowStart = today.subtract(const Duration(days: _kRhythmWindowDays - 1));
+  final windowStart = today.subtract(
+    const Duration(days: _kRhythmWindowDays - 1),
+  );
   final byDay = ironVibeStrengthLoadByDay(history);
 
   var daysInWindow = 0;
@@ -183,8 +225,9 @@ IronVibeRhythmSnapshot ironVibeComputeRhythm(
   final hasGauge = daysInWindow >= 3;
 
   final deloadIndicated = daysPerWeek >= _kRhythmDeloadMinFreq;
-  final deloadEveryWeeks =
-      deloadIndicated ? ironVibeDeloadIntervalWeeks(daysPerWeek) : null;
+  final deloadEveryWeeks = deloadIndicated
+      ? ironVibeDeloadIntervalWeeks(daysPerWeek)
+      : null;
 
   final thisMonday = _rhythmMondayOf(today);
   DateTime? firstDay;
@@ -215,9 +258,7 @@ IronVibeRhythmSnapshot ironVibeComputeRhythm(
       if (isDeload[i] == true) lastDeload = i;
     }
 
-    final after = lastDeload < 0
-        ? complete
-        : complete.sublist(lastDeload + 1);
+    final after = lastDeload < 0 ? complete : complete.sublist(lastDeload + 1);
     accumulationWeeks = after.length.toDouble();
     if (current != null) {
       accumulationWeeks += (today.weekday / 7.0);
@@ -225,7 +266,8 @@ IronVibeRhythmSnapshot ironVibeComputeRhythm(
 
     final lastCompleteWasDeload =
         complete.isNotEmpty && isDeload[complete.length - 1] == true;
-    final currentLooksQuiet = current != null &&
+    final currentLooksQuiet =
+        current != null &&
         today.weekday >= 5 &&
         _rhythmWeekLooksLikeDeload(current, complete);
     recentDeload = lastCompleteWasDeload || currentLooksQuiet;

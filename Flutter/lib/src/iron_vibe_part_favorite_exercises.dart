@@ -6,9 +6,31 @@ List<String> _ironVibeFavoriteListFor({String? clientName}) {
     return ironVibeAthleteFavoriteExercises;
   }
   for (final client in clients) {
-    if (client.name == scopedClient) return client.favoriteExercises;
+    if (ironVibeClientNameKey(client.name) == ironVibeClientNameKey(scopedClient)) {
+      return client.favoriteExercises;
+    }
   }
-  return ironVibeAthleteFavoriteExercises;
+  return const <String>[];
+}
+
+List<String> ironVibeNormalizedNamesFromJsonList(dynamic raw) {
+  if (raw is! List) return const [];
+  final out = <String>[];
+  for (final item in raw) {
+    if (item == null) continue;
+    final s = normalizeExerciseName(item is String ? item : item.toString());
+    if (s.isNotEmpty) out.add(s);
+  }
+  return _dedupeNormalizedExerciseBank(out);
+}
+
+void ironVibeMergeFavoriteNames(List<String> target, Iterable<String> incoming) {
+  for (final raw in incoming) {
+    final s = normalizeExerciseName(raw);
+    if (s.isEmpty) continue;
+    if (target.any((e) => normalizeExerciseName(e) == s)) continue;
+    target.add(s);
+  }
 }
 
 List<String> ironVibeFavoriteExerciseNames({String? clientName}) {
@@ -28,7 +50,13 @@ Future<void> ironVibeToggleFavoriteExercise(
 }) async {
   final name = normalizeExerciseName(rawName);
   if (name.isEmpty) return;
+  final scoped = clientName?.trim();
+  if (scoped != null && scoped.isNotEmpty) {
+    final client = ironVibeFindClient(name: scoped);
+    if (client == null) return;
+  }
   final list = _ironVibeFavoriteListFor(clientName: clientName);
+  if (identical(list, const <String>[])) return;
   final idx = list.indexWhere((e) => normalizeExerciseName(e) == name);
   if (idx >= 0) {
     list.removeAt(idx);
@@ -253,6 +281,7 @@ class _FavoriteExercisesScreenState extends State<FavoriteExercisesScreen> {
         exercises: ironVibeExerciseLogsFromFavoriteNames(selected),
       );
       trainerSchedule.add(session);
+      ironVibeMarkTrainerSessionLiveCurrent(session);
       await DataService.saveData();
       if (!mounted) return;
       await Navigator.push(

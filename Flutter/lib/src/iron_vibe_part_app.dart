@@ -151,6 +151,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _enter;
+  bool _backupNudgeChecked = false;
 
   @override
   void initState() {
@@ -161,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen>
     )..forward();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      _maybeShowWorkoutRecoveryDialog();
+      unawaited(_maybeShowWorkoutRecoveryDialog());
     });
   }
 
@@ -180,7 +181,10 @@ class _HomeScreenState extends State<HomeScreen>
 
   Future<void> _maybeShowWorkoutRecoveryDialog() async {
     final draft = activeWorkoutDraft;
-    if (draft == null || !draft.hasRecoverableContent) return;
+    if (draft == null || !draft.hasRecoverableContent) {
+      if (mounted) unawaited(_maybeShowBackupNudge());
+      return;
+    }
 
     final l = AppLocalizations.of(context)!;
     final action = await showDialog<bool>(
@@ -232,9 +236,17 @@ class _HomeScreenState extends State<HomeScreen>
 
     if (action == true) {
       _resumeWorkoutFromDraft(draft);
+      return;
     } else if (action == false) {
       await DataService.clearActiveWorkoutDraft();
     }
+    if (mounted) unawaited(_maybeShowBackupNudge());
+  }
+
+  Future<void> _maybeShowBackupNudge() async {
+    if (_backupNudgeChecked || !mounted) return;
+    _backupNudgeChecked = true;
+    await ironVibeMaybeShowBackupNudge(context);
   }
 
   void _resumeWorkoutFromDraft(ActiveWorkoutDraft draft) {
@@ -258,6 +270,19 @@ class _HomeScreenState extends State<HomeScreen>
             SnackBar(
               content: Text(AppLocalizations.of(context)!.workoutRecoverySessionMissing),
               duration: const Duration(seconds: 3),
+            ),
+          );
+          return;
+        }
+        if (ironVibeTrainerSessionIsCompleted(session)) {
+          unawaited(DataService.clearActiveWorkoutDraft());
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TrainerWorkoutSessionScreen(
+                session: session,
+                mode: TrainerSessionUiMode.history,
+              ),
             ),
           );
           return;
@@ -452,42 +477,72 @@ class _HomeScreenState extends State<HomeScreen>
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _FooterLink(
-                      label: AppLocalizations.of(context)!.footerWebsite,
-                      uri: Uri.parse('https://ironvibe.app'),
-                    ),
-                    Text(
-                      ' · ',
-                      style: TextStyle(
-                        color: pal.textMuted.withValues(alpha: 0.5),
-                        fontSize: 11,
-                      ),
-                    ),
-                    _FooterLink(
-                      label: 'support@ironvibe.app',
-                      uri: Uri.parse('mailto:support@ironvibe.app'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                _FooterLink(
-                  label: AppLocalizations.of(context)!.footerPrivacyPolicy,
-                  uri: Uri.parse('https://ironvibe.app/privacy/'),
-                ),
-              ],
-            ),
-          ),
+          const _HomeFooter(),
         ],
       ),
       ),
+    );
+  }
+}
+
+class _HomeFooter extends StatelessWidget {
+  const _HomeFooter();
+
+  static final _website = Uri.parse('https://ironvibe.app');
+  static final _telegram = Uri.parse('https://t.me/IronVibeapp');
+  static final _email = Uri.parse('mailto:support@ironvibe.app');
+  static final _privacy = Uri.parse('https://ironvibe.app/privacy/');
+
+  @override
+  Widget build(BuildContext context) {
+    final pal = IronVibePalette.of(context);
+    final l = AppLocalizations.of(context)!;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 22),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 400),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _footerPair(
+                pal,
+                _FooterLink(label: l.footerWebsite, uri: _website),
+                _FooterLink(label: 't.me/IronVibeapp', uri: _telegram),
+              ),
+              const SizedBox(height: 8),
+              _footerPair(
+                pal,
+                _FooterLink(
+                  label: 'support@ironvibe.app',
+                  uri: _email,
+                ),
+                _FooterLink(label: l.footerPrivacyPolicy, uri: _privacy),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _footerPair(IronVibePalette pal, Widget left, Widget right) {
+    return Row(
+      children: [
+        Expanded(child: left),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Text(
+            '·',
+            style: TextStyle(
+              color: pal.textMuted.withValues(alpha: 0.38),
+              fontSize: 11,
+              height: 1,
+            ),
+          ),
+        ),
+        Expanded(child: right),
+      ],
     );
   }
 }
@@ -502,20 +557,30 @@ class _FooterLink extends StatelessWidget {
   Widget build(BuildContext context) {
     final pal = IronVibePalette.of(context);
     final linkColor = pal.textMuted;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () async {
-        if (await canLaunchUrl(uri)) {
-          await launchUrl(uri, mode: LaunchMode.externalApplication);
-        }
-      },
-      child: Text(
-        label,
-        style: TextStyle(
-          color: linkColor,
-          fontSize: 11,
-          decoration: TextDecoration.underline,
-          decorationColor: linkColor.withValues(alpha: 0.75),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () async {
+          if (await canLaunchUrl(uri)) {
+            await launchUrl(uri, mode: LaunchMode.externalApplication);
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
+          child: Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: linkColor,
+              fontSize: 11,
+              height: 1.25,
+              letterSpacing: 0.15,
+              decoration: TextDecoration.underline,
+              decorationColor: linkColor.withValues(alpha: 0.55),
+              decorationThickness: 1,
+            ),
+          ),
         ),
       ),
     );

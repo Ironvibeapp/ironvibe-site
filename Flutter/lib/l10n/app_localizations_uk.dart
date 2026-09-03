@@ -92,6 +92,37 @@ class AppLocalizationsUk extends AppLocalizations {
       'Помилка: обрано некоректний файл резервної копії';
 
   @override
+  String get importAthlete => 'ІМПОРТ АТЛЕТА';
+
+  @override
+  String importAthleteFound(int count) {
+    return 'Знайдено записи про $count тренувань атлета, якого немає в списку.';
+  }
+
+  @override
+  String get importAthleteBackupOwn => 'СПОЧАТКУ ЗБЕРЕГТИ СВОЇ ДАНІ';
+
+  @override
+  String get importAthleteDecline => 'Відмовитися';
+
+  @override
+  String get importAthleteSuccess => 'Атлета додано';
+
+  @override
+  String get importAthleteNotAthleteFile =>
+      'Цей файл не є історією тренувань атлета.';
+
+  @override
+  String get importAthleteEmpty => 'У цьому файлі немає тренувань.';
+
+  @override
+  String get importAthleteAlreadyImported => 'Ці тренування вже є на пристрої.';
+
+  @override
+  String get importAthleteUseDedicatedButton =>
+      'Це схоже на історію атлета. Скористайтеся «Імпорт атлета».';
+
+  @override
   String get shareText => 'Історія тренувань IronVibe';
 
   @override
@@ -144,6 +175,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get workoutCompleteTitle => 'Тренування збережено';
+
+  @override
+  String get planChangesSavedTitle => 'Зміни збережено';
 
   @override
   String get startWorkout => 'ПОЧАТИ ТРЕНУВАННЯ';
@@ -300,6 +334,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get clientName => 'Ім\'я';
 
   @override
+  String get clientNameCannotChange => 'Ім\'я потім змінити не можна.';
+
+  @override
+  String get clientNameTaken => 'Це ім\'я вже зайняте. Оберіть інше.';
+
+  @override
   String get clientGoal => 'Ціль';
 
   @override
@@ -350,6 +390,23 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get fillCurrentExerciseBeforeAdd =>
       'Спочатку заповніть поточну вправу, перш ніж додавати наступну.';
+
+  @override
+  String get switchWorkoutTypeTitle => 'Змінити тип тренування?';
+
+  @override
+  String get switchWorkoutTypeBody =>
+      'Підходи іншого типу не збережуться в цьому тренуванні.';
+
+  @override
+  String get switchWorkoutTypeConfirm => 'Змінити';
+
+  @override
+  String get saveWorkoutNothingToSave =>
+      'Поки немає що зберігати. Вкажіть вагу й повтори або тривалість кардіо.';
+
+  @override
+  String get importedHistoryBadge => 'Імпорт';
 
   @override
   String get clientWorkoutHistoryEmpty => 'Історія порожня';
@@ -913,7 +970,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get instructionNavImportExportDesc =>
-      'Резервна копія чи перенесення через експорт і імпорт JSON у вікні статистики. До копії входять історія, список вправ, обране та мітки м’язових груп. Тренерська копія окрема від особистої історії.';
+      'Резервна копія чи перенесення через експорт і імпорт JSON у вікні статистики. До копії входять історія, список вправ, обране та мітки м’язових груп. Тренерська копія окрема від особистої історії. Тренер може імпортувати історію атлета як нового клієнта, не змішуючи назви вправ.';
 
   @override
   String get instructionSectionHome => 'Головний екран';
@@ -979,21 +1036,22 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get instructionRhythmIntro =>
-      'Після кількох силових тренувань угорі екрана тренувань з’являється шкала. Вона показує, скільки днів на тиждень ви тренувались у середньому за останні чотири тижні. Дні лише з кардіо не рахуються. Це знімок щільності, а не ціль, яку додаток вимагає досягти.';
+      'Після кількох силових тренувань угорі екрана тренувань з’являється шкала. Вона показує, скільки днів на тиждень ви тренувались у середньому за останні чотири тижні. Дні лише з кардіо не рахуються. Це знімок щільності, а не ціль, яку додаток вимагає досягти. Натисніть на шкалу — там нотатка про ваш ритм і про те, що таке тиждень активного відпочинку.';
 
   @override
   String get instructionRhythmGaugeTitle => 'Днів на тиждень';
 
   @override
   String get instructionRhythmGaugeDesc =>
-      'Дуга заповнюється від 1 до 6 днів на тиждень. Холодний сталевий відтінок — спокійніший ритм, теплі тони — вища щільність. Шкала з’являється, коли в цьому чотиритижневому вікні є щонайменше три силові дні.';
+      'Дуга заповнюється від 1 до 6 днів на тиждень. Колір іде від сталі через золото до іржі, коли щільність зростає. Шкала з’являється, коли в цьому чотиритижневому вікні є щонайменше три силові дні.';
 
   @override
-  String get instructionRhythmDeloadTitle => 'Нагадування про легший тиждень';
+  String get instructionRhythmDeloadTitle =>
+      'Нагадування про тиждень активного відпочинку';
 
   @override
   String get instructionRhythmDeloadDesc =>
-      'Якщо ви тренуєтесь приблизно два з половиною дні на тиждень або частіше кілька тижнів поспіль без легшого тижня, додаток може запропонувати знизити тоннаж і повторення приблизно на 30% на один тиждень. Що більше днів на тиждень, то раніше з’явиться нагадування. Це нагадування, не припис. Не частіше одного разу на тиждень.';
+      'Якщо ви тренуєтесь приблизно два з половиною дні на тиждень або частіше кілька тижнів поспіль без тижня активного відпочинку, додаток може нагадати, що іноді корисний короткий тиждень активного відпочинку — приблизно на 30% менше тоннажу й повторень. Що більше днів на тиждень, то раніше з’явиться нагадування. Це нагадування, не припис. Не частіше одного разу на тиждень і лише в особистому режимі — не автоматично по клієнтах. У клієнта ту саму нотатку відкриває натискання на шкалу.';
 
   @override
   String get instructionSectionFavorites => 'Обране';
@@ -1098,7 +1156,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get instructionClientProfileDesc =>
-      'З профілю починається сьогоднішня порожня жива сесія. Сірі цифри минулого разу з’являються лише після вибору вправи. В історії — лише завершені тренування. Плануйте інші дати в календарі. Прогрес і обране — на тому ж екрані. Незбережені правки профілю запитують підтвердження перед виходом.';
+      'З профілю починається сьогоднішня порожня жива сесія. Сірі цифри минулого разу з’являються лише після вибору вправи. В історії — лише завершені тренування. Плануйте інші дати в календарі. Прогрес і обране — на тому ж екрані. Якщо силових днів досить, шкала показує, як часто клієнт ходить до залу; натисніть, щоб відкрити нотатку про ритм і відпочинок. Незбережені правки профілю запитують підтвердження перед виходом.';
 
   @override
   String get instructionTrainerPlanTitle => 'Запланувати сесію';
@@ -1115,14 +1173,31 @@ class AppLocalizationsUk extends AppLocalizations {
       'За бажанням. З профілю клієнта або перемикачем під час додавання сесії в календарі. Копіює вправи минулої сесії в сьогоднішнє живе тренування або в новий план; минулі вага й повторення — сірі підказки, а не готові підходи.';
 
   @override
+  String get printSession => 'Друк';
+
+  @override
+  String get printSessionEmpty =>
+      'Друкувати поки нічого. Запишіть хоча б один підхід.';
+
+  @override
+  String get printSessionShareText => 'Тренування IronVibe';
+
+  @override
+  String get instructionPrintSessionTitle => 'Друк сесії';
+
+  @override
+  String get instructionPrintSessionDesc =>
+      'У завершеному тренуванні клієнта іконка друку в шапці збирає аркуш A4 з тим, що записано цього дня. Далі системний аркуш: друк, файл або надсилання.';
+
+  @override
   String get rhythmPerWeek => 'на тиждень';
 
   @override
-  String get deloadNudgeTitle => 'Легший тиждень?';
+  String get deloadNudgeTitle => 'Тиждень активного відпочинку?';
 
   @override
   String deloadNudgeBody(String rate, int weeks) {
-    return 'Ви тренуєтесь близько $rate днів на тиждень уже приблизно $weeks тиж. Це нагадування, не припис. За такого ритму часто варто зменшити тоннаж і повторення приблизно на 30% на тиждень.';
+    return 'Ви тренуєтесь близько $rate днів на тиждень уже приблизно $weeks тиж. Це нагадування, що іноді корисний короткий тиждень активного відпочинку — приблизно на 30% менше тоннажу й повторень. Не припис.';
   }
 
   @override
@@ -1130,6 +1205,84 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get deloadNudgeOk => 'Зрозуміло';
+
+  @override
+  String get backupNudgeTitle => 'Зберегти копію?';
+
+  @override
+  String get backupNudgeBody =>
+      'Дані зберігаються лише на цьому пристрої. Якщо телефон загубиться або станеться збій накопичувача — історія зникне. Поділіться копією зараз або відкладіть на 28 днів.';
+
+  @override
+  String get backupNudgeShare => 'Поділитися';
+
+  @override
+  String get backupNudgeLater => 'Відкласти';
+
+  @override
+  String get rhythmInsightTitle => 'Ритм тренувань';
+
+  @override
+  String rhythmInsightRateYou(String rate) {
+    return 'За останні чотири тижні ви тренуєтесь близько $rate днів на тиждень.';
+  }
+
+  @override
+  String rhythmInsightRateClient(String name, String rate) {
+    return 'За останні чотири тижні $name ходить до залу близько $rate днів на тиждень.';
+  }
+
+  @override
+  String get rhythmInsightWindow =>
+      'Рахуються лише силові дні. Дні лише з кардіо не входять. Це знімок щільності, а не ціль.';
+
+  @override
+  String get rhythmInsightWhatTitle => 'Тиждень активного відпочинку';
+
+  @override
+  String get rhythmInsightWhatBody =>
+      'Свідомо знижуєте навантаження, щоб відновитися, не втрачаючи форму: ті самі тренування, але приблизно на 30–50% менше обсягу. Можна і пропустити силові, залишаючись у русі.';
+
+  @override
+  String get rhythmInsightAdviceLight =>
+      'Зараз ритм спокійний. Якщо сесії не надто жорсткі, так можна йти дуже довго без планового тижня активного відпочинку.';
+
+  @override
+  String get rhythmInsightAdviceSteady =>
+      'Зараз стійкий ритм. Якщо тренування важкі, тижня активного відпочинку раз на кілька місяців зазвичай досить.';
+
+  @override
+  String get rhythmInsightAdviceDense =>
+      'Зараз щільний графік. Якщо тренування інтенсивні, тиждень активного відпочинку раз на два–три місяці часто варто мати на увазі.';
+
+  @override
+  String get rhythmInsightAdviceVeryDense =>
+      'Зараз майже щодня. Якщо навантаження високе, тиждень активного відпочинку приблизно раз на місяць багато хто вважає розумним.';
+
+  @override
+  String get rhythmInsightPraiseSteady =>
+      'Молодець. Саме на такому ритмі тримаються довгі прогреси.';
+
+  @override
+  String get rhythmInsightPraiseDense =>
+      'Справді відданий справі. Так тримати.';
+
+  @override
+  String get rhythmInsightPraiseVeryDense =>
+      'Схоже, ви пробуєте розкрити секретні можливості організму.';
+
+  @override
+  String get rhythmInsightRecentLighter =>
+      'У недавніх даних уже видно тиждень активного відпочинку.';
+
+  @override
+  String rhythmInsightAccumulation(int weeks) {
+    return 'Уже близько $weeks тиж. у такому ритмі без тижня активного відпочинку.';
+  }
+
+  @override
+  String get rhythmInsightDisclaimer =>
+      'Це довідкова нотатка, а не вказівка. Вона лише нагадує, що іноді корисний короткий тиждень активного відпочинку. Якщо почуваєтесь добре — нічого змінювати не потрібно.';
 
   @override
   String get instructionHubManifest =>

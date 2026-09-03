@@ -479,6 +479,87 @@ const double kIronVibeCalendarGridWidth = 350;
 const double kIronVibeCalendarGridHeight = 340;
 const EdgeInsets kIronVibeCalendarGridPadding = EdgeInsets.all(10);
 const double kIronVibeCalendarCellSpacing = 4;
+const int _kIronVibeCalendarMinYear = 2020;
+const int _kIronVibeCalendarMaxYear = 2032;
+
+int _ironVibeMonthPageCount() =>
+    (_kIronVibeCalendarMaxYear - _kIronVibeCalendarMinYear + 1) * 12;
+
+int _ironVibeMonthPageIndex(DateTime month) {
+  final i = (month.year - _kIronVibeCalendarMinYear) * 12 + (month.month - 1);
+  return i.clamp(0, _ironVibeMonthPageCount() - 1);
+}
+
+DateTime _ironVibeMonthFromPageIndex(int index) {
+  final i = index.clamp(0, _ironVibeMonthPageCount() - 1);
+  return DateTime(_kIronVibeCalendarMinYear, 1 + i);
+}
+
+DateTime ironVibeAlignSelectedDateToMonth(DateTime selected, DateTime month) {
+  final last = DateTime(month.year, month.month + 1, 0).day;
+  final day = selected.day.clamp(1, last);
+  return DateTime(month.year, month.month, day);
+}
+
+class _IronVibeMonthPageView extends StatefulWidget {
+  final DateTime month;
+  final ValueChanged<DateTime> onMonthChanged;
+  final Widget Function(BuildContext context, DateTime month) monthBuilder;
+
+  const _IronVibeMonthPageView({
+    required this.month,
+    required this.onMonthChanged,
+    required this.monthBuilder,
+  });
+
+  @override
+  State<_IronVibeMonthPageView> createState() => _IronVibeMonthPageViewState();
+}
+
+class _IronVibeMonthPageViewState extends State<_IronVibeMonthPageView> {
+  late final PageController _controller;
+  late int _page;
+
+  @override
+  void initState() {
+    super.initState();
+    _page = _ironVibeMonthPageIndex(widget.month);
+    _controller = PageController(initialPage: _page);
+  }
+
+  @override
+  void didUpdateWidget(covariant _IronVibeMonthPageView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final next = _ironVibeMonthPageIndex(widget.month);
+    if (next == _page || !_controller.hasClients) return;
+    _page = next;
+    _controller.jumpToPage(next);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView.builder(
+      controller: _controller,
+      itemCount: _ironVibeMonthPageCount(),
+      onPageChanged: (index) {
+        _page = index;
+        widget.onMonthChanged(_ironVibeMonthFromPageIndex(index));
+      },
+      itemBuilder: (context, index) {
+        return widget.monthBuilder(
+          context,
+          _ironVibeMonthFromPageIndex(index),
+        );
+      },
+    );
+  }
+}
 
 Widget _ironVibeCalendarDayCell(
   BuildContext context, {

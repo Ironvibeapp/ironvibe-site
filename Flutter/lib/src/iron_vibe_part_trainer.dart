@@ -17,12 +17,23 @@ String ironVibeTrainerSessionSubtitle(
   TrainerSession session,
 ) {
   final l = AppLocalizations.of(context)!;
-  if (ironVibeTrainerSessionHasLoggedData(session)) {
-    return ironVibeWorkoutVolumeLabel(l, session.exercises);
+  if (session.isImportedHistory) {
+    final vol = ironVibeWorkoutVolumeLabel(l, session.exercises);
+    return '${l.importedHistoryBadge} · $vol';
   }
-  final n = ironVibeTrainerSessionNamedExerciseCount(session);
-  if (n > 0) return l.trainerSessionPlanned(n);
-  return l.trainerSessionEmpty;
+  if (!ironVibeTrainerSessionIsCompleted(session)) return '';
+  return ironVibeWorkoutVolumeLabel(l, session.exercises);
+}
+
+IconData ironVibeTrainerSessionStatusIcon(TrainerSession session) {
+  final today = ironVibeDateOnly(DateTime.now());
+  final day = ironVibeDateOnly(session.dateTime);
+  if (day.isAfter(today)) return Icons.hourglass_empty_rounded;
+  if (ironVibeTrainerSessionIsCompleted(session)) {
+    return Icons.check_rounded;
+  }
+  if (session.isLiveCurrent) return Icons.play_arrow_rounded;
+  return Icons.hourglass_empty_rounded;
 }
 
 Future<void> ironVibeOpenTrainerSession(
@@ -42,8 +53,6 @@ Future<void> ironVibeOpenTrainerSession(
     ),
   );
 }
-
-enum _PlannedSessionAction { start, edit, delete }
 
 Future<bool> ironVibeConfirmDeleteTrainerSessionDialog(
   BuildContext context, {
@@ -190,7 +199,8 @@ class _TrainerScreenState extends State<TrainerScreen> {
           builder: (context, setDialogState) {
             final pal = IronVibePalette.of(context);
             final l = AppLocalizations.of(context)!;
-            final canRepeat = selectedClient != null &&
+            final canRepeat =
+                selectedClient != null &&
                 ironVibeLastRepeatableTrainerSession(selectedClient!.name) !=
                     null;
             return AlertDialog(
@@ -319,10 +329,7 @@ class _TrainerScreenState extends State<TrainerScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    l.cancel,
-                    style: TextStyle(color: pal.textMuted),
-                  ),
+                  child: Text(l.cancel, style: TextStyle(color: pal.textMuted)),
                 ),
                 TextButton(
                   onPressed: selectedClient == null
@@ -355,8 +362,10 @@ class _TrainerScreenState extends State<TrainerScreen> {
                           final session = ironVibeNewTrainerSession(
                             dateTime: dateTime,
                             clientName: client.name,
+                            clientId: client.id,
                             note: note.trim(),
                             exercises: plan,
+                            isScheduledPlan: true,
                           );
                           setState(() {
                             trainerSchedule.add(session);
@@ -380,13 +389,7 @@ class _TrainerScreenState extends State<TrainerScreen> {
         );
       },
     );
-    if (!mounted || created == null) return;
-    await ironVibeOpenTrainerSession(
-      context,
-      created,
-      mode: TrainerSessionUiMode.plan,
-    );
-    if (mounted) setState(() {});
+    if (mounted && created != null) setState(() {});
   }
 
   List<TrainerSession> _getSessionsForDate(DateTime date) {
@@ -436,6 +439,18 @@ class _TrainerScreenState extends State<TrainerScreen> {
     }
   }
 
+  void _onCalendarMonthChanged(DateTime month) {
+    final focused = DateTime(month.year, month.month);
+    if (focused.year == _focusedMonth.year &&
+        focused.month == _focusedMonth.month) {
+      return;
+    }
+    setState(() {
+      _focusedMonth = focused;
+      _selectedDate = ironVibeAlignSelectedDateToMonth(_selectedDate, focused);
+    });
+  }
+
   int _daysInMonth(DateTime date) {
     return DateTime(date.year, date.month + 1, 0).day;
   }
@@ -453,107 +468,36 @@ class _TrainerScreenState extends State<TrainerScreen> {
   }
 
   Future<void> _openSession(TrainerSession session) async {
-    if (ironVibeTrainerSessionHasLoggedData(session)) {
-      await ironVibeOpenTrainerSession(context, session);
+    final today = ironVibeDateOnly(DateTime.now());
+    final day = ironVibeDateOnly(session.dateTime);
+
+    if (ironVibeTrainerSessionIsCompleted(session)) {
+      await ironVibeOpenTrainerSession(
+        context,
+        session,
+        mode: TrainerSessionUiMode.history,
+      );
       if (mounted) setState(() {});
       return;
     }
 
-    final action = await _promptPlannedSessionAction(session);
-    if (!mounted || action == null) return;
-
-    switch (action) {
-      case _PlannedSessionAction.start:
-        await ironVibeOpenTrainerSession(
-          context,
-          session,
-          mode: TrainerSessionUiMode.live,
-        );
-      case _PlannedSessionAction.edit:
-        await ironVibeOpenTrainerSession(
-          context,
-          session,
-          mode: TrainerSessionUiMode.plan,
-        );
-      case _PlannedSessionAction.delete:
-        final confirmed = await ironVibeConfirmDeleteTrainerSessionDialog(
-          context,
-          scheduledNotLogged: true,
-        );
-        if (!confirmed) return;
-        ironVibeRemoveTrainerSession(session);
-        await DataService.saveData();
-        if (mounted) setState(() {});
-        return;
+    if (day.isAfter(today)) {
+      await ironVibeOpenTrainerSession(
+        context,
+        session,
+        mode: TrainerSessionUiMode.plan,
+      );
+    } else {
+      ironVibeMarkTrainerSessionLiveCurrent(session);
+      await DataService.saveData();
+      if (!mounted) return;
+      await ironVibeOpenTrainerSession(
+        context,
+        session,
+        mode: TrainerSessionUiMode.live,
+      );
     }
     if (mounted) setState(() {});
-  }
-
-  Future<_PlannedSessionAction?> _promptPlannedSessionAction(
-    TrainerSession session,
-  ) {
-    final today = ironVibeDateOnly(DateTime.now());
-    final day = ironVibeDateOnly(session.dateTime);
-    final canStart = day == today;
-    return showDialog<_PlannedSessionAction>(
-      context: context,
-      builder: (ctx) {
-        final pal = IronVibePalette.of(ctx);
-        final l = AppLocalizations.of(ctx)!;
-        return AlertDialog(
-          backgroundColor: pal.dialog,
-          shape: ironVibeDialogShape(pal),
-          title: Text(
-            session.clientName,
-            style: TextStyle(
-              color: pal.textPrimary,
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          content: Text(
-            ironVibeTrainerSessionSubtitle(ctx, session),
-            style: TextStyle(color: pal.textSecondary),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: Text(l.cancel, style: TextStyle(color: pal.textMuted)),
-            ),
-            TextButton(
-              onPressed: () =>
-                  Navigator.pop(ctx, _PlannedSessionAction.delete),
-              child: Text(
-                l.delete,
-                style: const TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, _PlannedSessionAction.edit),
-              child: Text(
-                l.editPlan,
-                style: TextStyle(color: pal.textPrimary),
-              ),
-            ),
-            if (canStart)
-              TextButton(
-                onPressed: () =>
-                    Navigator.pop(ctx, _PlannedSessionAction.start),
-                child: Text(
-                  ironVibeSentenceCase(l.startWorkout),
-                  style: TextStyle(
-                    color: pal.textPrimary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -674,59 +618,65 @@ class _TrainerScreenState extends State<TrainerScreen> {
   }
 
   Widget _buildCalendar() {
-    final year = _focusedMonth.year;
-    final month = _focusedMonth.month;
-    final daysInMonth = _daysInMonth(_focusedMonth);
-    final firstWeekday = _firstWeekdayOfMonth(_focusedMonth);
-    final emptyCells = firstWeekday - 1;
-    final totalCells = emptyCells + daysInMonth;
     final pal = IronVibePalette.of(context);
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
       child: Center(
         child: Container(
           width: kIronVibeCalendarGridWidth,
+          clipBehavior: Clip.antiAlias,
           decoration: ironVibeElevatedCardDecoration(pal),
           child: SizedBox(
             height: kIronVibeCalendarGridHeight,
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              padding: kIronVibeCalendarGridPadding,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 7,
-                mainAxisSpacing: kIronVibeCalendarCellSpacing,
-                crossAxisSpacing: kIronVibeCalendarCellSpacing,
-                childAspectRatio: 1.0,
-              ),
-              itemCount: totalCells,
-              itemBuilder: (context, index) {
-                if (index < emptyCells) return const SizedBox.shrink();
-
-                final day = index - emptyCells + 1;
-                final date = DateTime(year, month, day);
-                final isSelected = ironVibeIsSameCalendarDay(
-                  date,
-                  _selectedDate,
-                );
-                final hasSession = _hasSession(date);
-
-                return _ironVibeCalendarDayCell(
-                  context,
-                  day: day,
-                  isSelected: isSelected,
-                  hasMark: hasSession,
-                  onTap: () {
-                    setState(() {
-                      _selectedDate = date;
-                    });
-                  },
-                );
-              },
+            child: _IronVibeMonthPageView(
+              month: _focusedMonth,
+              onMonthChanged: _onCalendarMonthChanged,
+              monthBuilder: (context, month) => _calendarGridForMonth(month),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _calendarGridForMonth(DateTime month) {
+    final year = month.year;
+    final monthNumber = month.month;
+    final daysInMonth = _daysInMonth(month);
+    final firstWeekday = _firstWeekdayOfMonth(month);
+    final emptyCells = firstWeekday - 1;
+    final totalCells = emptyCells + daysInMonth;
+
+    return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      padding: kIronVibeCalendarGridPadding,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 7,
+        mainAxisSpacing: kIronVibeCalendarCellSpacing,
+        crossAxisSpacing: kIronVibeCalendarCellSpacing,
+        childAspectRatio: 1.0,
+      ),
+      itemCount: totalCells,
+      itemBuilder: (context, index) {
+        if (index < emptyCells) return const SizedBox.shrink();
+
+        final day = index - emptyCells + 1;
+        final date = DateTime(year, monthNumber, day);
+        final isSelected = ironVibeIsSameCalendarDay(date, _selectedDate);
+        final hasSession = _hasSession(date);
+
+        return _ironVibeCalendarDayCell(
+          context,
+          day: day,
+          isSelected: isSelected,
+          hasMark: hasSession,
+          onTap: () {
+            setState(() {
+              _selectedDate = date;
+            });
+          },
+        );
+      },
     );
   }
 }
@@ -750,13 +700,16 @@ class _TrainerSessionCard extends StatelessWidget {
     final timeStr =
         '${session.dateTime.hour.toString().padLeft(2, '0')}:${session.dateTime.minute.toString().padLeft(2, '0')}';
     final subtitle = ironVibeTrainerSessionSubtitle(context, session);
-    final logged = ironVibeTrainerSessionHasLoggedData(session);
     final title =
-        customTitle ??
-        (showClientName ? session.clientName : timeStr);
-    final detail = customTitle != null
-        ? subtitle
-        : (showClientName ? '$timeStr · $subtitle' : subtitle);
+        customTitle ?? (showClientName ? session.clientName : timeStr);
+    final String detail;
+    if (customTitle != null) {
+      detail = subtitle;
+    } else if (showClientName) {
+      detail = subtitle.isEmpty ? timeStr : '$timeStr · $subtitle';
+    } else {
+      detail = subtitle;
+    }
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
@@ -781,35 +734,33 @@ class _TrainerSessionCard extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      detail,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: pal.textSecondary,
-                        fontSize: 13,
+                    if (detail.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        detail,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: pal.textSecondary,
+                          fontSize: 13,
+                        ),
                       ),
-                    ),
+                    ],
                     if (session.note.isNotEmpty) ...[
                       const SizedBox(height: 2),
                       Text(
                         session.note,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: pal.textMuted,
-                          fontSize: 12,
-                        ),
+                        style: TextStyle(color: pal.textMuted, fontSize: 12),
                       ),
                     ],
                   ],
                 ),
               ),
               Icon(
-                logged
-                    ? Icons.chevron_right_rounded
-                    : Icons.play_arrow_rounded,
+                ironVibeTrainerSessionStatusIcon(session),
+                size: 24,
                 color: pal.textMuted,
               ),
             ],
@@ -848,11 +799,13 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
   late bool _isCardio;
   late final TextEditingController _noteController;
   bool _suppressPersist = false;
+  bool _planDirty = false;
 
   @override
   void initState() {
     super.initState();
     _noteController = TextEditingController(text: widget.session.note);
+    _noteController.addListener(_markPlanDirty);
     if (widget.restoredDraft != null) {
       _isCardio = widget.restoredDraft!.isCardio;
       _exercises = ironVibeExerciseListFromDraftJson(
@@ -874,6 +827,8 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
   void dispose() {
     if (!_suppressPersist) {
       if (widget.mode == TrainerSessionUiMode.plan) {
+        widget.session.isLiveCurrent = false;
+        widget.session.isCompleted = false;
         persistToSession(keepPlanPlaceholders: true);
         unawaited(DataService.saveData());
       } else if (widget.mode == TrainerSessionUiMode.history) {
@@ -897,36 +852,43 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
       clientName: widget.session.clientName,
       excludeSession: widget.session,
     );
-    return ironVibeExerciseDataPlannedWithHints(
-      planned: log,
-      lastLogged: last,
-    );
+    return ironVibeExerciseDataPlannedWithHints(planned: log, lastLogged: last);
   }
 
   void _flushAutoSaveDraft() {
     if (!hasDraftWorkout) return;
-    unawaited(
-      DataService.saveActiveWorkoutDraft(
-        ActiveWorkoutDraft(
-          kind: ActiveWorkoutDraftKind.trainer,
-          sessionId: widget.session.id,
-          clientName: widget.session.clientName,
-          sessionDateTime: widget.session.dateTime,
-          sessionNote: _noteController.text.trim(),
-          isCardio: _isCardio,
-          exercisesJson: ironVibeExerciseListToDraftJson(_exercises),
-          savedAt: DateTime.now(),
-        ),
+    _draftWrite = DataService.saveActiveWorkoutDraft(
+      ActiveWorkoutDraft(
+        kind: ActiveWorkoutDraftKind.trainer,
+        sessionId: widget.session.id,
+        clientName: widget.session.clientName,
+        clientId: widget.session.clientId,
+        sessionDateTime: widget.session.dateTime,
+        sessionNote: _noteController.text.trim(),
+        isCardio: _isCardio,
+        exercisesJson: ironVibeExerciseListToDraftJson(_exercises),
+        savedAt: DateTime.now(),
       ),
     );
   }
 
+  Future<void>? _draftWrite;
+
   Future<void> _clearAutoSaveDraft() async {
     ironVibeStopWorkoutAutoSave();
+    await _draftWrite;
     await DataService.clearActiveWorkoutDraft();
   }
 
+  void _markPlanDirty() {
+    if (widget.mode != TrainerSessionUiMode.plan) return;
+    if (_planDirty) return;
+    _planDirty = true;
+    if (mounted) setState(() {});
+  }
+
   void _notifyChanged() {
+    _markPlanDirty();
     setState(() {});
     widget.onChanged?.call();
   }
@@ -947,13 +909,6 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
   bool get hasDraftWorkout => _exercises.isNotEmpty || _hasAnyInput;
 
   bool get canSaveWorkout => _logsFromCurrentDraft().isNotEmpty;
-
-  bool get _canStartLive {
-    if (widget.mode != TrainerSessionUiMode.plan) return false;
-    final today = ironVibeDateOnly(DateTime.now());
-    final day = ironVibeDateOnly(widget.session.dateTime);
-    return day == today;
-  }
 
   bool get _hasAnyInput {
     if (_noteController.text.trim() != widget.session.note) return true;
@@ -981,7 +936,13 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
     }
     final ex = _exercises[index];
     final clientSessions = trainerSchedule.where(
-      (s) => s.clientName == widget.session.clientName,
+      (s) =>
+          ironVibeSessionBelongsToClient(
+            s,
+            clientName: widget.session.clientName,
+            clientId: widget.session.clientId,
+          ) &&
+          ironVibeTrainerSessionCountsAsWork(s),
     );
     return ironVibeSessionPrHighlightForDraft(
       normalizedExerciseName: ex.nameController.text,
@@ -1014,6 +975,7 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
     setState(() {
       _exercises.add(ExerciseData());
     });
+    _markPlanDirty();
     widget.onChanged?.call();
     _scrollHostToEnd();
   }
@@ -1023,6 +985,7 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
     setState(() {
       _exercises.removeAt(index);
     });
+    _markPlanDirty();
     widget.onChanged?.call();
   }
 
@@ -1033,12 +996,47 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
       final name = normalizeExerciseName(ex.nameController.text);
       if (name.isEmpty) continue;
       ex.nameController.text = name;
-      ensureExerciseInBank(name);
 
-      final setLogs = <SetLog>[];
       final setsToProcess = _isCardio && ex.sets.isNotEmpty
           ? [ex.sets.first]
           : ex.sets;
+
+      if (keepPlanPlaceholders) {
+        if (_isCardio) {
+          final s = setsToProcess.isNotEmpty ? setsToProcess.first : null;
+          logs.add(
+            ExerciseLog(name, [
+              SetLog(
+                '',
+                '',
+                '',
+                isCardio: true,
+                duration: s?.duration.text.trim() ?? '',
+                intensity: s?.intensity.text.trim() ?? '',
+              ),
+            ], isCardio: true),
+          );
+        } else {
+          final n = math.max(1, setsToProcess.length);
+          logs.add(
+            ExerciseLog(
+              name,
+              List<SetLog>.generate(n, (i) {
+                if (i >= setsToProcess.length) return SetLog('', '', '0');
+                final s = setsToProcess[i];
+                return SetLog(
+                  s.weight.text.trim(),
+                  s.reps.text.trim(),
+                  normalizeRirStored(s.rir.text),
+                );
+              }),
+            ),
+          );
+        }
+        continue;
+      }
+
+      final setLogs = <SetLog>[];
       for (final s in setsToProcess) {
         if (_isCardio) {
           if (s.duration.text.trim().isNotEmpty ||
@@ -1071,16 +1069,6 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
 
       if (setLogs.isNotEmpty) {
         logs.add(ExerciseLog(name, setLogs, isCardio: _isCardio));
-      } else if (keepPlanPlaceholders) {
-        logs.add(
-          ExerciseLog(
-            name,
-            _isCardio
-                ? [SetLog('', '', '', isCardio: true, duration: '', intensity: '')]
-                : [SetLog('', '', '0')],
-            isCardio: _isCardio,
-          ),
-        );
       }
     }
 
@@ -1140,7 +1128,10 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
 
     setState(() {
       draft.nameController.text = n;
-      ensureExerciseInBank(n);
+      if (ironVibeTrainerSessionIsCompleted(widget.session) &&
+          !widget.session.isImportedHistory) {
+        ensureExerciseInBank(n);
+      }
       if (widget.previousSetsAsHints && !_isCardio) {
         ironVibeApplyClientPreviousSetHints(
           data: draft,
@@ -1160,6 +1151,19 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
     await DataService.saveData();
   }
 
+  Future<void> _setSessionCardio(bool cardio) async {
+    if (_isCardio == cardio) return;
+    if (ironVibeDraftHasOpposingModeInput(
+      _exercises,
+      switchingToCardio: cardio,
+    )) {
+      final ok = await ironVibeConfirmSwitchWorkoutType(context);
+      if (!ok || !mounted) return;
+    }
+    setState(() => _isCardio = cardio);
+    widget.onChanged?.call();
+  }
+
   void persistToSession({required bool keepPlanPlaceholders}) {
     widget.session.note = _noteController.text.trim();
     widget.session.exercises = _logsFromCurrentDraft(
@@ -1169,14 +1173,27 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
   }
 
   Future<void> _saveSession({bool celebrate = false}) async {
+    final hasLogged = _logsFromCurrentDraft().isNotEmpty;
     persistToSession(keepPlanPlaceholders: false);
-    unawaited(_clearAutoSaveDraft());
+    await _clearAutoSaveDraft();
+    if (hasLogged && !_isStrictlyFutureSession()) {
+      widget.session.isLiveCurrent = false;
+      widget.session.isCompleted = true;
+      widget.session.isScheduledPlan = false;
+      ironVibeSyncTrainerSessionInSchedule(widget.session);
+      for (final log in widget.session.exercises) {
+        if (ironVibeExerciseLogHasLoggedData(log) &&
+            !widget.session.isImportedHistory) {
+          ensureExerciseInBank(log.name);
+        }
+      }
+    }
     if (ironVibeTrainerSessionIsAbandonedStub(widget.session)) {
       _suppressPersist = true;
       ironVibeRemoveTrainerSession(widget.session);
     }
     DataService.saveData();
-    final didSave = widget.session.exercises.isNotEmpty;
+    final didSave = widget.session.isCompleted;
     if (celebrate && didSave && mounted) {
       await ironVibeShowWorkoutComplete(context);
     }
@@ -1191,13 +1208,56 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
     await _saveSession(celebrate: true);
   }
 
-  Future<void> saveAndExit() {
-    return _saveSession(celebrate: canSaveWorkout);
+  Future<void> saveAndExit() async {
+    if (widget.mode == TrainerSessionUiMode.live) {
+      if (!canSaveWorkout) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.saveWorkoutNothingToSave,
+            ),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        return;
+      }
+      await _saveSession(celebrate: true);
+      return;
+    }
+    persistToSession(keepPlanPlaceholders: true);
+    widget.session.isLiveCurrent = false;
+    widget.session.isCompleted = false;
+    widget.session.isScheduledPlan = true;
+    ironVibeSyncTrainerSessionInSchedule(widget.session);
+    await _clearAutoSaveDraft();
+    if (ironVibeTrainerSessionIsAbandonedStub(widget.session)) {
+      _suppressPersist = true;
+      ironVibeRemoveTrainerSession(widget.session);
+    }
+    DataService.saveData();
+    if (!mounted) return;
+    Navigator.pop(context);
   }
 
   void persistPlanAndStay() {
+    widget.session.isLiveCurrent = false;
+    widget.session.isCompleted = false;
     persistToSession(keepPlanPlaceholders: true);
     DataService.saveData();
+    _planDirty = false;
+  }
+
+  Future<void> persistPlanAndLeave() async {
+    persistPlanAndStay();
+    if (!mounted) return;
+    _suppressPersist = true;
+    await ironVibeShowWorkoutComplete(
+      context,
+      title: AppLocalizations.of(context)!.planChangesSavedTitle,
+    );
+    if (!mounted) return;
+    Navigator.pop(context);
   }
 
   void persistHistoryAndStay() {
@@ -1209,22 +1269,6 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
     unawaited(_clearAutoSaveDraft());
   }
 
-  Future<void> _startLiveFromPlan() async {
-    persistToSession(keepPlanPlaceholders: true);
-    DataService.saveData();
-    if (!mounted) return;
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => TrainerWorkoutSessionScreen(
-          session: widget.session,
-          mode: TrainerSessionUiMode.live,
-          previousSetsAsHints: true,
-        ),
-      ),
-    );
-  }
-
   bool _isStrictlyFutureSession() {
     final today = ironVibeDateOnly(DateTime.now());
     final sessionDay = ironVibeDateOnly(widget.session.dateTime);
@@ -1233,7 +1277,7 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
 
   Future<void> _deleteSession() async {
     final scheduledNotLogged =
-        !ironVibeTrainerSessionHasLoggedData(widget.session) ||
+        !ironVibeTrainerSessionIsCompleted(widget.session) ||
         _isStrictlyFutureSession();
     final confirmed = await ironVibeConfirmDeleteTrainerSessionDialog(
       context,
@@ -1305,10 +1349,7 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  setState(() => _isCardio = false);
-                  widget.onChanged?.call();
-                },
+                onTap: () => _setSessionCardio(false),
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
@@ -1327,10 +1368,7 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
             const SizedBox(width: 8),
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  setState(() => _isCardio = true);
-                  widget.onChanged?.call();
-                },
+                onTap: () => _setSessionCardio(true),
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
@@ -1395,13 +1433,19 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
               ),
             ),
           )
-        else if (_canStartLive)
-          SteelButton(
-            text: l.startWorkout,
-            icon: Icons.play_arrow_rounded,
-            onPressed: _startLiveFromPlan,
-            width: double.infinity,
-            isBig: true,
+        else if (widget.mode == TrainerSessionUiMode.plan)
+          IgnorePointer(
+            ignoring: !_planDirty,
+            child: Opacity(
+              opacity: _planDirty ? 1.0 : 0.45,
+              child: SteelButton(
+                text: l.saveClientChanges,
+                icon: Icons.check_rounded,
+                onPressed: persistPlanAndLeave,
+                width: double.infinity,
+                isBig: true,
+              ),
+            ),
           ),
         const SizedBox(height: 20),
         TextButton(
@@ -1450,6 +1494,8 @@ class _TrainerWorkoutSessionScreenState
       GlobalKey<_TrainerSessionEditorState>();
 
   bool get _isLive => widget.mode == TrainerSessionUiMode.live;
+  bool get _isHistory => widget.mode == TrainerSessionUiMode.history;
+  bool _printBusy = false;
 
   @override
   void initState() {
@@ -1478,9 +1524,31 @@ class _TrainerWorkoutSessionScreenState
     }
   }
 
+  Future<void> _printHistorySession() async {
+    if (_printBusy) return;
+    _printBusy = true;
+    try {
+      _editorKey.currentState?.persistHistoryAndStay();
+      if (!mounted) return;
+      final l = AppLocalizations.of(context)!;
+      if (ironVibeSessionPrintRows(widget.session).isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l.printSessionEmpty),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+        return;
+      }
+      await ironVibeShareSessionPdf(context, widget.session);
+    } finally {
+      _printBusy = false;
+    }
+  }
+
   void _leaveLiveWithoutSaving() {
     _editorKey.currentState?.discardAutoSavedDraft();
-    unawaited(ironVibeDiscardAbandonedTrainerSession(widget.session));
+    unawaited(ironVibeRevertOrDiscardLiveTrainerSession(widget.session));
     Navigator.of(context).pop();
   }
 
@@ -1498,9 +1566,7 @@ class _TrainerWorkoutSessionScreenState
               _persistQuietly();
             } else {
               _editorKey.currentState?.discardAutoSavedDraft();
-              unawaited(
-                ironVibeDiscardAbandonedTrainerSession(widget.session),
-              );
+              unawaited(ironVibeDiscardAbandonedTrainerSession(widget.session));
             }
             return;
           }
@@ -1612,6 +1678,14 @@ class _TrainerWorkoutSessionScreenState
                         icon: Icons.arrow_back,
                         onPressed: () => Navigator.maybePop(context),
                       ),
+                      trailing: _isHistory
+                          ? _ironVibeHeaderIconButton(
+                              context,
+                              icon: Icons.print_outlined,
+                              tooltip: AppLocalizations.of(context)!.printSession,
+                              onPressed: _printHistorySession,
+                            )
+                          : null,
                     ),
                   ),
                 ),
@@ -1653,72 +1727,99 @@ class _ClientListScreenState extends State<ClientListScreen> {
       context: context,
       builder: (ctx) {
         String name = '';
-        String goal = '';
+        String? error;
         final pal = IronVibePalette.of(ctx);
-        return AlertDialog(
-          backgroundColor: pal.dialog,
-          shape: ironVibeDialogShape(pal),
-          title: Text(
-            AppLocalizations.of(ctx)!.newClient,
-            style: TextStyle(
-              color: pal.textPrimary,
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                style: TextStyle(color: pal.textPrimary),
-                decoration: InputDecoration(
-                  hintText: AppLocalizations.of(ctx)!.clientName,
-                  hintStyle: TextStyle(color: pal.textHint),
-                  filled: true,
-                  fillColor: pal.inputFill,
-                ),
-                onChanged: (val) => name = val,
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                style: TextStyle(color: pal.textPrimary),
-                decoration: InputDecoration(
-                  hintText: AppLocalizations.of(ctx)!.clientGoal,
-                  hintStyle: TextStyle(color: pal.textHint),
-                  filled: true,
-                  fillColor: pal.inputFill,
-                ),
-                onChanged: (val) => goal = val,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: Text(
-                AppLocalizations.of(ctx)!.cancel,
-                style: TextStyle(color: pal.textMuted),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                if (name.isNotEmpty) {
-                  setState(() {
-                    clients.add(Client(name, goal));
-                  });
-                  DataService.saveData();
-                  Navigator.pop(ctx);
-                }
-              },
-              child: Text(
-                AppLocalizations.of(ctx)!.add,
+        return StatefulBuilder(
+          builder: (ctx, setLocal) {
+            final l = AppLocalizations.of(ctx)!;
+            return AlertDialog(
+              backgroundColor: pal.dialog,
+              shape: ironVibeDialogShape(pal),
+              title: Text(
+                l.newClient,
                 style: TextStyle(
                   color: pal.textPrimary,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-            ),
-          ],
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    style: TextStyle(color: pal.textPrimary),
+                    decoration: InputDecoration(
+                      hintText: l.clientName,
+                      hintStyle: TextStyle(color: pal.textHint),
+                      filled: true,
+                      fillColor: pal.inputFill,
+                    ),
+                    onChanged: (val) {
+                      name = val;
+                      if (error != null) setLocal(() => error = null);
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      l.clientNameCannotChange,
+                      style: TextStyle(
+                        color: pal.textMuted,
+                        fontSize: 12,
+                        height: 1.35,
+                      ),
+                    ),
+                  ),
+                  if (error != null) ...[
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        error!,
+                        style: const TextStyle(
+                          color: Colors.redAccent,
+                          fontSize: 12,
+                          height: 1.35,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: Text(
+                    l.cancel,
+                    style: TextStyle(color: pal.textMuted),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    final trimmed = name.trim();
+                    if (trimmed.isEmpty) return;
+                    if (ironVibeClientNameTaken(trimmed)) {
+                      setLocal(() => error = l.clientNameTaken);
+                      return;
+                    }
+                    setState(() {
+                      clients.add(Client(trimmed, '', id: ironVibeNewEntityId()));
+                    });
+                    DataService.saveData();
+                    Navigator.pop(ctx);
+                  },
+                  child: Text(
+                    l.add,
+                    style: TextStyle(
+                      color: pal.textPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -1726,8 +1827,14 @@ class _ClientListScreenState extends State<ClientListScreen> {
 
   String _clientMeta(BuildContext context, Client client) {
     final l = AppLocalizations.of(context)!;
-    final last = ironVibeLastLoggedTrainerSessionForClient(client.name);
-    final next = ironVibeNextTrainerSessionForClient(client.name);
+    final last = ironVibeLastLoggedTrainerSessionForClient(
+      client.name,
+      clientId: client.id,
+    );
+    final next = ironVibeNextTrainerSessionForClient(
+      client.name,
+      clientId: client.id,
+    );
     final lastText = last == null
         ? l.clientNeverTrained
         : l.clientLastSession(
@@ -1995,11 +2102,9 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
             ),
             TextButton(
               onPressed: () {
-                final today = ironVibeDateOnly(DateTime.now());
-                trainerSchedule.removeWhere((s) {
-                  return s.clientName == widget.client.name &&
-                      !ironVibeDateOnly(s.dateTime).isBefore(today);
-                });
+                trainerSchedule.removeWhere(
+                  (s) => ironVibeSessionBelongsToClientRecord(s, widget.client),
+                );
                 clients.remove(widget.client);
                 DataService.saveData();
                 Navigator.pop(ctx);
@@ -2019,7 +2124,11 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
     );
   }
 
-  InputDecoration _fieldDecoration(IronVibePalette pal, {String? hint, String? label}) {
+  InputDecoration _fieldDecoration(
+    IronVibePalette pal, {
+    String? hint,
+    String? label,
+  }) {
     return InputDecoration(
       hintText: hint,
       labelText: label,
@@ -2042,7 +2151,7 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
   TrainerSession? _abandonedTodayStub() {
     final now = DateTime.now();
     for (final s in trainerSchedule) {
-      if (s.clientName != widget.client.name) continue;
+      if (!ironVibeSessionBelongsToClientRecord(s, widget.client)) continue;
       if (!ironVibeIsSameCalendarDay(s.dateTime, now)) continue;
       if (ironVibeTrainerSessionIsAbandonedStub(s)) return s;
     }
@@ -2051,8 +2160,21 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
 
   Future<void> _openTodaySession({required bool repeatLast}) async {
     final l = AppLocalizations.of(context)!;
+    final name = widget.client.name;
+    final clientId = widget.client.id;
+    TrainerSession? target =
+        ironVibeLiveCurrentTrainerSessionForClient(name, clientId: clientId) ??
+        ironVibeTodaysIncompleteTrainerSessionForClient(
+          name,
+          clientId: clientId,
+        ) ??
+        _abandonedTodayStub();
+
     if (repeatLast) {
-      final last = ironVibeLastRepeatableTrainerSession(widget.client.name);
+      final last = ironVibeLastRepeatableTrainerSession(
+        name,
+        clientId: clientId,
+      );
       if (last == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -2062,56 +2184,34 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
         );
         return;
       }
-      final existing = _abandonedTodayStub();
-      if (existing != null) {
-        existing.exercises = ironVibeTrainerPlanLogsFrom(last);
-        await DataService.saveData();
-        if (!mounted) return;
-        await ironVibeOpenTrainerSession(
-          context,
-          existing,
-          mode: TrainerSessionUiMode.live,
+      if (target != null) {
+        if (!ironVibeTrainerSessionHasLoggedData(target)) {
+          target.exercises = ironVibeTrainerPlanLogsFrom(last);
+        }
+      } else {
+        target = ironVibeNewTrainerSession(
+          dateTime: DateTime.now(),
+          clientName: name,
+          clientId: clientId,
+          exercises: ironVibeTrainerPlanLogsFrom(last),
         );
-        if (mounted) setState(() {});
-        return;
+        trainerSchedule.add(target);
       }
-      final session = ironVibeNewTrainerSession(
+    } else if (target == null) {
+      target = ironVibeNewTrainerSession(
         dateTime: DateTime.now(),
-        clientName: widget.client.name,
-        exercises: ironVibeTrainerPlanLogsFrom(last),
+        clientName: name,
+        clientId: clientId,
       );
-      trainerSchedule.add(session);
-      await DataService.saveData();
-      if (!mounted) return;
-      await ironVibeOpenTrainerSession(
-        context,
-        session,
-        mode: TrainerSessionUiMode.live,
-      );
-      if (mounted) setState(() {});
-      return;
+      trainerSchedule.add(target);
     }
 
-    final existing = _abandonedTodayStub();
-    if (existing != null) {
-      await ironVibeOpenTrainerSession(
-        context,
-        existing,
-        mode: TrainerSessionUiMode.live,
-      );
-      if (mounted) setState(() {});
-      return;
-    }
-    final session = ironVibeNewTrainerSession(
-      dateTime: DateTime.now(),
-      clientName: widget.client.name,
-    );
-    trainerSchedule.add(session);
+    ironVibeMarkTrainerSessionLiveCurrent(target);
     await DataService.saveData();
     if (!mounted) return;
     await ironVibeOpenTrainerSession(
       context,
-      session,
+      target,
       mode: TrainerSessionUiMode.live,
     );
     if (mounted) setState(() {});
@@ -2140,8 +2240,8 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
   Widget build(BuildContext context) {
     final history =
         trainerSchedule
-            .where((s) => s.clientName == widget.client.name)
-            .where(ironVibeTrainerSessionHasLoggedData)
+            .where((s) => ironVibeSessionBelongsToClientRecord(s, widget.client))
+            .where(ironVibeTrainerSessionInClientHistory)
             .toList()
           ..sort((a, b) => b.dateTime.compareTo(a.dateTime));
 
@@ -2154,10 +2254,21 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
     final pal = IronVibePalette.of(context);
     final l = AppLocalizations.of(context)!;
     final dirty = _isDirty;
-    final last = ironVibeLastLoggedTrainerSessionForClient(widget.client.name);
-    final next = ironVibeNextTrainerSessionForClient(widget.client.name);
+    final last = ironVibeLastLoggedTrainerSessionForClient(
+      widget.client.name,
+      clientId: widget.client.id,
+    );
+    final next = ironVibeNextTrainerSessionForClient(
+      widget.client.name,
+      clientId: widget.client.id,
+    );
     final canRepeat =
-        ironVibeLastRepeatableTrainerSession(widget.client.name) != null;
+        ironVibeLastRepeatableTrainerSession(
+          widget.client.name,
+          clientId: widget.client.id,
+        ) !=
+        null;
+    final rhythm = ironVibeComputeRhythmFor(clientName: widget.client.name);
 
     return PopScope(
       canPop: !dirty,
@@ -2239,6 +2350,16 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                       style: TextStyle(color: pal.textMuted, fontSize: 13),
                     ),
                     const SizedBox(height: 20),
+                    if (rhythm.hasGauge) ...[
+                      IronVibeRhythmCard(
+                        snapshot: rhythm,
+                        onTap: () => ironVibeOpenRhythmInsight(
+                          context,
+                          clientName: widget.client.name,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
                     IronVibePrimaryCta(
                       label: ironVibeSentenceCase(l.startWorkout),
                       icon: Icons.play_arrow_rounded,
@@ -2271,9 +2392,10 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => PersonalProgressScreen(
-                                      clientName: widget.client.name,
-                                    ),
+                                    builder: (context) =>
+                                        PersonalProgressScreen(
+                                          clientName: widget.client.name,
+                                        ),
                                   ),
                                 );
                               },
@@ -2288,9 +2410,10 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                                 await Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => FavoriteExercisesScreen(
-                                      clientName: widget.client.name,
-                                    ),
+                                    builder: (context) =>
+                                        FavoriteExercisesScreen(
+                                          clientName: widget.client.name,
+                                        ),
                                   ),
                                 );
                                 if (mounted) setState(() {});
@@ -2313,10 +2436,7 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                       maxLines: 8,
                       keyboardType: TextInputType.multiline,
                       textInputAction: TextInputAction.newline,
-                      decoration: _fieldDecoration(
-                        pal,
-                        hint: l.clientGoal,
-                      ),
+                      decoration: _fieldDecoration(pal, hint: l.clientGoal),
                       onChanged: (_) => setState(() {}),
                     ),
                     const SizedBox(height: 12),
@@ -2414,6 +2534,7 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                               await ironVibeOpenTrainerSession(
                                 context,
                                 session,
+                                mode: TrainerSessionUiMode.history,
                               );
                               if (mounted) setState(() {});
                             },

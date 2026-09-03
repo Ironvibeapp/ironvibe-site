@@ -485,6 +485,11 @@ List<_InstructionChapter> _ironVibeInstructionChapters(AppLocalizations l) {
             description: l.instructionClientProfileDesc,
           ),
           _InstructionTopic(
+            icon: Icons.print_outlined,
+            label: l.instructionPrintSessionTitle,
+            description: l.instructionPrintSessionDesc,
+          ),
+          _InstructionTopic(
             icon: Icons.edit_calendar_outlined,
             label: l.instructionTrainerPlanTitle,
             description: l.instructionTrainerPlanDesc,

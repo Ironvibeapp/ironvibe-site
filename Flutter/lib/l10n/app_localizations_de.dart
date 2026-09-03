@@ -93,6 +93,39 @@ class AppLocalizationsDe extends AppLocalizations {
       'Fehler: Ungültige Backup-Datei ausgewählt';
 
   @override
+  String get importAthlete => 'ATHLET IMPORTIEREN';
+
+  @override
+  String importAthleteFound(int count) {
+    return 'Einträge zu $count Trainingseinheiten eines Athleten gefunden, der nicht auf der Liste steht.';
+  }
+
+  @override
+  String get importAthleteBackupOwn => 'ZUERST EIGENE DATEN SPEICHERN';
+
+  @override
+  String get importAthleteDecline => 'Nicht hinzufügen';
+
+  @override
+  String get importAthleteSuccess => 'Athlet hinzugefügt';
+
+  @override
+  String get importAthleteNotAthleteFile =>
+      'Diese Datei ist keine Athletentrainingshistorie.';
+
+  @override
+  String get importAthleteEmpty =>
+      'In dieser Datei wurden keine Trainingseinheiten gefunden.';
+
+  @override
+  String get importAthleteAlreadyImported =>
+      'Diese Trainingseinheiten sind bereits auf diesem Gerät.';
+
+  @override
+  String get importAthleteUseDedicatedButton =>
+      'Das sieht nach einer Athletenhistorie aus. Bitte „Athlet importieren“ verwenden.';
+
+  @override
   String get shareText => 'IronVibe Trainingsverlauf';
 
   @override
@@ -145,6 +178,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get workoutCompleteTitle => 'Training gespeichert';
+
+  @override
+  String get planChangesSavedTitle => 'Änderungen gespeichert';
 
   @override
   String get startWorkout => 'TRAINING STARTEN';
@@ -301,6 +337,14 @@ class AppLocalizationsDe extends AppLocalizations {
   String get clientName => 'Name';
 
   @override
+  String get clientNameCannotChange =>
+      'Der Name kann später nicht geändert werden.';
+
+  @override
+  String get clientNameTaken =>
+      'Dieser Name ist bereits vergeben. Bitte einen anderen wählen.';
+
+  @override
   String get clientGoal => 'Ziel';
 
   @override
@@ -351,6 +395,23 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get fillCurrentExerciseBeforeAdd =>
       'Schließe zuerst die aktuelle Übung ab, bevor du eine weitere hinzufügst.';
+
+  @override
+  String get switchWorkoutTypeTitle => 'Trainingstyp wechseln?';
+
+  @override
+  String get switchWorkoutTypeBody =>
+      'Bereits eingegebene Sätze des anderen Typs werden mit diesem Training nicht gespeichert.';
+
+  @override
+  String get switchWorkoutTypeConfirm => 'Wechseln';
+
+  @override
+  String get saveWorkoutNothingToSave =>
+      'Noch nichts zu speichern. Gewicht und Wiederholungen oder Cardio-Dauer eintragen.';
+
+  @override
+  String get importedHistoryBadge => 'Importiert';
 
   @override
   String get clientWorkoutHistoryEmpty => 'Noch keine Einheiten';
@@ -914,7 +975,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get instructionNavImportExportDesc =>
-      'Daten sichern oder übertragen mit JSON-Export und -Import im Statistikdialog. Backups enthalten Verlauf, Übungsliste, Favoriten und Muskelgruppen-Tags. Trainer-Backups sind vom persönlichen Verlauf getrennt.';
+      'Daten sichern oder übertragen mit JSON-Export und -Import im Statistikdialog. Backups enthalten Verlauf, Übungsliste, Favoriten und Muskelgruppen-Tags. Trainer-Backups sind vom persönlichen Verlauf getrennt. Ein Trainer kann die Historie eines Athleten als neuen Kunden importieren, ohne Übungsnamen zu vermischen.';
 
   @override
   String get instructionSectionHome => 'Startseite';
@@ -980,22 +1041,22 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get instructionRhythmIntro =>
-      'Nach ein paar Krafteinheiten erscheint oben auf dem Trainingsbildschirm eine Anzeige. Sie zeigt, an wie vielen Tagen pro Woche du in den letzten vier Wochen im Schnitt trainiert hast. Reine Cardio-Tage zählen nicht. Die Zahl ist ein Schnappschuss deiner Dichte — kein Ziel, das die App von dir erwartet.';
+      'Nach ein paar Krafteinheiten erscheint oben auf dem Trainingsbildschirm eine Anzeige. Sie zeigt, an wie vielen Tagen pro Woche du in den letzten vier Wochen im Schnitt trainiert hast. Reine Cardio-Tage zählen nicht. Die Zahl ist ein Schnappschuss deiner Dichte — kein Ziel, das die App von dir erwartet. Tippe darauf für einen Hinweis zu deinem Tempo und dazu, wie eine Woche aktiver Erholung aussehen kann.';
 
   @override
   String get instructionRhythmGaugeTitle => 'Tage pro Woche';
 
   @override
   String get instructionRhythmGaugeDesc =>
-      'Der Bogen füllt sich von 1 bis 6 Tagen pro Woche. Kühles Stahlgrau steht für ein ruhigeres Tempo, wärmere Töne für höhere Dichte. Die Anzeige erscheint, sobald in diesem Vier-Wochen-Fenster mindestens drei Krafttage liegen.';
+      'Der Bogen füllt sich von 1 bis 6 Tagen pro Woche. Die Farbe geht von Stahl über Gold zu Rost, wenn die Dichte steigt. Die Anzeige erscheint, sobald in diesem Vier-Wochen-Fenster mindestens drei Krafttage liegen.';
 
   @override
   String get instructionRhythmDeloadTitle =>
-      'Erinnerung an eine leichtere Woche';
+      'Erinnerung an eine Woche aktiver Erholung';
 
   @override
   String get instructionRhythmDeloadDesc =>
-      'Wenn du etwa zweieinhalb Tage pro Woche oder öfter mehrere Wochen ohne leichtere Woche trainierst, kann die App vorschlagen, Tonnage und Wiederholungen für eine Woche um etwa 30 % zu senken. Je mehr Tage pro Woche, desto früher die Erinnerung. Das ist eine Erinnerung, keine Vorschrift. Höchstens einmal pro Woche.';
+      'Wenn du etwa zweieinhalb Tage pro Woche oder öfter mehrere Wochen ohne Woche aktiver Erholung trainierst, kann die App daran erinnern, dass eine kurze Woche aktiver Erholung manchmal sinnvoll ist — etwa 30 % weniger Tonnage und Wiederholungen. Je mehr Tage pro Woche, desto früher die Erinnerung. Das ist eine Erinnerung, keine Vorschrift. Höchstens einmal pro Woche, und nur im eigenen Trainingsmodus — nicht automatisch für Kunden. Tippe auf die Anzeige eines Kunden für denselben Hinweis.';
 
   @override
   String get instructionSectionFavorites => 'Favoriten';
@@ -1101,7 +1162,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get instructionClientProfileDesc =>
-      'Vom Profil startet eine leere heutige Einheit. Graue Zahlen der letzten Einheit erscheinen erst nach der Übungsauswahl. Der Verlauf zeigt nur abgeschlossene Trainings. Zukünftige Einheiten planst du im Kalender. Fortschritt und Favoriten sind auf demselben Bildschirm. Ungespeicherte Profiländerungen fragen vor dem Verlassen nach.';
+      'Vom Profil startet eine leere heutige Einheit. Graue Zahlen der letzten Einheit erscheinen erst nach der Übungsauswahl. Der Verlauf zeigt nur abgeschlossene Trainings. Zukünftige Einheiten planst du im Kalender. Fortschritt und Favoriten sind auf demselben Bildschirm. Bei genug Kraftarbeit zuletzt zeigt eine Anzeige, wie oft die Person trainiert; tippe darauf für einen Hinweis zu Tempo und Pause. Ungespeicherte Profiländerungen fragen vor dem Verlassen nach.';
 
   @override
   String get instructionTrainerPlanTitle => 'Einheit planen';
@@ -1118,14 +1179,31 @@ class AppLocalizationsDe extends AppLocalizations {
       'Optional. Vom Kundenprofil oder als Schalter beim Hinzufügen einer Einheit im Kalender. Übernimmt die Übungen der letzten Einheit in das heutige Live-Training oder einen neuen Plan; vorherige Gewichte und Wiederholungen sind graue Hinweise, keine fertigen Sätze.';
 
   @override
+  String get printSession => 'Drucken';
+
+  @override
+  String get printSessionEmpty =>
+      'Noch nichts zu drucken. Trage mindestens einen Satz ein.';
+
+  @override
+  String get printSessionShareText => 'IronVibe-Einheit';
+
+  @override
+  String get instructionPrintSessionTitle => 'Einheit drucken';
+
+  @override
+  String get instructionPrintSessionDesc =>
+      'Bei einem abgeschlossenen Kundentraining macht das Druck-Symbol in der Kopfzeile ein A4-Blatt dieses Tages, so wie er erfasst wurde. Teilen, speichern oder drucken über den Systemdialog.';
+
+  @override
   String get rhythmPerWeek => 'pro Woche';
 
   @override
-  String get deloadNudgeTitle => 'Eine leichtere Woche?';
+  String get deloadNudgeTitle => 'Eine Woche aktiver Erholung?';
 
   @override
   String deloadNudgeBody(String rate, int weeks) {
-    return 'Du trainierst etwa $rate Tage pro Woche seit rund $weeks Wochen. Das ist eine Erinnerung, keine Vorschrift. Bei diesem Rhythmus lohnt oft eine Woche mit etwa 30 % weniger Tonnage und Wiederholungen.';
+    return 'Du trainierst etwa $rate Tage pro Woche seit rund $weeks Wochen. Das ist eine Erinnerung, dass eine kurze Woche aktiver Erholung manchmal sinnvoll ist — etwa 30 % weniger Tonnage und Wiederholungen. Keine Vorschrift.';
   }
 
   @override
@@ -1133,6 +1211,83 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get deloadNudgeOk => 'Verstanden';
+
+  @override
+  String get backupNudgeTitle => 'Sicherung speichern?';
+
+  @override
+  String get backupNudgeBody =>
+      'Deine Daten liegen nur auf diesem Gerät. Bei Verlust oder Speicherfehler ist der Verlauf weg. Teile jetzt eine Kopie oder verschiebe die Erinnerung um 28 Tage.';
+
+  @override
+  String get backupNudgeShare => 'Teilen';
+
+  @override
+  String get backupNudgeLater => 'Später';
+
+  @override
+  String get rhythmInsightTitle => 'Trainingsrhythmus';
+
+  @override
+  String rhythmInsightRateYou(String rate) {
+    return 'In den letzten vier Wochen trainierst du etwa $rate Tage pro Woche.';
+  }
+
+  @override
+  String rhythmInsightRateClient(String name, String rate) {
+    return '$name trainiert in den letzten vier Wochen etwa $rate Tage pro Woche.';
+  }
+
+  @override
+  String get rhythmInsightWindow =>
+      'Nur Krafttage zählen. Reine Cardio-Tage fallen raus. Das ist ein Schnappschuss der Dichte, kein Ziel.';
+
+  @override
+  String get rhythmInsightWhatTitle => 'Woche aktiver Erholung';
+
+  @override
+  String get rhythmInsightWhatBody =>
+      'Du senkst die Last bewusst, um dich zu erholen, ohne Form zu verlieren: dieselben Einheiten, aber etwa 30–50 % weniger Umfang. Oder du lässt die Krafttage aus und bleibst in Bewegung.';
+
+  @override
+  String get rhythmInsightAdviceLight =>
+      'Gerade ist der Rhythmus ruhig. Wenn die Einheiten nicht extrem hart sind, kannst du lange ohne geplante Woche aktiver Erholung weitermachen.';
+
+  @override
+  String get rhythmInsightAdviceSteady =>
+      'Gerade ist das ein stetiger Rhythmus. Wenn das Training hart ist, reicht oft alle paar Monate eine Woche aktiver Erholung.';
+
+  @override
+  String get rhythmInsightAdviceDense =>
+      'Gerade ist der Plan dicht. Wenn die Einheiten intensiv sind, lohnt alle zwei bis drei Monate eine Woche aktiver Erholung im Blick zu behalten.';
+
+  @override
+  String get rhythmInsightAdviceVeryDense =>
+      'Gerade ist das fast täglich. Wenn die Last hoch ist, gilt eine Woche aktiver Erholung etwa einmal im Monat vielen als sinnvoll.';
+
+  @override
+  String get rhythmInsightPraiseSteady =>
+      'Gut gemacht. Genau auf so einem Rhythmus hält langer Fortschritt.';
+
+  @override
+  String get rhythmInsightPraiseDense => 'Wirklich bei der Sache. Weiter so.';
+
+  @override
+  String get rhythmInsightPraiseVeryDense =>
+      'Sieht so aus, als würdest du die geheimen Fähigkeiten deines Körpers ausloten.';
+
+  @override
+  String get rhythmInsightRecentLighter =>
+      'In den letzten Daten ist bereits eine Woche aktiver Erholung zu sehen.';
+
+  @override
+  String rhythmInsightAccumulation(int weeks) {
+    return 'Etwa $weeks Wochen in dieser Dichte ohne Woche aktiver Erholung.';
+  }
+
+  @override
+  String get rhythmInsightDisclaimer =>
+      'Das ist ein Hinweis zur Orientierung, keine Vorschrift. Er erinnert nur daran, dass eine kurze Woche aktiver Erholung manchmal hilft. Wenn du dich gut fühlst, musst du nichts ändern.';
 
   @override
   String get instructionHubManifest =>

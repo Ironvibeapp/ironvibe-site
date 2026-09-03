@@ -91,6 +91,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get importInvalidBackupFile => 'Error: invalid backup file selected';
 
   @override
+  String get importAthlete => 'IMPORT ATHLETE';
+
+  @override
+  String importAthleteFound(int count) {
+    return 'Found records of $count workouts from an athlete who is not on your list.';
+  }
+
+  @override
+  String get importAthleteBackupOwn => 'SAVE MY DATA FIRST';
+
+  @override
+  String get importAthleteDecline => 'Don\'t add';
+
+  @override
+  String get importAthleteSuccess => 'Athlete added';
+
+  @override
+  String get importAthleteNotAthleteFile =>
+      'This file is not an athlete workout history.';
+
+  @override
+  String get importAthleteEmpty => 'No workouts found in this file.';
+
+  @override
+  String get importAthleteAlreadyImported =>
+      'These workouts are already on this device.';
+
+  @override
+  String get importAthleteUseDedicatedButton =>
+      'This looks like an athlete history file. Use Import athlete instead.';
+
+  @override
   String get shareText => 'IronVibe workout history';
 
   @override
@@ -143,6 +175,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get workoutCompleteTitle => 'Workout saved';
+
+  @override
+  String get planChangesSavedTitle => 'Changes saved';
 
   @override
   String get startWorkout => 'START WORKOUT';
@@ -299,6 +334,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientName => 'Name';
 
   @override
+  String get clientNameCannotChange => 'The name cannot be changed later.';
+
+  @override
+  String get clientNameTaken => 'This name is already in use. Choose another.';
+
+  @override
   String get clientGoal => 'Goal';
 
   @override
@@ -349,6 +390,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get fillCurrentExerciseBeforeAdd =>
       'Finish the current exercise before adding another one.';
+
+  @override
+  String get switchWorkoutTypeTitle => 'Switch workout type?';
+
+  @override
+  String get switchWorkoutTypeBody =>
+      'Sets already entered for the other type will not be saved with this workout.';
+
+  @override
+  String get switchWorkoutTypeConfirm => 'Switch';
+
+  @override
+  String get saveWorkoutNothingToSave =>
+      'Nothing to save yet. Add weight and reps, or duration for cardio.';
+
+  @override
+  String get importedHistoryBadge => 'Imported';
 
   @override
   String get clientWorkoutHistoryEmpty => 'No workouts yet';
@@ -911,7 +969,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get instructionNavImportExportDesc =>
-      'Back up or transfer your data using JSON export and import in the statistics dialog. Backups include workout history, your exercise list, favorites, and muscle-group tags. Coach backups are separate from personal history.';
+      'Back up or transfer your data using JSON export and import in the statistics dialog. Backups include workout history, your exercise list, favorites, and muscle-group tags. Coach backups are separate from personal history. A coach can also import an athlete\'s history as a new client without mixing exercise names.';
 
   @override
   String get instructionSectionHome => 'Home';
@@ -977,21 +1035,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get instructionRhythmIntro =>
-      'After a few strength sessions, a gauge appears at the top of your training screen. It shows how many days per week you have trained on average over the last four weeks. Cardio-only days are not counted. The number is a snapshot of your density — not a target the app expects you to hit.';
+      'After a few strength sessions, a gauge appears at the top of your training screen. It shows how many days per week you have trained on average over the last four weeks. Cardio-only days are not counted. The number is a snapshot of your density — not a target the app expects you to hit. Tap it for a note about your pace and what an active recovery week can look like.';
 
   @override
   String get instructionRhythmGaugeTitle => 'Days per week';
 
   @override
   String get instructionRhythmGaugeDesc =>
-      'The arc fills from 1 to 6 days per week. Cooler steel means a lighter pace; warmer tones mean higher density. The gauge appears once you have at least three strength days in that four-week window.';
+      'The arc fills from 1 to 6 days per week. Color moves from steel through gold toward rust as density rises. The gauge appears once you have at least three strength days in that four-week window.';
 
   @override
-  String get instructionRhythmDeloadTitle => 'Lighter week reminder';
+  String get instructionRhythmDeloadTitle => 'Active recovery week reminder';
 
   @override
   String get instructionRhythmDeloadDesc =>
-      'If you have been training about two and a half days a week or more for several weeks without a lighter week, the app may suggest cutting tonnage and reps by about 30% for one week. The more days per week, the sooner that reminder. It is a reminder, not a prescription. You will see it at most once per week.';
+      'If you have been training about two and a half days a week or more for several weeks without an active recovery week, the app may remind you that a short active recovery week is sometimes useful — about 30% less tonnage and reps. The more days per week, the sooner that reminder. It is a reminder, not a prescription. You will see it at most once per week, and only in your own training mode — not automatically for clients. Tap a client\'s gauge for the same note.';
 
   @override
   String get instructionSectionFavorites => 'Favorites';
@@ -1095,7 +1153,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get instructionClientProfileDesc =>
-      'Start today\'s session from the profile: an empty live workout. Grey last-session numbers appear only after you pick an exercise. History lists completed workouts only. Plan future sessions on the calendar. Progress and favorites are on the same screen. Unsaved profile edits ask before you leave.';
+      'Start today\'s session from the profile: an empty live workout. Grey last-session numbers appear only after you pick an exercise. History lists completed workouts only. Plan future sessions on the calendar. Progress and favorites are on the same screen. When there is enough recent strength work, a rhythm gauge shows how often they train; tap it for a note about pace and rest. Unsaved profile edits ask before you leave.';
 
   @override
   String get instructionTrainerPlanTitle => 'Plan a session';
@@ -1112,14 +1170,30 @@ class AppLocalizationsEn extends AppLocalizations {
       'Optional. From the client profile, or as a switch when adding a session on the calendar. Copies the last session\'s exercises into today\'s live workout or a new plan; previous weights and reps show as grey hints, not as finished sets.';
 
   @override
+  String get printSession => 'Print';
+
+  @override
+  String get printSessionEmpty => 'Nothing to print yet. Log at least one set.';
+
+  @override
+  String get printSessionShareText => 'IronVibe session';
+
+  @override
+  String get instructionPrintSessionTitle => 'Print a session';
+
+  @override
+  String get instructionPrintSessionDesc =>
+      'On a finished client workout, the print icon in the header makes an A4 sheet of that day as logged. Share, save, or print from the system sheet.';
+
+  @override
   String get rhythmPerWeek => 'per week';
 
   @override
-  String get deloadNudgeTitle => 'A lighter week?';
+  String get deloadNudgeTitle => 'An active recovery week?';
 
   @override
   String deloadNudgeBody(String rate, int weeks) {
-    return 'You\'ve been training about $rate days a week for roughly $weeks weeks. This is a reminder, not a prescription. At this density a lighter week — about 30% less tonnage and reps — is often worth considering.';
+    return 'You\'ve been training about $rate days a week for roughly $weeks weeks. This is a reminder that a short active recovery week is sometimes useful — about 30% less tonnage and reps. Not a prescription.';
   }
 
   @override
@@ -1127,6 +1201,83 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deloadNudgeOk => 'Got it';
+
+  @override
+  String get backupNudgeTitle => 'Save a backup?';
+
+  @override
+  String get backupNudgeBody =>
+      'Your data lives only on this device. If it is lost or storage fails, that history is gone. Share a copy now, or postpone for 28 days.';
+
+  @override
+  String get backupNudgeShare => 'Share';
+
+  @override
+  String get backupNudgeLater => 'Later';
+
+  @override
+  String get rhythmInsightTitle => 'Training rhythm';
+
+  @override
+  String rhythmInsightRateYou(String rate) {
+    return 'You\'ve trained about $rate days a week over the last four weeks.';
+  }
+
+  @override
+  String rhythmInsightRateClient(String name, String rate) {
+    return '$name has trained about $rate days a week over the last four weeks.';
+  }
+
+  @override
+  String get rhythmInsightWindow =>
+      'Only strength days count. Cardio-only days are ignored. This is a snapshot of density, not a target.';
+
+  @override
+  String get rhythmInsightWhatTitle => 'Active recovery week';
+
+  @override
+  String get rhythmInsightWhatBody =>
+      'A week of deliberately lighter work so you recover without losing fitness: same sessions, about 30–50% less volume. Or skip strength days and stay moving.';
+
+  @override
+  String get rhythmInsightAdviceLight =>
+      'Right now the rhythm is easy. If sessions are not extremely hard, you can go a long time without a planned active recovery week.';
+
+  @override
+  String get rhythmInsightAdviceSteady =>
+      'Right now this is a steady rhythm. If the work is hard, an active recovery week every few months is often enough.';
+
+  @override
+  String get rhythmInsightAdviceDense =>
+      'Right now this is a dense schedule. If sessions are intense, an active recovery week every two to three months is often worth keeping in mind.';
+
+  @override
+  String get rhythmInsightAdviceVeryDense =>
+      'Right now this is nearly every day. If the load is high, an active recovery week about once a month is a common way to stay durable.';
+
+  @override
+  String get rhythmInsightPraiseSteady =>
+      'Well done. This is the kind of rhythm long progress is built on.';
+
+  @override
+  String get rhythmInsightPraiseDense => 'Truly dedicated. Keep it up.';
+
+  @override
+  String get rhythmInsightPraiseVeryDense =>
+      'Looks like you\'re trying to unlock the secret capabilities of your body.';
+
+  @override
+  String get rhythmInsightRecentLighter =>
+      'An active recovery week already shows up in the recent data.';
+
+  @override
+  String rhythmInsightAccumulation(int weeks) {
+    return 'About $weeks weeks at this density without an active recovery week.';
+  }
+
+  @override
+  String get rhythmInsightDisclaimer =>
+      'This is a reference note, not a prescription. It only flags that a short active recovery week can help. If you feel fine, you can leave things as they are.';
 
   @override
   String get instructionHubManifest =>

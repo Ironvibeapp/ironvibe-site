@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 280" fill="none">
+  <circle fill="none" stroke="#C4A06A" stroke-width="8.2" stroke-linecap="butt" stroke-linejoin="miter" cx="100.20" cy="15.69" r="12.94"/>
+  <circle fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" cx="100.20" cy="15.69" r="8.16"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 93.14 29.02 V 69.02"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 106.86 29.02 V 69.02"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 68.24 70.59 Q 100.20 68.24 132.16 70.59"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 75.29 81.57 Q 100.20 78.43 125.10 81.57"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 89.22 86.27 V 250.98 L 100.20 279.22 L 110.78 250.98 V 86.27"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 100.20 87.84 V 250.98"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 0.78 64.71 L 43.14 64.71"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 8.63 80.78 L 30.20 80.78"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 3.92 69.80 L 83.14 244.71"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 43.92 69.80 L 83.92 201.57 L 83.92 245.49"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 54.90 94.90 L 83.92 163.92"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 67.84 75.29 L 67.84 87.84"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 199.61 64.71 L 157.25 64.71"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 191.76 80.78 L 170.20 80.78"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 196.47 69.80 L 117.25 244.71"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 156.47 69.80 L 116.47 201.57 L 116.47 245.49"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 145.49 94.90 L 116.47 163.92"/>
+  <path fill="none" stroke="#2A3140" stroke-width="7.2" stroke-linecap="butt" stroke-linejoin="miter" d="M 132.55 75.29 L 132.55 87.84"/>
+</svg>

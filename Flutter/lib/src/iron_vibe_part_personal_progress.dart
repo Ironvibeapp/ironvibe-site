@@ -3,7 +3,7 @@ part of 'package:fitness_app/main.dart';
 class _PersonalProgressAgg {
   bool sawOnlyCardioLogs = true;
   bool hasWeightedBest = false;
-  double bestVol = -1;
+  double bestEpley = -1;
   double bestW = 0;
   int bestR = 0;
   int maxBodyReps = 0;
@@ -38,9 +38,8 @@ double _ironVibeStrengthTonForExercise(ExerciseLog ex) {
   var t = 0.0;
   for (final s in ex.sets) {
     if (s.isCardio) continue;
-    final w = double.tryParse(s.weight.replaceAll(',', '.')) ?? 0;
-    final r = int.tryParse(s.reps) ?? 0;
-    if (w > 0 && r > 0) t += w * r;
+    final v = ironVibeVolumeKgFromFields(s.weight, s.reps);
+    if (v != null) t += v;
   }
   return t;
 }
@@ -58,20 +57,23 @@ void _ironVibePersonalProgressUpdateBest(Map<String, _PersonalProgressAgg> map, 
   agg.sawOnlyCardioLogs = false;
   for (final s in ex.sets) {
     if (s.isCardio) continue;
-    final w = double.tryParse(s.weight.replaceAll(',', '.')) ?? 0;
-    final r = int.tryParse(s.reps) ?? 0;
-    if (w > 0 && r > 0) {
-      final vol = w * r;
-      if (!agg.hasWeightedBest ||
-          vol > agg.bestVol ||
-          (vol == agg.bestVol && (w > agg.bestW || (w == agg.bestW && r > agg.bestR)))) {
+    final w = ironVibeParseQuantity(s.weight) ?? 0;
+    final r = ironVibeParseQuantity(s.reps) ?? 0;
+    if (w > 0 && r >= 1) {
+      final epley = ironVibeEpleyOneRmKg(w, r);
+      if (epley != null &&
+          (!agg.hasWeightedBest ||
+              epley > agg.bestEpley ||
+              (epley == agg.bestEpley &&
+                  (w > agg.bestW || (w == agg.bestW && r > agg.bestR))))) {
         agg.hasWeightedBest = true;
-        agg.bestVol = vol;
+        agg.bestEpley = epley;
         agg.bestW = w;
-        agg.bestR = r;
+        agg.bestR = r.round();
       }
-    } else if (w <= 0 && r > 0) {
-      if (r > agg.maxBodyReps) agg.maxBodyReps = r;
+    } else if (w <= 0 && r >= 1) {
+      final ri = r.round();
+      if (ri > agg.maxBodyReps) agg.maxBodyReps = ri;
     }
   }
 }
@@ -99,7 +101,10 @@ List<PersonalProgressRow> ironVibePersonalProgressRows({String? clientName}) {
       processSession(w.exercises);
     }
   } else {
-    for (final s in trainerSchedule.where((x) => x.clientName == clientName)) {
+    for (final s in trainerSchedule.where(
+      (x) => ironVibeSessionBelongsToClient(x, clientName: clientName),
+    )) {
+      if (!ironVibeTrainerSessionCountsAsWork(s)) continue;
       processSession(s.exercises);
     }
   }

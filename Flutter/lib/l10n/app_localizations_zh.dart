@@ -90,6 +90,35 @@ class AppLocalizationsZh extends AppLocalizations {
   String get importInvalidBackupFile => '错误：选择了无效的备份文件';
 
   @override
+  String get importAthlete => '导入运动员';
+
+  @override
+  String importAthleteFound(int count) {
+    return '发现 $count 条训练记录，来自名单中没有的运动员。';
+  }
+
+  @override
+  String get importAthleteBackupOwn => '先保存我的数据';
+
+  @override
+  String get importAthleteDecline => '不添加';
+
+  @override
+  String get importAthleteSuccess => '已添加运动员';
+
+  @override
+  String get importAthleteNotAthleteFile => '此文件不是运动员训练历史。';
+
+  @override
+  String get importAthleteEmpty => '此文件中没有训练记录。';
+
+  @override
+  String get importAthleteAlreadyImported => '这些训练已在此设备上。';
+
+  @override
+  String get importAthleteUseDedicatedButton => '这看起来像运动员历史。请使用「导入运动员」。';
+
+  @override
   String get shareText => 'IronVibe 训练记录';
 
   @override
@@ -142,6 +171,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get workoutCompleteTitle => '训练已保存';
+
+  @override
+  String get planChangesSavedTitle => '更改已保存';
 
   @override
   String get startWorkout => '开始训练';
@@ -292,6 +324,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get clientName => '姓名';
 
   @override
+  String get clientNameCannotChange => '姓名之后无法更改。';
+
+  @override
+  String get clientNameTaken => '此姓名已被使用。请选择另一个。';
+
+  @override
   String get clientGoal => '目标';
 
   @override
@@ -338,6 +376,21 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get fillCurrentExerciseBeforeAdd => '请先完成当前动作，再添加下一个。';
+
+  @override
+  String get switchWorkoutTypeTitle => '切换训练类型？';
+
+  @override
+  String get switchWorkoutTypeBody => '另一种类型已填写的组不会保存在这次训练中。';
+
+  @override
+  String get switchWorkoutTypeConfirm => '切换';
+
+  @override
+  String get saveWorkoutNothingToSave => '还没有可保存的内容。请填写重量和次数，或有氧时长。';
+
+  @override
+  String get importedHistoryBadge => '已导入';
 
   @override
   String get clientWorkoutHistoryEmpty => '暂无训练记录';
@@ -888,7 +941,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get instructionNavImportExportDesc =>
-      '在统计弹窗中通过 JSON 导出与导入备份或迁移数据。备份包含训练历史、动作列表、收藏和肌群标签。教练备份与个人历史分开。';
+      '在统计弹窗中通过 JSON 导出与导入备份或迁移数据。备份包含训练历史、动作列表、收藏和肌群标签。教练备份与个人历史分开。教练也可以将运动员历史导入为新客户，而不会混入动作名称。';
 
   @override
   String get instructionSectionHome => '主屏幕';
@@ -953,21 +1006,21 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get instructionRhythmIntro =>
-      '几次力量训练后，训练页顶部会出现量表。它显示过去四周平均每周练几天。纯有氧日不计。这是密度快照，不是应用要求你达到的目标。';
+      '几次力量训练后，训练页顶部会出现量表。它显示过去四周平均每周练几天。纯有氧日不计。这是密度快照，不是应用要求你达到的目标。点按可查看关于节奏以及主动恢复周是什么的说明。';
 
   @override
   String get instructionRhythmGaugeTitle => '每周天数';
 
   @override
   String get instructionRhythmGaugeDesc =>
-      '弧线从每周 1 天填到 6 天。偏冷的钢色表示较轻松的节奏，偏暖的色调表示密度更高。该四周窗口内至少有三个力量日时才会出现量表。';
+      '弧线从每周 1 天填到 6 天。颜色从钢色经金色再到锈色，密度越高越深。该四周窗口内至少有三个力量日时才会出现量表。';
 
   @override
-  String get instructionRhythmDeloadTitle => '轻松周提醒';
+  String get instructionRhythmDeloadTitle => '主动恢复周提醒';
 
   @override
   String get instructionRhythmDeloadDesc =>
-      '若你大约每周练两天半或更多、连续数周没有轻松周，应用可能建议把吨位和次数各减约 30%，休息一周。每周练得越密，提醒来得越早。这只是提醒，不是医嘱。每周最多出现一次。';
+      '若你大约每周练两天半或更多、连续数周没有主动恢复周，应用可能会提醒：有时短暂的主动恢复周有用——把吨位和次数各减约 30%。每周练得越密，提醒来得越早。这只是提醒，不是医嘱。每周最多出现一次，且只在个人训练模式，不会自动弹给客户。点按客户的量表可看同样的说明。';
 
   @override
   String get instructionSectionFavorites => '收藏';
@@ -1068,7 +1121,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get instructionClientProfileDesc =>
-      '从资料页开始今天的空白课次。上次的灰色数字只在选定动作后出现。历史只列出已完成的训练。未来课次在日历中安排。进步和收藏在同一页。未保存的资料修改在离开前会询问。';
+      '从资料页开始今天的空白课次。上次的灰色数字只在选定动作后出现。历史只列出已完成的训练。未来课次在日历中安排。进步和收藏在同一页。近期力量训练足够时，量表会显示他们练得多勤；点按可查看节奏与休息说明。未保存的资料修改在离开前会询问。';
 
   @override
   String get instructionTrainerPlanTitle => '预先排课';
@@ -1085,14 +1138,30 @@ class AppLocalizationsZh extends AppLocalizations {
       '可选。从客户资料，或在日历里添加课次时用开关。把上次课次的动作复制到今天的进行中训练或新计划；上次的重量和次数是灰色提示，不是已经完成的组。';
 
   @override
+  String get printSession => '打印';
+
+  @override
+  String get printSessionEmpty => '还没有可打印的内容。至少记下一组。';
+
+  @override
+  String get printSessionShareText => 'IronVibe 课次';
+
+  @override
+  String get instructionPrintSessionTitle => '打印课次';
+
+  @override
+  String get instructionPrintSessionDesc =>
+      '在已完成的客户训练里，顶栏的打印图标会按当天记录生成一张 A4。再通过系统菜单分享、保存或打印。';
+
+  @override
   String get rhythmPerWeek => '每周';
 
   @override
-  String get deloadNudgeTitle => '轻松一周？';
+  String get deloadNudgeTitle => '主动恢复周？';
 
   @override
   String deloadNudgeBody(String rate, int weeks) {
-    return '你大约每周训练 $rate 天，已持续约 $weeks 周。这只是提醒，不是医嘱。按这个密度，通常值得把吨位和次数各减约 30%，休息一周。';
+    return '你大约每周训练 $rate 天，已持续约 $weeks 周。这只是提醒：有时短暂的主动恢复周有用——把吨位和次数各减约 30%。不是医嘱。';
   }
 
   @override
@@ -1100,6 +1169,76 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get deloadNudgeOk => '知道了';
+
+  @override
+  String get backupNudgeTitle => '保存备份？';
+
+  @override
+  String get backupNudgeBody =>
+      '数据只存在这台设备上。如果丢失或存储损坏，训练记录就没了。现在分享一份副本，或推迟 28 天。';
+
+  @override
+  String get backupNudgeShare => '分享';
+
+  @override
+  String get backupNudgeLater => '以后再说';
+
+  @override
+  String get rhythmInsightTitle => '训练节奏';
+
+  @override
+  String rhythmInsightRateYou(String rate) {
+    return '过去四周你大约每周训练 $rate 天。';
+  }
+
+  @override
+  String rhythmInsightRateClient(String name, String rate) {
+    return '过去四周 $name 大约每周训练 $rate 天。';
+  }
+
+  @override
+  String get rhythmInsightWindow => '只计力量日。纯有氧日不计。这是密度快照，不是目标。';
+
+  @override
+  String get rhythmInsightWhatTitle => '主动恢复周';
+
+  @override
+  String get rhythmInsightWhatBody =>
+      '有意减轻负荷，好在不掉状态的前提下恢复：还是那些课，但总量大约少 30–50%。也可以跳过力量日，保持日常活动。';
+
+  @override
+  String get rhythmInsightAdviceLight => '眼下节奏偏轻松。如果课次不是特别狠，可以很久都不安排主动恢复周。';
+
+  @override
+  String get rhythmInsightAdviceSteady => '眼下节奏稳定。如果练得硬，隔几个月一个主动恢复周往往够了。';
+
+  @override
+  String get rhythmInsightAdviceDense => '眼下日程偏密。如果课次强度大，每两到三个月一个主动恢复周值得记在心里。';
+
+  @override
+  String get rhythmInsightAdviceVeryDense =>
+      '眼下几乎天天练。如果负荷高，大约每月一个主动恢复周，很多人觉得合理。';
+
+  @override
+  String get rhythmInsightPraiseSteady => '好样的。长久进步，靠的就是这种节奏。';
+
+  @override
+  String get rhythmInsightPraiseDense => '真的很投入。继续保持。';
+
+  @override
+  String get rhythmInsightPraiseVeryDense => '看来你在试着解锁身体的隐藏能力。';
+
+  @override
+  String get rhythmInsightRecentLighter => '近期数据里已经能看到一个主动恢复周。';
+
+  @override
+  String rhythmInsightAccumulation(int weeks) {
+    return '按这个密度大约已有 $weeks 周没有主动恢复周。';
+  }
+
+  @override
+  String get rhythmInsightDisclaimer =>
+      '这是参考说明，不是医嘱。只是提醒：有时短暂的主动恢复周会有帮助。如果自己觉得状态好，可以什么都不改。';
 
   @override
   String get instructionHubManifest => '没有内置动作库或现成计划。动作名称由你自己写；应用按你的方式记录数据。';

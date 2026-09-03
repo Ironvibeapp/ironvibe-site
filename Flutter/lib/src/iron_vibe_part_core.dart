@@ -74,6 +74,27 @@ bool _jsonPickBool(Map<String, dynamic> json, List<String> preferredKeys) {
   return false;
 }
 
+String? _jsonOptionalId(dynamic value) {
+  if (value == null) return null;
+  if (value is String) {
+    final t = value.trim();
+    return t.isEmpty ? null : t;
+  }
+  if (value is num) return value.toString();
+  final t = value.toString().trim();
+  return t.isEmpty ? null : t;
+}
+
+int? _jsonOptionalInt(dynamic value) {
+  if (value == null) return null;
+  if (value is int) return value;
+  if (value is num) return value.toInt();
+  if (value is String) return int.tryParse(value.trim());
+  return null;
+}
+
+String ironVibeNewEntityId() => const Uuid().v4();
+
 SetLog? _setLogFromDecoded(
   dynamic item, {
   required bool parentExerciseIsCardio,
@@ -103,10 +124,17 @@ SetLog? _setLogFromDecoded(
 /// Единый формат названий упражнений в хранилище и UI (без путаницы регистра).
 String normalizeExerciseName(String raw) => raw.trim().toUpperCase();
 
+/// Вес / повторы / длительность: trim, запятая как десятичная, double.
+double? ironVibeParseQuantity(String raw) {
+  final t = raw.trim().replaceAll(',', '.');
+  if (t.isEmpty) return null;
+  return double.tryParse(t);
+}
+
 /// Объём подхода, кг (вес × повторы), если оба значения валидны.
 double? ironVibeVolumeKgFromFields(String weightText, String repsText) {
-  final w = double.tryParse(weightText.trim().replaceAll(',', '.'));
-  final r = double.tryParse(repsText.trim().replaceAll(',', '.'));
+  final w = ironVibeParseQuantity(weightText);
+  final r = ironVibeParseQuantity(repsText);
   if (w == null || r == null || w <= 0 || r < 1) return null;
   return w * r;
 }
@@ -162,6 +190,62 @@ String normalizeRirStored(String raw) {
 bool rirIndicatesMeaningfulUserChoice(String raw) {
   final t = raw.trim();
   return t.isNotEmpty && t != '0';
+}
+
+void ironVibeRebuildExerciseBankFromCompletedWorkouts() {
+  for (final w in workoutHistory) {
+    for (final ex in w.exercises) {
+      ensureExerciseInBank(ex.name);
+    }
+  }
+  for (final s in trainerSchedule) {
+    if (s.isImportedHistory) continue;
+    if (!ironVibeTrainerSessionIsCompleted(s)) continue;
+    for (final ex in s.exercises) {
+      if (ironVibeExerciseLogHasLoggedData(ex)) ensureExerciseInBank(ex.name);
+    }
+  }
+}
+
+List<String> ironVibeCompletedExerciseNames({String? clientName}) {
+  final scoped = clientName?.trim();
+  final names = <String>[];
+  final seen = <String>{};
+  void add(String raw) {
+    final n = normalizeExerciseName(raw);
+    if (n.isEmpty || !seen.add(n)) return;
+    names.add(n);
+  }
+
+  if (scoped == null || scoped.isEmpty) {
+    for (final w in workoutHistory) {
+      for (final ex in w.exercises) {
+        add(ex.name);
+      }
+    }
+    return names;
+  }
+
+  for (final s in trainerSchedule) {
+    if (!ironVibeSessionBelongsToClient(s, clientName: scoped)) continue;
+    if (s.isImportedHistory) continue;
+    if (!ironVibeTrainerSessionIsCompleted(s)) continue;
+    for (final ex in s.exercises) {
+      if (ironVibeExerciseLogHasLoggedData(ex)) add(ex.name);
+    }
+  }
+  return names;
+}
+
+Iterable<String> ironVibeExerciseNameSuggestions({
+  required String query,
+  String? clientName,
+}) {
+  final q = normalizeExerciseName(query);
+  if (q.isEmpty) return const Iterable<String>.empty();
+  return exerciseBank.where(
+    (option) => normalizeExerciseName(option).contains(q),
+  );
 }
 
 void ensureExerciseInBank(String rawName) {
@@ -241,6 +325,11 @@ TrainerSession _normalizeTrainerSessionExerciseNames(TrainerSession s) {
     s.note,
     exercises: exs,
     id: s.id,
+    clientId: s.clientId,
+    isLiveCurrent: s.isLiveCurrent,
+    isScheduledPlan: s.isScheduledPlan,
+    isCompleted: s.isCompleted,
+    isImportedHistory: s.isImportedHistory,
   );
 }
 
@@ -280,9 +369,9 @@ Future<void> _deleteExportFile(String path) async {
   } catch (_) {}
 }
 
-/// Семейное правило версий: … 1.6.4+64, 1.6.5+65, 1.6.6+66 …
-const String kAppVersion = '1.6.6';
-const int kAppBuildNumber = 66;
+/// Семейное правило версий: … 1.7.4+74, 1.7.5+75 …
+const String kAppVersion = '1.7.5';
+const int kAppBuildNumber = 75;
 
 /// График прогресса: вес (красный) и повторы (как цвет фокуса полей).
 const Color kProgressChartWeightColor = Color(0xFFFF1744);

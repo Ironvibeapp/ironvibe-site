@@ -13,5 +13,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('IRONVIBE'), findsOneWidget);
+    expect(find.text('ironvibe.app'), findsOneWidget);
+    expect(find.text('t.me/IronVibeapp'), findsOneWidget);
+    expect(find.text('support@ironvibe.app'), findsOneWidget);
+    expect(find.text('Privacy policy'), findsOneWidget);
   });
 }

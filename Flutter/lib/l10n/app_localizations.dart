@@ -276,6 +276,60 @@ abstract class AppLocalizations {
   /// **'Error: invalid backup file selected'**
   String get importInvalidBackupFile;
 
+  /// No description provided for @importAthlete.
+  ///
+  /// In en, this message translates to:
+  /// **'IMPORT ATHLETE'**
+  String get importAthlete;
+
+  /// No description provided for @importAthleteFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Found records of {count} workouts from an athlete who is not on your list.'**
+  String importAthleteFound(int count);
+
+  /// No description provided for @importAthleteBackupOwn.
+  ///
+  /// In en, this message translates to:
+  /// **'SAVE MY DATA FIRST'**
+  String get importAthleteBackupOwn;
+
+  /// No description provided for @importAthleteDecline.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t add'**
+  String get importAthleteDecline;
+
+  /// No description provided for @importAthleteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Athlete added'**
+  String get importAthleteSuccess;
+
+  /// No description provided for @importAthleteNotAthleteFile.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is not an athlete workout history.'**
+  String get importAthleteNotAthleteFile;
+
+  /// No description provided for @importAthleteEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No workouts found in this file.'**
+  String get importAthleteEmpty;
+
+  /// No description provided for @importAthleteAlreadyImported.
+  ///
+  /// In en, this message translates to:
+  /// **'These workouts are already on this device.'**
+  String get importAthleteAlreadyImported;
+
+  /// No description provided for @importAthleteUseDedicatedButton.
+  ///
+  /// In en, this message translates to:
+  /// **'This looks like an athlete history file. Use Import athlete instead.'**
+  String get importAthleteUseDedicatedButton;
+
   /// No description provided for @shareText.
   ///
   /// In en, this message translates to:
@@ -383,6 +437,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Workout saved'**
   String get workoutCompleteTitle;
+
+  /// No description provided for @planChangesSavedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes saved'**
+  String get planChangesSavedTitle;
 
   /// No description provided for @startWorkout.
   ///
@@ -678,6 +738,18 @@ abstract class AppLocalizations {
   /// **'Name'**
   String get clientName;
 
+  /// No description provided for @clientNameCannotChange.
+  ///
+  /// In en, this message translates to:
+  /// **'The name cannot be changed later.'**
+  String get clientNameCannotChange;
+
+  /// No description provided for @clientNameTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'This name is already in use. Choose another.'**
+  String get clientNameTaken;
+
   /// No description provided for @clientGoal.
   ///
   /// In en, this message translates to:
@@ -773,6 +845,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Finish the current exercise before adding another one.'**
   String get fillCurrentExerciseBeforeAdd;
+
+  /// No description provided for @switchWorkoutTypeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch workout type?'**
+  String get switchWorkoutTypeTitle;
+
+  /// No description provided for @switchWorkoutTypeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Sets already entered for the other type will not be saved with this workout.'**
+  String get switchWorkoutTypeBody;
+
+  /// No description provided for @switchWorkoutTypeConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch'**
+  String get switchWorkoutTypeConfirm;
+
+  /// No description provided for @saveWorkoutNothingToSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to save yet. Add weight and reps, or duration for cardio.'**
+  String get saveWorkoutNothingToSave;
+
+  /// No description provided for @importedHistoryBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Imported'**
+  String get importedHistoryBadge;
 
   /// No description provided for @clientWorkoutHistoryEmpty.
   ///
@@ -1803,7 +1905,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionNavImportExportDesc.
   ///
   /// In en, this message translates to:
-  /// **'Back up or transfer your data using JSON export and import in the statistics dialog. Backups include workout history, your exercise list, favorites, and muscle-group tags. Coach backups are separate from personal history.'**
+  /// **'Back up or transfer your data using JSON export and import in the statistics dialog. Backups include workout history, your exercise list, favorites, and muscle-group tags. Coach backups are separate from personal history. A coach can also import an athlete\'s history as a new client without mixing exercise names.'**
   String get instructionNavImportExportDesc;
 
   /// No description provided for @instructionSectionHome.
@@ -1917,7 +2019,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionRhythmIntro.
   ///
   /// In en, this message translates to:
-  /// **'After a few strength sessions, a gauge appears at the top of your training screen. It shows how many days per week you have trained on average over the last four weeks. Cardio-only days are not counted. The number is a snapshot of your density — not a target the app expects you to hit.'**
+  /// **'After a few strength sessions, a gauge appears at the top of your training screen. It shows how many days per week you have trained on average over the last four weeks. Cardio-only days are not counted. The number is a snapshot of your density — not a target the app expects you to hit. Tap it for a note about your pace and what an active recovery week can look like.'**
   String get instructionRhythmIntro;
 
   /// No description provided for @instructionRhythmGaugeTitle.
@@ -1929,19 +2031,19 @@ abstract class AppLocalizations {
   /// No description provided for @instructionRhythmGaugeDesc.
   ///
   /// In en, this message translates to:
-  /// **'The arc fills from 1 to 6 days per week. Cooler steel means a lighter pace; warmer tones mean higher density. The gauge appears once you have at least three strength days in that four-week window.'**
+  /// **'The arc fills from 1 to 6 days per week. Color moves from steel through gold toward rust as density rises. The gauge appears once you have at least three strength days in that four-week window.'**
   String get instructionRhythmGaugeDesc;
 
   /// No description provided for @instructionRhythmDeloadTitle.
   ///
   /// In en, this message translates to:
-  /// **'Lighter week reminder'**
+  /// **'Active recovery week reminder'**
   String get instructionRhythmDeloadTitle;
 
   /// No description provided for @instructionRhythmDeloadDesc.
   ///
   /// In en, this message translates to:
-  /// **'If you have been training about two and a half days a week or more for several weeks without a lighter week, the app may suggest cutting tonnage and reps by about 30% for one week. The more days per week, the sooner that reminder. It is a reminder, not a prescription. You will see it at most once per week.'**
+  /// **'If you have been training about two and a half days a week or more for several weeks without an active recovery week, the app may remind you that a short active recovery week is sometimes useful — about 30% less tonnage and reps. The more days per week, the sooner that reminder. It is a reminder, not a prescription. You will see it at most once per week, and only in your own training mode — not automatically for clients. Tap a client\'s gauge for the same note.'**
   String get instructionRhythmDeloadDesc;
 
   /// No description provided for @instructionSectionFavorites.
@@ -2121,7 +2223,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionClientProfileDesc.
   ///
   /// In en, this message translates to:
-  /// **'Start today\'s session from the profile: an empty live workout. Grey last-session numbers appear only after you pick an exercise. History lists completed workouts only. Plan future sessions on the calendar. Progress and favorites are on the same screen. Unsaved profile edits ask before you leave.'**
+  /// **'Start today\'s session from the profile: an empty live workout. Grey last-session numbers appear only after you pick an exercise. History lists completed workouts only. Plan future sessions on the calendar. Progress and favorites are on the same screen. When there is enough recent strength work, a rhythm gauge shows how often they train; tap it for a note about pace and rest. Unsaved profile edits ask before you leave.'**
   String get instructionClientProfileDesc;
 
   /// No description provided for @instructionTrainerPlanTitle.
@@ -2148,6 +2250,36 @@ abstract class AppLocalizations {
   /// **'Optional. From the client profile, or as a switch when adding a session on the calendar. Copies the last session\'s exercises into today\'s live workout or a new plan; previous weights and reps show as grey hints, not as finished sets.'**
   String get instructionTrainerRepeatDesc;
 
+  /// No description provided for @printSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Print'**
+  String get printSession;
+
+  /// No description provided for @printSessionEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to print yet. Log at least one set.'**
+  String get printSessionEmpty;
+
+  /// No description provided for @printSessionShareText.
+  ///
+  /// In en, this message translates to:
+  /// **'IronVibe session'**
+  String get printSessionShareText;
+
+  /// No description provided for @instructionPrintSessionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Print a session'**
+  String get instructionPrintSessionTitle;
+
+  /// No description provided for @instructionPrintSessionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'On a finished client workout, the print icon in the header makes an A4 sheet of that day as logged. Share, save, or print from the system sheet.'**
+  String get instructionPrintSessionDesc;
+
   /// No description provided for @rhythmPerWeek.
   ///
   /// In en, this message translates to:
@@ -2157,13 +2289,13 @@ abstract class AppLocalizations {
   /// No description provided for @deloadNudgeTitle.
   ///
   /// In en, this message translates to:
-  /// **'A lighter week?'**
+  /// **'An active recovery week?'**
   String get deloadNudgeTitle;
 
   /// No description provided for @deloadNudgeBody.
   ///
   /// In en, this message translates to:
-  /// **'You\'ve been training about {rate} days a week for roughly {weeks} weeks. This is a reminder, not a prescription. At this density a lighter week — about 30% less tonnage and reps — is often worth considering.'**
+  /// **'You\'ve been training about {rate} days a week for roughly {weeks} weeks. This is a reminder that a short active recovery week is sometimes useful — about 30% less tonnage and reps. Not a prescription.'**
   String deloadNudgeBody(String rate, int weeks);
 
   /// No description provided for @deloadNudgeLater.
@@ -2177,6 +2309,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Got it'**
   String get deloadNudgeOk;
+
+  /// No description provided for @backupNudgeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save a backup?'**
+  String get backupNudgeTitle;
+
+  /// No description provided for @backupNudgeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data lives only on this device. If it is lost or storage fails, that history is gone. Share a copy now, or postpone for 28 days.'**
+  String get backupNudgeBody;
+
+  /// No description provided for @backupNudgeShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get backupNudgeShare;
+
+  /// No description provided for @backupNudgeLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get backupNudgeLater;
+
+  /// No description provided for @rhythmInsightTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Training rhythm'**
+  String get rhythmInsightTitle;
+
+  /// No description provided for @rhythmInsightRateYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve trained about {rate} days a week over the last four weeks.'**
+  String rhythmInsightRateYou(String rate);
+
+  /// No description provided for @rhythmInsightRateClient.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} has trained about {rate} days a week over the last four weeks.'**
+  String rhythmInsightRateClient(String name, String rate);
+
+  /// No description provided for @rhythmInsightWindow.
+  ///
+  /// In en, this message translates to:
+  /// **'Only strength days count. Cardio-only days are ignored. This is a snapshot of density, not a target.'**
+  String get rhythmInsightWindow;
+
+  /// No description provided for @rhythmInsightWhatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Active recovery week'**
+  String get rhythmInsightWhatTitle;
+
+  /// No description provided for @rhythmInsightWhatBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A week of deliberately lighter work so you recover without losing fitness: same sessions, about 30–50% less volume. Or skip strength days and stay moving.'**
+  String get rhythmInsightWhatBody;
+
+  /// No description provided for @rhythmInsightAdviceLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Right now the rhythm is easy. If sessions are not extremely hard, you can go a long time without a planned active recovery week.'**
+  String get rhythmInsightAdviceLight;
+
+  /// No description provided for @rhythmInsightAdviceSteady.
+  ///
+  /// In en, this message translates to:
+  /// **'Right now this is a steady rhythm. If the work is hard, an active recovery week every few months is often enough.'**
+  String get rhythmInsightAdviceSteady;
+
+  /// No description provided for @rhythmInsightAdviceDense.
+  ///
+  /// In en, this message translates to:
+  /// **'Right now this is a dense schedule. If sessions are intense, an active recovery week every two to three months is often worth keeping in mind.'**
+  String get rhythmInsightAdviceDense;
+
+  /// No description provided for @rhythmInsightAdviceVeryDense.
+  ///
+  /// In en, this message translates to:
+  /// **'Right now this is nearly every day. If the load is high, an active recovery week about once a month is a common way to stay durable.'**
+  String get rhythmInsightAdviceVeryDense;
+
+  /// No description provided for @rhythmInsightPraiseSteady.
+  ///
+  /// In en, this message translates to:
+  /// **'Well done. This is the kind of rhythm long progress is built on.'**
+  String get rhythmInsightPraiseSteady;
+
+  /// No description provided for @rhythmInsightPraiseDense.
+  ///
+  /// In en, this message translates to:
+  /// **'Truly dedicated. Keep it up.'**
+  String get rhythmInsightPraiseDense;
+
+  /// No description provided for @rhythmInsightPraiseVeryDense.
+  ///
+  /// In en, this message translates to:
+  /// **'Looks like you\'re trying to unlock the secret capabilities of your body.'**
+  String get rhythmInsightPraiseVeryDense;
+
+  /// No description provided for @rhythmInsightRecentLighter.
+  ///
+  /// In en, this message translates to:
+  /// **'An active recovery week already shows up in the recent data.'**
+  String get rhythmInsightRecentLighter;
+
+  /// No description provided for @rhythmInsightAccumulation.
+  ///
+  /// In en, this message translates to:
+  /// **'About {weeks} weeks at this density without an active recovery week.'**
+  String rhythmInsightAccumulation(int weeks);
+
+  /// No description provided for @rhythmInsightDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a reference note, not a prescription. It only flags that a short active recovery week can help. If you feel fine, you can leave things as they are.'**
+  String get rhythmInsightDisclaimer;
 
   /// No description provided for @instructionHubManifest.
   ///

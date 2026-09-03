@@ -92,6 +92,38 @@ class AppLocalizationsRu extends AppLocalizations {
       'Ошибка: выбран некорректный файл резервной копии';
 
   @override
+  String get importAthlete => 'ИМПОРТ АТЛЕТА';
+
+  @override
+  String importAthleteFound(int count) {
+    return 'Найдены записи о $count тренировках атлета, которого нет в списке.';
+  }
+
+  @override
+  String get importAthleteBackupOwn => 'СНАЧАЛА СОХРАНИТЬ СВОИ ДАННЫЕ';
+
+  @override
+  String get importAthleteDecline => 'Отказаться';
+
+  @override
+  String get importAthleteSuccess => 'Атлет добавлен';
+
+  @override
+  String get importAthleteNotAthleteFile =>
+      'Этот файл не является историей тренировок атлета.';
+
+  @override
+  String get importAthleteEmpty => 'В этом файле нет тренировок.';
+
+  @override
+  String get importAthleteAlreadyImported =>
+      'Эти тренировки уже есть на устройстве.';
+
+  @override
+  String get importAthleteUseDedicatedButton =>
+      'Это похоже на историю атлета. Используйте «Импорт атлета».';
+
+  @override
   String get shareText => 'История тренировок IronVibe';
 
   @override
@@ -144,6 +176,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get workoutCompleteTitle => 'Тренировка сохранена';
+
+  @override
+  String get planChangesSavedTitle => 'Изменения сохранены';
 
   @override
   String get startWorkout => 'НАЧАТЬ ТРЕНИРОВКУ';
@@ -301,6 +336,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get clientName => 'Имя';
 
   @override
+  String get clientNameCannotChange => 'Имя потом изменить нельзя.';
+
+  @override
+  String get clientNameTaken => 'Это имя уже занято. Выберите другое.';
+
+  @override
   String get clientGoal => 'Цель';
 
   @override
@@ -351,6 +392,23 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get fillCurrentExerciseBeforeAdd =>
       'Сначала заполните текущее упражнение.';
+
+  @override
+  String get switchWorkoutTypeTitle => 'Сменить тип тренировки?';
+
+  @override
+  String get switchWorkoutTypeBody =>
+      'Подходы другого типа не сохранятся в этой тренировке.';
+
+  @override
+  String get switchWorkoutTypeConfirm => 'Сменить';
+
+  @override
+  String get saveWorkoutNothingToSave =>
+      'Пока нечего сохранять. Укажите вес и повторы или длительность кардио.';
+
+  @override
+  String get importedHistoryBadge => 'Импорт';
 
   @override
   String get clientWorkoutHistoryEmpty => 'История пуста';
@@ -913,7 +971,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionNavImportExportDesc =>
-      'Резервная копия и перенос данных через экспорт и импорт JSON в окне статистики. В копию входят история, список упражнений, избранное и метки мышечных групп. Тренерская копия отдельна от личной истории.';
+      'Резервная копия и перенос данных через экспорт и импорт JSON в окне статистики. В копию входят история, список упражнений, избранное и метки мышечных групп. Тренерская копия отдельна от личной истории. Тренер может импортировать историю атлета как нового клиента, не смешивая названия упражнений.';
 
   @override
   String get instructionSectionHome => 'Главный экран';
@@ -979,21 +1037,22 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionRhythmIntro =>
-      'После нескольких силовых тренировок вверху экрана тренировок появляется шкала. Она показывает, сколько дней в неделю вы тренировались в среднем за последние четыре недели. Дни только с кардио не считаются. Это снимок плотности, а не цель, которую приложение требует достичь.';
+      'После нескольких силовых тренировок вверху экрана тренировок появляется шкала. Она показывает, сколько дней в неделю вы тренировались в среднем за последние четыре недели. Дни только с кардио не считаются. Это снимок плотности, а не цель, которую приложение требует достичь. Нажмите на шкалу — там заметка о вашем ритме и о том, что такое неделя активного отдыха.';
 
   @override
   String get instructionRhythmGaugeTitle => 'Дней в неделю';
 
   @override
   String get instructionRhythmGaugeDesc =>
-      'Дуга заполняется от 1 до 6 дней в неделю. Холодный стальной оттенок — более спокойный ритм, тёплые тона — выше плотность. Шкала появляется, когда в этом четырёхнедельном окне есть хотя бы три силовых дня.';
+      'Дуга заполняется от 1 до 6 дней в неделю. Цвет идёт от стали через золото к ржавчине, когда плотность растёт. Шкала появляется, когда в этом четырёхнедельном окне есть хотя бы три силовых дня.';
 
   @override
-  String get instructionRhythmDeloadTitle => 'Напоминание о лёгкой неделе';
+  String get instructionRhythmDeloadTitle =>
+      'Напоминание о неделе активного отдыха';
 
   @override
   String get instructionRhythmDeloadDesc =>
-      'Если вы тренируетесь примерно два с половиной дня в неделю или чаще несколько недель подряд без более лёгкой недели, приложение может предложить снизить тоннаж и повторения примерно на 30% на одну неделю. Чем больше дней в неделю, тем раньше появится напоминание. Это напоминание, не предписание. Не чаще одного раза в неделю.';
+      'Если вы тренируетесь примерно два с половиной дня в неделю или чаще несколько недель подряд без недели активного отдыха, приложение может напомнить, что иногда полезна короткая неделя активного отдыха — примерно на 30% меньше тоннажа и повторений. Чем больше дней в неделю, тем раньше появится напоминание. Это напоминание, не предписание. Не чаще одного раза в неделю и только в личном режиме — не автоматически по клиентам. У клиента ту же заметку открывает нажатие на шкалу.';
 
   @override
   String get instructionSectionFavorites => 'Избранное';
@@ -1098,7 +1157,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionClientProfileDesc =>
-      'Из профиля начинается сегодняшняя пустая живая сессия. Серые цифры прошлого раза появляются только после выбора упражнения. В истории — только завершённые тренировки. Планируйте на другие даты в календаре. Прогресс и избранное — на том же экране. Несохранённые правки профиля спрашивают подтверждение перед выходом.';
+      'Из профиля начинается сегодняшняя пустая живая сессия. Серые цифры прошлого раза появляются только после выбора упражнения. В истории — только завершённые тренировки. Планируйте на другие даты в календаре. Прогресс и избранное — на том же экране. Если силовых дней достаточно, шкала показывает, как часто клиент ходит в зал; нажмите, чтобы открыть заметку о ритме и отдыхе. Несохранённые правки профиля спрашивают подтверждение перед выходом.';
 
   @override
   String get instructionTrainerPlanTitle => 'Спланировать сессию';
@@ -1115,14 +1174,31 @@ class AppLocalizationsRu extends AppLocalizations {
       'По желанию. Из профиля клиента или переключателем при добавлении сессии в календаре. Копирует упражнения прошлой сессии в сегодняшнюю живую тренировку или в новый план; прошлые вес и повторы — серые подсказки, а не готовые подходы.';
 
   @override
+  String get printSession => 'Печать';
+
+  @override
+  String get printSessionEmpty =>
+      'Печатать пока нечего. Запишите хотя бы один подход.';
+
+  @override
+  String get printSessionShareText => 'Тренировка IronVibe';
+
+  @override
+  String get instructionPrintSessionTitle => 'Печать сессии';
+
+  @override
+  String get instructionPrintSessionDesc =>
+      'В завершённой тренировке клиента иконка печати в шапке собирает лист A4 с тем, что записано в этот день. Дальше системный лист: печать, файл или отправка.';
+
+  @override
   String get rhythmPerWeek => 'в неделю';
 
   @override
-  String get deloadNudgeTitle => 'Неделя полегче?';
+  String get deloadNudgeTitle => 'Неделя активного отдыха?';
 
   @override
   String deloadNudgeBody(String rate, int weeks) {
-    return 'Вы тренируетесь около $rate дней в неделю уже примерно $weeks нед. Это напоминание, не предписание. При таком ритме часто стоит снизить тоннаж и повторения примерно на 30% на неделю.';
+    return 'Вы тренируетесь около $rate дней в неделю уже примерно $weeks нед. Это напоминание, что иногда полезна короткая неделя активного отдыха — примерно на 30% меньше тоннажа и повторений. Не предписание.';
   }
 
   @override
@@ -1130,6 +1206,84 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get deloadNudgeOk => 'Понятно';
+
+  @override
+  String get backupNudgeTitle => 'Сохранить копию?';
+
+  @override
+  String get backupNudgeBody =>
+      'Данные хранятся только на этом устройстве. Если телефон потеряется или сбой накопителя — история пропадёт. Поделитесь копией сейчас или отложите на 28 дней.';
+
+  @override
+  String get backupNudgeShare => 'Поделиться';
+
+  @override
+  String get backupNudgeLater => 'Отложить';
+
+  @override
+  String get rhythmInsightTitle => 'Ритм тренировок';
+
+  @override
+  String rhythmInsightRateYou(String rate) {
+    return 'За последние четыре недели вы тренируетесь около $rate дней в неделю.';
+  }
+
+  @override
+  String rhythmInsightRateClient(String name, String rate) {
+    return 'За последние четыре недели $name ходит в зал около $rate дней в неделю.';
+  }
+
+  @override
+  String get rhythmInsightWindow =>
+      'Считаются только силовые дни. Дни только с кардио не входят. Это снимок плотности, а не цель.';
+
+  @override
+  String get rhythmInsightWhatTitle => 'Неделя активного отдыха';
+
+  @override
+  String get rhythmInsightWhatBody =>
+      'Сознательно снижаете нагрузку, чтобы восстановиться, не теряя форму: те же тренировки, но примерно на 30–50% меньше объёма. Можно и пропустить силовые, оставаясь в движении.';
+
+  @override
+  String get rhythmInsightAdviceLight =>
+      'Сейчас ритм спокойный. Если сессии не зверские, так можно идти очень долго без плановой недели активного отдыха.';
+
+  @override
+  String get rhythmInsightAdviceSteady =>
+      'Сейчас устойчивый ритм. Если тренировки тяжёлые, недели активного отдыха раз в несколько месяцев обычно достаточно.';
+
+  @override
+  String get rhythmInsightAdviceDense =>
+      'Сейчас плотный график. Если тренировки интенсивные, неделю активного отдыха раз в два–три месяца часто стоит иметь в виду.';
+
+  @override
+  String get rhythmInsightAdviceVeryDense =>
+      'Сейчас почти каждый день. Если нагрузка высокая, неделю активного отдыха примерно раз в месяц многие считают разумной.';
+
+  @override
+  String get rhythmInsightPraiseSteady =>
+      'Молодец. Такой ритм как раз из тех, на которых держатся долгие прогрессы.';
+
+  @override
+  String get rhythmInsightPraiseDense =>
+      'По-настоящему предан делу. Так держать.';
+
+  @override
+  String get rhythmInsightPraiseVeryDense =>
+      'Похоже, вы пробуете раскрыть секретные возможности организма.';
+
+  @override
+  String get rhythmInsightRecentLighter =>
+      'В недавних данных уже видна неделя активного отдыха.';
+
+  @override
+  String rhythmInsightAccumulation(int weeks) {
+    return 'Уже около $weeks нед. в таком ритме без недели активного отдыха.';
+  }
+
+  @override
+  String get rhythmInsightDisclaimer =>
+      'Это справочная заметка, а не указание. Она лишь напоминает, что иногда полезна короткая неделя активного отдыха. Если чувствуете себя хорошо — менять ничего не нужно.';
 
   @override
   String get instructionHubManifest =>

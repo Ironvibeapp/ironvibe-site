@@ -113,9 +113,21 @@ void ironVibeRenameMuscleGroup(String oldName, String newName) {
   ironVibeExerciseMuscleGroups.putIfAbsent(n, () => group);
 }
 
-void ironVibeMergeMuscleGroupsFromBackup(dynamic decoded) {
+void ironVibeMergeMuscleGroupsFromBackup(
+  dynamic decoded, {
+  Iterable<String>? onlyNames,
+}) {
   final incoming = ironVibeParseExerciseMuscleGroups(decoded);
+  Set<String>? allow;
+  if (onlyNames != null) {
+    allow = <String>{};
+    for (final raw in onlyNames) {
+      final name = normalizeExerciseName(raw);
+      if (name.isNotEmpty) allow.add(name);
+    }
+  }
   incoming.forEach((name, group) {
+    if (allow != null && !allow.contains(name)) return;
     ironVibeExerciseMuscleGroups.putIfAbsent(name, () => group);
   });
 }
@@ -150,17 +162,26 @@ class _MuscleGroupDialogResult {
   final IronVibeMuscleGroup? group;
   final bool deferred;
   final bool cleared;
+  final bool suppressed;
   const _MuscleGroupDialogResult.group(this.group)
     : deferred = false,
-      cleared = false;
+      cleared = false,
+      suppressed = false;
   const _MuscleGroupDialogResult.later()
     : group = null,
       deferred = true,
-      cleared = false;
+      cleared = false,
+      suppressed = false;
   const _MuscleGroupDialogResult.clear()
     : group = null,
       deferred = false,
-      cleared = true;
+      cleared = true,
+      suppressed = false;
+  const _MuscleGroupDialogResult.suppressed()
+    : group = null,
+      deferred = false,
+      cleared = false,
+      suppressed = true;
 }
 
 Future<_MuscleGroupDialogResult?> _ironVibeShowMuscleGroupPicker({
@@ -170,9 +191,19 @@ Future<_MuscleGroupDialogResult?> _ironVibeShowMuscleGroupPicker({
   required bool allowLater,
   required bool allowClear,
 }) async {
+  if (!context.mounted) return const _MuscleGroupDialogResult.suppressed();
+  final existingRoute = ModalRoute.of(context);
+  if (existingRoute == null || !existingRoute.isCurrent) {
+    return const _MuscleGroupDialogResult.suppressed();
+  }
+
   FocusManager.instance.primaryFocus?.unfocus();
   await Future<void>.delayed(const Duration(milliseconds: 80));
-  if (!context.mounted) return null;
+  if (!context.mounted) return const _MuscleGroupDialogResult.suppressed();
+  final route = ModalRoute.of(context);
+  if (route == null || !route.isCurrent) {
+    return const _MuscleGroupDialogResult.suppressed();
+  }
 
   final pal = IronVibePalette.of(context);
   final compact = MediaQuery.sizeOf(context).shortestSide < 600;
@@ -462,6 +493,7 @@ Future<void> ironVibeMaybePromptMuscleGroup(
     _ironVibeMuscleGroupPromptDeferred.add(name);
     return;
   }
+  if (result.suppressed) return;
   if (result.cleared || result.group == null) return;
   await ironVibeSetMuscleGroup(name, result.group);
 }
@@ -587,7 +619,8 @@ DateTime? ironVibeLastTrainedAt(String rawName, {String? clientName}) {
     }
   } else {
     for (final s in trainerSchedule) {
-      if (s.clientName != scoped) continue;
+      if (!ironVibeSessionBelongsToClient(s, clientName: scoped)) continue;
+      if (!ironVibeTrainerSessionCountsAsWork(s)) continue;
       consider(s.dateTime, s.exercises);
     }
   }
@@ -622,7 +655,8 @@ ExerciseLog ironVibeLastExerciseLogFor(
     }
   } else {
     for (final s in trainerSchedule) {
-      if (s.clientName != scoped) continue;
+      if (!ironVibeSessionBelongsToClient(s, clientName: scoped)) continue;
+      if (!ironVibeTrainerSessionCountsAsWork(s)) continue;
       if (excludeSession != null &&
           _ironVibeSameTrainerSession(s, excludeSession)) {
         continue;
@@ -845,6 +879,7 @@ Future<void> ironVibeStartQuickWorkout(
           .toList(),
     );
     trainerSchedule.add(session);
+    ironVibeMarkTrainerSessionLiveCurrent(session);
     await DataService.saveData();
     if (!context.mounted) return;
     await Navigator.push(

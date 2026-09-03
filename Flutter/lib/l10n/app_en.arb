@@ -27,6 +27,22 @@
   "importFileAccessError": "File access error",
   "importInvalidJson": "Invalid JSON format",
   "importInvalidBackupFile": "Error: invalid backup file selected",
+  "importAthlete": "IMPORT ATHLETE",
+  "importAthleteFound": "Found records of {count} workouts from an athlete who is not on your list.",
+  "@importAthleteFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importAthleteBackupOwn": "SAVE MY DATA FIRST",
+  "importAthleteDecline": "Don't add",
+  "importAthleteSuccess": "Athlete added",
+  "importAthleteNotAthleteFile": "This file is not an athlete workout history.",
+  "importAthleteEmpty": "No workouts found in this file.",
+  "importAthleteAlreadyImported": "These workouts are already on this device.",
+  "importAthleteUseDedicatedButton": "This looks like an athlete history file. Use Import athlete instead.",
   "shareText": "IronVibe workout history",
   "monthStats": "THIS MONTH",
   "yearStats": "THIS YEAR",
@@ -45,6 +61,7 @@
   "finishWorkoutConfirmBody": "The workout will be saved.",
   "finishWorkoutConfirmAction": "Finish",
   "workoutCompleteTitle": "Workout saved",
+  "planChangesSavedTitle": "Changes saved",
   "startWorkout": "START WORKOUT",
   "quickWorkout": "QUICK WORKOUT",
   "quickWorkoutFullBody": "FULL BODY",
@@ -94,6 +111,8 @@
   "newClient": "NEW CLIENT",
   "editClient": "EDIT",
   "clientName": "Name",
+  "clientNameCannotChange": "The name cannot be changed later.",
+  "clientNameTaken": "This name is already in use. Choose another.",
   "clientGoal": "Goal",
   "clientWeight": "Weight",
   "clientHeight": "Height",
@@ -110,6 +129,11 @@
   "workoutRecoveryDelete": "Delete workout",
   "workoutRecoverySessionMissing": "The scheduled client workout was removed. The unsaved draft has been cleared.",
   "fillCurrentExerciseBeforeAdd": "Finish the current exercise before adding another one.",
+  "switchWorkoutTypeTitle": "Switch workout type?",
+  "switchWorkoutTypeBody": "Sets already entered for the other type will not be saved with this workout.",
+  "switchWorkoutTypeConfirm": "Switch",
+  "saveWorkoutNothingToSave": "Nothing to save yet. Add weight and reps, or duration for cardio.",
+  "importedHistoryBadge": "Imported",
   "clientWorkoutHistoryEmpty": "No workouts yet",
   "exerciseNumberedTitle": "Exercise #{n}",
   "@exerciseNumberedTitle": {
@@ -330,7 +354,7 @@
   "instructionNavHistoryTitle": "History / statistics",
   "instructionNavHistoryDesc": "In calendar/history each workout shows total tonnage. Workout volume is one of the best indicators of hypertrophy: the more quality volume you accumulate, the more muscle you can build.",
   "instructionNavImportExportTitle": "Import / export",
-  "instructionNavImportExportDesc": "Back up or transfer your data using JSON export and import in the statistics dialog. Backups include workout history, your exercise list, favorites, and muscle-group tags. Coach backups are separate from personal history.",
+  "instructionNavImportExportDesc": "Back up or transfer your data using JSON export and import in the statistics dialog. Backups include workout history, your exercise list, favorites, and muscle-group tags. Coach backups are separate from personal history. A coach can also import an athlete's history as a new client without mixing exercise names.",
   "instructionSectionHome": "Home",
   "instructionThemeTitle": "Theme",
   "instructionThemeDesc": "The sun / moon switch on the home screen toggles light and dark. Your choice is remembered.",
@@ -349,11 +373,11 @@
   "instructionFavoritesMenuTitle": "Favorite exercises",
   "instructionFavoritesMenuDesc": "Your starred list. Tick the ones you want and tap Build workout to start a session in that order. Last weights and reps appear greyed as a target to beat.",
   "instructionSectionRhythm": "Training rhythm",
-  "instructionRhythmIntro": "After a few strength sessions, a gauge appears at the top of your training screen. It shows how many days per week you have trained on average over the last four weeks. Cardio-only days are not counted. The number is a snapshot of your density — not a target the app expects you to hit.",
+  "instructionRhythmIntro": "After a few strength sessions, a gauge appears at the top of your training screen. It shows how many days per week you have trained on average over the last four weeks. Cardio-only days are not counted. The number is a snapshot of your density — not a target the app expects you to hit. Tap it for a note about your pace and what an active recovery week can look like.",
   "instructionRhythmGaugeTitle": "Days per week",
-  "instructionRhythmGaugeDesc": "The arc fills from 1 to 6 days per week. Cooler steel means a lighter pace; warmer tones mean higher density. The gauge appears once you have at least three strength days in that four-week window.",
-  "instructionRhythmDeloadTitle": "Lighter week reminder",
-  "instructionRhythmDeloadDesc": "If you have been training about two and a half days a week or more for several weeks without a lighter week, the app may suggest cutting tonnage and reps by about 30% for one week. The more days per week, the sooner that reminder. It is a reminder, not a prescription. You will see it at most once per week.",
+  "instructionRhythmGaugeDesc": "The arc fills from 1 to 6 days per week. Color moves from steel through gold toward rust as density rises. The gauge appears once you have at least three strength days in that four-week window.",
+  "instructionRhythmDeloadTitle": "Active recovery week reminder",
+  "instructionRhythmDeloadDesc": "If you have been training about two and a half days a week or more for several weeks without an active recovery week, the app may remind you that a short active recovery week is sometimes useful — about 30% less tonnage and reps. The more days per week, the sooner that reminder. It is a reminder, not a prescription. You will see it at most once per week, and only in your own training mode — not automatically for clients. Tap a client's gauge for the same note.",
   "instructionSectionFavorites": "Favorites",
   "instructionFavoriteStarTitle": "Star",
   "instructionFavoriteStarDesc": "In Personal Progress, tap the star next to an exercise to add or remove it from favorites. Favorites stay at the top of the table.",
@@ -383,14 +407,19 @@
   "instructionClientsTitle": "Clients",
   "instructionClientsDesc": "Add, edit, or delete clients. The list shows the last and next session. Profile fields: goal, weight, height, and private coach notes.",
   "instructionClientProfileTitle": "Client profile",
-  "instructionClientProfileDesc": "Start today's session from the profile: an empty live workout. Grey last-session numbers appear only after you pick an exercise. History lists completed workouts only. Plan future sessions on the calendar. Progress and favorites are on the same screen. Unsaved profile edits ask before you leave.",
+  "instructionClientProfileDesc": "Start today's session from the profile: an empty live workout. Grey last-session numbers appear only after you pick an exercise. History lists completed workouts only. Plan future sessions on the calendar. Progress and favorites are on the same screen. When there is enough recent strength work, a rhythm gauge shows how often they train; tap it for a note about pace and rest. Unsaved profile edits ask before you leave.",
   "instructionTrainerPlanTitle": "Plan a session",
   "instructionTrainerPlanDesc": "Plan only from the coach calendar: pick a client and date, then name exercises. Previous weights and reps appear grey as a hint. A planned session shows a play icon. Tap it to start (today) or delete. Only finished workouts go to history. A plan whose date has already passed is removed.",
   "instructionTrainerRepeatTitle": "Repeat last workout",
   "instructionTrainerRepeatDesc": "Optional. From the client profile, or as a switch when adding a session on the calendar. Copies the last session's exercises into today's live workout or a new plan; previous weights and reps show as grey hints, not as finished sets.",
+  "printSession": "Print",
+  "printSessionEmpty": "Nothing to print yet. Log at least one set.",
+  "printSessionShareText": "IronVibe session",
+  "instructionPrintSessionTitle": "Print a session",
+  "instructionPrintSessionDesc": "On a finished client workout, the print icon in the header makes an A4 sheet of that day as logged. Share, save, or print from the system sheet.",
   "rhythmPerWeek": "per week",
-  "deloadNudgeTitle": "A lighter week?",
-  "deloadNudgeBody": "You've been training about {rate} days a week for roughly {weeks} weeks. This is a reminder, not a prescription. At this density a lighter week — about 30% less tonnage and reps — is often worth considering.",
+  "deloadNudgeTitle": "An active recovery week?",
+  "deloadNudgeBody": "You've been training about {rate} days a week for roughly {weeks} weeks. This is a reminder that a short active recovery week is sometimes useful — about 30% less tonnage and reps. Not a prescription.",
   "@deloadNudgeBody": {
     "placeholders": {
       "rate": { "type": "String" },
@@ -399,6 +428,42 @@
   },
   "deloadNudgeLater": "Not now",
   "deloadNudgeOk": "Got it",
+  "backupNudgeTitle": "Save a backup?",
+  "backupNudgeBody": "Your data lives only on this device. If it is lost or storage fails, that history is gone. Share a copy now, or postpone for 28 days.",
+  "backupNudgeShare": "Share",
+  "backupNudgeLater": "Later",
+  "rhythmInsightTitle": "Training rhythm",
+  "rhythmInsightRateYou": "You've trained about {rate} days a week over the last four weeks.",
+  "@rhythmInsightRateYou": {
+    "placeholders": {
+      "rate": { "type": "String" }
+    }
+  },
+  "rhythmInsightRateClient": "{name} has trained about {rate} days a week over the last four weeks.",
+  "@rhythmInsightRateClient": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "rate": { "type": "String" }
+    }
+  },
+  "rhythmInsightWindow": "Only strength days count. Cardio-only days are ignored. This is a snapshot of density, not a target.",
+  "rhythmInsightWhatTitle": "Active recovery week",
+  "rhythmInsightWhatBody": "A week of deliberately lighter work so you recover without losing fitness: same sessions, about 30–50% less volume. Or skip strength days and stay moving.",
+  "rhythmInsightAdviceLight": "Right now the rhythm is easy. If sessions are not extremely hard, you can go a long time without a planned active recovery week.",
+  "rhythmInsightAdviceSteady": "Right now this is a steady rhythm. If the work is hard, an active recovery week every few months is often enough.",
+  "rhythmInsightAdviceDense": "Right now this is a dense schedule. If sessions are intense, an active recovery week every two to three months is often worth keeping in mind.",
+  "rhythmInsightAdviceVeryDense": "Right now this is nearly every day. If the load is high, an active recovery week about once a month is a common way to stay durable.",
+  "rhythmInsightPraiseSteady": "Well done. This is the kind of rhythm long progress is built on.",
+  "rhythmInsightPraiseDense": "Truly dedicated. Keep it up.",
+  "rhythmInsightPraiseVeryDense": "Looks like you're trying to unlock the secret capabilities of your body.",
+  "rhythmInsightRecentLighter": "An active recovery week already shows up in the recent data.",
+  "rhythmInsightAccumulation": "About {weeks} weeks at this density without an active recovery week.",
+  "@rhythmInsightAccumulation": {
+    "placeholders": {
+      "weeks": { "type": "int" }
+    }
+  },
+  "rhythmInsightDisclaimer": "This is a reference note, not a prescription. It only flags that a short active recovery week can help. If you feel fine, you can leave things as they are.",
   "instructionHubManifest": "No built-in catalog or preset programs. You name exercises yourself; the app keeps stats your way.",
   "instructionChapterStartTitle": "Getting started",
   "instructionChapterStartBlurb": "Home screen, how you train, and why the app stays out of your way.",
