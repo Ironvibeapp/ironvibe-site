@@ -620,7 +620,7 @@ DateTime? ironVibeLastTrainedAt(String rawName, {String? clientName}) {
   } else {
     for (final s in trainerSchedule) {
       if (!ironVibeSessionBelongsToClient(s, clientName: scoped)) continue;
-      if (!ironVibeTrainerSessionCountsAsWork(s)) continue;
+      if (!ironVibeTrainerSessionInClientHistory(s)) continue;
       consider(s.dateTime, s.exercises);
     }
   }
@@ -656,7 +656,7 @@ ExerciseLog ironVibeLastExerciseLogFor(
   } else {
     for (final s in trainerSchedule) {
       if (!ironVibeSessionBelongsToClient(s, clientName: scoped)) continue;
-      if (!ironVibeTrainerSessionCountsAsWork(s)) continue;
+      if (!ironVibeTrainerSessionInClientHistory(s)) continue;
       if (excludeSession != null &&
           _ironVibeSameTrainerSession(s, excludeSession)) {
         continue;

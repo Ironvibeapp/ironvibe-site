@@ -209,9 +209,20 @@ class RhythmInsightScreen extends StatelessWidget {
           }
         : null;
     final showRecent = snap.recentDeload;
+    final showDue = !showRecent && snap.suggestsDeloadNudge;
     final showAccumulation =
-        !showRecent && snap.deloadIndicated && snap.accumulationWeeks >= 1;
+        !showRecent &&
+        !showDue &&
+        snap.deloadIndicated &&
+        snap.accumulationWeeks >= 1;
     final weeks = math.max(1, snap.accumulationWeeks.round());
+    final zone = ironVibeRhythmZoneColor(snap.daysPerWeek);
+    final bandLabel = switch (band) {
+      IronVibeRhythmAdviceBand.light => l.rhythmInsightBandLight,
+      IronVibeRhythmAdviceBand.steady => l.rhythmInsightBandSteady,
+      IronVibeRhythmAdviceBand.dense => l.rhythmInsightBandDense,
+      IronVibeRhythmAdviceBand.veryDense => l.rhythmInsightBandVeryDense,
+    };
 
     return Scaffold(
       body: SafeArea(
@@ -255,84 +266,103 @@ class RhythmInsightScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         IronVibeRhythmCard(snapshot: snap, height: 160),
-                        const SizedBox(height: 22),
+                        const SizedBox(height: 16),
+                        Text(
+                          bandLabel,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: zone,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                            height: 1.25,
+                            letterSpacing: 0.1,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
                         Text(
                           rateLine,
                           style: TextStyle(
                             color: pal.textPrimary,
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            height: 1.35,
+                            height: 1.4,
                           ),
                         ),
                         if (praise != null) ...[
                           const SizedBox(height: 12),
                           _RhythmInsightPraise(band: band, text: praise),
                         ],
-                        const SizedBox(height: 10),
-                        Text(
-                          l.rhythmInsightWindow,
-                          style: TextStyle(
-                            color: pal.textSecondary,
-                            fontSize: 14,
-                            height: 1.4,
-                          ),
+                        const SizedBox(height: 22),
+                        _RhythmInsightSection(
+                          title: l.rhythmInsightHowTitle,
+                          body: l.rhythmInsightWindow,
                         ),
                         const SizedBox(height: 22),
-                        Text(
-                          l.rhythmInsightWhatTitle,
-                          style: TextStyle(
-                            color: pal.textPrimary,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          l.rhythmInsightWhatBody,
-                          style: TextStyle(
-                            color: pal.textSecondary,
-                            fontSize: 14,
-                            height: 1.45,
-                          ),
+                        _RhythmInsightSection(
+                          title: l.rhythmInsightWhatTitle,
+                          body: l.rhythmInsightWhatBody,
                         ),
                         const SizedBox(height: 18),
-                        Text(
-                          advice,
-                          style: TextStyle(
-                            color: pal.textPrimary,
-                            fontSize: 14,
-                            height: 1.4,
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+                          decoration: ironVibeElevatedCardDecoration(pal),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                l.rhythmInsightPaceTitle,
+                                style: TextStyle(
+                                  color: pal.textPrimary,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                advice,
+                                style: TextStyle(
+                                  color: pal.textPrimary,
+                                  fontSize: 14,
+                                  height: 1.45,
+                                ),
+                              ),
+                              if (showRecent) ...[
+                                const SizedBox(height: 12),
+                                Text(
+                                  l.rhythmInsightRecentLighter,
+                                  style: TextStyle(
+                                    color: pal.textSecondary,
+                                    fontSize: 14,
+                                    height: 1.45,
+                                  ),
+                                ),
+                              ] else if (showDue) ...[
+                                const SizedBox(height: 14),
+                                _RhythmInsightDue(
+                                  title: l.deloadNudgeTitle,
+                                  body: l.rhythmInsightAccumulation(weeks),
+                                ),
+                              ] else if (showAccumulation) ...[
+                                const SizedBox(height: 12),
+                                Text(
+                                  l.rhythmInsightAccumulation(weeks),
+                                  style: TextStyle(
+                                    color: pal.textSecondary,
+                                    fontSize: 14,
+                                    height: 1.45,
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
                         ),
-                        if (showRecent) ...[
-                          const SizedBox(height: 14),
-                          Text(
-                            l.rhythmInsightRecentLighter,
-                            style: TextStyle(
-                              color: pal.textSecondary,
-                              fontSize: 14,
-                              height: 1.4,
-                            ),
-                          ),
-                        ] else if (showAccumulation) ...[
-                          const SizedBox(height: 14),
-                          Text(
-                            l.rhythmInsightAccumulation(weeks),
-                            style: TextStyle(
-                              color: pal.textSecondary,
-                              fontSize: 14,
-                              height: 1.4,
-                            ),
-                          ),
-                        ],
                         const SizedBox(height: 22),
                         Text(
                           l.rhythmInsightDisclaimer,
                           style: TextStyle(
                             color: pal.textMuted,
                             fontSize: 13,
-                            height: 1.4,
+                            height: 1.45,
                           ),
                         ),
                       ],
@@ -344,6 +374,87 @@ class RhythmInsightScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _RhythmInsightDue extends StatelessWidget {
+  final String title;
+  final String body;
+
+  const _RhythmInsightDue({required this.title, required this.body});
+
+  @override
+  Widget build(BuildContext context) {
+    final pal = IronVibePalette.of(context);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(top: 2),
+          child: Icon(
+            Icons.self_improvement_rounded,
+            size: 20,
+            color: kIronVibeAccent,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  color: kIronVibeAccent,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w800,
+                  height: 1.3,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                body,
+                style: TextStyle(
+                  color: pal.textSecondary,
+                  fontSize: 14,
+                  height: 1.45,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _RhythmInsightSection extends StatelessWidget {
+  final String title;
+  final String body;
+
+  const _RhythmInsightSection({required this.title, required this.body});
+
+  @override
+  Widget build(BuildContext context) {
+    final pal = IronVibePalette.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            color: pal.textPrimary,
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          body,
+          style: TextStyle(color: pal.textSecondary, fontSize: 14, height: 1.5),
+        ),
+      ],
     );
   }
 }

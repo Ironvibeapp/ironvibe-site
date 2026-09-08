@@ -333,7 +333,7 @@ void main() {
     expect(ironVibeMuscleGroupForName('unknown'), isNull);
   });
 
-  test('import copies athlete favorites and tags without mixing names', () {
+  test('import copies athlete favorites without mixing names or tags', () {
     exerciseBank.add('SQUAT');
     ironVibeAthleteFavoriteExercises.add('SQUAT');
     ironVibeExerciseMuscleGroups['SQUAT'] = IronVibeMuscleGroup.chest;
@@ -347,13 +347,6 @@ void main() {
       workouts: workouts,
       clientName: 'Ivan',
       favoriteExercises: ['weird curl', 'Ghost Fly'],
-      exerciseMuscleGroups: {
-        'WEIRD CURL': 'armFlex',
-        'WEIRD PRESS': 'chest',
-        'GHOST FLY': 'shoulders',
-        'SQUAT': 'quad',
-        'DEADLIFT': 'back',
-      },
     );
 
     expect(outcome.status, IronVibeAthleteImportStatus.success);
@@ -368,14 +361,75 @@ void main() {
     );
     expect(ironVibeAthleteFavoriteExercises, ['SQUAT']);
     expect(exerciseBank, ['SQUAT']);
-    expect(ironVibeMuscleGroupForName('Weird Curl'), IronVibeMuscleGroup.armFlex);
-    expect(ironVibeMuscleGroupForName('Weird Press'), IronVibeMuscleGroup.chest);
-    expect(ironVibeMuscleGroupForName('Ghost Fly'), IronVibeMuscleGroup.shoulders);
+    expect(ironVibeMuscleGroupForName('Weird Curl'), isNull);
+    expect(ironVibeMuscleGroupForName('Weird Press'), isNull);
+    expect(ironVibeMuscleGroupForName('Ghost Fly'), isNull);
     expect(ironVibeMuscleGroupForName('Squat'), IronVibeMuscleGroup.chest);
-    expect(ironVibeMuscleGroupForName('Deadlift'), isNull);
+    expect(ironVibeLastLoggedTrainerSessionForClient('Ivan'), isNull);
+    expect(ironVibeLastHistoryTrainerSessionForClient('Ivan')?.id, isNotNull);
+    expect(
+      ironVibeLastExerciseLogFor('Weird Curl', clientName: 'Ivan').sets.single.weight,
+      '20',
+    );
+    expect(
+      trainerSchedule.where(ironVibeTrainerSessionVisibleOnCoachCalendar),
+      isEmpty,
+    );
     expect(
       ironVibeRhythmHistoryFor(clientName: 'Ivan').map((w) => w.exercises.single.name).toSet(),
       {'Weird Curl', 'Weird Press'},
     );
+  });
+
+  test('deleting an imported client keeps only coach-run sessions', () {
+    final workouts = [
+      _athleteDay(DateTime(2026, 3, 1), id: 'w-a', exercise: 'Weird Curl'),
+      _athleteDay(DateTime(2026, 3, 2), id: 'w-b', exercise: 'Weird Press'),
+    ];
+    expect(
+      ironVibeImportAthleteHistory(workouts: workouts, clientName: 'Ivan').status,
+      IronVibeAthleteImportStatus.success,
+    );
+    final client = clients.single;
+    trainerSchedule.add(
+      TrainerSession(
+        DateTime(2026, 4, 1),
+        'Ivan',
+        '',
+        exercises: [
+          ExerciseLog('Bench', [SetLog('80', '5', '1')]),
+        ],
+        id: 'coached',
+        clientId: client.id,
+        isCompleted: true,
+      ),
+    );
+
+    ironVibeDeleteClientKeepingHistory(client);
+
+    expect(clients, isEmpty);
+    expect(trainerSchedule, hasLength(1));
+    expect(trainerSchedule.single.id, 'coached');
+    expect(trainerSchedule.single.isImportedHistory, isFalse);
+    expect(trainerSchedule.where((s) => s.isImportedHistory), isEmpty);
+    expect(ironVibeTrainerWorkCountsByClient().single.key, 'Ivan');
+    expect(ironVibeTrainerWorkCountsByClient().single.value, 1);
+    ironVibeRebuildExerciseBankFromCompletedWorkouts();
+    expect(exerciseBank, ['BENCH']);
+  });
+
+  test('deleting an imported client with no coach sessions leaves nothing', () {
+    expect(
+      ironVibeImportAthleteHistory(
+        workouts: [_athleteDay(DateTime(2026, 3, 1), id: 'w-a')],
+        clientName: 'Ivan',
+        favoriteExercises: ['Weird Curl'],
+      ).status,
+      IronVibeAthleteImportStatus.success,
+    );
+    ironVibeDeleteClientKeepingHistory(clients.single);
+    expect(clients, isEmpty);
+    expect(trainerSchedule, isEmpty);
+    expect(ironVibeTrainerWorkCountsByClient(), isEmpty);
   });
 }

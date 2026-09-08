@@ -6,16 +6,19 @@ void main() {
   late List<TrainerSession> savedSchedule;
   late List<Client> savedClients;
   late List<String> savedBank;
+  late ActiveWorkoutDraft? savedDraft;
 
   setUp(() {
     savedHistory = List.of(workoutHistory);
     savedSchedule = List.of(trainerSchedule);
     savedClients = List.of(clients);
     savedBank = List.of(exerciseBank);
+    savedDraft = activeWorkoutDraft;
     workoutHistory = [];
     trainerSchedule = [];
     clients = [];
     exerciseBank = [];
+    activeWorkoutDraft = null;
   });
 
   tearDown(() {
@@ -23,6 +26,7 @@ void main() {
     trainerSchedule = savedSchedule;
     clients = savedClients;
     exerciseBank = savedBank;
+    activeWorkoutDraft = savedDraft;
   });
 
   test('quantity parser accepts comma decimals and trims', () {
@@ -182,5 +186,54 @@ void main() {
     expect(ironVibeEnsurePersistentIds(), isTrue);
     expect(workoutHistory.single.id, isNotNull);
     expect(clients.single.id, isNotNull);
+  });
+
+  test('deleting a client keeps saved workouts for reporting', () {
+    final masha = Client('Маша', '', id: 'm1');
+    clients.add(masha);
+    final past = TrainerSession(
+      DateTime.now().subtract(const Duration(days: 3)),
+      'Маша',
+      '',
+      exercises: [
+        ExerciseLog('Squat', [SetLog('60', '8', '1')]),
+      ],
+      id: 'done',
+      clientId: 'm1',
+      isCompleted: true,
+    );
+    final future = ironVibeNewTrainerSession(
+      dateTime: DateTime.now().add(const Duration(days: 2)),
+      clientName: 'Маша',
+      clientId: 'm1',
+      isScheduledPlan: true,
+    );
+    final liveToday = ironVibeNewTrainerSession(
+      dateTime: DateTime.now(),
+      clientName: 'Маша',
+      clientId: 'm1',
+      isLiveCurrent: true,
+    );
+    trainerSchedule.addAll([past, future, liveToday]);
+    activeWorkoutDraft = ActiveWorkoutDraft(
+      kind: ActiveWorkoutDraftKind.trainer,
+      clientName: 'Маша',
+      clientId: 'm1',
+      isCardio: false,
+      exercisesJson: const [],
+      savedAt: DateTime.now(),
+    );
+
+    expect(ironVibeDeleteClientKeepingHistory(masha), isTrue);
+    expect(clients, isEmpty);
+    expect(activeWorkoutDraft, isNull);
+    expect(trainerSchedule, hasLength(1));
+    expect(trainerSchedule.single.id, 'done');
+    expect(trainerSchedule.single.clientName, 'Маша');
+    expect(ironVibeTrainerSessionCountsAsWork(trainerSchedule.single), isTrue);
+    final byClient = ironVibeTrainerWorkCountsByClient();
+    expect(byClient, hasLength(1));
+    expect(byClient.single.key, 'Маша');
+    expect(byClient.single.value, 1);
   });
 }

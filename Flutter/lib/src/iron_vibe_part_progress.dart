@@ -344,7 +344,7 @@ class _ProgressChart extends StatelessWidget {
           TextSpan(text: locale.totalVolume, style: base),
           TextSpan(text: ': ', style: base),
           TextSpan(text: ironVibeFormatKgTon(pt.volumeKg), style: emphasisV),
-          TextSpan(text: ' ${locale.kg}', style: base),
+          TextSpan(text: ' ${locale.weightUnitsChoiceShort}', style: base),
         ],
       );
       return List<LineTooltipItem?>.generate(

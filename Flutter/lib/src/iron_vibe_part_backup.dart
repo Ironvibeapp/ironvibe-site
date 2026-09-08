@@ -112,24 +112,12 @@ void ironVibeMergeAthleteBackupCatalog(Map<String, dynamic> data) {
   ironVibeMergeMuscleGroupsFromBackup(data['exerciseMuscleGroups']);
 }
 
-Set<String> ironVibeExerciseNamesFromWorkouts(Iterable<WorkoutLog> workouts) {
-  final names = <String>{};
-  for (final w in workouts) {
-    for (final ex in w.exercises) {
-      final n = normalizeExerciseName(ex.name);
-      if (n.isNotEmpty) names.add(n);
-    }
-  }
-  return names;
-}
-
 IronVibeAthleteImportOutcome ironVibeImportAthleteHistory({
   required List<WorkoutLog> workouts,
   required String clientName,
   String weight = '',
   String height = '',
   List<String> favoriteExercises = const [],
-  dynamic exerciseMuscleGroups,
 }) {
   final name = clientName.trim();
   if (name.isEmpty) {
@@ -186,13 +174,6 @@ IronVibeAthleteImportOutcome ironVibeImportAthleteHistory({
     weight: weight.trim(),
     height: height.trim(),
     favoriteExercises: favorites,
-  );
-  ironVibeMergeMuscleGroupsFromBackup(
-    exerciseMuscleGroups,
-    onlyNames: {
-      ...ironVibeExerciseNamesFromWorkouts(workouts),
-      ...favorites,
-    },
   );
   for (final s in sessions) {
     s.clientId = client.id;
@@ -777,7 +758,6 @@ Future<void> _importAthleteHistoryFromJson(BuildContext context) async {
                       favoriteExercises: ironVibeNormalizedNamesFromJsonList(
                         data['favoriteExercises'],
                       ),
-                      exerciseMuscleGroups: data['exerciseMuscleGroups'],
                     );
                     switch (outcome.status) {
                       case IronVibeAthleteImportStatus.nameEmpty:
@@ -841,6 +821,10 @@ void _showStatistics(BuildContext context, bool isTrainer) {
   int yearCount = 0;
   int totalCount = 0;
 
+  final clientCounts = isTrainer
+      ? ironVibeTrainerWorkCountsByClient()
+      : const <MapEntry<String, int>>[];
+
   if (isTrainer) {
     final logged = trainerSchedule.where(ironVibeTrainerSessionCountsAsWork);
     totalCount = logged.length;
@@ -894,6 +878,37 @@ void _showStatistics(BuildContext context, bool isTrainer) {
               _buildStatItem(ctx, l.yearStats, '$yearCount'),
               const SizedBox(height: 20),
               _buildStatItem(ctx, l.allTimeStats, '$totalCount'),
+              if (clientCounts.isNotEmpty) ...[
+                const SizedBox(height: 28),
+                for (final row in clientCounts)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            row.key,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: pal.textPrimary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          '${row.value}',
+                          style: TextStyle(
+                            color: pal.textPrimary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
               const SizedBox(height: 40),
               SteelButton(
                 text: l.exportHistory,

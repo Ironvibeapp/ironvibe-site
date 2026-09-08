@@ -2842,7 +2842,7 @@ class _IronVibeWorkoutCompleteOverlay extends StatefulWidget {
 class _IronVibeWorkoutCompleteOverlayState
     extends State<_IronVibeWorkoutCompleteOverlay>
     with TickerProviderStateMixin {
-  static const Color _checkGreen = Color(0xFF22C55E);
+  static const Color _checkAccent = kIronVibeAccent;
   static const Color _cardWhite = Color(0xFFFBFCFE);
 
   late final AnimationController _cardCtrl;
@@ -2922,7 +2922,7 @@ class _IronVibeWorkoutCompleteOverlayState
                           return CustomPaint(
                             painter: _IronVibeCheckPainter(
                               progress: _checkCtrl.value,
-                              color: _checkGreen,
+                              color: _checkAccent,
                             ),
                           );
                         },

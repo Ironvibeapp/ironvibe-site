@@ -12,7 +12,7 @@
 <p align="center">
   <a href="https://ironvibe.app"><img alt="Website" src="https://img.shields.io/badge/website-ironvibe.app-111111?style=flat-square" /></a>
   <a href="https://play.google.com/store/apps/details?id=com.ironvibe.app"><img alt="Google Play" src="https://img.shields.io/badge/Google_Play-com.ironvibe.app-34A853?style=flat-square&logo=googleplay&logoColor=white" /></a>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.7.5-E53935?style=flat-square" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.7.9-E53935?style=flat-square" />
   <img alt="License" src="https://img.shields.io/badge/license-MIT-0D47A1?style=flat-square" />
 </p>
 
@@ -69,7 +69,7 @@ flutter pub get
 flutter run
 ```
 
-Current version: **1.7.5** (`1.7.5+75`). Release builds: see [`Flutter/BUILD_AAB.md`](Flutter/BUILD_AAB.md). Signing keys stay on the maintainer machine; they are not in git.
+Current version: **1.7.9** (`1.7.9+79`). Release builds: see [`Flutter/BUILD_AAB.md`](Flutter/BUILD_AAB.md). Signing keys stay on the maintainer machine; they are not in git.
 
 ## Website
 

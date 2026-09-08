@@ -156,11 +156,28 @@ void main() {
       ),
     );
     expect(en.rhythmInsightWhatTitle, 'Active recovery week');
-    expect(en.rhythmInsightDisclaimer, contains('reference note'));
-    expect(en.rhythmInsightPraiseSteady, contains('Well done'));
-    expect(en.rhythmInsightPraiseDense, contains('dedicated'));
+    expect(en.rhythmInsightHowTitle, isNotEmpty);
+    expect(en.rhythmInsightPaceTitle, isNotEmpty);
+    expect(en.rhythmInsightBandSteady, isNotEmpty);
+    expect(en.rhythmInsightWindow, isNot(contains('snapshot')));
+    expect(en.rhythmInsightDisclaimer, contains('not medical advice'));
+    expect(en.rhythmInsightWhatBody, contains('30–50%'));
+    expect(en.rhythmInsightPraiseSteady, contains('years'));
+    expect(en.rhythmInsightPraiseDense, contains('itself'));
     expect(en.rhythmInsightPraiseVeryDense, contains('secret'));
+    expect(en.rhythmInsightAccumulation(1), contains('week'));
+    expect(en.rhythmInsightAccumulation(5), contains('5'));
     expect(en.deloadNudgeTitle, 'An active recovery week?');
+    for (final s in [
+      en.rhythmInsightAdviceLight,
+      en.rhythmInsightAdviceSteady,
+      en.rhythmInsightAdviceDense,
+      en.rhythmInsightAdviceVeryDense,
+      en.rhythmInsightDisclaimer,
+      en.deloadNudgeBody('3.5', 6),
+    ]) {
+      expect(s, isNot(contains('easier week')));
+    }
 
     await tester.pumpWidget(
       MaterialApp(
@@ -176,9 +193,27 @@ void main() {
       ),
     );
     expect(ru.rhythmInsightWhatTitle, 'Неделя активного отдыха');
-    expect(ru.rhythmInsightDisclaimer, contains('справочная'));
-    expect(ru.rhythmInsightPraiseSteady, contains('Молодец'));
-    expect(ru.rhythmInsightAdviceSteady, startsWith('Сейчас'));
+    expect(ru.rhythmInsightHowTitle, 'Откуда эта цифра');
+    expect(ru.rhythmInsightWindow, isNot(contains('снимок')));
+    expect(ru.rhythmInsightDisclaimer, contains('не медицинский совет'));
+    expect(ru.rhythmInsightWhatBody, contains('30–50%'));
+    expect(ru.rhythmInsightWhatBody, contains('сухожилия'));
+    expect(ru.rhythmInsightRateYou('3,5'), contains('в среднем 3,5'));
+    expect(ru.rhythmInsightPraiseSteady, contains('ритме'));
+    expect(ru.rhythmInsightAdviceSteady, contains('неделю активного отдыха'));
+    expect(ru.rhythmInsightAccumulation(1), contains('неделю'));
+    expect(ru.rhythmInsightAccumulation(3), contains('недели'));
+    expect(ru.rhythmInsightAccumulation(5), contains('недель'));
     expect(ru.deloadNudgeTitle, 'Неделя активного отдыха?');
+    for (final s in [
+      ru.rhythmInsightAdviceLight,
+      ru.rhythmInsightAdviceSteady,
+      ru.rhythmInsightAdviceDense,
+      ru.rhythmInsightAdviceVeryDense,
+      ru.rhythmInsightDisclaimer,
+      ru.deloadNudgeBody('3,5', 6),
+    ]) {
+      expect(s, isNot(contains('полегче')));
+    }
   });
 }

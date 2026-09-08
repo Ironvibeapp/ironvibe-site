@@ -174,7 +174,7 @@ String ironVibeWorkoutVolumeLabel(
 ) {
   final kg = ironVibeWorkoutVolumeKgFromExercises(exercises);
   if (kg <= 0) return '${l.volumeShort}: —';
-  return '${l.volumeShort}: ${ironVibeFormatKgTon(kg)} ${l.kg}';
+  return '${l.volumeShort}: ${ironVibeFormatKgTon(kg)} ${l.weightUnitsChoiceShort}';
 }
 
 /// Заголовок колонки «Вес» в строке вес / повторы / RIR: единицы на выбор пользователя.
@@ -369,9 +369,9 @@ Future<void> _deleteExportFile(String path) async {
   } catch (_) {}
 }
 
-/// Семейное правило версий: … 1.7.4+74, 1.7.5+75 …
-const String kAppVersion = '1.7.5';
-const int kAppBuildNumber = 75;
+/// Семейное правило версий: … 1.7.8+78, 1.7.9+79 …
+const String kAppVersion = '1.7.9';
+const int kAppBuildNumber = 79;
 
 /// График прогресса: вес (красный) и повторы (как цвет фокуса полей).
 const Color kProgressChartWeightColor = Color(0xFFFF1744);

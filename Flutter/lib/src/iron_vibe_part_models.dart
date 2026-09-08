@@ -348,6 +348,72 @@ bool ironVibeTrainerSessionCountsAsWork(TrainerSession s) =>
 bool ironVibeTrainerSessionInClientHistory(TrainerSession s) =>
     ironVibeTrainerSessionIsCompleted(s);
 
+bool ironVibeTrainerSessionVisibleOnCoachCalendar(TrainerSession s) =>
+    !s.isImportedHistory;
+
+bool ironVibeTrainerDraftBelongsToClient(
+  ActiveWorkoutDraft? draft,
+  Client client,
+) {
+  if (draft == null || draft.kind != ActiveWorkoutDraftKind.trainer) {
+    return false;
+  }
+  final idKey = client.id?.trim();
+  final draftId = draft.clientId?.trim();
+  if (idKey != null &&
+      idKey.isNotEmpty &&
+      draftId != null &&
+      draftId.isNotEmpty &&
+      draftId == idKey) {
+    return true;
+  }
+  final draftName = draft.clientName;
+  if (draftName == null) return false;
+  return ironVibeClientNameKey(draftName) == ironVibeClientNameKey(client.name);
+}
+
+/// Drops the roster card, unfinished sessions, and imported athlete history.
+/// Only completed sessions the coach ran with this person stay for reporting.
+bool ironVibeDeleteClientKeepingHistory(Client client) {
+  trainerSchedule.removeWhere((s) {
+    if (!ironVibeSessionBelongsToClientRecord(s, client)) return false;
+    return !ironVibeTrainerSessionCountsAsWork(s);
+  });
+  final idKey = client.id?.trim();
+  final nameKey = ironVibeClientNameKey(client.name);
+  clients.removeWhere((c) {
+    if (identical(c, client)) return true;
+    if (idKey != null && idKey.isNotEmpty && c.id == idKey) return true;
+    return nameKey.isNotEmpty && ironVibeClientNameKey(c.name) == nameKey;
+  });
+  final droppedDraft = ironVibeTrainerDraftBelongsToClient(
+    activeWorkoutDraft,
+    client,
+  );
+  if (droppedDraft) activeWorkoutDraft = null;
+  return droppedDraft;
+}
+
+List<MapEntry<String, int>> ironVibeTrainerWorkCountsByClient() {
+  final counts = <String, int>{};
+  final labels = <String, String>{};
+  for (final s in trainerSchedule) {
+    if (!ironVibeTrainerSessionCountsAsWork(s)) continue;
+    final name = s.clientName.trim();
+    if (name.isEmpty) continue;
+    final key = ironVibeClientNameKey(name);
+    counts[key] = (counts[key] ?? 0) + 1;
+    labels[key] = name;
+  }
+  final keys = counts.keys.toList()
+    ..sort((a, b) {
+      final byCount = counts[b]!.compareTo(counts[a]!);
+      if (byCount != 0) return byCount;
+      return a.compareTo(b);
+    });
+  return [for (final k in keys) MapEntry(labels[k]!, counts[k]!)];
+}
+
 int ironVibeTrainerSessionNamedExerciseCount(TrainerSession s) => s.exercises
     .where((e) => normalizeExerciseName(e.name).isNotEmpty)
     .length;
@@ -567,10 +633,11 @@ Future<void> ironVibeRevertOrDiscardLiveTrainerSession(
   await DataService.saveData();
 }
 
-TrainerSession? ironVibeLastLoggedTrainerSessionForClient(
+TrainerSession? _ironVibeLastCompletedTrainerSessionForClient(
   String clientName, {
   String? clientId,
   TrainerSession? exclude,
+  required bool coachWorkOnly,
 }) {
   final name = clientName.trim();
   if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) return null;
@@ -585,11 +652,41 @@ TrainerSession? ironVibeLastLoggedTrainerSessionForClient(
       continue;
     }
     if (exclude != null && _ironVibeSameTrainerSession(s, exclude)) continue;
-    if (!ironVibeTrainerSessionCountsAsWork(s)) continue;
+    if (coachWorkOnly) {
+      if (!ironVibeTrainerSessionCountsAsWork(s)) continue;
+    } else if (!ironVibeTrainerSessionInClientHistory(s)) {
+      continue;
+    }
     if (ironVibeDateOnly(s.dateTime).isAfter(today)) continue;
     if (best == null || s.dateTime.isAfter(best.dateTime)) best = s;
   }
   return best;
+}
+
+TrainerSession? ironVibeLastLoggedTrainerSessionForClient(
+  String clientName, {
+  String? clientId,
+  TrainerSession? exclude,
+}) {
+  return _ironVibeLastCompletedTrainerSessionForClient(
+    clientName,
+    clientId: clientId,
+    exclude: exclude,
+    coachWorkOnly: true,
+  );
+}
+
+TrainerSession? ironVibeLastHistoryTrainerSessionForClient(
+  String clientName, {
+  String? clientId,
+  TrainerSession? exclude,
+}) {
+  return _ironVibeLastCompletedTrainerSessionForClient(
+    clientName,
+    clientId: clientId,
+    exclude: exclude,
+    coachWorkOnly: false,
+  );
 }
 
 TrainerSession? ironVibeLastRepeatableTrainerSession(

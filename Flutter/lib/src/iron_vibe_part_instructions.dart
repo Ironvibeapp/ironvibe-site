@@ -182,6 +182,16 @@ List<_InstructionChapter> _ironVibeInstructionChapters(AppLocalizations l) {
             label: l.instructionTrainOthersTitle,
             description: l.instructionTrainOthersDesc,
           ),
+          _InstructionTopic(
+            icon: Icons.language_rounded,
+            label: l.instructionLanguageTitle,
+            description: l.instructionLanguageDesc,
+          ),
+          _InstructionTopic(
+            icon: Icons.info_outline_rounded,
+            label: l.instructionHomeLinksTitle,
+            description: l.instructionHomeLinksDesc,
+          ),
         ]),
         _InstructionBlock.heading(l.instructionSectionAthleteMenu),
         _InstructionBlock.topics([
@@ -214,55 +224,6 @@ List<_InstructionChapter> _ironVibeInstructionChapters(AppLocalizations l) {
       ],
     ),
     _InstructionChapter(
-      id: 'tools',
-      icon: Icons.tune_rounded,
-      title: l.instructionChapterToolsTitle,
-      blurb: l.instructionChapterToolsBlurb,
-      blocks: [
-        _InstructionBlock.heading(l.instructionSectionRhythm),
-        _InstructionBlock.body(l.instructionRhythmIntro),
-        _InstructionBlock.topics([
-          _InstructionTopic(
-            icon: Icons.speed_rounded,
-            label: l.instructionRhythmGaugeTitle,
-            description: l.instructionRhythmGaugeDesc,
-          ),
-          _InstructionTopic(
-            icon: Icons.battery_saver_rounded,
-            label: l.instructionRhythmDeloadTitle,
-            description: l.instructionRhythmDeloadDesc,
-          ),
-        ]),
-        _InstructionBlock.heading(l.instructionSectionFavorites),
-        _InstructionBlock.topics([
-          _InstructionTopic(
-            icon: Icons.star_border_rounded,
-            label: l.instructionFavoriteStarTitle,
-            description: l.instructionFavoriteStarDesc,
-          ),
-          _InstructionTopic(
-            icon: Icons.playlist_add_check_rounded,
-            label: l.instructionBuildFromFavoritesTitle,
-            description: l.instructionBuildFromFavoritesDesc,
-          ),
-        ]),
-        _InstructionBlock.heading(l.instructionSectionMuscleGroups),
-        _InstructionBlock.body(l.instructionMuscleGroupsIntro),
-        _InstructionBlock.topics([
-          _InstructionTopic(
-            icon: Icons.label_outline_rounded,
-            label: l.instructionMuscleGroupTagTitle,
-            description: l.instructionMuscleGroupTagDesc,
-          ),
-          _InstructionTopic(
-            icon: Icons.swap_horiz_rounded,
-            label: l.instructionQuickWorkoutHowTitle,
-            description: l.instructionQuickWorkoutHowDesc,
-          ),
-        ]),
-      ],
-    ),
-    _InstructionChapter(
       id: 'session',
       icon: Icons.fitness_center_rounded,
       title: l.instructionChapterSessionTitle,
@@ -276,14 +237,14 @@ List<_InstructionChapter> _ironVibeInstructionChapters(AppLocalizations l) {
             description: l.instructionStrengthCardioDesc,
           ),
           _InstructionTopic(
-            icon: Icons.visibility_outlined,
-            label: l.instructionPreviousHintsTitle,
-            description: l.instructionPreviousHintsDesc,
-          ),
-          _InstructionTopic(
             icon: Icons.fitness_center_rounded,
             label: l.instructionAddExerciseTitle,
             description: l.instructionAddExerciseBody,
+          ),
+          _InstructionTopic(
+            icon: Icons.visibility_outlined,
+            label: l.instructionPreviousHintsTitle,
+            description: l.instructionPreviousHintsDesc,
           ),
           _InstructionTopic(
             icon: Icons.delete_outline_rounded,
@@ -291,40 +252,27 @@ List<_InstructionChapter> _ironVibeInstructionChapters(AppLocalizations l) {
             description: l.instructionRemoveExerciseDesc,
           ),
         ]),
-        _InstructionBlock.heading(l.instructionSectionExerciseNameTools),
-        _InstructionBlock.topics([
-          _InstructionTopic(
-            icon: Icons.drive_file_rename_outline_rounded,
-            label: l.instructionRenameExerciseTitle,
-            description: l.instructionRenameExerciseDesc,
-          ),
-          _InstructionTopic(
-            icon: Icons.close_rounded,
-            label: l.instructionRemoveFromBankTitle,
-            description: l.instructionRemoveFromBankDesc,
-          ),
-          _InstructionTopic(
-            icon: Icons.drive_file_move_outline,
-            label: l.instructionReassignExerciseTitle,
-            description: l.instructionReassignExerciseDesc,
-          ),
-        ]),
         _InstructionBlock.heading(l.instructionSectionSetControl),
         _InstructionBlock.topics([
-          _InstructionTopic(
-            icon: Icons.remove_rounded,
-            label: l.instructionSetMinusLabel,
-            description: l.instructionSetMinusDesc,
-          ),
           _InstructionTopic(
             icon: Icons.add_rounded,
             label: l.instructionSetPlusLabel,
             description: l.instructionSetPlusDesc,
           ),
           _InstructionTopic(
+            icon: Icons.remove_rounded,
+            label: l.instructionSetMinusLabel,
+            description: l.instructionSetMinusDesc,
+          ),
+          _InstructionTopic(
             icon: Icons.show_chart_rounded,
             label: l.instructionSetProgressLabel,
             description: l.instructionSetProgressDesc,
+          ),
+          _InstructionTopic(
+            icon: Icons.stacked_bar_chart_rounded,
+            label: l.instructionExerciseVolumeTitle,
+            description: l.instructionExerciseVolumeDesc,
           ),
         ]),
         _InstructionBlock.heading(l.instructionSectionInputs),
@@ -349,11 +297,6 @@ List<_InstructionChapter> _ironVibeInstructionChapters(AppLocalizations l) {
             label: l.instructionOneRmTitle,
             description: l.instructionOneRmDesc,
           ),
-          _InstructionTopic(
-            icon: Icons.stacked_bar_chart_rounded,
-            label: l.instructionExerciseVolumeTitle,
-            description: l.instructionExerciseVolumeDesc,
-          ),
         ]),
         _InstructionBlock.heading(l.instructionSectionCardio),
         _InstructionBlock.topics([
@@ -376,12 +319,29 @@ List<_InstructionChapter> _ironVibeInstructionChapters(AppLocalizations l) {
             description: l.instructionFinishBody,
           ),
           _InstructionTopic(
+            icon: Icons.exit_to_app_rounded,
+            label: l.instructionLeaveWorkoutTitle,
+            description: l.instructionLeaveWorkoutDesc,
+          ),
+          _InstructionTopic(
             icon: Icons.restore_rounded,
             label: l.instructionAutoSaveTitle,
             description: l.instructionAutoSaveDesc,
           ),
+          _InstructionTopic(
+            icon: Icons.smartphone_rounded,
+            label: l.instructionScreenAwakeTitle,
+            description: l.instructionScreenAwakeDesc,
+          ),
         ]),
-        _InstructionBlock.heading(l.instructionSectionStopwatch),
+      ],
+    ),
+    _InstructionChapter(
+      id: 'timer',
+      icon: Icons.timer_rounded,
+      title: l.instructionChapterTimerTitle,
+      blurb: l.instructionChapterTimerBlurb,
+      blocks: [
         _InstructionBlock.topics([
           _InstructionTopic(
             icon: Icons.timer_outlined,
@@ -419,6 +379,68 @@ List<_InstructionChapter> _ironVibeInstructionChapters(AppLocalizations l) {
       ],
     ),
     _InstructionChapter(
+      id: 'exercises',
+      icon: Icons.list_alt_rounded,
+      title: l.instructionChapterExercisesTitle,
+      blurb: l.instructionChapterExercisesBlurb,
+      blocks: [
+        _InstructionBlock.philosophy(l.instructionExerciseBankIntro),
+        _InstructionBlock.heading(l.instructionSectionExerciseNameTools),
+        _InstructionBlock.topics([
+          _InstructionTopic(
+            icon: Icons.drive_file_rename_outline_rounded,
+            label: l.instructionRenameExerciseTitle,
+            description: l.instructionRenameExerciseDesc,
+          ),
+          _InstructionTopic(
+            icon: Icons.close_rounded,
+            label: l.instructionRemoveFromBankTitle,
+            description: l.instructionRemoveFromBankDesc,
+          ),
+          _InstructionTopic(
+            icon: Icons.drive_file_move_outline,
+            label: l.instructionReassignExerciseTitle,
+            description: l.instructionReassignExerciseDesc,
+          ),
+        ]),
+        _InstructionBlock.heading(l.instructionSectionMuscleGroups),
+        _InstructionBlock.body(l.instructionMuscleGroupsIntro),
+        _InstructionBlock.topics([
+          _InstructionTopic(
+            icon: Icons.label_outline_rounded,
+            label: l.instructionMuscleGroupTagTitle,
+            description: l.instructionMuscleGroupTagDesc,
+          ),
+        ]),
+        _InstructionBlock.heading(l.instructionSectionFavorites),
+        _InstructionBlock.topics([
+          _InstructionTopic(
+            icon: Icons.star_border_rounded,
+            label: l.instructionFavoriteStarTitle,
+            description: l.instructionFavoriteStarDesc,
+          ),
+          _InstructionTopic(
+            icon: Icons.playlist_add_check_rounded,
+            label: l.instructionBuildFromFavoritesTitle,
+            description: l.instructionBuildFromFavoritesDesc,
+          ),
+        ]),
+        _InstructionBlock.heading(l.instructionSectionQuickWorkout),
+        _InstructionBlock.topics([
+          _InstructionTopic(
+            icon: Icons.grid_view_rounded,
+            label: l.instructionQuickWorkoutHowTitle,
+            description: l.instructionQuickWorkoutHowDesc,
+          ),
+          _InstructionTopic(
+            icon: Icons.swap_horiz_rounded,
+            label: l.instructionQuickWorkoutPreviewTitle,
+            description: l.instructionQuickWorkoutPreviewDesc,
+          ),
+        ]),
+      ],
+    ),
+    _InstructionChapter(
       id: 'progress',
       icon: Icons.insights_rounded,
       title: l.instructionChapterProgressTitle,
@@ -426,6 +448,18 @@ List<_InstructionChapter> _ironVibeInstructionChapters(AppLocalizations l) {
       blocks: [
         _InstructionBlock.heading(l.instructionSectionPersonalProgress),
         _InstructionBlock.body(l.instructionPersonalProgressIntro),
+        _InstructionBlock.topics([
+          _InstructionTopic(
+            icon: Icons.emoji_events_outlined,
+            label: l.instructionProgressBestSetTitle,
+            description: l.instructionProgressBestSetDesc,
+          ),
+          _InstructionTopic(
+            icon: Icons.stacked_bar_chart_rounded,
+            label: l.instructionProgressMaxVolumeTitle,
+            description: l.instructionProgressMaxVolumeDesc,
+          ),
+        ]),
         _InstructionBlock.heading(l.instructionSectionProgressChart),
         _InstructionBlock.body(l.instructionProgressChartIntro),
         _InstructionBlock.chartLegend([
@@ -443,25 +477,87 @@ List<_InstructionChapter> _ironVibeInstructionChapters(AppLocalizations l) {
           ),
         ]),
         _InstructionBlock.callout(l.instructionProgressChartSessionHighlight),
+      ],
+    ),
+    _InstructionChapter(
+      id: 'rhythm',
+      icon: Icons.speed_rounded,
+      title: l.instructionChapterRhythmTitle,
+      blurb: l.instructionChapterRhythmBlurb,
+      blocks: [
+        _InstructionBlock.body(l.instructionRhythmIntro),
+        _InstructionBlock.topics([
+          _InstructionTopic(
+            icon: Icons.speed_rounded,
+            label: l.instructionRhythmGaugeTitle,
+            description: l.instructionRhythmGaugeDesc,
+          ),
+          _InstructionTopic(
+            icon: Icons.query_stats_rounded,
+            label: l.instructionRhythmInsightTitle,
+            description: l.instructionRhythmInsightDesc,
+          ),
+          _InstructionTopic(
+            icon: Icons.battery_saver_rounded,
+            label: l.instructionRhythmDeloadTitle,
+            description: l.instructionRhythmDeloadDesc,
+          ),
+          _InstructionTopic(
+            icon: Icons.notifications_none_rounded,
+            label: l.instructionRhythmNudgeTitle,
+            description: l.instructionRhythmNudgeDesc,
+          ),
+        ]),
+      ],
+    ),
+    _InstructionChapter(
+      id: 'data',
+      icon: Icons.history_rounded,
+      title: l.instructionChapterDataTitle,
+      blurb: l.instructionChapterDataBlurb,
+      blocks: [
         _InstructionBlock.heading(l.instructionSectionCalendar),
         _InstructionBlock.topics([
+          _InstructionTopic(
+            icon: Icons.calendar_month_rounded,
+            label: l.instructionCalendarBrowseTitle,
+            description: l.instructionCalendarBrowseDesc,
+          ),
           _InstructionTopic(
             icon: Icons.event_rounded,
             label: l.instructionCalendarAddTitle,
             description: l.instructionCalendarAddDesc,
           ),
-        ]),
-        _InstructionBlock.heading(l.instructionSectionNavHistory),
-        _InstructionBlock.topics([
           _InstructionTopic(
             icon: Icons.bar_chart_rounded,
             label: l.instructionNavHistoryTitle,
             description: l.instructionNavHistoryDesc,
           ),
           _InstructionTopic(
+            icon: Icons.edit_note_rounded,
+            label: l.instructionHistoryEditTitle,
+            description: l.instructionHistoryEditDesc,
+          ),
+        ]),
+        _InstructionBlock.heading(l.instructionSectionStats),
+        _InstructionBlock.topics([
+          _InstructionTopic(
+            icon: Icons.pie_chart_outline_rounded,
+            label: l.instructionStatsTitle,
+            description: l.instructionStatsDesc,
+          ),
+        ]),
+        _InstructionBlock.heading(l.instructionSectionBackup),
+        _InstructionBlock.topics([
+          _InstructionTopic(
             icon: Icons.import_export_rounded,
             label: l.instructionNavImportExportTitle,
             description: l.instructionNavImportExportDesc,
+          ),
+          _InstructionTopic(
+            icon: Icons.backup_outlined,
+            label: l.instructionBackupNudgeTitle,
+            description: l.instructionBackupNudgeDesc,
           ),
         ]),
       ],
@@ -485,9 +581,9 @@ List<_InstructionChapter> _ironVibeInstructionChapters(AppLocalizations l) {
             description: l.instructionClientProfileDesc,
           ),
           _InstructionTopic(
-            icon: Icons.print_outlined,
-            label: l.instructionPrintSessionTitle,
-            description: l.instructionPrintSessionDesc,
+            icon: Icons.event_note_rounded,
+            label: l.instructionTrainerScheduleTitle,
+            description: l.instructionTrainerScheduleDesc,
           ),
           _InstructionTopic(
             icon: Icons.edit_calendar_outlined,
@@ -498,6 +594,16 @@ List<_InstructionChapter> _ironVibeInstructionChapters(AppLocalizations l) {
             icon: Icons.replay_rounded,
             label: l.instructionTrainerRepeatTitle,
             description: l.instructionTrainerRepeatDesc,
+          ),
+          _InstructionTopic(
+            icon: Icons.print_outlined,
+            label: l.instructionPrintSessionTitle,
+            description: l.instructionPrintSessionDesc,
+          ),
+          _InstructionTopic(
+            icon: Icons.person_add_alt_1_rounded,
+            label: l.instructionImportAthleteTitle,
+            description: l.instructionImportAthleteDesc,
           ),
         ]),
       ],

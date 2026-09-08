@@ -394,6 +394,7 @@ class _TrainerScreenState extends State<TrainerScreen> {
 
   List<TrainerSession> _getSessionsForDate(DateTime date) {
     return trainerSchedule
+        .where(ironVibeTrainerSessionVisibleOnCoachCalendar)
         .where((s) => ironVibeIsSameCalendarDay(s.dateTime, date))
         .toList()
       ..sort((a, b) => a.dateTime.compareTo(b.dateTime));
@@ -401,7 +402,9 @@ class _TrainerScreenState extends State<TrainerScreen> {
 
   bool _hasSession(DateTime date) {
     return trainerSchedule.any(
-      (s) => ironVibeIsSameCalendarDay(s.dateTime, date),
+      (s) =>
+          ironVibeTrainerSessionVisibleOnCoachCalendar(s) &&
+          ironVibeIsSameCalendarDay(s.dateTime, date),
     );
   }
 
@@ -1827,7 +1830,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
 
   String _clientMeta(BuildContext context, Client client) {
     final l = AppLocalizations.of(context)!;
-    final last = ironVibeLastLoggedTrainerSessionForClient(
+    final last = ironVibeLastHistoryTrainerSessionForClient(
       client.name,
       clientId: client.id,
     );
@@ -2102,11 +2105,15 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
             ),
             TextButton(
               onPressed: () {
-                trainerSchedule.removeWhere(
-                  (s) => ironVibeSessionBelongsToClientRecord(s, widget.client),
+                final droppedDraft = ironVibeDeleteClientKeepingHistory(
+                  widget.client,
                 );
-                clients.remove(widget.client);
-                DataService.saveData();
+                unawaited(() async {
+                  if (droppedDraft) {
+                    await DataService.clearActiveWorkoutDraft();
+                  }
+                  await DataService.saveData();
+                }());
                 Navigator.pop(ctx);
                 Navigator.pop(context);
               },
@@ -2254,7 +2261,7 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
     final pal = IronVibePalette.of(context);
     final l = AppLocalizations.of(context)!;
     final dirty = _isDirty;
-    final last = ironVibeLastLoggedTrainerSessionForClient(
+    final last = ironVibeLastHistoryTrainerSessionForClient(
       widget.client.name,
       clientId: widget.client.id,
     );

@@ -756,222 +756,74 @@ class AppLocalizationsRu extends AppLocalizations {
   String get instructionTitle => 'Как всё устроено';
 
   @override
+  String get instructionHubManifest =>
+      'Без каталога упражнений и готовых программ. Вы называете движения своими словами — приложение ведёт по ним статистику.';
+
+  @override
+  String get instructionSearchHint => 'Поиск по инструкции';
+
+  @override
+  String get instructionSearchEmpty => 'Ничего не найдено.';
+
+  @override
+  String get instructionChapterStartTitle => 'С чего начать';
+
+  @override
+  String get instructionChapterStartBlurb =>
+      'Главный экран, два режима и логика приложения.';
+
+  @override
+  String get instructionChapterSessionTitle => 'На тренировке';
+
+  @override
+  String get instructionChapterSessionBlurb =>
+      'Подходы, вес, повторы, RIR, кардио и завершение сессии.';
+
+  @override
+  String get instructionChapterTimerTitle => 'Секундомер';
+
+  @override
+  String get instructionChapterTimerBlurb =>
+      'Интервалы, отдых между подходами и сигналы.';
+
+  @override
+  String get instructionChapterExercisesTitle => 'Упражнения и группы';
+
+  @override
+  String get instructionChapterExercisesBlurb =>
+      'Свой список движений, мышечные группы, избранное и быстрая тренировка.';
+
+  @override
+  String get instructionChapterProgressTitle => 'Прогресс и рекорды';
+
+  @override
+  String get instructionChapterProgressBlurb =>
+      'Личный прогресс, 1ПМ, тоннаж и график по упражнению.';
+
+  @override
+  String get instructionChapterRhythmTitle => 'Ритм и восстановление';
+
+  @override
+  String get instructionChapterRhythmBlurb =>
+      'Шкала недельного ритма и неделя разгрузки.';
+
+  @override
+  String get instructionChapterDataTitle => 'История и данные';
+
+  @override
+  String get instructionChapterDataBlurb =>
+      'Календарь, правка записей, статистика и резервная копия.';
+
+  @override
+  String get instructionChapterCoachTitle => 'Режим тренера';
+
+  @override
+  String get instructionChapterCoachBlurb =>
+      'Клиенты, расписание, план сессии и печать.';
+
+  @override
   String get instructionPhilosophy =>
-      'В IronVibe намеренно нет готовых списков из тысяч упражнений и зашитых «программ». Приложение не учит тренироваться — для этого есть YouTube и живой тренер — оно помогает вести статистику так, как удобно именно вам. Вы сами вводите названия движений своими словами. При желании можно пометить мышечную группу — тогда приложение соберёт быструю тренировку на всё тело из ваших же упражнений. Чем дольше пользуетесь, тем естественнее становится интерфейс: приложение подстраивается под ваши привычки, а не вы под него.';
-
-  @override
-  String get instructionSectionSetControl => 'Управление подходом';
-
-  @override
-  String get instructionSetMinusLabel => 'Минус';
-
-  @override
-  String get instructionSetMinusDesc =>
-      'Удаляет последний подход. Если в строке уже есть вес, повторы или запас — сначала спросит подтверждение. Пустую строку убирает сразу. Если подход остался один: в текущей тренировке строка очищается, в сохранённой истории удаляется всё упражнение.';
-
-  @override
-  String get instructionSetPlusLabel => 'Плюс';
-
-  @override
-  String get instructionSetPlusDesc =>
-      'Добавляет пустую строку нового подхода в текущем упражнении.';
-
-  @override
-  String get instructionSetProgressLabel => 'Временная шкала';
-
-  @override
-  String get instructionSetProgressDesc =>
-      'Открывает график прогресса по этому упражнению.';
-
-  @override
-  String get instructionSectionProgressChart => 'График прогресса';
-
-  @override
-  String get instructionProgressChartIntro =>
-      'Три независимые кривые по датам: красный — максимальный вес в одном подходе за день; голубой — максимум повторений в одном подходе; жёлтый — объём упражнения (сумма «вес × повторы» за день). Слева шкала веса, справа — повторов; жёлтая линия нормализована для сравнения тренда.';
-
-  @override
-  String get instructionProgressLineWeightLabel => 'Вес';
-
-  @override
-  String get instructionProgressLineWeightDesc =>
-      'Красная линия — наибольший вес в одном подходе за каждый календарный день.';
-
-  @override
-  String get instructionProgressLineRepsLabel => 'Повторы';
-
-  @override
-  String get instructionProgressLineRepsDesc =>
-      'Голубая линия — больше всего повторений за один подход в этот день (не обязательно с макс. весом).';
-
-  @override
-  String get instructionProgressLineVolumeDesc =>
-      'Жёлтая линия — дневной объём (тоннаж): сумма «вес × повторы» по подходам, где заполнены оба поля.';
-
-  @override
-  String get instructionProgressChartSessionHighlight =>
-      'Во время активной тренировки кнопка графика под подходами может подсвечиваться теми же цветами, что и линии: красный — если вы превысили прежний рекорд по весу в одном подходе; жёлтый — если суммарный объём упражнения выше лучшего за прошлые тренировки; голубой — если упражнение без веса и сумма повторов по всем подходам выше прошлого максимума. Если выполняется несколько условий, приоритет: красный, затем жёлтый, затем голубой. Подсветка только в текущей тренировке, в сохранённой истории её нет.';
-
-  @override
-  String get instructionSectionWorkout => 'Тренировка';
-
-  @override
-  String get instructionAddExerciseTitle => 'Добавить упражнение';
-
-  @override
-  String get instructionAddExerciseBody =>
-      'Добавляет новый блок. Сначала укажите название текущего упражнения — если поле пустое, приложение напомнит.';
-
-  @override
-  String get instructionSectionExerciseNameTools => 'Название упражнения';
-
-  @override
-  String get instructionRenameExerciseTitle => 'Долгое нажатие — переименовать';
-
-  @override
-  String get instructionRenameExerciseDesc =>
-      'Долго нажмите на название упражнения при вводе тренировки, на подсказку в выпадающем списке или на заголовок в сохранённой тренировке в истории — имя обновится везде.';
-
-  @override
-  String get instructionRemoveFromBankTitle => 'Убрать из списка';
-
-  @override
-  String get instructionRemoveFromBankDesc =>
-      'Когда открыт список подсказок под полем названия, нажмите крестик у строки — или красный крестик в личном прогрессе, — чтобы убрать это имя из подсказок и из таблицы прогресса. Сохранённые тренировки не меняются.';
-
-  @override
-  String get instructionSectionInputs => 'Данные';
-
-  @override
-  String get instructionWeightTitle => 'Вес';
-
-  @override
-  String get instructionWeightBody =>
-      'Вес снаряда или оборудования. Вводите число в кг или lb — как вам удобно. Приложение единицы не пересчитывает.';
-
-  @override
-  String get instructionRepsTitle => 'Повторы';
-
-  @override
-  String get instructionRepsBody =>
-      'Сколько раз вы выполнили движение за один подход.';
-
-  @override
-  String get instructionRirTitle => 'Запас (RIR)';
-
-  @override
-  String get instructionRirBody =>
-      'Сколько повторений вы могли бы ещё сделать до полного отказа. Помогает отслеживать интенсивность.';
-
-  @override
-  String get instructionOneRmTitle => '1ПМ (одно повторение, 1RM)';
-
-  @override
-  String get instructionOneRmDesc =>
-      'Расчётный максимум на одно повторение по текущему весу и числу повторов. Ключевой показатель силы для прогресса и подбора рабочих весов.';
-
-  @override
-  String get instructionExerciseVolumeTitle => 'Объём упражнения (сумма)';
-
-  @override
-  String get instructionExerciseVolumeDesc =>
-      'Под строками подходов, справа от кнопки прогресса (график): суммарный тоннаж по упражнению — сумма «вес × повторы» по всем подходам, где заданы оба значения. Пересчитывается при вводе и правках.';
-
-  @override
-  String get instructionSectionPersonalProgress => 'Личный прогресс';
-
-  @override
-  String get instructionPersonalProgressIntro =>
-      'Одна таблица по всем движениям из сохранённых тренировок: лучший подход, оценка 1ПМ и максимальный объём. Поиск сразу находит название. Звезда добавляет упражнение в избранное; маленькая метка под именем задаёт мышечную группу; красный крестик убирает имя из подсказок и из этой таблицы (сохранённые тренировки не меняются). Открыть можно из меню тренировок или из профиля клиента.';
-
-  @override
-  String get instructionSectionSaving => 'Сохранение';
-
-  @override
-  String get instructionFinishTitle => 'Завершить тренировку';
-
-  @override
-  String get instructionFinishBody =>
-      'Подтверждает и записывает тренировку в историю. Если выйти раньше, можно сохранить, удалить черновик или остаться. Если приложение прервалось, черновик сохраняется сам.';
-
-  @override
-  String get instructionSectionCardio => 'Кардио и интенсивность';
-
-  @override
-  String get instructionCardioTitle => 'Кардио';
-
-  @override
-  String get instructionCardioBody =>
-      'Отслеживает время и интенсивность кардио-блока; расстояние в приложении не вводится. Помогает держать ритм и контролировать усилие.';
-
-  @override
-  String get instructionIntensityTitle => 'Интенсивность';
-
-  @override
-  String get instructionIntensityBody =>
-      'Используйте шкалу усилий (RPE), чтобы понимать, насколько тяжело далась тренировка. Это ключ к прогрессу без перетренированности.';
-
-  @override
-  String get instructionSectionStopwatch => 'Секундомер (ваш помощник)';
-
-  @override
-  String get instructionStopwatchWhyTitle => 'Зачем он нужен?';
-
-  @override
-  String get instructionStopwatchWhyBody =>
-      'Чтобы контролировать отдых между подходами. Короткий отдых - выше плотность, длинный - больше сил на тяжелый вес.';
-
-  @override
-  String get instructionStopwatchHowTitle => 'Как он работает?';
-
-  @override
-  String get instructionStopwatchHowBody =>
-      'По центру — время и кнопки «Пуск/Пауза» и «Сброс». Слева и справа — быстрые пресеты (описаны ниже). В обычном режиме секундомера время идёт вверх с сотыми долями секунды. Таймер закреплён в шапке при прокрутке экрана.';
-
-  @override
-  String get instructionStopwatchIntervalsTitle => 'Слева: интервалы';
-
-  @override
-  String get instructionStopwatchIntervalsBody =>
-      '1/1 — 60 секунд работы и 60 секунд отдыха. 4/4 — по 4 минуты работы и 4 минуты отдыха за цикл. 20/10 — табата: 20 секунд нагрузки, 10 секунд отдыха. После выбора таймер по кругу чередует фазы, пока не поставите на паузу или не сбросите. Красный оттенок — работа, синий — отдых.';
-
-  @override
-  String get instructionStopwatchRestTitle => 'Справа: отдых';
-
-  @override
-  String get instructionStopwatchRestBody =>
-      'Кнопки +1m, +2m и +5m задают или удлиняют обратный отсчёт в минутах. Если шёл интервальный цикл, он переключается на такой отсчёт. Если отсчёт уже идёт — минуты добавляются к оставшемуся времени. Удобно для отдыха между подходами.';
-
-  @override
-  String get instructionStopwatchProgressTitle => 'Полоска прогресса';
-
-  @override
-  String get instructionStopwatchProgressBody =>
-      'В режимах отсчёта и интервалов под временем отображается полоска: сколько текущей фазы осталось.';
-
-  @override
-  String get instructionStopwatchSoundsTitle => 'Звук и вибрация';
-
-  @override
-  String get instructionStopwatchSoundsBody =>
-      'За 3, 2 и 1 секунду до конца фазы — короткий звук из приложения и лёгкая вибрация. При смене фазы или обнулении отсчёта — более заметный сигнал и отклик. Звуки — минимальные файлы в составе приложения; микрофон и разрешение на уведомления не нужны; громкость зависит от настроек устройства.';
-
-  @override
-  String get instructionSectionNavHistory => 'История и данные';
-
-  @override
-  String get instructionNavHistoryTitle => 'История / статистика';
-
-  @override
-  String get instructionNavHistoryDesc =>
-      'В календаре/истории у каждой тренировки показан тоннаж. Объём тренировки — один из лучших индикаторов гипертрофии: чем больше качественного объёма, тем больше мышц вы строите.';
-
-  @override
-  String get instructionNavImportExportTitle => 'Импорт / экспорт';
-
-  @override
-  String get instructionNavImportExportDesc =>
-      'Резервная копия и перенос данных через экспорт и импорт JSON в окне статистики. В копию входят история, список упражнений, избранное и метки мышечных групп. Тренерская копия отдельна от личной истории. Тренер может импортировать историю атлета как нового клиента, не смешивая названия упражнений.';
+      'IronVibe не учит тренироваться и не выдаёт готовых программ — для этого есть тренер и собственный опыт. Здесь нет каталога из тысяч упражнений: названия движений вы вводите своими словами, а приложение аккуратно считает по ним цифры. Всё хранится на устройстве: ни аккаунтов, ни подписок, ни рекламы.';
 
   @override
   String get instructionSectionHome => 'Главный экран';
@@ -981,21 +833,35 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionThemeDesc =>
-      'Переключатель солнце / луна на главном экране меняет светлую и тёмную тему. Выбор запоминается.';
+      'Переключатель солнце — луна меняет светлое и тёмное оформление. Выбор запоминается.';
 
   @override
   String get instructionTrainSelfTitle => 'Тренирую себя';
 
   @override
   String get instructionTrainSelfDesc =>
-      'Свои тренировки, календарь, личный прогресс, избранное, шкала ритма (как часто вы тренируетесь) и быстрая тренировка на всё тело из упражнений с метками групп.';
+      'Ваш контур: тренировки, календарь, личный прогресс, избранное и шкала ритма.';
 
   @override
   String get instructionTrainOthersTitle => 'Тренирую других';
 
   @override
   String get instructionTrainOthersDesc =>
-      'Режим тренера: клиенты, расписание и отдельная история на каждого. У каждого клиента свои таблица прогресса и избранное.';
+      'Режим тренера: клиенты, расписание и отдельная история по каждому человеку. С личными тренировками не смешивается.';
+
+  @override
+  String get instructionLanguageTitle => 'Язык';
+
+  @override
+  String get instructionLanguageDesc =>
+      'Приложение следует языку системы — отдельной настройки нет. Поддерживается десять языков.';
+
+  @override
+  String get instructionHomeLinksTitle => 'Версия и связь';
+
+  @override
+  String get instructionHomeLinksDesc =>
+      'Внизу главного экрана — номер версии, сайт, Telegram, почта поддержки и политика конфиденциальности.';
 
   @override
   String get instructionSectionAthleteMenu => 'Ваши тренировки';
@@ -1005,54 +871,259 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionStartWorkoutDesc =>
-      'Открывает пустую сессию — прошлую тренировку не копирует. Добавляйте упражнения, записывайте подходы и завершите, чтобы сохранить.';
+      'Открывает пустую сессию — прошлая не копируется. Добавляйте упражнения, записывайте подходы и завершите, чтобы сохранить.';
 
   @override
   String get instructionQuickWorkoutTitle => 'Быстрая тренировка';
 
   @override
   String get instructionQuickWorkoutDesc =>
-      'Собирает тренировку на всё тело из 4 упражнений: грудь, спина, одна половина ног (перед или зад бедра — не оба в один день) и одно на плечи, руки или кор — какая группа дольше не тренировалась. Сначала избранные. Прошлые вес и повторы показаны серым как минимум, который нужно преодолеть — каждый подход вы вводите сами.';
+      'Собирает фулбади из четырёх упражнений по вашим меткам мышечных групп.';
 
   @override
   String get instructionCalendarMenuTitle => 'Календарь тренировок';
 
   @override
   String get instructionCalendarMenuDesc =>
-      'Видно, в какие дни вы тренировались; можно открыть сохранённую сессию или добавить тренировку на выбранную дату и время — в том числе в прошлые дни.';
+      'Дни, в которые вы тренировались. Отсюда открываются сохранённые сессии и добавляются пропущенные.';
+
+  @override
+  String get instructionSectionPersonalProgress => 'Личный прогресс';
 
   @override
   String get instructionPersonalProgressMenuDesc =>
-      'Таблица лучших подходов, оценки 1ПМ и максимального объёма. Здесь же звезда избранного и метка мышечной группы.';
+      'Таблица лучших подходов, расчётного 1ПМ и максимального объёма по каждому движению.';
 
   @override
   String get instructionFavoritesMenuTitle => 'Избранные упражнения';
 
   @override
   String get instructionFavoritesMenuDesc =>
-      'Список отмеченных звёздочкой. Отметьте нужные и нажмите «Собрать тренировку» — сессия начнётся в этом порядке. Прошлые вес и повторы показаны серым как минимум, который нужно преодолеть.';
+      'Движения, отмеченные звездой. Из них собирается тренировка в пару касаний.';
 
   @override
-  String get instructionSectionRhythm => 'Ритм тренировок';
+  String get instructionSectionWorkout => 'Сессия';
 
   @override
-  String get instructionRhythmIntro =>
-      'После нескольких силовых тренировок вверху экрана тренировок появляется шкала. Она показывает, сколько дней в неделю вы тренировались в среднем за последние четыре недели. Дни только с кардио не считаются. Это снимок плотности, а не цель, которую приложение требует достичь. Нажмите на шкалу — там заметка о вашем ритме и о том, что такое неделя активного отдыха.';
+  String get instructionStrengthCardioTitle => 'Сила или кардио';
 
   @override
-  String get instructionRhythmGaugeTitle => 'Дней в неделю';
+  String get instructionStrengthCardioDesc =>
+      'Переключатель вверху сессии задаёт тип тренировки. Силовая — вес, повторы и RIR; кардио — время и интенсивность. Если данные другого типа уже введены, приложение переспросит.';
 
   @override
-  String get instructionRhythmGaugeDesc =>
-      'Дуга заполняется от 1 до 6 дней в неделю. Цвет идёт от стали через золото к ржавчине, когда плотность растёт. Шкала появляется, когда в этом четырёхнедельном окне есть хотя бы три силовых дня.';
+  String get instructionAddExerciseTitle => 'Добавить упражнение';
 
   @override
-  String get instructionRhythmDeloadTitle =>
-      'Напоминание о неделе активного отдыха';
+  String get instructionAddExerciseBody =>
+      'Новый блок добавится, когда у текущего упражнения есть название и хотя бы один заполненный подход.';
 
   @override
-  String get instructionRhythmDeloadDesc =>
-      'Если вы тренируетесь примерно два с половиной дня в неделю или чаще несколько недель подряд без недели активного отдыха, приложение может напомнить, что иногда полезна короткая неделя активного отдыха — примерно на 30% меньше тоннажа и повторений. Чем больше дней в неделю, тем раньше появится напоминание. Это напоминание, не предписание. Не чаще одного раза в неделю и только в личном режиме — не автоматически по клиентам. У клиента ту же заметку открывает нажатие на шкалу.';
+  String get instructionPreviousHintsTitle => 'Серые подсказки';
+
+  @override
+  String get instructionPreviousHintsDesc =>
+      'Вес и повторы прошлого раза показаны серым — это ориентир, который нужно побить, а не записанный подход. В историю попадёт только то, что вы введёте сами.';
+
+  @override
+  String get instructionRemoveExerciseTitle => 'Убрать упражнение';
+
+  @override
+  String get instructionRemoveExerciseDesc =>
+      'Красный крестик удаляет блок из текущей сессии. Сохранённая история при этом не меняется.';
+
+  @override
+  String get instructionSectionSetControl => 'Строка подхода';
+
+  @override
+  String get instructionSetPlusLabel => 'Плюс';
+
+  @override
+  String get instructionSetPlusDesc =>
+      'Добавляет пустую строку следующего подхода.';
+
+  @override
+  String get instructionSetMinusLabel => 'Минус';
+
+  @override
+  String get instructionSetMinusDesc =>
+      'Убирает последний подход. Пустую строку удаляет сразу, заполненную — после подтверждения. Если подход остался один, поля просто очистятся.';
+
+  @override
+  String get instructionSetProgressLabel => 'График упражнения';
+
+  @override
+  String get instructionSetProgressDesc =>
+      'Открывает динамику по этому движению за месяц, год или всё время.';
+
+  @override
+  String get instructionExerciseVolumeTitle => 'Тоннаж упражнения';
+
+  @override
+  String get instructionExerciseVolumeDesc =>
+      'Справа от кнопки графика — сумма «вес × повторы» по всем заполненным подходам. Пересчитывается на лету.';
+
+  @override
+  String get instructionSectionInputs => 'Что означают поля';
+
+  @override
+  String get instructionWeightTitle => 'Вес';
+
+  @override
+  String get instructionWeightBody =>
+      'Рабочий вес снаряда. Вводите в килограммах или фунтах — приложение единицы не пересчитывает и ничего не навязывает.';
+
+  @override
+  String get instructionRepsTitle => 'Повторы';
+
+  @override
+  String get instructionRepsBody => 'Количество повторений в подходе.';
+
+  @override
+  String get instructionRirTitle => 'RIR — запас повторений';
+
+  @override
+  String get instructionRirBody =>
+      'Сколько повторений вы могли бы сделать сверх выполненного. 0 — работа до отказа, ∞ — разминочный подход. Простой способ дозировать интенсивность.';
+
+  @override
+  String get instructionOneRmTitle => '1ПМ — разовый максимум';
+
+  @override
+  String get instructionOneRmDesc =>
+      'Расчётная оценка веса на одно повторение по формуле Эпли. Считается из веса и повторов подхода и показывается прямо под строкой — ключевой ориентир силы.';
+
+  @override
+  String get instructionSectionCardio => 'Кардио';
+
+  @override
+  String get instructionCardioTitle => 'Время';
+
+  @override
+  String get instructionCardioBody =>
+      'Длительность блока в минутах. Дистанции и пульса здесь нет: приложение не связано с трекерами.';
+
+  @override
+  String get instructionIntensityTitle => 'Интенсивность';
+
+  @override
+  String get instructionIntensityBody =>
+      'Оценка усилия от 1 до 5 — упрощённая шкала RPE. В кардио-сессии на упражнение сохраняется одна строка.';
+
+  @override
+  String get instructionSectionSaving => 'Завершение';
+
+  @override
+  String get instructionFinishTitle => 'Завершить тренировку';
+
+  @override
+  String get instructionFinishBody =>
+      'Кнопка внизу сессии: приложение переспросит и запишет тренировку в историю. Нужен хотя бы один заполненный подход.';
+
+  @override
+  String get instructionLeaveWorkoutTitle => 'Выход раньше времени';
+
+  @override
+  String get instructionLeaveWorkoutDesc =>
+      'Если закрыть сессию с данными, можно остаться, сохранить сделанное или удалить черновик.';
+
+  @override
+  String get instructionAutoSaveTitle => 'Прерванная тренировка';
+
+  @override
+  String get instructionAutoSaveDesc =>
+      'Черновик сохраняется сам — раз в минуту и при сворачивании приложения. При следующем запуске вам предложат продолжить с того же места или удалить его.';
+
+  @override
+  String get instructionScreenAwakeTitle => 'Экран не гаснет';
+
+  @override
+  String get instructionScreenAwakeDesc =>
+      'Пока идёт живая сессия, экран остаётся включённым, чтобы не разблокировать телефон после каждого подхода.';
+
+  @override
+  String get instructionStopwatchWhyTitle => 'Зачем считать отдых';
+
+  @override
+  String get instructionStopwatchWhyBody =>
+      'Пауза между подходами — такой же рабочий параметр, как вес и повторы: короткий отдых поднимает плотность работы, длинный даёт выложиться в тяжёлом подходе.';
+
+  @override
+  String get instructionStopwatchHowTitle => 'Пуск, пауза, сброс';
+
+  @override
+  String get instructionStopwatchHowBody =>
+      'Таймер закреплён в шапке сессии и остаётся на виду при прокрутке. По центру — время и управление; в обычном режиме отсчёт идёт вверх, с сотыми долями секунды.';
+
+  @override
+  String get instructionStopwatchIntervalsTitle => 'Слева: интервалы';
+
+  @override
+  String get instructionStopwatchIntervalsBody =>
+      '1/1 — минута работы и минута отдыха. 4/4 — по четыре минуты. 20/10 — табата. Фазы чередуются по кругу до паузы или сброса: красный оттенок — работа, синий — отдых.';
+
+  @override
+  String get instructionStopwatchRestTitle => 'Справа: отдых';
+
+  @override
+  String get instructionStopwatchRestBody =>
+      '+1m, +2m и +5m запускают обратный отсчёт между подходами. Если отсчёт уже идёт, минуты прибавляются к остатку; интервальный цикл переключится на отдых.';
+
+  @override
+  String get instructionStopwatchProgressTitle => 'Полоса фазы';
+
+  @override
+  String get instructionStopwatchProgressBody =>
+      'В обратном отсчёте и интервалах под цифрами видно, сколько текущей фазы осталось.';
+
+  @override
+  String get instructionStopwatchSoundsTitle => 'Звук и вибрация';
+
+  @override
+  String get instructionStopwatchSoundsBody =>
+      'За три, две и одну секунду до конца фазы — короткий щелчок и лёгкая вибрация, на смене фазы сигнал заметнее. Звуки встроены в приложение: ни микрофон, ни разрешение на уведомления не нужны, громкость берётся из настроек телефона.';
+
+  @override
+  String get instructionExerciseBankIntro =>
+      'Список упражнений растёт сам: каждое новое название из завершённой тренировки попадает в подсказки. Имена хранятся в верхнем регистре, чтобы одно движение не раздваивалось.';
+
+  @override
+  String get instructionSectionExerciseNameTools => 'Названия';
+
+  @override
+  String get instructionRenameExerciseTitle => 'Переименовать везде';
+
+  @override
+  String get instructionRenameExerciseDesc =>
+      'Долгое нажатие на название — в сессии, в списке подсказок или в сохранённой тренировке. Имя обновится во всей истории и на графиках.';
+
+  @override
+  String get instructionRemoveFromBankTitle => 'Убрать из подсказок';
+
+  @override
+  String get instructionRemoveFromBankDesc =>
+      'Крестик в открытом списке подсказок или красный крестик в личном прогрессе убирает название из подсказок и из таблицы. Сохранённые тренировки остаются нетронутыми.';
+
+  @override
+  String get instructionReassignExerciseTitle => 'Заменить в записи';
+
+  @override
+  String get instructionReassignExerciseDesc =>
+      'В сохранённой тренировке блок можно переназначить на другое движение. Подходы останутся как есть, но уйдут в статистику нового названия — меняется только эта сессия.';
+
+  @override
+  String get instructionSectionMuscleGroups => 'Мышечные группы';
+
+  @override
+  String get instructionMuscleGroupsIntro =>
+      'Группа — необязательная метка к вашему названию. Она нужна только быстрой тренировке, чтобы собрать сбалансированный фулбади. Восемь групп: грудь, спина, плечи, корпус, квадрицепс, бицепс бедра, сгибатели рук, разгибатели рук.';
+
+  @override
+  String get instructionMuscleGroupTagTitle => 'Как поставить метку';
+
+  @override
+  String get instructionMuscleGroupTagDesc =>
+      'При первом вводе нового названия приложение спросит группу. Можно ответить «Позже» или «Не для быстрой тренировки», если движение не должно попадать в микс. Метку под именем в личном прогрессе и избранном легко сменить или снять.';
 
   @override
   String get instructionSectionFavorites => 'Избранное';
@@ -1062,116 +1133,215 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionFavoriteStarDesc =>
-      'В «Личном прогрессе» нажмите звезду рядом с упражнением, чтобы добавить или убрать его из избранного. Избранные остаются вверху таблицы.';
+      'Звезда есть и на карточке упражнения в сессии, и в таблице личного прогресса. Избранные держатся вверху списка.';
 
   @override
   String get instructionBuildFromFavoritesTitle => 'Собрать тренировку';
 
   @override
   String get instructionBuildFromFavoritesDesc =>
-      'На экране избранного отметьте упражнения. Кнопка появляется, когда выбрано хотя бы одно. Прошлые вес и повторы показаны серым как минимум, который нужно преодолеть — каждый подход вы вводите сами. Для клиента то же действие открывает сессию этого человека.';
+      'На экране избранного отметьте нужные движения — кнопка появится сразу. Сессия откроется в том же порядке, с серыми подсказками прошлого раза. Для клиента то же действие открывает его тренировку.';
 
   @override
-  String get instructionSectionMuscleGroups =>
-      'Мышечные группы и быстрая тренировка';
+  String get instructionSectionQuickWorkout => 'Быстрая тренировка';
 
   @override
-  String get instructionMuscleGroupsIntro =>
-      'Группы — необязательные метки к вашим названиям упражнений. Это не каталог: они нужны только быстрой тренировке, чтобы собрать сбалансированный микс на всё тело. Восемь групп: грудь, спина, плечи, корпус, передняя поверхность бедра, задняя поверхность бедра, сгибание рук, разгибание рук.';
-
-  @override
-  String get instructionMuscleGroupTagTitle => 'Как пометить';
-
-  @override
-  String get instructionMuscleGroupTagDesc =>
-      'Когда вы впервые вводите новое название, приложение спрашивает группу. Можно нажать «Позже» или «Не для быстрой тренировки», если движение не должно попадать в микс на всё тело. Метку под именем в «Личном прогрессе» или избранном можно сменить или снять.';
-
-  @override
-  String get instructionQuickWorkoutHowTitle => 'Как собирается быстрая сессия';
+  String get instructionQuickWorkoutHowTitle => 'Четыре слота';
 
   @override
   String get instructionQuickWorkoutHowDesc =>
-      'Четыре слота: грудь, спина, одна половина ног, затем плечи/руки/кор по давности. В предпросмотре слот можно заменить другим упражнением той же группы. Если мало — добавьте упражнения сами.';
+      'Грудь, спина, одна половина ног (квадрицепс или бицепс бедра — не обе в один день) и одно движение на плечи, руки или корпус. В каждом слоте приложение берёт группу, которая дольше не работала, и отдаёт приоритет избранному.';
 
   @override
-  String get instructionStrengthCardioTitle => 'Сила / кардио';
+  String get instructionQuickWorkoutPreviewTitle => 'Предпросмотр и замена';
 
   @override
-  String get instructionStrengthCardioDesc =>
-      'Переключатель вверху сессии. Сила: вес, повторы, запас (RIR). Кардио: только время и интенсивность — поле дистанции нет.';
+  String get instructionQuickWorkoutPreviewDesc =>
+      'Перед стартом виден весь состав: любой слот можно заменить другим упражнением той же группы. Если помеченных движений не хватает, приложение скажет об этом и откроет личный прогресс, чтобы расставить метки.';
 
   @override
-  String get instructionPreviousHintsTitle => 'Серые цифры прошлой сессии';
+  String get instructionPersonalProgressIntro =>
+      'Одна таблица по всем движениям из сохранённых тренировок. Избранные наверху, остальные по алфавиту; поиск находит по названию. Открывается из меню тренировок или из профиля клиента.';
 
   @override
-  String get instructionPreviousHintsDesc =>
-      'Когда тренер выбирает упражнение в сессии клиента, быстрой тренировке или сборке из избранного, прошлые вес и повторы показаны серым — это минимум, который нужно преодолеть, а не уже записанный подход. В историю попадают только числа, которые вы ввели сами.';
+  String get instructionProgressBestSetTitle => 'Лучший подход';
 
   @override
-  String get instructionRemoveExerciseTitle => 'Убрать из этой тренировки';
+  String get instructionProgressBestSetDesc =>
+      'Подход с наивысшим расчётным 1ПМ за всю историю. Для движений без веса берётся подход с наибольшим числом повторений.';
 
   @override
-  String get instructionRemoveExerciseDesc =>
-      'Удаляет блок только из текущей сессии. Сохранённая история не меняется, пока вы не завершите тренировку.';
+  String get instructionProgressMaxVolumeTitle => 'Максимальный объём';
 
   @override
-  String get instructionReassignExerciseTitle => 'Сменить упражнение в истории';
+  String get instructionProgressMaxVolumeDesc =>
+      'Наибольший тоннаж этого упражнения за одну тренировку — ориентир, от которого удобно планировать рабочий объём.';
 
   @override
-  String get instructionReassignExerciseDesc =>
-      'В сохранённой тренировке блок можно переназначить на другое имя. Меняется только эта сессия; графики пойдут по новому имени. Подходы остаются как были.';
+  String get instructionSectionProgressChart => 'График упражнения';
 
   @override
-  String get instructionAutoSaveTitle => 'Прерванная тренировка';
+  String get instructionProgressChartIntro =>
+      'Три независимые кривые по датам. Слева шкала веса, справа — повторов; жёлтая линия нормализована, чтобы тренды сравнивались по форме. Период переключается — месяц, год, всё время, — а касание точки показывает цифры этого дня. Кардио в график не попадает.';
 
   @override
-  String get instructionAutoSaveDesc =>
-      'Если приложение закрылось посреди сессии, оно предложит продолжить с того же места или удалить несохранённый черновик.';
+  String get instructionProgressLineWeightDesc =>
+      'Красная — наибольший вес в одном подходе за день.';
 
   @override
-  String get instructionSectionCalendar => 'Календарь';
+  String get instructionProgressLineRepsDesc =>
+      'Голубая — наибольшее число повторений в подходе, не обязательно с максимальным весом.';
 
   @override
-  String get instructionCalendarAddTitle => 'Добавить на дату';
+  String get instructionProgressLineVolumeDesc =>
+      'Жёлтая — дневной тоннаж: сумма «вес × повторы» по подходам, где заполнены оба поля.';
+
+  @override
+  String get instructionProgressChartSessionHighlight =>
+      'На живой тренировке кнопка графика подсвечивается, когда вы бьёте рекорд: красным — по весу в подходе, жёлтым — по тоннажу упражнения, голубым — по сумме повторов в движениях без веса. Если совпало несколько, приоритет у красного, затем жёлтый и голубой. В сохранённой истории подсветки нет.';
+
+  @override
+  String get instructionRhythmIntro =>
+      'Когда за последние четыре недели набирается хотя бы три силовых дня, вверху экрана тренировок появляется шкала ритма. Это не цель и не оценка — просто то, как вы сейчас ходите в зал.';
+
+  @override
+  String get instructionRhythmGaugeTitle => 'Дней в неделю';
+
+  @override
+  String get instructionRhythmGaugeDesc =>
+      'Дуга заполняется от одного до шести дней — это среднее за четыре недели. Считаются дни с силовой работой, дни только с кардио — нет. Чем плотнее ритм, тем дальше цвет уходит от стали через золото к ржавчине.';
+
+  @override
+  String get instructionRhythmInsightTitle => 'Разбор ритма';
+
+  @override
+  String get instructionRhythmInsightDesc =>
+      'Нажмите на шкалу: приложение назовёт ваш режим — спокойный, ровный, плотный или почти без выходных — и объяснит, что он значит для восстановления. У клиента тренера открывается такой же разбор.';
+
+  @override
+  String get instructionRhythmDeloadTitle => 'Неделя разгрузки';
+
+  @override
+  String get instructionRhythmDeloadDesc =>
+      'Разгрузка — не пауза, а неделя вполсилы: рабочие веса и число подходов ниже на 30–50%, либо только кардио. Мышцы восстанавливаются быстрее связок, сухожилий и суставов — такая неделя даёт им догнать.';
+
+  @override
+  String get instructionRhythmNudgeTitle => 'Напоминание';
+
+  @override
+  String get instructionRhythmNudgeDesc =>
+      'Если вы держите от двух с половиной тренировок в неделю и давно не разгружались, приложение предложит взять такую неделю. Чем плотнее ритм, тем раньше появится подсказка. Она всплывает не чаще раза в неделю и только в личном режиме — и остаётся рекомендацией, а не медицинским советом.';
+
+  @override
+  String get instructionSectionCalendar => 'Календарь и история';
+
+  @override
+  String get instructionCalendarBrowseTitle => 'Как листать';
+
+  @override
+  String get instructionCalendarBrowseDesc =>
+      'Месяцы перелистываются свайпом, а нажатие на название месяца открывает быстрый выбор даты. Точка под числом означает, что в этот день была тренировка.';
+
+  @override
+  String get instructionCalendarAddTitle => 'Запись задним числом';
 
   @override
   String get instructionCalendarAddDesc =>
-      'Выберите день и добавьте тренировку на выбранное время. Удобно, если нужно внести пропущенную сессию.';
+      'Выберите день, укажите время и добавьте тренировку — в том числе за прошедшую дату. Удобно, если сессию забыли записать.';
 
   @override
-  String get instructionSectionTrainer => 'Режим тренера';
+  String get instructionNavHistoryTitle => 'Тоннаж тренировки';
+
+  @override
+  String get instructionNavHistoryDesc =>
+      'У каждой сохранённой сессии указан суммарный тоннаж. Объём — один из самых надёжных ориентиров для гипертрофии: важен не рекорд в отдельный день, а то, как он держится из недели в неделю.';
+
+  @override
+  String get instructionHistoryEditTitle => 'Правка записей';
+
+  @override
+  String get instructionHistoryEditDesc =>
+      'Сохранённую тренировку можно раскрыть и поправить: добавить упражнение или подход, изменить цифры, удалить сессию целиком. Изменения сохраняются сразу.';
+
+  @override
+  String get instructionSectionStats => 'Статистика';
+
+  @override
+  String get instructionStatsTitle => 'Сводка тренировок';
+
+  @override
+  String get instructionStatsDesc =>
+      'Иконка графика в шапке экрана тренировок или тренера: сколько сессий было за месяц, за год и за всё время. В режиме тренера — ещё и разбивка по клиентам.';
+
+  @override
+  String get instructionSectionBackup => 'Резервная копия';
+
+  @override
+  String get instructionNavImportExportTitle => 'Экспорт и импорт';
+
+  @override
+  String get instructionNavImportExportDesc =>
+      'Экспорт складывает в один файл JSON историю, список упражнений, избранное, метки групп, клиентов и расписание. Импорт подмешивает файл к текущим данным и пропускает дубли — ничего не затирается. Тренерская копия отделена от личной.';
+
+  @override
+  String get instructionBackupNudgeTitle => 'Напоминание о копии';
+
+  @override
+  String get instructionBackupNudgeDesc =>
+      'Данные живут только на этом устройстве: аккаунтов и облака нет. Раз в четыре недели приложение предложит сохранить копию — если телефон потеряется, история восстановится только из файла.';
 
   @override
   String get instructionTrainerIntro =>
-      '«Тренирую других» — для тренеров. Добавляйте клиентов, ставьте сессии, планируйте упражнения заранее и ведите тренировки отдельно по каждому человеку. Повтор прошлой сессии — по желанию. Экспорт и импорт тренерских данных отделены от личной истории. Удаление клиента снимает будущие сессии, но прошлые тренировки остаются для отчётности.';
+      '«Тренирую других» — отдельный контур для работы с людьми: клиенты, расписание и своя история на каждого. Личные тренировки и тренерские данные не пересекаются.';
 
   @override
   String get instructionClientsTitle => 'Клиенты';
 
   @override
   String get instructionClientsDesc =>
-      'Добавление, правка и удаление клиентов. В списке видны прошлая и следующая сессии. В профиле: цель, вес, рост и закрытые заметки тренера.';
+      'Список с целью, прошлой и следующей сессией. В карточке — цель, вес, рост и закрытые заметки тренера. Имя задаётся при создании и потом не меняется.';
 
   @override
   String get instructionClientProfileTitle => 'Профиль клиента';
 
   @override
   String get instructionClientProfileDesc =>
-      'Из профиля начинается сегодняшняя пустая живая сессия. Серые цифры прошлого раза появляются только после выбора упражнения. В истории — только завершённые тренировки. Планируйте на другие даты в календаре. Прогресс и избранное — на том же экране. Если силовых дней достаточно, шкала показывает, как часто клиент ходит в зал; нажмите, чтобы открыть заметку о ритме и отдыхе. Несохранённые правки профиля спрашивают подтверждение перед выходом.';
+      'Отсюда начинается сегодняшняя сессия и открываются прогресс, избранное и история по месяцам. Если силовых дней достаточно, здесь же шкала ритма. Удаление клиента снимает будущие сессии, но прошлые тренировки остаются для отчётности.';
 
   @override
-  String get instructionTrainerPlanTitle => 'Спланировать сессию';
+  String get instructionTrainerScheduleTitle => 'Расписание';
+
+  @override
+  String get instructionTrainerScheduleDesc =>
+      'Календарь тренера показывает сессии всех клиентов: значок «плей» — запланированная, галочка — завершённая, песочные часы — сегодняшняя в работе. Пустые планы прошедших дней убираются сами.';
+
+  @override
+  String get instructionTrainerPlanTitle => 'План сессии';
 
   @override
   String get instructionTrainerPlanDesc =>
-      'План только из календаря тренера: выберите клиента и дату, затем упражнения. Прошлые вес и повторы — серые подсказки. Запланированная сессия со значком «плей»: нажмите, чтобы начать (сегодня) или удалить. В историю попадают только завершённые. План с прошедшей датой удаляется.';
+      'На будущую дату упражнения и заметку можно расставить заранее и сохранить, не завершая тренировку. Прошлые вес и повторы придут серыми подсказками. В историю попадают только завершённые сессии.';
 
   @override
-  String get instructionTrainerRepeatTitle => 'Повторить прошлую тренировку';
+  String get instructionTrainerRepeatTitle => 'Повторить прошлую';
 
   @override
   String get instructionTrainerRepeatDesc =>
-      'По желанию. Из профиля клиента или переключателем при добавлении сессии в календаре. Копирует упражнения прошлой сессии в сегодняшнюю живую тренировку или в новый план; прошлые вес и повторы — серые подсказки, а не готовые подходы.';
+      'Из профиля клиента или переключателем при добавлении сессии в календаре. Копируется состав упражнений; вес и повторы приходят серыми подсказками, а не готовыми подходами.';
+
+  @override
+  String get instructionPrintSessionTitle => 'Печать сессии';
+
+  @override
+  String get instructionPrintSessionDesc =>
+      'В завершённой тренировке иконка печати в шапке собирает лист A4 с составом и цифрами дня. Дальше системное окно: принтер, PDF или отправка клиенту.';
+
+  @override
+  String get instructionImportAthleteTitle => 'Импорт истории атлета';
+
+  @override
+  String get instructionImportAthleteDesc =>
+      'Отдельная кнопка в статистике тренера: файл из личного режима заводится как новый клиент вместе с избранным и метками групп. Перенесённые тренировки помечаются как импортированные, а названия упражнений не смешиваются с вашими.';
 
   @override
   String get printSession => 'Печать';
@@ -1184,13 +1354,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get printSessionShareText => 'Тренировка IronVibe';
 
   @override
-  String get instructionPrintSessionTitle => 'Печать сессии';
-
-  @override
-  String get instructionPrintSessionDesc =>
-      'В завершённой тренировке клиента иконка печати в шапке собирает лист A4 с тем, что записано в этот день. Дальше системный лист: печать, файл или отправка.';
-
-  @override
   String get rhythmPerWeek => 'в неделю';
 
   @override
@@ -1198,7 +1361,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String deloadNudgeBody(String rate, int weeks) {
-    return 'Вы тренируетесь около $rate дней в неделю уже примерно $weeks нед. Это напоминание, что иногда полезна короткая неделя активного отдыха — примерно на 30% меньше тоннажа и повторений. Не предписание.';
+    return 'Вы тренируетесь около $rate дней в неделю уже примерно $weeks нед. Хороший момент для недели активного отдыха: рабочие веса и подходы ниже на 30–50% или только кардио. Это рекомендация, а не медицинский совет.';
   }
 
   @override
@@ -1225,108 +1388,89 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String rhythmInsightRateYou(String rate) {
-    return 'За последние четыре недели вы тренируетесь около $rate дней в неделю.';
+    return 'Вы тренируетесь в среднем $rate раза в неделю.';
   }
 
   @override
   String rhythmInsightRateClient(String name, String rate) {
-    return 'За последние четыре недели $name ходит в зал около $rate дней в неделю.';
+    return '$name тренируется в среднем $rate раза в неделю.';
   }
 
   @override
+  String get rhythmInsightBandLight => 'Спокойный ритм';
+
+  @override
+  String get rhythmInsightBandSteady => 'Ровный ритм';
+
+  @override
+  String get rhythmInsightBandDense => 'Плотный ритм';
+
+  @override
+  String get rhythmInsightBandVeryDense => 'Почти без выходных';
+
+  @override
+  String get rhythmInsightHowTitle => 'Откуда эта цифра';
+
+  @override
   String get rhythmInsightWindow =>
-      'Считаются только силовые дни. Дни только с кардио не входят. Это снимок плотности, а не цель.';
+      'Среднее за последние четыре недели. Считаются дни с силовыми упражнениями; дни только с кардио — нет. Это не цель и не оценка, а просто ваш нынешний ритм.';
 
   @override
   String get rhythmInsightWhatTitle => 'Неделя активного отдыха';
 
   @override
   String get rhythmInsightWhatBody =>
-      'Сознательно снижаете нагрузку, чтобы восстановиться, не теряя форму: те же тренировки, но примерно на 30–50% меньше объёма. Можно и пропустить силовые, оставаясь в движении.';
+      'Это не пауза, а неделя вполсилы: рабочие веса и число подходов ниже на 30–50%. Можно и вовсе отложить силовые, оставив кардио или любую другую активность. Мышцы восстанавливаются быстрее, чем суставы, связки и сухожилия, — такая неделя даёт им время догнать.';
+
+  @override
+  String get rhythmInsightPaceTitle => 'Что это значит';
 
   @override
   String get rhythmInsightAdviceLight =>
-      'Сейчас ритм спокойный. Если сессии не зверские, так можно идти очень долго без плановой недели активного отдыха.';
+      'Между тренировками достаточно свободных дней, усталость не копится. Специально планировать активный отдых пока незачем — при таком ритме тело успевает восстанавливаться само.';
 
   @override
   String get rhythmInsightAdviceSteady =>
-      'Сейчас устойчивый ритм. Если тренировки тяжёлые, недели активного отдыха раз в несколько месяцев обычно достаточно.';
+      'Ровный ритм, на котором можно работать годами. Если тренировки тяжёлые, раз в несколько месяцев берите неделю активного отдыха — лучше заранее, чем когда веса встанут.';
 
   @override
   String get rhythmInsightAdviceDense =>
-      'Сейчас плотный график. Если тренировки интенсивные, неделю активного отдыха раз в два–три месяца часто стоит иметь в виду.';
+      'Тренировки идут плотно, и усталость копится незаметно. Неделя активного отдыха раз в два–три месяца обычно держит прогресс лучше, чем работа без передышек.';
 
   @override
   String get rhythmInsightAdviceVeryDense =>
-      'Сейчас почти каждый день. Если нагрузка высокая, неделю активного отдыха примерно раз в месяц многие считают разумной.';
+      'Почти каждый день под нагрузкой. Так можно, если сон и питание успевают. При таком ритме неделя активного отдыха примерно раз в месяц — обычная профилактика для суставов и связок, а не слабость.';
 
   @override
   String get rhythmInsightPraiseSteady =>
-      'Молодец. Такой ритм как раз из тех, на которых держатся долгие прогрессы.';
+      'Именно на таком ритме люди держатся годами.';
 
   @override
   String get rhythmInsightPraiseDense =>
-      'По-настоящему предан делу. Так держать.';
+      'Тренируетесь часто — такой график сам собой не складывается.';
 
   @override
   String get rhythmInsightPraiseVeryDense =>
-      'Похоже, вы пробуете раскрыть секретные возможности организма.';
+      'Похоже, вы нащупали у организма секретный режим.';
 
   @override
   String get rhythmInsightRecentLighter =>
-      'В недавних данных уже видна неделя активного отдыха.';
+      'Недавно нагрузка уже была ниже обычной — активный отдых можно считать пройденным. Набирайте ход.';
 
   @override
   String rhythmInsightAccumulation(int weeks) {
-    return 'Уже около $weeks нед. в таком ритме без недели активного отдыха.';
+    String _temp0 = intl.Intl.pluralLogic(
+      weeks,
+      locale: localeName,
+      other: 'Такой ритм держится уже $weeks недель.',
+      many: 'Такой ритм держится уже $weeks недель.',
+      few: 'Такой ритм держится уже $weeks недели.',
+      one: 'Такой ритм держится уже $weeks неделю.',
+    );
+    return '$_temp0';
   }
 
   @override
   String get rhythmInsightDisclaimer =>
-      'Это справочная заметка, а не указание. Она лишь напоминает, что иногда полезна короткая неделя активного отдыха. Если чувствуете себя хорошо — менять ничего не нужно.';
-
-  @override
-  String get instructionHubManifest =>
-      'Без встроенного каталога и готовых программ. Вы сами называете упражнения — приложение ведёт статистику так, как вам удобно.';
-
-  @override
-  String get instructionChapterStartTitle => 'С чего начать';
-
-  @override
-  String get instructionChapterStartBlurb =>
-      'Главный экран, как вы тренируетесь, и почему приложение не учит вас тренироваться.';
-
-  @override
-  String get instructionChapterToolsTitle => 'Инструменты';
-
-  @override
-  String get instructionChapterToolsBlurb =>
-      'Ритм, избранное, группы мышц и быстрая тренировка.';
-
-  @override
-  String get instructionChapterSessionTitle => 'На тренировке';
-
-  @override
-  String get instructionChapterSessionBlurb =>
-      'Подходы, поля, кардио, сохранение и секундомер.';
-
-  @override
-  String get instructionChapterProgressTitle => 'Прогресс и данные';
-
-  @override
-  String get instructionChapterProgressBlurb =>
-      'Личные рекорды, график, календарь, история и резервная копия.';
-
-  @override
-  String get instructionChapterCoachTitle => 'Режим тренера';
-
-  @override
-  String get instructionChapterCoachBlurb =>
-      'Клиенты, профили, план сессии и повтор тренировки.';
-
-  @override
-  String get instructionSearchHint => 'Поиск по инструкции';
-
-  @override
-  String get instructionSearchEmpty => 'Ничего не найдено.';
+      'Это рекомендация, а не медицинский совет. Если чувствуете себя хорошо — менять ничего не нужно.';
 }

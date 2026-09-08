@@ -754,222 +754,74 @@ class AppLocalizationsEn extends AppLocalizations {
   String get instructionTitle => 'How it works';
 
   @override
+  String get instructionHubManifest =>
+      'No exercise catalog and no ready-made programs. You name movements in your own words — the app keeps stats on them.';
+
+  @override
+  String get instructionSearchHint => 'Search the guide';
+
+  @override
+  String get instructionSearchEmpty => 'Nothing found.';
+
+  @override
+  String get instructionChapterStartTitle => 'Getting started';
+
+  @override
+  String get instructionChapterStartBlurb =>
+      'Home screen, the two modes, and how the app thinks.';
+
+  @override
+  String get instructionChapterSessionTitle => 'During a workout';
+
+  @override
+  String get instructionChapterSessionBlurb =>
+      'Sets, weight, reps, RIR, cardio, and finishing a session.';
+
+  @override
+  String get instructionChapterTimerTitle => 'Stopwatch';
+
+  @override
+  String get instructionChapterTimerBlurb =>
+      'Intervals, rest between sets, and cues.';
+
+  @override
+  String get instructionChapterExercisesTitle => 'Exercises and groups';
+
+  @override
+  String get instructionChapterExercisesBlurb =>
+      'Your movement list, muscle groups, favorites, and the quick workout.';
+
+  @override
+  String get instructionChapterProgressTitle => 'Progress and records';
+
+  @override
+  String get instructionChapterProgressBlurb =>
+      'Personal progress, 1RM, tonnage, and the exercise chart.';
+
+  @override
+  String get instructionChapterRhythmTitle => 'Rhythm and recovery';
+
+  @override
+  String get instructionChapterRhythmBlurb =>
+      'The weekly rhythm gauge and the deload week.';
+
+  @override
+  String get instructionChapterDataTitle => 'History and data';
+
+  @override
+  String get instructionChapterDataBlurb =>
+      'Calendar, editing records, statistics, and backup.';
+
+  @override
+  String get instructionChapterCoachTitle => 'Coach mode';
+
+  @override
+  String get instructionChapterCoachBlurb =>
+      'Clients, schedule, session plan, and print.';
+
+  @override
   String get instructionPhilosophy =>
-      'IronVibe deliberately ships without a built-in exercise catalog or preset \"programs.\" It is not here to teach you how to train—YouTube and real coaches already do that—but to help you keep stats exactly the way you like. You type exercise names yourself, in your own words. Optionally tag a muscle group so the app can assemble a quick full-body session from your own list. The longer you use it, the more it feels like home: the app learns your habits and adapts to you, not the other way around.';
-
-  @override
-  String get instructionSectionSetControl => 'Set controls';
-
-  @override
-  String get instructionSetMinusLabel => 'Minus';
-
-  @override
-  String get instructionSetMinusDesc =>
-      'Removes the last set. If that row already has weight, reps, or RIR, the app asks for confirmation. An empty row is removed right away. If only one set remains: in the current workout the row is cleared; in saved history the whole exercise is deleted.';
-
-  @override
-  String get instructionSetPlusLabel => 'Plus';
-
-  @override
-  String get instructionSetPlusDesc =>
-      'Adds a new empty set row to this exercise.';
-
-  @override
-  String get instructionSetProgressLabel => 'Timeline';
-
-  @override
-  String get instructionSetProgressDesc =>
-      'Opens the progress timeline for this exercise.';
-
-  @override
-  String get instructionSectionProgressChart => 'Progress chart';
-
-  @override
-  String get instructionProgressChartIntro =>
-      'Three independent trends by date: red — heaviest single set that day; cyan — most reps in any single set that day; yellow — exercise volume (sum of weight × reps for that day). Left axis: weight; right axis: reps; yellow is shown as a normalized trend.';
-
-  @override
-  String get instructionProgressLineWeightLabel => 'Weight';
-
-  @override
-  String get instructionProgressLineWeightDesc =>
-      'Red line: maximum weight in one set on each calendar day.';
-
-  @override
-  String get instructionProgressLineRepsLabel => 'Reps';
-
-  @override
-  String get instructionProgressLineRepsDesc =>
-      'Cyan line: maximum reps in one set that day (not tied to the heaviest weight).';
-
-  @override
-  String get instructionProgressLineVolumeDesc =>
-      'Yellow line: daily exercise volume (tonnage), calculated as the sum of weight × reps for sets where both values are logged.';
-
-  @override
-  String get instructionProgressChartSessionHighlight =>
-      'During an active workout, the chart button under the sets may tint in the same colors as the graph: red if you beat your previous best weight in a single set; yellow if total exercise volume beats your past best for that movement; cyan if the exercise is bodyweight-only and your total reps (sum across all sets) beat your past best. If several apply, priority is red, then yellow, then cyan. The tint appears only while you are logging the current workout—not in saved history.';
-
-  @override
-  String get instructionSectionWorkout => 'Workout';
-
-  @override
-  String get instructionAddExerciseTitle => 'Add exercise';
-
-  @override
-  String get instructionAddExerciseBody =>
-      'Adds a new block. Name the current exercise first — the app will remind you if that field is still empty.';
-
-  @override
-  String get instructionSectionExerciseNameTools => 'Exercise name';
-
-  @override
-  String get instructionRenameExerciseTitle => 'Long press to rename';
-
-  @override
-  String get instructionRenameExerciseDesc =>
-      'Long-press the exercise name while logging a workout, on a suggestion in the dropdown, or on the title in a saved workout in history to rename that exercise everywhere.';
-
-  @override
-  String get instructionRemoveFromBankTitle => 'Remove from your list';
-
-  @override
-  String get instructionRemoveFromBankDesc =>
-      'When the suggestions list is open under the name field, tap the X on a row — or the red X in Personal Progress — to remove that name from suggestions and the progress table. Saved workouts stay unchanged.';
-
-  @override
-  String get instructionSectionInputs => 'Data fields';
-
-  @override
-  String get instructionWeightTitle => 'Weight';
-
-  @override
-  String get instructionWeightBody =>
-      'Load on the bar or equipment. Type the number in kg or lb — whichever you use. The app does not convert units.';
-
-  @override
-  String get instructionRepsTitle => 'Reps';
-
-  @override
-  String get instructionRepsBody =>
-      'How many times you completed the movement in one set.';
-
-  @override
-  String get instructionRirTitle => 'RIR';
-
-  @override
-  String get instructionRirBody =>
-      'How many more reps you could still do before failure. Helps track intensity.';
-
-  @override
-  String get instructionOneRmTitle => '1RM (one-rep max)';
-
-  @override
-  String get instructionOneRmDesc =>
-      'Estimated maximum weight for one full repetition from your current weight and reps. A key strength benchmark for tracking progress and picking working weights.';
-
-  @override
-  String get instructionExerciseVolumeTitle => 'Exercise volume (total)';
-
-  @override
-  String get instructionExerciseVolumeDesc =>
-      'Next to the progress (chart) button under the sets: total tonnage for this exercise—the sum of weight × reps for every set that has both values. Updates live as you add or edit sets.';
-
-  @override
-  String get instructionSectionPersonalProgress => 'Personal progress';
-
-  @override
-  String get instructionPersonalProgressIntro =>
-      'One table of every movement from saved workouts: best set, estimated 1RM, and max volume. Search to find a name. Star favorites; tap the small chip under the name to tag a muscle group; the red X removes the name from suggestions and this table (saved workouts stay). Open it from your training menu or a client profile.';
-
-  @override
-  String get instructionSectionSaving => 'Saving';
-
-  @override
-  String get instructionFinishTitle => 'Finish workout';
-
-  @override
-  String get instructionFinishBody =>
-      'Confirms and writes the session to history. If you leave earlier, you can save, discard, or stay. A draft is also kept automatically if the app is interrupted.';
-
-  @override
-  String get instructionSectionCardio => 'Cardio & intensity';
-
-  @override
-  String get instructionCardioTitle => 'Cardio';
-
-  @override
-  String get instructionCardioBody =>
-      'Tracks time and intensity for cardio (distance is not entered). Helps you keep pace and monitor effort.';
-
-  @override
-  String get instructionIntensityTitle => 'Intensity';
-
-  @override
-  String get instructionIntensityBody =>
-      'Use the effort scale to gauge how hard the workout felt. That is the key to progress without overtraining.';
-
-  @override
-  String get instructionSectionStopwatch => 'Stopwatch (your assistant)';
-
-  @override
-  String get instructionStopwatchWhyTitle => 'Why use it?';
-
-  @override
-  String get instructionStopwatchWhyBody =>
-      'To control rest between sets. Short rest — higher density; long rest — more strength for heavy weight.';
-
-  @override
-  String get instructionStopwatchHowTitle => 'How does it work?';
-
-  @override
-  String get instructionStopwatchHowBody =>
-      'Center: time, Play/Pause, and Reset. Left and right: quick presets (below). In plain stopwatch mode time runs up with centiseconds. The timer stays pinned in the header while you scroll.';
-
-  @override
-  String get instructionStopwatchIntervalsTitle => 'Left: intervals';
-
-  @override
-  String get instructionStopwatchIntervalsBody =>
-      '1/1 — 60 s work, 60 s rest. 4/4 — 4 minutes work and 4 minutes rest each round. 20/10 — Tabata-style: 20 s on, 10 s off. After you pick one, the timer loops work and rest until you pause or reset. Red tint means work; blue means rest.';
-
-  @override
-  String get instructionStopwatchRestTitle => 'Right: rest countdown';
-
-  @override
-  String get instructionStopwatchRestBody =>
-      '+1m, +2m, and +5m start or extend a normal minute countdown. If an interval loop was running, it switches to this countdown. If a countdown is already running, the minutes are added to the time left. Handy for rest between sets.';
-
-  @override
-  String get instructionStopwatchProgressTitle => 'Progress bar';
-
-  @override
-  String get instructionStopwatchProgressBody =>
-      'During countdown and interval modes, a bar under the time shows how much of the current phase remains.';
-
-  @override
-  String get instructionStopwatchSoundsTitle => 'Sound & haptics';
-
-  @override
-  String get instructionStopwatchSoundsBody =>
-      'At 3, 2, and 1 seconds left in a phase, a short in-app sound and light haptic play. When the phase ends or work/rest switches, a stronger cue and haptic follow. Sounds are minimal bundled clips—no microphone, no notification permission; media/system volume still affects loudness.';
-
-  @override
-  String get instructionSectionNavHistory => 'History & data';
-
-  @override
-  String get instructionNavHistoryTitle => 'History / statistics';
-
-  @override
-  String get instructionNavHistoryDesc =>
-      'In calendar/history each workout shows total tonnage. Workout volume is one of the best indicators of hypertrophy: the more quality volume you accumulate, the more muscle you can build.';
-
-  @override
-  String get instructionNavImportExportTitle => 'Import / export';
-
-  @override
-  String get instructionNavImportExportDesc =>
-      'Back up or transfer your data using JSON export and import in the statistics dialog. Backups include workout history, your exercise list, favorites, and muscle-group tags. Coach backups are separate from personal history. A coach can also import an athlete\'s history as a new client without mixing exercise names.';
+      'IronVibe does not teach you how to train and does not hand you ready-made programs — that is what a coach and your own experience are for. There is no catalog of thousands of exercises: you type movement names in your own words, and the app quietly does the counting. Everything stays on the device: no accounts, no subscriptions, no ads.';
 
   @override
   String get instructionSectionHome => 'Home';
@@ -979,21 +831,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get instructionThemeDesc =>
-      'The sun / moon switch on the home screen toggles light and dark. Your choice is remembered.';
+      'The sun–moon switch changes light and dark. Your choice is remembered.';
 
   @override
   String get instructionTrainSelfTitle => 'I train myself';
 
   @override
   String get instructionTrainSelfDesc =>
-      'Your own workouts, calendar, personal progress, favorites, a rhythm gauge of how often you train, and a full-body quick workout built from your tagged exercises.';
+      'Your space: workouts, calendar, personal progress, favorites, and the rhythm gauge.';
 
   @override
   String get instructionTrainOthersTitle => 'I train others';
 
   @override
   String get instructionTrainOthersDesc =>
-      'Coach mode: clients, a schedule, and a separate history per person. Each client has their own progress table and favorites.';
+      'Coach mode: clients, a schedule, and a separate history for each person. It never mixes with your own training.';
+
+  @override
+  String get instructionLanguageTitle => 'Language';
+
+  @override
+  String get instructionLanguageDesc =>
+      'The app follows the system language — there is no separate setting. Ten languages are supported.';
+
+  @override
+  String get instructionHomeLinksTitle => 'Version and contact';
+
+  @override
+  String get instructionHomeLinksDesc =>
+      'At the bottom of the home screen: version number, website, Telegram, support email, and the privacy policy.';
 
   @override
   String get instructionSectionAthleteMenu => 'Your training';
@@ -1003,53 +869,258 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get instructionStartWorkoutDesc =>
-      'Opens an empty session — it does not copy the last workout. Add exercises, log sets, then finish to save.';
+      'Opens an empty session — the last workout is not copied. Add exercises, log sets, then finish to save.';
 
   @override
   String get instructionQuickWorkoutTitle => 'Quick workout';
 
   @override
   String get instructionQuickWorkoutDesc =>
-      'Assembles a 4-exercise full-body session: chest, back, one leg movement (front or rear thigh — never both), and one accessory for shoulders, arms, or core, whichever you have trained least recently. Prefers favorites. Last weights and reps appear greyed as a target to beat — you log each set yourself.';
+      'Builds a full-body session from four exercises using your muscle-group tags.';
 
   @override
   String get instructionCalendarMenuTitle => 'Workout calendar';
 
   @override
   String get instructionCalendarMenuDesc =>
-      'See which days you trained, open a saved session, or add a workout on a chosen date and time — including past days.';
+      'The days you trained. Open saved sessions here, or add one you missed.';
+
+  @override
+  String get instructionSectionPersonalProgress => 'Personal progress';
 
   @override
   String get instructionPersonalProgressMenuDesc =>
-      'A table of your best sets, estimated 1RM, and max volume. Star favorites and tag muscle groups here.';
+      'A table of best sets, estimated 1RM, and max volume for every movement.';
 
   @override
   String get instructionFavoritesMenuTitle => 'Favorite exercises';
 
   @override
   String get instructionFavoritesMenuDesc =>
-      'Your starred list. Tick the ones you want and tap Build workout to start a session in that order. Last weights and reps appear greyed as a target to beat.';
+      'Movements marked with a star. Build a workout from them in a couple of taps.';
 
   @override
-  String get instructionSectionRhythm => 'Training rhythm';
+  String get instructionSectionWorkout => 'Session';
 
   @override
-  String get instructionRhythmIntro =>
-      'After a few strength sessions, a gauge appears at the top of your training screen. It shows how many days per week you have trained on average over the last four weeks. Cardio-only days are not counted. The number is a snapshot of your density — not a target the app expects you to hit. Tap it for a note about your pace and what an active recovery week can look like.';
+  String get instructionStrengthCardioTitle => 'Strength or cardio';
 
   @override
-  String get instructionRhythmGaugeTitle => 'Days per week';
+  String get instructionStrengthCardioDesc =>
+      'The switch at the top of the session sets the workout type. Strength: weight, reps, and RIR. Cardio: time and intensity. If the other type is already logged, the app asks before switching.';
 
   @override
-  String get instructionRhythmGaugeDesc =>
-      'The arc fills from 1 to 6 days per week. Color moves from steel through gold toward rust as density rises. The gauge appears once you have at least three strength days in that four-week window.';
+  String get instructionAddExerciseTitle => 'Add exercise';
 
   @override
-  String get instructionRhythmDeloadTitle => 'Active recovery week reminder';
+  String get instructionAddExerciseBody =>
+      'A new block is added once the current exercise has a name and at least one completed set.';
 
   @override
-  String get instructionRhythmDeloadDesc =>
-      'If you have been training about two and a half days a week or more for several weeks without an active recovery week, the app may remind you that a short active recovery week is sometimes useful — about 30% less tonnage and reps. The more days per week, the sooner that reminder. It is a reminder, not a prescription. You will see it at most once per week, and only in your own training mode — not automatically for clients. Tap a client\'s gauge for the same note.';
+  String get instructionPreviousHintsTitle => 'Grey hints';
+
+  @override
+  String get instructionPreviousHintsDesc =>
+      'Last time\'s weight and reps show in grey — a target to beat, not a logged set. Only numbers you type yourself go into history.';
+
+  @override
+  String get instructionRemoveExerciseTitle => 'Remove exercise';
+
+  @override
+  String get instructionRemoveExerciseDesc =>
+      'The red X removes the block from the current session. Saved history is not changed.';
+
+  @override
+  String get instructionSectionSetControl => 'Set row';
+
+  @override
+  String get instructionSetPlusLabel => 'Plus';
+
+  @override
+  String get instructionSetPlusDesc => 'Adds an empty row for the next set.';
+
+  @override
+  String get instructionSetMinusLabel => 'Minus';
+
+  @override
+  String get instructionSetMinusDesc =>
+      'Removes the last set. An empty row is deleted at once; a filled one after confirmation. If only one set remains, the fields are simply cleared.';
+
+  @override
+  String get instructionSetProgressLabel => 'Exercise chart';
+
+  @override
+  String get instructionSetProgressDesc =>
+      'Opens the trend for this movement over a month, a year, or all time.';
+
+  @override
+  String get instructionExerciseVolumeTitle => 'Exercise tonnage';
+
+  @override
+  String get instructionExerciseVolumeDesc =>
+      'To the right of the chart button: the sum of weight × reps across every completed set. Updates as you type.';
+
+  @override
+  String get instructionSectionInputs => 'What the fields mean';
+
+  @override
+  String get instructionWeightTitle => 'Weight';
+
+  @override
+  String get instructionWeightBody =>
+      'Working load on the bar or machine. Enter kilograms or pounds — the app does not convert units and does not force a choice.';
+
+  @override
+  String get instructionRepsTitle => 'Reps';
+
+  @override
+  String get instructionRepsBody => 'How many repetitions you did in the set.';
+
+  @override
+  String get instructionRirTitle => 'RIR — reps in reserve';
+
+  @override
+  String get instructionRirBody =>
+      'How many more reps you could have done. 0 is work to failure, ∞ is a warm-up set. A simple way to dose intensity.';
+
+  @override
+  String get instructionOneRmTitle => '1RM — one-rep max';
+
+  @override
+  String get instructionOneRmDesc =>
+      'An estimated max for a single repetition, using the Epley formula from that set\'s weight and reps. Shown under the row — a key strength landmark.';
+
+  @override
+  String get instructionSectionCardio => 'Cardio';
+
+  @override
+  String get instructionCardioTitle => 'Time';
+
+  @override
+  String get instructionCardioBody =>
+      'Block duration in minutes. No distance and no heart rate: the app is not tied to trackers.';
+
+  @override
+  String get instructionIntensityTitle => 'Intensity';
+
+  @override
+  String get instructionIntensityBody =>
+      'Effort from 1 to 5 — a simplified RPE scale. In a cardio session, one row is saved per exercise.';
+
+  @override
+  String get instructionSectionSaving => 'Finishing';
+
+  @override
+  String get instructionFinishTitle => 'Finish workout';
+
+  @override
+  String get instructionFinishBody =>
+      'The button at the bottom of the session: the app confirms, then writes the workout to history. You need at least one completed set.';
+
+  @override
+  String get instructionLeaveWorkoutTitle => 'Leaving early';
+
+  @override
+  String get instructionLeaveWorkoutDesc =>
+      'If you close a session that already has data, you can stay, save what you logged, or delete the draft.';
+
+  @override
+  String get instructionAutoSaveTitle => 'Interrupted workout';
+
+  @override
+  String get instructionAutoSaveDesc =>
+      'A draft is saved on its own — every minute and when you background the app. Next launch, you can continue from the same place or delete it.';
+
+  @override
+  String get instructionScreenAwakeTitle => 'Screen stays on';
+
+  @override
+  String get instructionScreenAwakeDesc =>
+      'During a live session the screen stays awake, so you do not unlock the phone after every set.';
+
+  @override
+  String get instructionStopwatchWhyTitle => 'Why time rest';
+
+  @override
+  String get instructionStopwatchWhyBody =>
+      'The pause between sets is a working parameter, same as weight and reps: short rest raises density, long rest lets you hit a heavy set.';
+
+  @override
+  String get instructionStopwatchHowTitle => 'Start, pause, reset';
+
+  @override
+  String get instructionStopwatchHowBody =>
+      'The timer is pinned in the session header and stays visible as you scroll. Time and controls sit in the center; in normal mode it counts up, including hundredths of a second.';
+
+  @override
+  String get instructionStopwatchIntervalsTitle => 'Left: intervals';
+
+  @override
+  String get instructionStopwatchIntervalsBody =>
+      '1/1 — a minute of work and a minute of rest. 4/4 — four minutes each. 20/10 — Tabata. Phases loop until you pause or reset: red tint is work, blue is rest.';
+
+  @override
+  String get instructionStopwatchRestTitle => 'Right: rest';
+
+  @override
+  String get instructionStopwatchRestBody =>
+      '+1m, +2m, and +5m start a countdown between sets. If a countdown is already running, minutes are added to the remaining time; an interval loop switches to rest.';
+
+  @override
+  String get instructionStopwatchProgressTitle => 'Phase bar';
+
+  @override
+  String get instructionStopwatchProgressBody =>
+      'In countdown and interval modes, a bar under the digits shows how much of the current phase is left.';
+
+  @override
+  String get instructionStopwatchSoundsTitle => 'Sound and haptics';
+
+  @override
+  String get instructionStopwatchSoundsBody =>
+      'Three, two, and one seconds before a phase ends — a short click and a light vibration; the phase change is louder. Sounds are built into the app: no microphone, no notification permission. Volume follows the phone settings.';
+
+  @override
+  String get instructionExerciseBankIntro =>
+      'The exercise list grows on its own: every new name from a finished workout joins the suggestions. Names are stored in uppercase so the same movement never splits in two.';
+
+  @override
+  String get instructionSectionExerciseNameTools => 'Names';
+
+  @override
+  String get instructionRenameExerciseTitle => 'Rename everywhere';
+
+  @override
+  String get instructionRenameExerciseDesc =>
+      'Long-press the name — in a session, in the suggestion list, or in a saved workout. It updates across history and on the charts.';
+
+  @override
+  String get instructionRemoveFromBankTitle => 'Remove from suggestions';
+
+  @override
+  String get instructionRemoveFromBankDesc =>
+      'The X in the open suggestion list, or the red X in personal progress, drops the name from suggestions and from the table. Saved workouts stay untouched.';
+
+  @override
+  String get instructionReassignExerciseTitle => 'Reassign in a record';
+
+  @override
+  String get instructionReassignExerciseDesc =>
+      'In a saved workout you can point a block at a different movement. The sets stay as they were, but they move into the new name\'s stats — only this session changes.';
+
+  @override
+  String get instructionSectionMuscleGroups => 'Muscle groups';
+
+  @override
+  String get instructionMuscleGroupsIntro =>
+      'A group is an optional tag on your name. It is used only by the quick workout, to build a balanced full-body session. Eight groups: chest, back, shoulders, core, front thigh, rear thigh, arm curl, arm extension.';
+
+  @override
+  String get instructionMuscleGroupTagTitle => 'How to tag';
+
+  @override
+  String get instructionMuscleGroupTagDesc =>
+      'The first time you enter a new name, the app asks for a group. You can answer Later, or Not for quick workout if the movement should stay out of the mix. The chip under the name in personal progress and favorites is easy to change or clear.';
 
   @override
   String get instructionSectionFavorites => 'Favorites';
@@ -1059,115 +1130,215 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get instructionFavoriteStarDesc =>
-      'In Personal Progress, tap the star next to an exercise to add or remove it from favorites. Favorites stay at the top of the table.';
+      'The star is on the exercise card in a session and in the personal progress table. Favorites stay at the top of the list.';
 
   @override
   String get instructionBuildFromFavoritesTitle => 'Build workout';
 
   @override
   String get instructionBuildFromFavoritesDesc =>
-      'On the favorites screen, tick the exercises you want. The button appears when at least one is selected. Last weights and reps appear greyed as a target to beat — you log each set yourself. For a client, the same action starts a session for that person.';
+      'On the favorites screen, tick the movements you want — the button appears at once. The session opens in that order, with grey hints from last time. For a client, the same action opens their workout.';
 
   @override
-  String get instructionSectionMuscleGroups => 'Muscle groups & quick workout';
+  String get instructionSectionQuickWorkout => 'Quick workout';
 
   @override
-  String get instructionMuscleGroupsIntro =>
-      'Groups are optional labels you attach to your own exercise names. They are not a catalog: they only help Quick workout pick a balanced full-body mix. Eight groups: chest, back, shoulders, core, front thigh, rear thigh, arm curl, arm extension.';
-
-  @override
-  String get instructionMuscleGroupTagTitle => 'How to tag';
-
-  @override
-  String get instructionMuscleGroupTagDesc =>
-      'When you first enter a new exercise name, the app asks for a group. You can skip with Later, or mark Not for quick workout if you do not want that movement in a full-body mix. Tap the small chip under the name in Personal Progress or Favorites to change or clear it.';
-
-  @override
-  String get instructionQuickWorkoutHowTitle => 'How a quick session is built';
+  String get instructionQuickWorkoutHowTitle => 'Four slots';
 
   @override
   String get instructionQuickWorkoutHowDesc =>
-      'Four slots: chest, back, one half of the legs, then shoulders/arms/core by recency. A preview lets you swap any slot for another exercise in the same group. Add more yourself if you want a longer session.';
+      'Chest, back, one half of the legs (front or rear thigh — never both on the same day), and one movement for shoulders, arms, or core. In each slot the app picks the group that has gone longest without work, and prefers a favorite.';
 
   @override
-  String get instructionStrengthCardioTitle => 'Strength / Cardio';
+  String get instructionQuickWorkoutPreviewTitle => 'Preview and swap';
 
   @override
-  String get instructionStrengthCardioDesc =>
-      'Switch at the top of the session. Strength: weight, reps, RIR. Cardio: time and intensity only — no distance field.';
+  String get instructionQuickWorkoutPreviewDesc =>
+      'You see the full line-up before you start: any slot can be swapped for another exercise from the same group. If there are not enough tagged movements, the app says so and opens personal progress so you can add tags.';
 
   @override
-  String get instructionPreviousHintsTitle => 'Grey last-session numbers';
+  String get instructionPersonalProgressIntro =>
+      'One table of every movement from saved workouts. Favorites on top, the rest alphabetically; search finds a name. Open it from the training menu or from a client profile.';
 
   @override
-  String get instructionPreviousHintsDesc =>
-      'When you pick an exercise in a client session, a quick workout, or a session built from favorites, last logged weights and reps show as grey placeholders — a minimum to beat, not a finished set. Only numbers you type are saved to history.';
+  String get instructionProgressBestSetTitle => 'Best set';
 
   @override
-  String get instructionRemoveExerciseTitle => 'Remove from this workout';
+  String get instructionProgressBestSetDesc =>
+      'The set with the highest estimated 1RM across your history. For movements without weight, it is the set with the most reps.';
 
   @override
-  String get instructionRemoveExerciseDesc =>
-      'Removes that block from the current session only. Saved history is not affected until you finish.';
+  String get instructionProgressMaxVolumeTitle => 'Max volume';
 
   @override
-  String get instructionReassignExerciseTitle => 'Change exercise in history';
+  String get instructionProgressMaxVolumeDesc =>
+      'The largest tonnage for this exercise in a single workout — a useful anchor when you plan working volume.';
 
   @override
-  String get instructionReassignExerciseDesc =>
-      'In a saved workout you can reassign a block to a different name. Only that session changes; charts follow the new name. Sets stay as they were.';
+  String get instructionSectionProgressChart => 'Exercise chart';
 
   @override
-  String get instructionAutoSaveTitle => 'Interrupted workout';
+  String get instructionProgressChartIntro =>
+      'Three independent curves by date. Left axis is weight, right axis is reps; the yellow line is normalized so the trends can be compared by shape. Switch the window — month, year, all time — and tap a point for that day\'s numbers. Cardio does not appear on the chart.';
 
   @override
-  String get instructionAutoSaveDesc =>
-      'If the app closes mid-session, it offers to continue where you left off or delete the unsaved draft.';
+  String get instructionProgressLineWeightDesc =>
+      'Red — heaviest weight in one set that day.';
 
   @override
-  String get instructionSectionCalendar => 'Calendar';
+  String get instructionProgressLineRepsDesc =>
+      'Cyan — most reps in a set, not necessarily with the heaviest weight.';
 
   @override
-  String get instructionCalendarAddTitle => 'Add on a date';
+  String get instructionProgressLineVolumeDesc =>
+      'Yellow — daily tonnage: the sum of weight × reps for sets where both fields are filled.';
+
+  @override
+  String get instructionProgressChartSessionHighlight =>
+      'In a live workout the chart button lights up when you beat a record: red for set weight, yellow for exercise tonnage, cyan for total reps on movements without weight. If more than one applies, red wins, then yellow, then cyan. Saved history has no highlight.';
+
+  @override
+  String get instructionRhythmIntro =>
+      'Once you have at least three strength days in the last four weeks, a rhythm gauge appears at the top of the training screen. It is not a goal and not a grade — just how often you currently get to the gym.';
+
+  @override
+  String get instructionRhythmGaugeTitle => 'Days per week';
+
+  @override
+  String get instructionRhythmGaugeDesc =>
+      'The arc fills from one to six days — a four-week average. Days with strength work count; cardio-only days do not. The denser the rhythm, the further the color moves from steel through gold toward rust.';
+
+  @override
+  String get instructionRhythmInsightTitle => 'Rhythm breakdown';
+
+  @override
+  String get instructionRhythmInsightDesc =>
+      'Tap the gauge: the app names your mode — an easy rhythm, a steady rhythm, a dense rhythm, or almost no days off — and explains what that means for recovery. A client\'s gauge opens the same breakdown.';
+
+  @override
+  String get instructionRhythmDeloadTitle => 'Deload week';
+
+  @override
+  String get instructionRhythmDeloadDesc =>
+      'A deload is not a pause — it is a week at half power: working weights and set counts down 30–50%, or cardio only. Muscle recovers faster than ligaments, tendons, and joints — this week lets them catch up.';
+
+  @override
+  String get instructionRhythmNudgeTitle => 'Reminder';
+
+  @override
+  String get instructionRhythmNudgeDesc =>
+      'If you hold two and a half sessions a week or more and have not deloaded in a while, the app suggests taking such a week. The denser the rhythm, the sooner the hint appears. It shows at most once a week, in personal mode only — and it stays a recommendation, not medical advice.';
+
+  @override
+  String get instructionSectionCalendar => 'Calendar and history';
+
+  @override
+  String get instructionCalendarBrowseTitle => 'How to browse';
+
+  @override
+  String get instructionCalendarBrowseDesc =>
+      'Swipe to change months; tap the month name for a quick date picker. A dot under a day means there was a workout.';
+
+  @override
+  String get instructionCalendarAddTitle => 'Backdated entry';
 
   @override
   String get instructionCalendarAddDesc =>
-      'Pick a day, then add a workout at a chosen time. Useful for logging a missed session.';
+      'Pick a day, set a time, and add a workout — including a date already past. Handy if you forgot to log the session.';
 
   @override
-  String get instructionSectionTrainer => 'Coach mode';
+  String get instructionNavHistoryTitle => 'Workout tonnage';
+
+  @override
+  String get instructionNavHistoryDesc =>
+      'Every saved session shows total tonnage. Volume is one of the most reliable hypertrophy landmarks: what matters is not a single-day record, but how it holds from week to week.';
+
+  @override
+  String get instructionHistoryEditTitle => 'Editing records';
+
+  @override
+  String get instructionHistoryEditDesc =>
+      'A saved workout can be expanded and edited: add an exercise or a set, change the numbers, or delete the session. Changes save immediately.';
+
+  @override
+  String get instructionSectionStats => 'Statistics';
+
+  @override
+  String get instructionStatsTitle => 'Workout summary';
+
+  @override
+  String get instructionStatsDesc =>
+      'The chart icon in the header of the training or coach screen: how many sessions this month, this year, and all time. In coach mode it also breaks the count down per client.';
+
+  @override
+  String get instructionSectionBackup => 'Backup';
+
+  @override
+  String get instructionNavImportExportTitle => 'Export and import';
+
+  @override
+  String get instructionNavImportExportDesc =>
+      'Export packs history, the exercise list, favorites, group tags, clients, and the schedule into one JSON file. Import merges the file into current data and skips duplicates — nothing is wiped. A coach backup is separate from a personal one.';
+
+  @override
+  String get instructionBackupNudgeTitle => 'Backup reminder';
+
+  @override
+  String get instructionBackupNudgeDesc =>
+      'Data lives on this device only: no accounts, no cloud. Every four weeks the app offers to save a copy — if the phone is lost, history comes back only from that file.';
 
   @override
   String get instructionTrainerIntro =>
-      'I train others is for coaches. Add clients, schedule sessions, plan exercises ahead of time, and log workouts per person. Repeating the last session is optional. Export and import for coach data is separate from your personal history. Deleting a client removes future sessions but keeps past workouts for reporting.';
+      'I train others is a separate space for working with people: clients, a schedule, and a history per person. Personal workouts and coach data never cross.';
 
   @override
   String get instructionClientsTitle => 'Clients';
 
   @override
   String get instructionClientsDesc =>
-      'Add, edit, or delete clients. The list shows the last and next session. Profile fields: goal, weight, height, and private coach notes.';
+      'A list with the goal, last session, and next session. The card holds goal, weight, height, and private coach notes. The name is set at creation and cannot be changed later.';
 
   @override
   String get instructionClientProfileTitle => 'Client profile';
 
   @override
   String get instructionClientProfileDesc =>
-      'Start today\'s session from the profile: an empty live workout. Grey last-session numbers appear only after you pick an exercise. History lists completed workouts only. Plan future sessions on the calendar. Progress and favorites are on the same screen. When there is enough recent strength work, a rhythm gauge shows how often they train; tap it for a note about pace and rest. Unsaved profile edits ask before you leave.';
+      'Today\'s session starts here, along with progress, favorites, and history by month. If there are enough strength days, the rhythm gauge is here too. Deleting a client removes future sessions; past workouts stay for reporting.';
 
   @override
-  String get instructionTrainerPlanTitle => 'Plan a session';
+  String get instructionTrainerScheduleTitle => 'Schedule';
+
+  @override
+  String get instructionTrainerScheduleDesc =>
+      'The coach calendar shows sessions for every client: a play icon means planned, a check means finished, an hourglass means today is in progress. Empty plans from past days are cleared on their own.';
+
+  @override
+  String get instructionTrainerPlanTitle => 'Session plan';
 
   @override
   String get instructionTrainerPlanDesc =>
-      'Plan only from the coach calendar: pick a client and date, then name exercises. Previous weights and reps appear grey as a hint. A planned session shows a play icon. Tap it to start (today) or delete. Only finished workouts go to history. A plan whose date has already passed is removed.';
+      'For a future date you can lay out exercises and a note in advance and save without finishing the workout. Last weights and reps arrive as grey hints. Only finished sessions go into history.';
 
   @override
-  String get instructionTrainerRepeatTitle => 'Repeat last workout';
+  String get instructionTrainerRepeatTitle => 'Repeat last';
 
   @override
   String get instructionTrainerRepeatDesc =>
-      'Optional. From the client profile, or as a switch when adding a session on the calendar. Copies the last session\'s exercises into today\'s live workout or a new plan; previous weights and reps show as grey hints, not as finished sets.';
+      'From the client profile, or as a switch when adding a session on the calendar. The exercise list is copied; weights and reps come as grey hints, not as finished sets.';
+
+  @override
+  String get instructionPrintSessionTitle => 'Print a session';
+
+  @override
+  String get instructionPrintSessionDesc =>
+      'On a finished workout, the print icon in the header builds an A4 sheet with that day\'s line-up and numbers. Then the system sheet: printer, PDF, or send to the client.';
+
+  @override
+  String get instructionImportAthleteTitle => 'Import an athlete\'s history';
+
+  @override
+  String get instructionImportAthleteDesc =>
+      'A dedicated button in coach statistics: a file from personal mode becomes a new client, including favorites and group tags. Transferred workouts are marked as imported, and exercise names stay separate from yours.';
 
   @override
   String get printSession => 'Print';
@@ -1179,13 +1350,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get printSessionShareText => 'IronVibe session';
 
   @override
-  String get instructionPrintSessionTitle => 'Print a session';
-
-  @override
-  String get instructionPrintSessionDesc =>
-      'On a finished client workout, the print icon in the header makes an A4 sheet of that day as logged. Share, save, or print from the system sheet.';
-
-  @override
   String get rhythmPerWeek => 'per week';
 
   @override
@@ -1193,7 +1357,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String deloadNudgeBody(String rate, int weeks) {
-    return 'You\'ve been training about $rate days a week for roughly $weeks weeks. This is a reminder that a short active recovery week is sometimes useful — about 30% less tonnage and reps. Not a prescription.';
+    return 'You\'ve been training about $rate days a week for roughly $weeks weeks. A good moment for an active recovery week: working weights and sets down 30–50%, or cardio only. This is a recommendation, not medical advice.';
   }
 
   @override
@@ -1220,107 +1384,87 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String rhythmInsightRateYou(String rate) {
-    return 'You\'ve trained about $rate days a week over the last four weeks.';
+    return 'You train about $rate times a week on average.';
   }
 
   @override
   String rhythmInsightRateClient(String name, String rate) {
-    return '$name has trained about $rate days a week over the last four weeks.';
+    return '$name trains about $rate times a week on average.';
   }
 
   @override
+  String get rhythmInsightBandLight => 'An easy rhythm';
+
+  @override
+  String get rhythmInsightBandSteady => 'A steady rhythm';
+
+  @override
+  String get rhythmInsightBandDense => 'A dense rhythm';
+
+  @override
+  String get rhythmInsightBandVeryDense => 'Almost no days off';
+
+  @override
+  String get rhythmInsightHowTitle => 'Where this number comes from';
+
+  @override
   String get rhythmInsightWindow =>
-      'Only strength days count. Cardio-only days are ignored. This is a snapshot of density, not a target.';
+      'Average over the last four weeks. Days with strength work count; cardio-only days do not. This is not a goal and not a grade — just your current rhythm.';
 
   @override
   String get rhythmInsightWhatTitle => 'Active recovery week';
 
   @override
   String get rhythmInsightWhatBody =>
-      'A week of deliberately lighter work so you recover without losing fitness: same sessions, about 30–50% less volume. Or skip strength days and stay moving.';
+      'Not a pause — a week at half power: working weights and set counts down 30–50%. You can skip strength entirely and keep cardio or any other activity. Muscle recovers faster than joints, ligaments, and tendons — this week gives them time to catch up.';
+
+  @override
+  String get rhythmInsightPaceTitle => 'What this means';
 
   @override
   String get rhythmInsightAdviceLight =>
-      'Right now the rhythm is easy. If sessions are not extremely hard, you can go a long time without a planned active recovery week.';
+      'There are enough rest days between sessions that fatigue does not stack. No need to plan active recovery yet — at this rhythm the body recovers on its own.';
 
   @override
   String get rhythmInsightAdviceSteady =>
-      'Right now this is a steady rhythm. If the work is hard, an active recovery week every few months is often enough.';
+      'A steady rhythm you can live on for years. If the sessions are hard, take an active recovery week every few months — better early than after the weights stall.';
 
   @override
   String get rhythmInsightAdviceDense =>
-      'Right now this is a dense schedule. If sessions are intense, an active recovery week every two to three months is often worth keeping in mind.';
+      'Sessions sit close together, and fatigue builds quietly. An active recovery week every two or three months usually keeps progress better than grinding without a break.';
 
   @override
   String get rhythmInsightAdviceVeryDense =>
-      'Right now this is nearly every day. If the load is high, an active recovery week about once a month is a common way to stay durable.';
+      'Almost every day under load. That can work if sleep and food keep up. At this rhythm an active recovery week about once a month is ordinary care for joints and ligaments, not a cop-out.';
 
   @override
   String get rhythmInsightPraiseSteady =>
-      'Well done. This is the kind of rhythm long progress is built on.';
+      'This is the rhythm people keep for years.';
 
   @override
-  String get rhythmInsightPraiseDense => 'Truly dedicated. Keep it up.';
+  String get rhythmInsightPraiseDense =>
+      'You train often — a schedule like that does not happen by itself.';
 
   @override
   String get rhythmInsightPraiseVeryDense =>
-      'Looks like you\'re trying to unlock the secret capabilities of your body.';
+      'Looks like you found the body\'s secret mode.';
 
   @override
   String get rhythmInsightRecentLighter =>
-      'An active recovery week already shows up in the recent data.';
+      'Load already dropped recently — active recovery can count as done. Pick the pace back up.';
 
   @override
   String rhythmInsightAccumulation(int weeks) {
-    return 'About $weeks weeks at this density without an active recovery week.';
+    String _temp0 = intl.Intl.pluralLogic(
+      weeks,
+      locale: localeName,
+      other: 'This rhythm has held for $weeks weeks.',
+      one: 'This rhythm has held for $weeks week.',
+    );
+    return '$_temp0';
   }
 
   @override
   String get rhythmInsightDisclaimer =>
-      'This is a reference note, not a prescription. It only flags that a short active recovery week can help. If you feel fine, you can leave things as they are.';
-
-  @override
-  String get instructionHubManifest =>
-      'No built-in catalog or preset programs. You name exercises yourself; the app keeps stats your way.';
-
-  @override
-  String get instructionChapterStartTitle => 'Getting started';
-
-  @override
-  String get instructionChapterStartBlurb =>
-      'Home screen, how you train, and why the app stays out of your way.';
-
-  @override
-  String get instructionChapterToolsTitle => 'Training tools';
-
-  @override
-  String get instructionChapterToolsBlurb =>
-      'Rhythm gauge, favorites, muscle tags, and quick workout.';
-
-  @override
-  String get instructionChapterSessionTitle => 'In session';
-
-  @override
-  String get instructionChapterSessionBlurb =>
-      'Logging sets, fields, cardio, saving, and the stopwatch.';
-
-  @override
-  String get instructionChapterProgressTitle => 'Progress and data';
-
-  @override
-  String get instructionChapterProgressBlurb =>
-      'Personal records, the chart, calendar, history, and backup.';
-
-  @override
-  String get instructionChapterCoachTitle => 'Coach mode';
-
-  @override
-  String get instructionChapterCoachBlurb =>
-      'Clients, profiles, planned sessions, and repeating a workout.';
-
-  @override
-  String get instructionSearchHint => 'Search the guide';
-
-  @override
-  String get instructionSearchEmpty => 'Nothing matches that search.';
+      'This is a recommendation, not medical advice. If you feel fine, nothing has to change.';
 }

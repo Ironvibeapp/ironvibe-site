@@ -117,7 +117,7 @@ class _IronVibeThemeToggle extends StatelessWidget {
                         child: Icon(
                           Icons.wb_sunny_rounded,
                           size: 17,
-                          color: isDark ? pal.textMuted : const Color(0xFFBF360C),
+                          color: isDark ? pal.textMuted : kIronVibeAccent,
                         ),
                       ),
                     ),
@@ -126,7 +126,7 @@ class _IronVibeThemeToggle extends StatelessWidget {
                         child: Icon(
                           Icons.nightlight_round,
                           size: 16,
-                          color: isDark ? const Color(0xFF64B5F6) : pal.textMuted,
+                          color: isDark ? const Color(0xFFB0BEC5) : pal.textMuted,
                         ),
                       ),
                     ),
