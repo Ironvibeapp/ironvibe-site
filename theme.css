@@ -348,6 +348,44 @@ html[data-theme="dark"] body.iv-site .iv-feature-icon-wrap {
   border-color: var(--iv-phone-bezel);
 }
 
+.iv-store-row {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.75rem;
+  width: 100%;
+  max-width: 64rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+@media (min-width: 1024px) {
+  .iv-store-row {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 2rem 2.25rem;
+  }
+}
+.iv-store-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 14.5rem;
+  flex: 0 0 14.5rem;
+}
+.iv-store-hint {
+  margin-top: 0.3rem;
+  min-height: 1.15rem;
+  max-width: 13rem;
+  font-size: 0.75rem;
+  line-height: 1.25;
+  text-align: center;
+}
+
 body.iv-site a.iv-btn-primary-like {
   display: inline-flex;
   align-items: center;

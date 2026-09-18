@@ -11,7 +11,7 @@
     <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=22">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../theme.css?v=174">
+    <link rel="stylesheet" href="../theme.css?v=175">
     <style>
          .logo-hero { width: 8.2rem; height: 11.5rem; }
         @media (min-width: 768px) {  .logo-hero { width: 11.1rem; height: 15.5rem; } }
@@ -49,24 +49,27 @@
             <div class="iv-fade-rule" aria-hidden="true"></div>
             <p class="iv-prose max-w-xl mx-auto mb-3" data-i18n="home.philosophy1"></p>
             <p class="iv-prose max-w-xl mx-auto mb-12" data-i18n="home.philosophy2"></p>
-            <div class="iv-store-row flex flex-col sm:flex-row flex-wrap items-center justify-center gap-8 md:gap-10 w-full max-w-xl md:max-w-5xl mx-auto px-2">
-                <div class="flex flex-col items-center gap-1 order-2 sm:order-1">
+            <div class="iv-store-row">
+                <div class="iv-store-item order-2 lg:order-1">
                     <a href="../IronVibe-release.apk" download="IronVibe-release.apk" class="iv-btn-primary-like text-sm md:text-[0.95rem] transition-all inline-flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--iv-ring)]">
                         <span data-i18n="home.downloadApk">DOWNLOAD APK</span>
                     </a>
-                    <span class="text-[10px] md:text-xs iv-text-soft text-center leading-snug max-w-[13rem]" data-i18n="home.directApkHint"></span>
+                    <span class="iv-store-hint iv-text-soft" data-i18n="home.directApkHint"></span>
                 </div>
-                <a href="https://play.google.com/store/apps/details?id=com.ironvibe.app" target="_blank" rel="noopener noreferrer" class="iv-play-badge order-1 sm:order-2 opacity-95 hover:opacity-100 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--iv-ring)]" data-i18n-aria="home.getOnPlayAria">
-                    <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="" class="iv-play-badge-img" width="646" height="250" decoding="async" />
-                </a>
-                <div class="flex flex-col items-center gap-1 order-3">
+                <div class="iv-store-item order-1 lg:order-2">
+                    <a href="https://play.google.com/store/apps/details?id=com.ironvibe.app" target="_blank" rel="noopener noreferrer" class="iv-play-badge opacity-95 hover:opacity-100 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--iv-ring)]" data-i18n-aria="home.getOnPlayAria">
+                        <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="" class="iv-play-badge-img" width="646" height="250" decoding="async" />
+                    </a>
+                    <span class="iv-store-hint" aria-hidden="true"></span>
+                </div>
+                <div class="iv-store-item order-3">
                     <a href="https://t.me/IronVibeapp_bot" target="_blank" rel="noopener noreferrer" class="iv-tg-btn text-sm md:text-[0.95rem] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--iv-ring)]" data-i18n-aria="home.telegramAria">
                         <svg class="iv-tg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                             <path fill="currentColor" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.1-.002.321.023.465.14a.51.51 0 0 1 .171.325c.016.093.036.306.02.472z"/>
                         </svg>
                         <span data-i18n="home.telegramCta">TELEGRAM</span>
                     </a>
-                    <span class="text-[10px] md:text-xs iv-text-soft text-center leading-snug max-w-[13rem]" data-i18n="home.telegramHint">Mini App</span>
+                    <span class="iv-store-hint iv-text-soft" data-i18n="home.telegramHint">Mini App</span>
                 </div>
             </div>
         </div>
