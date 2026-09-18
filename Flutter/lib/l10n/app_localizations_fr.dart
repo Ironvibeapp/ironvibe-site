@@ -249,10 +249,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get muscleGroupHamstrings => 'Cuisse arrière';
 
   @override
-  String get muscleGroupArmFlex => 'Flexion des bras';
+  String get muscleGroupArmFlex => 'Biceps';
 
   @override
-  String get muscleGroupArmExt => 'Extension des bras';
+  String get muscleGroupArmExt => 'Triceps';
 
   @override
   String get muscleGroupUntagged => '—';
@@ -1122,7 +1122,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get instructionMuscleGroupsIntro =>
-      'Le groupe est une étiquette facultative sur votre nom. Il ne sert qu\'à la séance rapide, pour composer un full body équilibré. Huit groupes : pectoraux, dos, épaules, gainage, cuisse avant, cuisse arrière, flexion des bras, extension des bras.';
+      'Le groupe est une étiquette facultative sur votre nom. Il ne sert qu\'à la séance rapide, pour composer un full body équilibré. Huit groupes : pectoraux, dos, épaules, gainage, cuisse avant, cuisse arrière, biceps, triceps.';
 
   @override
   String get instructionMuscleGroupTagTitle => 'Comment étiqueter';

@@ -248,10 +248,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get muscleGroupHamstrings => 'Coxa posterior';
 
   @override
-  String get muscleGroupArmFlex => 'Flexão de braços';
+  String get muscleGroupArmFlex => 'Bíceps';
 
   @override
-  String get muscleGroupArmExt => 'Extensão de braços';
+  String get muscleGroupArmExt => 'Tríceps';
 
   @override
   String get muscleGroupUntagged => '—';
@@ -1118,7 +1118,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get instructionMuscleGroupsIntro =>
-      'O grupo é uma etiqueta opcional no teu nome. Só serve ao treino rápido, para montar um corpo todo equilibrado. Oito grupos: peito, costas, ombros, core, coxa anterior, coxa posterior, flexão de braços, extensão de braços.';
+      'O grupo é uma etiqueta opcional no teu nome. Só serve ao treino rápido, para montar um corpo todo equilibrado. Oito grupos: peito, costas, ombros, core, coxa anterior, coxa posterior, bíceps, tríceps.';
 
   @override
   String get instructionMuscleGroupTagTitle => 'Como etiquetar';

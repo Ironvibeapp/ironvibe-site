@@ -573,13 +573,13 @@ abstract class AppLocalizations {
   /// No description provided for @muscleGroupArmFlex.
   ///
   /// In en, this message translates to:
-  /// **'Arm curl'**
+  /// **'Biceps'**
   String get muscleGroupArmFlex;
 
   /// No description provided for @muscleGroupArmExt.
   ///
   /// In en, this message translates to:
-  /// **'Arm extension'**
+  /// **'Triceps'**
   String get muscleGroupArmExt;
 
   /// No description provided for @muscleGroupUntagged.
@@ -2157,7 +2157,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionMuscleGroupsIntro.
   ///
   /// In en, this message translates to:
-  /// **'A group is an optional tag on your name. It is used only by the quick workout, to build a balanced full-body session. Eight groups: chest, back, shoulders, core, front thigh, rear thigh, arm curl, arm extension.'**
+  /// **'A group is an optional tag on your name. It is used only by the quick workout, to build a balanced full-body session. Eight groups: chest, back, shoulders, core, front thigh, rear thigh, biceps, triceps.'**
   String get instructionMuscleGroupsIntro;
 
   /// No description provided for @instructionMuscleGroupTagTitle.

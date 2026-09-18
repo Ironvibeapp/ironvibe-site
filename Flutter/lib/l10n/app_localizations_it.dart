@@ -248,10 +248,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get muscleGroupHamstrings => 'Coscia posteriore';
 
   @override
-  String get muscleGroupArmFlex => 'Flessione braccia';
+  String get muscleGroupArmFlex => 'Bicipiti';
 
   @override
-  String get muscleGroupArmExt => 'Estensione braccia';
+  String get muscleGroupArmExt => 'Tricipiti';
 
   @override
   String get muscleGroupUntagged => '—';
@@ -1121,7 +1121,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get instructionMuscleGroupsIntro =>
-      'Il gruppo è un\'etichetta facoltativa sul tuo nome. Serve solo all\'allenamento rapido, per comporre un full body equilibrato. Otto gruppi: petto, schiena, spalle, core, coscia anteriore, coscia posteriore, flessione braccia, estensione braccia.';
+      'Il gruppo è un\'etichetta facoltativa sul tuo nome. Serve solo all\'allenamento rapido, per comporre un full body equilibrato. Otto gruppi: petto, schiena, spalle, core, coscia anteriore, coscia posteriore, bicipiti, tricipiti.';
 
   @override
   String get instructionMuscleGroupTagTitle => 'Come etichettare';

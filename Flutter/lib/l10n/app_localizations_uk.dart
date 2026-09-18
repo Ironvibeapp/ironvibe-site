@@ -245,10 +245,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get muscleGroupHamstrings => 'Заднє стегно';
 
   @override
-  String get muscleGroupArmFlex => 'Згинання рук';
+  String get muscleGroupArmFlex => 'Біцепс';
 
   @override
-  String get muscleGroupArmExt => 'Розгинання рук';
+  String get muscleGroupArmExt => 'Трицепс';
 
   @override
   String get muscleGroupUntagged => '—';
@@ -1114,7 +1114,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get instructionMuscleGroupsIntro =>
-      'Група — необов\'язкова мітка до вашої назви. Вона потрібна лише швидкому тренуванню, щоб зібрати збалансоване тренування на все тіло. Вісім груп: груди, спина, плечі, кор, переднє стегно, заднє стегно, згинання рук, розгинання рук.';
+      'Група — необов\'язкова мітка до вашої назви. Вона потрібна лише швидкому тренуванню, щоб зібрати збалансоване тренування на все тіло. Вісім груп: груди, спина, плечі, кор, переднє стегно, заднє стегно, біцепс, трицепс.';
 
   @override
   String get instructionMuscleGroupTagTitle => 'Як поставити мітку';

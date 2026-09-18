@@ -247,10 +247,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get muscleGroupHamstrings => 'Tył uda';
 
   @override
-  String get muscleGroupArmFlex => 'Zgięcie ramion';
+  String get muscleGroupArmFlex => 'Biceps';
 
   @override
-  String get muscleGroupArmExt => 'Wyprost ramion';
+  String get muscleGroupArmExt => 'Triceps';
 
   @override
   String get muscleGroupUntagged => '—';
@@ -1117,7 +1117,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get instructionMuscleGroupsIntro =>
-      'Grupa to opcjonalny znacznik przy twojej nazwie. Potrzebna jest tylko szybkiemu treningowi, żeby złożyć zrównoważone całe ciało. Osiem grup: klatka, plecy, barki, core, przód uda, tył uda, zgięcie ramion, wyprost ramion.';
+      'Grupa to opcjonalny znacznik przy twojej nazwie. Potrzebna jest tylko szybkiemu treningowi, żeby złożyć zrównoważone całe ciało. Osiem grup: klatka, plecy, barki, core, przód uda, tył uda, biceps, triceps.';
 
   @override
   String get instructionMuscleGroupTagTitle => 'Jak oznaczyć';

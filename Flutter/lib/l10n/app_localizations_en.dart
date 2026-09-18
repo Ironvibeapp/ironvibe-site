@@ -245,10 +245,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get muscleGroupHamstrings => 'Rear thigh';
 
   @override
-  String get muscleGroupArmFlex => 'Arm curl';
+  String get muscleGroupArmFlex => 'Biceps';
 
   @override
-  String get muscleGroupArmExt => 'Arm extension';
+  String get muscleGroupArmExt => 'Triceps';
 
   @override
   String get muscleGroupUntagged => '—';
@@ -1113,7 +1113,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get instructionMuscleGroupsIntro =>
-      'A group is an optional tag on your name. It is used only by the quick workout, to build a balanced full-body session. Eight groups: chest, back, shoulders, core, front thigh, rear thigh, arm curl, arm extension.';
+      'A group is an optional tag on your name. It is used only by the quick workout, to build a balanced full-body session. Eight groups: chest, back, shoulders, core, front thigh, rear thigh, biceps, triceps.';
 
   @override
   String get instructionMuscleGroupTagTitle => 'How to tag';

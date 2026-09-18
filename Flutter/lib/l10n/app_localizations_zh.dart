@@ -240,10 +240,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get muscleGroupHamstrings => '大腿后侧';
 
   @override
-  String get muscleGroupArmFlex => '手臂屈曲';
+  String get muscleGroupArmFlex => '肱二头肌';
 
   @override
-  String get muscleGroupArmExt => '手臂伸展';
+  String get muscleGroupArmExt => '肱三头肌';
 
   @override
   String get muscleGroupUntagged => '—';
@@ -1067,7 +1067,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get instructionMuscleGroupsIntro =>
-      '肌群是名称上的可选标签。只给快速训练用来拼一次均衡的全身课。八个组：胸、背、肩、核心、大腿前侧、大腿后侧、手臂屈曲、手臂伸展。';
+      '肌群是名称上的可选标签。只给快速训练用来拼一次均衡的全身课。八个组：胸、背、肩、核心、大腿前侧、大腿后侧、肱二头肌、肱三头肌。';
 
   @override
   String get instructionMuscleGroupTagTitle => '怎么打标签';

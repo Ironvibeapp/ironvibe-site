@@ -248,10 +248,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get muscleGroupHamstrings => 'Hinterer Oberschenkel';
 
   @override
-  String get muscleGroupArmFlex => 'Armbeugung';
+  String get muscleGroupArmFlex => 'Bizeps';
 
   @override
-  String get muscleGroupArmExt => 'Armstreckung';
+  String get muscleGroupArmExt => 'Trizeps';
 
   @override
   String get muscleGroupUntagged => '—';
@@ -1122,7 +1122,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get instructionMuscleGroupsIntro =>
-      'Die Gruppe ist eine optionale Markierung an deinem Namen. Sie braucht nur das schnelle Training, um ein ausgewogenes Ganzkörpertraining zu bauen. Acht Gruppen: Brust, Rücken, Schultern, Core, vorderer Oberschenkel, hinterer Oberschenkel, Armbeugung, Armstreckung.';
+      'Die Gruppe ist eine optionale Markierung an deinem Namen. Sie braucht nur das schnelle Training, um ein ausgewogenes Ganzkörpertraining zu bauen. Acht Gruppen: Brust, Rücken, Schultern, Core, vorderer Oberschenkel, hinterer Oberschenkel, Bizeps, Trizeps.';
 
   @override
   String get instructionMuscleGroupTagTitle => 'So markierst du';

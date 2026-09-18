@@ -247,10 +247,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get muscleGroupHamstrings => 'Заднее бедро';
 
   @override
-  String get muscleGroupArmFlex => 'Сгибание рук';
+  String get muscleGroupArmFlex => 'Бицепс';
 
   @override
-  String get muscleGroupArmExt => 'Разгибание рук';
+  String get muscleGroupArmExt => 'Трицепс';
 
   @override
   String get muscleGroupUntagged => '—';
@@ -1116,7 +1116,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionMuscleGroupsIntro =>
-      'Группа — необязательная метка к вашему названию. Она нужна только быстрой тренировке, чтобы собрать сбалансированный фулбади. Восемь групп: грудь, спина, плечи, корпус, квадрицепс, бицепс бедра, сгибатели рук, разгибатели рук.';
+      'Группа — необязательная метка к вашему названию. Она нужна только быстрой тренировке, чтобы собрать сбалансированный фулбади. Восемь групп: грудь, спина, плечи, корпус, переднее бедро, заднее бедро, бицепс, трицепс.';
 
   @override
   String get instructionMuscleGroupTagTitle => 'Как поставить метку';
@@ -1150,7 +1150,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionQuickWorkoutHowDesc =>
-      'Грудь, спина, одна половина ног (квадрицепс или бицепс бедра — не обе в один день) и одно движение на плечи, руки или корпус. В каждом слоте приложение берёт группу, которая дольше не работала, и отдаёт приоритет избранному.';
+      'Грудь, спина, одна половина ног (переднее или заднее бедро — не оба в один день) и одно движение на плечи, руки или корпус. В каждом слоте приложение берёт группу, которая дольше не работала, и отдаёт приоритет избранному.';
 
   @override
   String get instructionQuickWorkoutPreviewTitle => 'Предпросмотр и замена';
