@@ -61,7 +61,7 @@ Minimal workout tracker for athletes and coaches:
 - Trainee and trainer modes
 - History, personal progress, rest timer
 - Local storage only — uninstalling the app removes the data
-- CSV export / import if you want a copy elsewhere
+- One-file backup you can export and import whenever you want
 
 ```bash
 cd Flutter
@@ -73,7 +73,7 @@ Current version: **1.7.9** (`1.7.9+79`). Release builds: see [`Flutter/BUILD_AAB
 
 ## Website
 
-The live site is a static multilingual landing page (EN, RU, AR, DE, ES, FR, HI, IT, PT, ZH), plus privacy and donate pages. No accounts, no server-side forms.
+The live site is a static multilingual landing page (EN, RU, AR, DE, ES, FR, HI, IT, PT, ZH) plus a privacy page. No accounts, no server-side forms, no cookies, no analytics. Donation addresses live in the `#support` section of each landing page; `/<locale>/donate/` only redirects there.
 
 ## License
 
