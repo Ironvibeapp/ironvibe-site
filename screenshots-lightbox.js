@@ -1,5 +1,5 @@
 (function () {
-  var TOTAL = 7;
+  var TOTAL = 4;
   var lightbox = null;
   var lightboxImg = null;
   var backdrop = null;
@@ -12,7 +12,7 @@
 
   function urlForIndex(i) {
     var f = themeFolder();
-    return "../screenshots/" + f + "/" + i + ".jpg?v=166-" + f;
+    return "../screenshots/" + f + "/" + i + ".jpg?v=179-" + f;
   }
 
   function applyIndex(i) {

@@ -27,7 +27,7 @@
       var n = el.getAttribute("data-screenshot");
       if (!n || !/^\d+$/.test(n)) return;
       /* Query string ties decoded image to theme (avoids stale bitmap when swapping light/dark). */
-      var url = "../screenshots/" + folder + "/" + n + ".jpg?v=166-" + folder;
+      var url = "../screenshots/" + folder + "/" + n + ".jpg?v=179-" + folder;
       el.setAttribute("data-lightbox", url);
       var img = el.querySelector("img");
       if (!img) return;

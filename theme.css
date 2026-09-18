@@ -466,6 +466,16 @@ html[data-theme="dark"] body.iv-site a.iv-btn-primary-like:hover {
   flex-direction: row-reverse;
 }
 
+/* Hall of fame: one card (patrons only) on non-Russian locales */
+.iv-hof-grid--single {
+  display: flex;
+  justify-content: center;
+}
+.iv-hof-grid--single > .glass-panel {
+  width: 100%;
+  max-width: 28rem;
+}
+
 /* Hall of Legends — themed thumbnails (steel / light & dark) */
 .iv-legend-thumb {
   position: relative;
