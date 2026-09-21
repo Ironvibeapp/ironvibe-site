@@ -24,7 +24,7 @@ void main() {
         ExerciseLog('', [SetLog('60', '8', '2')]),
         ExerciseLog('Squat', [SetLog('', '', '1')]),
         ExerciseLog('Bench', [
-          SetLog('', '', '0'),
+          SetLog('', '', ''),
           SetLog('60', '8', '2'),
           SetLog('62.5', '8', '1'),
         ]),

@@ -1099,7 +1099,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ], isCardio: true),
         );
       } else {
-        workout.exercises.add(ExerciseLog('', [SetLog('', '', '0')]));
+        workout.exercises.add(ExerciseLog('', [SetLog('', '', '')]));
       }
     });
     DataService.saveData();
@@ -1318,7 +1318,7 @@ class _EditableHistoryExerciseBlockState
     if (widget.exerciseIndex >= exList.length) return;
     final sets = exList[widget.exerciseIndex].sets;
     setState(() {
-      sets.add(SetLog('', '', '0'));
+      sets.add(SetLog('', '', ''));
       final newData = SetData();
       final idx = _setDataList.length;
       newData.weight.addListener(() => _persistSet(idx, newData));

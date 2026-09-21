@@ -122,7 +122,7 @@ class SetLog {
   factory SetLog.fromJson(Map<String, dynamic> json) {
     final j = _jsonMap(json);
     if (j == null) {
-      return SetLog('', '', '0');
+      return SetLog('', '', '');
     }
     return SetLog(
       _jsonPickString(j, ['weight', 'w', 'kg', 'mass']),
@@ -774,7 +774,7 @@ List<ExerciseLog> ironVibeTrainerPlanLogsFrom(TrainerSession source) {
       out.add(
         ExerciseLog(
           name,
-          List<SetLog>.generate(n, (_) => SetLog('', '', '0')),
+          List<SetLog>.generate(n, (_) => SetLog('', '', '')),
         ),
       );
     }

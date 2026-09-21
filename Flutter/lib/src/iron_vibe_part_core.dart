@@ -113,7 +113,7 @@ SetLog? _setLogFromDecoded(
     }
     final w = item.isNotEmpty ? _jsonString(item[0]) : '';
     final r = item.length > 1 ? _jsonString(item[1]) : '';
-    final ri = item.length > 2 ? normalizeRirStored(_jsonString(item[2])) : '0';
+    final ri = item.length > 2 ? normalizeRirStored(_jsonString(item[2])) : '';
     return SetLog(w, r, ri);
   }
   final m = _jsonMap(item);
@@ -181,15 +181,20 @@ String ironVibeWorkoutVolumeLabel(
 String ironVibeWeightColumnTitle(AppLocalizations l) =>
     '${l.weightHeader} (${l.weightUnitsChoiceShort})';
 
-/// Пустой RIR в данных = «до отказа» → храним и показываем как 0.
+/// Незаданный RIR в UI — прочерк. В данных хранится пустая строка.
+const kRirUnsetDisplay = '—';
+
+/// Пустой RIR = не задан. «0» — до отказа, только если пользователь выбрал.
 String normalizeRirStored(String raw) {
   final t = raw.trim();
-  return t.isEmpty ? '0' : t;
+  if (t.isEmpty || t == kRirUnsetDisplay || t == '-' || t == '–' || t == '−') {
+    return '';
+  }
+  return t;
 }
 
 bool rirIndicatesMeaningfulUserChoice(String raw) {
-  final t = raw.trim();
-  return t.isNotEmpty && t != '0';
+  return normalizeRirStored(raw).isNotEmpty;
 }
 
 void ironVibeRebuildExerciseBankFromCompletedWorkouts() {
@@ -369,9 +374,9 @@ Future<void> _deleteExportFile(String path) async {
   } catch (_) {}
 }
 
-/// Семейное правило версий: … 1.7.8+78, 1.7.9+79 …
-const String kAppVersion = '1.7.9';
-const int kAppBuildNumber = 79;
+/// Семейное правило версий: … 1.7.9+79, 1.8.0+80 …
+const String kAppVersion = '1.8.0';
+const int kAppBuildNumber = 80;
 
 /// График прогресса: вес (красный) и повторы (как цвет фокуса полей).
 const Color kProgressChartWeightColor = Color(0xFFFF1744);

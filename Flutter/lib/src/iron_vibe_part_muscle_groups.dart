@@ -667,7 +667,7 @@ ExerciseLog ironVibeLastExerciseLogFor(
 
   final sets = found?.sets;
   if (sets == null || sets.isEmpty) {
-    return ExerciseLog(name, [SetLog('', '', '0')]);
+    return ExerciseLog(name, [SetLog('', '', '')]);
   }
   return ExerciseLog(name, List<SetLog>.from(sets));
 }
@@ -875,7 +875,7 @@ Future<void> ironVibeStartQuickWorkout(
       dateTime: DateTime.now(),
       clientName: scopedClient,
       exercises: confirmed
-          .map((p) => ExerciseLog(p.name, [SetLog('', '', '0')]))
+          .map((p) => ExerciseLog(p.name, [SetLog('', '', '')]))
           .toList(),
     );
     trainerSchedule.add(session);

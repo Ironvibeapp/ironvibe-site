@@ -36,6 +36,22 @@ void main() {
     expect(ironVibeVolumeKgFromFields('80.5', '10'), 805);
   });
 
+  test('unset RIR stays empty and is not treated as failure', () {
+    expect(normalizeRirStored(''), '');
+    expect(normalizeRirStored('  '), '');
+    expect(normalizeRirStored(kRirUnsetDisplay), '');
+    expect(normalizeRirStored('-'), '');
+    expect(normalizeRirStored('0'), '0');
+    expect(normalizeRirStored('2'), '2');
+    expect(rirIndicatesMeaningfulUserChoice(''), isFalse);
+    expect(rirIndicatesMeaningfulUserChoice(kRirUnsetDisplay), isFalse);
+    expect(rirIndicatesMeaningfulUserChoice('0'), isTrue);
+    expect(rirIndicatesMeaningfulUserChoice('∞'), isTrue);
+    expect(ironVibeSetLogHasLoggedData(SetLog('', '', '')), isFalse);
+    expect(ironVibeSetLogHasLoggedData(SetLog('', '', '0')), isTrue);
+    expect(SetData().rir.text, '');
+  });
+
   test('new workout logs get an id', () {
     final w = ironVibeNewWorkoutLog(DateTime(2026, 5, 1), [
       ExerciseLog('Squat', [SetLog('100', '5', '1')]),
@@ -141,7 +157,7 @@ void main() {
       clientId: 'c1',
       isScheduledPlan: true,
       exercises: [
-        ExerciseLog('Squat', [SetLog('', '', '0')]),
+        ExerciseLog('Squat', [SetLog('', '', '')]),
       ],
     );
     trainerSchedule.add(todayPlan);

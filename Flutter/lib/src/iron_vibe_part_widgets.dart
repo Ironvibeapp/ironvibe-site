@@ -107,7 +107,7 @@ bool ironVibeApplyClientPreviousSetHints({
     final hint = i < lastSets.length ? lastSets[i] : null;
     final typedW = existing?.weight.text.trim() ?? '';
     final typedR = existing?.reps.text.trim() ?? '';
-    final ri = existing?.rir.text ?? '0';
+    final ri = existing?.rir.text ?? '';
     final hintW = typedW.isEmpty ? (hint?.weight.trim() ?? '') : '';
     final hintR = typedR.isEmpty ? (hint?.reps.trim() ?? '') : '';
     if (existing == null ||
@@ -180,7 +180,7 @@ class SetData {
   SetData({
     String w = '',
     String r = '',
-    String ri = '0',
+    String ri = '',
     String d = '',
     String i = '',
     this.hintWeight = '',
@@ -264,7 +264,7 @@ Future<bool> ironVibeConfirmSwitchWorkoutType(BuildContext context) async {
 Map<String, dynamic> ironVibeSetDataToDraftJson(SetData s) => {
   'weight': s.weight.text,
   'reps': s.reps.text,
-  'rir': s.rir.text,
+  'rir': normalizeRirStored(s.rir.text),
   'duration': s.duration.text,
   'intensity': s.intensity.text,
   if (s.hintWeight.isNotEmpty) 'hintWeight': s.hintWeight,
@@ -1667,12 +1667,12 @@ class _SetRowState extends State<SetRow> {
   }
 
   Widget _buildRirDropdown(IronVibePalette pal) {
-    final effective = normalizeRirStored(widget.data.rir.text);
-    final itemValues = List<String>.from(_rirValues);
-    if (effective.isNotEmpty && !itemValues.contains(effective)) {
-      itemValues.insert(0, effective);
+    final stored = normalizeRirStored(widget.data.rir.text);
+    final itemValues = <String>[kRirUnsetDisplay, ..._rirValues];
+    if (stored.isNotEmpty && !itemValues.contains(stored)) {
+      itemValues.insert(1, stored);
     }
-    final selected = itemValues.contains(effective) ? effective : null;
+    final selected = stored.isEmpty ? kRirUnsetDisplay : stored;
     return Container(
       height: 40,
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -1685,7 +1685,6 @@ class _SetRowState extends State<SetRow> {
         child: DropdownButton<String>(
           value: selected,
           isExpanded: true,
-          hint: Text('0', style: TextStyle(color: pal.textHint, fontSize: 12)),
           dropdownColor: pal.dropdown,
           style: TextStyle(color: pal.textPrimary, fontSize: 14),
           icon: Icon(Icons.arrow_drop_down, color: pal.textSecondary),
@@ -1696,11 +1695,10 @@ class _SetRowState extends State<SetRow> {
             );
           }).toList(),
           onChanged: (String? v) {
-            if (v != null) {
-              widget.data.rir.text = v;
-              setState(() {});
-              _notifyDraft();
-            }
+            if (v == null) return;
+            widget.data.rir.text = v == kRirUnsetDisplay ? '' : v;
+            setState(() {});
+            _notifyDraft();
           },
         ),
       ),

@@ -102,7 +102,7 @@ List<ExerciseLog> ironVibeExerciseLogsFromFavoriteNames(List<String> names) {
   return names
       .map(normalizeExerciseName)
       .where((name) => name.isNotEmpty)
-      .map((name) => ExerciseLog(name, [SetLog('', '', '0')]))
+      .map((name) => ExerciseLog(name, [SetLog('', '', '')]))
       .toList();
 }
 

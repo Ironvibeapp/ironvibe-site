@@ -1025,7 +1025,7 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
             ExerciseLog(
               name,
               List<SetLog>.generate(n, (i) {
-                if (i >= setsToProcess.length) return SetLog('', '', '0');
+                if (i >= setsToProcess.length) return SetLog('', '', '');
                 final s = setsToProcess[i];
                 return SetLog(
                   s.weight.text.trim(),
