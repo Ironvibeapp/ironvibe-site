@@ -29,14 +29,16 @@ class IronVibeApp extends StatelessWidget {
           supportedLocales: const [
             Locale('en'),
             Locale('ru'),
-            Locale('es'),
+            Locale('ar'),
             Locale('de'),
+            Locale('es'),
             Locale('fr'),
+            Locale('hi'),
             Locale('it'),
-            Locale('pt'),
-            Locale('zh'),
             Locale('pl'),
+            Locale('pt'),
             Locale('uk'),
+            Locale('zh'),
           ],
           localeListResolutionCallback: (List<Locale>? preferred, Iterable<Locale> supported) {
             return basicLocaleListResolution(preferred ?? <Locale>[], supported);

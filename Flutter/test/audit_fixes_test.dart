@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fitness_app/main.dart';
 
@@ -251,5 +252,65 @@ void main() {
     expect(byClient, hasLength(1));
     expect(byClient.single.key, 'Маша');
     expect(byClient.single.value, 1);
+  });
+
+  test('client last name is kept and shown with the first name', () {
+    final client = Client('Иван', '', id: 'c1', lastName: 'Петров');
+    clients.add(client);
+    expect(client.toJson()['lastName'], 'Петров');
+    expect(Client.fromJson(client.toJson()).lastName, 'Петров');
+    expect(
+      ironVibeClientDisplayName(client.name, lastName: client.lastName),
+      'Иван Петров',
+    );
+    expect(ironVibeClientNameTaken('Иван', lastName: 'Сидоров'), isFalse);
+    expect(ironVibeClientNameTaken('иван', lastName: 'петров'), isTrue);
+
+    final session = TrainerSession(
+      DateTime(2026, 9, 21, 18),
+      'Иван',
+      '',
+      id: 's1',
+      clientId: 'c1',
+      isCompleted: true,
+      exercises: [
+        ExerciseLog('Squat', [SetLog('60', '8', '1')]),
+      ],
+    );
+    trainerSchedule.add(session);
+    expect(ironVibeSessionClientLabel(session), 'Иван Петров');
+    expect(ironVibeTrainerWorkCountsByClient().single.key, 'Иван Петров');
+
+    ironVibeStampClientLastNameOnSessions(client);
+    ironVibeDeleteClientKeepingHistory(client);
+    expect(ironVibeSessionClientLabel(trainerSchedule.single), 'Иван Петров');
+  });
+
+  test('exercise name formatter keeps a space between words', () {
+    const typed = TextEditingValue(
+      text: 'ЖИМ ',
+      selection: TextSelection.collapsed(offset: 4),
+      composing: TextRange(start: 0, end: 4),
+    );
+    final kept = ironVibeFormatExerciseNameEdit(
+      const TextEditingValue(
+        text: 'ЖИМ',
+        selection: TextSelection.collapsed(offset: 3),
+      ),
+      typed,
+    );
+    expect(kept.text, 'ЖИМ ');
+    expect(kept.composing, const TextRange(start: 0, end: 4));
+
+    final upper = ironVibeFormatExerciseNameEdit(
+      const TextEditingValue(text: 'жим'),
+      const TextEditingValue(
+        text: 'жим ',
+        selection: TextSelection.collapsed(offset: 4),
+        composing: TextRange(start: 0, end: 4),
+      ),
+    );
+    expect(upper.text, 'ЖИМ ');
+    expect(upper.composing, const TextRange(start: 0, end: 4));
   });
 }

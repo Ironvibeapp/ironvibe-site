@@ -219,7 +219,9 @@ class _TrainerScreenState extends State<TrainerScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     DropdownButtonFormField<Client>(
-                      key: ValueKey(selectedClient?.name ?? 'none'),
+                      key: ValueKey(
+                        selectedClient?.id ?? selectedClient?.name ?? 'none',
+                      ),
                       initialValue: selectedClient,
                       dropdownColor: pal.dropdown,
                       style: TextStyle(color: pal.textPrimary),
@@ -233,7 +235,10 @@ class _TrainerScreenState extends State<TrainerScreen> {
                         return DropdownMenuItem(
                           value: c,
                           child: Text(
-                            c.name,
+                            ironVibeClientDisplayName(
+                              c.name,
+                              lastName: c.lastName,
+                            ),
                             style: TextStyle(color: pal.textPrimary),
                           ),
                         );
@@ -704,7 +709,8 @@ class _TrainerSessionCard extends StatelessWidget {
         '${session.dateTime.hour.toString().padLeft(2, '0')}:${session.dateTime.minute.toString().padLeft(2, '0')}';
     final subtitle = ironVibeTrainerSessionSubtitle(context, session);
     final title =
-        customTitle ?? (showClientName ? session.clientName : timeStr);
+        customTitle ??
+            (showClientName ? ironVibeSessionClientLabel(session) : timeStr);
     final String detail;
     if (customTitle != null) {
       detail = subtitle;
@@ -1318,7 +1324,7 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          widget.session.clientName,
+          ironVibeSessionClientLabel(widget.session),
           textAlign: TextAlign.center,
           style: TextStyle(
             color: pal.textPrimary,
@@ -1730,6 +1736,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
       context: context,
       builder: (ctx) {
         String name = '';
+        String lastName = '';
         String? error;
         final pal = IronVibePalette.of(ctx);
         return StatefulBuilder(
@@ -1746,19 +1753,37 @@ class _ClientListScreenState extends State<ClientListScreen> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              content: Column(
+              content: SingleChildScrollView(
+                child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
+                    autofocus: true,
+                    textInputAction: TextInputAction.next,
                     style: TextStyle(color: pal.textPrimary),
                     decoration: InputDecoration(
-                      hintText: l.clientName,
-                      hintStyle: TextStyle(color: pal.textHint),
+                      labelText: l.clientName,
+                      labelStyle: TextStyle(color: pal.textMuted),
                       filled: true,
                       fillColor: pal.inputFill,
                     ),
                     onChanged: (val) {
                       name = val;
+                      if (error != null) setLocal(() => error = null);
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    textInputAction: TextInputAction.done,
+                    style: TextStyle(color: pal.textPrimary),
+                    decoration: InputDecoration(
+                      labelText: l.clientLastName,
+                      labelStyle: TextStyle(color: pal.textMuted),
+                      filled: true,
+                      fillColor: pal.inputFill,
+                    ),
+                    onChanged: (val) {
+                      lastName = val;
                       if (error != null) setLocal(() => error = null);
                     },
                   ),
@@ -1789,6 +1814,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
                     ),
                   ],
                 ],
+                ),
               ),
               actions: [
                 TextButton(
@@ -1801,13 +1827,28 @@ class _ClientListScreenState extends State<ClientListScreen> {
                 TextButton(
                   onPressed: () {
                     final trimmed = name.trim();
+                    final trimmedLast = lastName.trim();
                     if (trimmed.isEmpty) return;
-                    if (ironVibeClientNameTaken(trimmed)) {
+                    if (trimmedLast.isEmpty) {
+                      setLocal(() => error = l.clientLastNameRequired);
+                      return;
+                    }
+                    if (ironVibeClientNameTaken(
+                      trimmed,
+                      lastName: trimmedLast,
+                    )) {
                       setLocal(() => error = l.clientNameTaken);
                       return;
                     }
                     setState(() {
-                      clients.add(Client(trimmed, '', id: ironVibeNewEntityId()));
+                      clients.add(
+                        Client(
+                          trimmed,
+                          '',
+                          id: ironVibeNewEntityId(),
+                          lastName: trimmedLast,
+                        ),
+                      );
                     });
                     DataService.saveData();
                     Navigator.pop(ctx);
@@ -1909,7 +1950,10 @@ class _ClientListScreenState extends State<ClientListScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    client.name,
+                                    ironVibeClientDisplayName(
+                                      client.name,
+                                      lastName: client.lastName,
+                                    ),
                                     style: TextStyle(
                                       color: pal.textPrimary,
                                       fontSize: 16,
@@ -1977,6 +2021,8 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
   late TextEditingController _weightController;
   late TextEditingController _heightController;
   late TextEditingController _notesController;
+  late TextEditingController _lastNameController;
+  String? _lastNameError;
 
   @override
   void initState() {
@@ -1985,6 +2031,7 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
     _weightController = TextEditingController(text: widget.client.weight);
     _heightController = TextEditingController(text: widget.client.height);
     _notesController = TextEditingController(text: widget.client.notes);
+    _lastNameController = TextEditingController(text: widget.client.lastName);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await ironVibePurgeExpiredUnloggedTrainerSessionsAndSave();
       if (mounted) setState(() {});
@@ -1997,23 +2044,40 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
     _weightController.dispose();
     _heightController.dispose();
     _notesController.dispose();
+    _lastNameController.dispose();
     super.dispose();
   }
 
   bool get _isDirty {
-    return _goalController.text != widget.client.goal ||
+    return _lastNameController.text.trim() != widget.client.lastName.trim() ||
+        _goalController.text != widget.client.goal ||
         _weightController.text != widget.client.weight ||
         _heightController.text != widget.client.height ||
         _notesController.text != widget.client.notes;
   }
 
   void _saveChanges() {
+    final last = _lastNameController.text.trim();
+    final others = clients.where((c) => !identical(c, widget.client));
+    if (ironVibeClientNameTaken(
+      widget.client.name,
+      lastName: last,
+      among: others,
+    )) {
+      setState(
+        () => _lastNameError = AppLocalizations.of(context)!.clientNameTaken,
+      );
+      return;
+    }
     setState(() {
+      _lastNameError = null;
+      widget.client.lastName = last;
       widget.client.goal = _goalController.text;
       widget.client.weight = _weightController.text;
       widget.client.height = _heightController.text;
       widget.client.notes = _notesController.text;
     });
+    ironVibeStampClientLastNameOnSessions(widget.client);
     DataService.saveData();
   }
 
@@ -2321,7 +2385,10 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                   padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
                   children: [
                     Text(
-                      widget.client.name,
+                      ironVibeClientDisplayName(
+                        widget.client.name,
+                        lastName: _lastNameController.text,
+                      ),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: pal.textPrimary,
@@ -2436,6 +2503,24 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                       l.clientProfileDetails,
                     ),
                     const SizedBox(height: 10),
+                    TextField(
+                      controller: _lastNameController,
+                      style: TextStyle(color: pal.textPrimary),
+                      decoration: _fieldDecoration(pal, label: l.clientLastName),
+                      onChanged: (_) => setState(() => _lastNameError = null),
+                    ),
+                    if (_lastNameError != null) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        _lastNameError!,
+                        style: const TextStyle(
+                          color: Colors.redAccent,
+                          fontSize: 12,
+                          height: 1.35,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 12),
                     TextField(
                       controller: _goalController,
                       style: TextStyle(color: pal.textPrimary),

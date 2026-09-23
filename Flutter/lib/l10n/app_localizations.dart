@@ -5,10 +5,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_ar.dart';
 import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
 import 'app_localizations_fr.dart';
+import 'app_localizations_hi.dart';
 import 'app_localizations_it.dart';
 import 'app_localizations_pl.dart';
 import 'app_localizations_pt.dart';
@@ -102,10 +104,12 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('ar'),
     Locale('de'),
     Locale('en'),
     Locale('es'),
     Locale('fr'),
+    Locale('hi'),
     Locale('it'),
     Locale('pl'),
     Locale('pt'),
@@ -735,19 +739,31 @@ abstract class AppLocalizations {
   /// No description provided for @clientName.
   ///
   /// In en, this message translates to:
-  /// **'Name'**
+  /// **'First name'**
   String get clientName;
+
+  /// No description provided for @clientLastName.
+  ///
+  /// In en, this message translates to:
+  /// **'Last name'**
+  String get clientLastName;
+
+  /// No description provided for @clientLastNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a last name.'**
+  String get clientLastNameRequired;
 
   /// No description provided for @clientNameCannotChange.
   ///
   /// In en, this message translates to:
-  /// **'The name cannot be changed later.'**
+  /// **'The first name cannot be changed later. You can add or correct the last name on the client card.'**
   String get clientNameCannotChange;
 
   /// No description provided for @clientNameTaken.
   ///
   /// In en, this message translates to:
-  /// **'This name is already in use. Choose another.'**
+  /// **'A client with this first and last name already exists.'**
   String get clientNameTaken;
 
   /// No description provided for @clientGoal.
@@ -1701,7 +1717,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionLanguageDesc.
   ///
   /// In en, this message translates to:
-  /// **'The app follows the system language — there is no separate setting. Ten languages are supported.'**
+  /// **'The app follows the system language — there is no separate setting. Twelve languages are supported.'**
   String get instructionLanguageDesc;
 
   /// No description provided for @instructionHomeLinksTitle.
@@ -2760,10 +2776,12 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) => <String>[
+    'ar',
     'de',
     'en',
     'es',
     'fr',
+    'hi',
     'it',
     'pl',
     'pt',
@@ -2779,6 +2797,8 @@ class _AppLocalizationsDelegate
 AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'ar':
+      return AppLocalizationsAr();
     case 'de':
       return AppLocalizationsDe();
     case 'en':
@@ -2787,6 +2807,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEs();
     case 'fr':
       return AppLocalizationsFr();
+    case 'hi':
+      return AppLocalizationsHi();
     case 'it':
       return AppLocalizationsIt();
     case 'pl':

@@ -16,8 +16,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-# Версия как у IronVibe: … 1.7.9+79, 1.8.0+80 …
-version: 1.8.0+80
+# Версия как у IronVibe: … 1.8.1+81, 1.8.2+82 …
+version: 1.8.2+82
 
 environment:
   sdk: ^3.11.0
@@ -107,6 +107,8 @@ flutter:
     - assets/fonts/NotoSans-Regular.ttf
     - assets/fonts/NotoSans-Bold.ttf
     - assets/fonts/NotoSansSC-Regular.ttf
+    - assets/fonts/NotoSansArabic-Regular.ttf
+    - assets/fonts/NotoSansDevanagari-Regular.ttf
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

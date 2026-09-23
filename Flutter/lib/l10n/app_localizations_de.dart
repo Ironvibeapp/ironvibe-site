@@ -334,15 +334,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get editClient => 'BEARBEITEN';
 
   @override
-  String get clientName => 'Name';
+  String get clientName => 'Vorname';
+
+  @override
+  String get clientLastName => 'Nachname';
+
+  @override
+  String get clientLastNameRequired => 'Nachname angeben.';
 
   @override
   String get clientNameCannotChange =>
-      'Der Name kann später nicht geändert werden.';
+      'Der Vorname kann später nicht geändert werden. Den Nachnamen kannst du in der Kundenkarte ergänzen oder korrigieren.';
 
   @override
   String get clientNameTaken =>
-      'Dieser Name ist bereits vergeben. Bitte einen anderen wählen.';
+      'Ein Kunde mit diesem Vor- und Nachnamen existiert bereits.';
 
   @override
   String get clientGoal => 'Ziel';
@@ -859,7 +865,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get instructionLanguageDesc =>
-      'Die App folgt der Systemsprache — es gibt keine eigene Einstellung. Zehn Sprachen werden unterstützt.';
+      'Die App folgt der Systemsprache — es gibt keine eigene Einstellung. Zwölf Sprachen werden unterstützt.';
 
   @override
   String get instructionHomeLinksTitle => 'Version und Kontakt';

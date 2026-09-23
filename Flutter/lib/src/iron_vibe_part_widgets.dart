@@ -2134,10 +2134,14 @@ class _ExerciseCardState extends State<ExerciseCard> {
                 (context, controller, focusNode, onEditingComplete) {
                   _bindNameFocus(focusNode);
                   _exerciseNameFieldFocus = focusNode;
-                  if (controller.text != widget.data.nameController.text) {
-                    controller.text = widget.data.nameController.text;
-                    controller.selection = TextSelection.fromPosition(
-                      TextPosition(offset: controller.text.length),
+                  final storedName = widget.data.nameController.text;
+                  if (controller.text != storedName &&
+                      !controller.value.composing.isValid) {
+                    controller.value = TextEditingValue(
+                      text: storedName,
+                      selection: TextSelection.collapsed(
+                        offset: storedName.length,
+                      ),
                     );
                   }
 

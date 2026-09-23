@@ -321,13 +321,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get editClient => '编辑';
 
   @override
-  String get clientName => '姓名';
+  String get clientName => '名字';
 
   @override
-  String get clientNameCannotChange => '姓名之后无法更改。';
+  String get clientLastName => '姓氏';
 
   @override
-  String get clientNameTaken => '此姓名已被使用。请选择另一个。';
+  String get clientLastNameRequired => '请填写姓氏。';
+
+  @override
+  String get clientNameCannotChange => '名字之后无法更改。姓氏可以在客户资料中补充或修改。';
+
+  @override
+  String get clientNameTaken => '已有相同姓名的客户。';
 
   @override
   String get clientGoal => '目标';
@@ -822,7 +828,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get instructionLanguageTitle => '语言';
 
   @override
-  String get instructionLanguageDesc => '应用跟随系统语言 — 没有单独设置。支持十种语言。';
+  String get instructionLanguageDesc => '应用跟随系统语言 — 没有单独设置。支持十二种语言。';
 
   @override
   String get instructionHomeLinksTitle => '版本与联系';

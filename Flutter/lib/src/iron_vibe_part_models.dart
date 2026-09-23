@@ -138,6 +138,7 @@ class SetLog {
 class Client {
   String? id;
   String name;
+  String lastName;
   String goal;
   String weight;
   String height;
@@ -147,6 +148,7 @@ class Client {
     this.name,
     this.goal, {
     this.id,
+    this.lastName = '',
     this.weight = '',
     this.height = '',
     this.notes = '',
@@ -156,6 +158,7 @@ class Client {
   Map<String, dynamic> toJson() => {
     if (id != null) 'id': id,
     'name': name,
+    if (lastName.trim().isNotEmpty) 'lastName': lastName.trim(),
     'goal': goal,
     'weight': weight,
     'height': height,
@@ -177,6 +180,7 @@ class Client {
       _jsonString(json['name']),
       _jsonString(json['goal']),
       id: _jsonOptionalId(json['id']),
+      lastName: _jsonString(json['lastName']),
       weight: _jsonString(json['weight']),
       height: _jsonString(json['height']),
       notes: _jsonString(json['notes']),
@@ -187,11 +191,55 @@ class Client {
 
 String ironVibeClientNameKey(String raw) => raw.trim().toLowerCase();
 
-bool ironVibeClientNameTaken(String raw, {Iterable<Client>? among}) {
+String ironVibeClientIdentityKey(String name, {String lastName = ''}) =>
+    '${ironVibeClientNameKey(name)}\u0000${ironVibeClientNameKey(lastName)}';
+
+String ironVibeClientDisplayName(String name, {String lastName = ''}) {
+  final first = name.trim();
+  final last = lastName.trim();
+  if (first.isEmpty) return last;
+  if (last.isEmpty) return first;
+  return '$first $last';
+}
+
+String ironVibeSessionClientLabel(TrainerSession session) {
+  final client = ironVibeFindClient(
+    name: session.clientName,
+    id: session.clientId,
+  );
+  if (client != null) {
+    final live = ironVibeClientDisplayName(
+      client.name,
+      lastName: client.lastName,
+    );
+    if (live.isNotEmpty) return live;
+  }
+  return ironVibeClientDisplayName(
+    session.clientName,
+    lastName: session.clientLastName,
+  );
+}
+
+void ironVibeStampClientLastNameOnSessions(Client client) {
+  final last = client.lastName.trim();
+  for (final s in trainerSchedule) {
+    if (!ironVibeSessionBelongsToClientRecord(s, client)) continue;
+    s.clientLastName = last;
+  }
+}
+
+bool ironVibeClientNameTaken(
+  String raw, {
+  Iterable<Client>? among,
+  String lastName = '',
+}) {
   final key = ironVibeClientNameKey(raw);
   if (key.isEmpty) return false;
+  final identity = ironVibeClientIdentityKey(raw, lastName: lastName);
   for (final c in among ?? clients) {
-    if (ironVibeClientNameKey(c.name) == key) return true;
+    if (ironVibeClientIdentityKey(c.name, lastName: c.lastName) == identity) {
+      return true;
+    }
   }
   return false;
 }
@@ -236,6 +284,7 @@ bool ironVibeSessionBelongsToClientRecord(TrainerSession s, Client client) {
 class TrainerSession {
   final DateTime dateTime;
   final String clientName;
+  String clientLastName;
   String? clientId;
   String note;
   List<ExerciseLog> exercises;
@@ -251,6 +300,7 @@ class TrainerSession {
     this.exercises = const [],
     this.id,
     this.clientId,
+    this.clientLastName = '',
     this.isLiveCurrent = false,
     this.isScheduledPlan = false,
     this.isCompleted = false,
@@ -261,6 +311,7 @@ class TrainerSession {
     if (id != null) 'id': id,
     'dateTime': dateTime.toIso8601String(),
     'clientName': clientName,
+    if (clientLastName.trim().isNotEmpty) 'clientLastName': clientLastName.trim(),
     if (clientId != null) 'clientId': clientId,
     'note': note,
     'exercises': exercises.map((e) => e.toJson()).toList(),
@@ -309,6 +360,7 @@ class TrainerSession {
       exercises: exercises,
       id: _jsonOptionalId(json['id']),
       clientId: _jsonOptionalId(json['clientId']),
+      clientLastName: _jsonString(json['clientLastName']),
       isLiveCurrent: json['isLiveCurrent'] == true,
       isScheduledPlan: isScheduledPlan,
       isCompleted: isCompleted,
@@ -380,11 +432,14 @@ bool ironVibeDeleteClientKeepingHistory(Client client) {
     return !ironVibeTrainerSessionCountsAsWork(s);
   });
   final idKey = client.id?.trim();
-  final nameKey = ironVibeClientNameKey(client.name);
+  final identity = ironVibeClientIdentityKey(
+    client.name,
+    lastName: client.lastName,
+  );
   clients.removeWhere((c) {
     if (identical(c, client)) return true;
-    if (idKey != null && idKey.isNotEmpty && c.id == idKey) return true;
-    return nameKey.isNotEmpty && ironVibeClientNameKey(c.name) == nameKey;
+    if (idKey != null && idKey.isNotEmpty) return c.id == idKey;
+    return ironVibeClientIdentityKey(c.name, lastName: c.lastName) == identity;
   });
   final droppedDraft = ironVibeTrainerDraftBelongsToClient(
     activeWorkoutDraft,
@@ -399,11 +454,14 @@ List<MapEntry<String, int>> ironVibeTrainerWorkCountsByClient() {
   final labels = <String, String>{};
   for (final s in trainerSchedule) {
     if (!ironVibeTrainerSessionCountsAsWork(s)) continue;
-    final name = s.clientName.trim();
-    if (name.isEmpty) continue;
-    final key = ironVibeClientNameKey(name);
+    final label = ironVibeSessionClientLabel(s);
+    if (label.isEmpty) continue;
+    final id = s.clientId?.trim();
+    final key = (id != null && id.isNotEmpty)
+        ? 'id:$id'
+        : ironVibeClientNameKey(s.clientName);
     counts[key] = (counts[key] ?? 0) + 1;
-    labels[key] = name;
+    labels[key] = label;
   }
   final keys = counts.keys.toList()
     ..sort((a, b) {
@@ -505,13 +563,15 @@ TrainerSession ironVibeNewTrainerSession({
   bool isScheduledPlan = false,
   bool isCompleted = false,
 }) {
+  final owner = ironVibeFindClient(name: clientName, id: clientId);
   return TrainerSession(
     dateTime,
     clientName,
     note,
     exercises: exercises ?? const [],
     id: ironVibeNewEntityId(),
-    clientId: clientId ?? ironVibeFindClient(name: clientName)?.id,
+    clientId: clientId ?? owner?.id,
+    clientLastName: owner?.lastName.trim() ?? '',
     isLiveCurrent: isLiveCurrent,
     isScheduledPlan: isScheduledPlan,
     isCompleted: isCompleted,

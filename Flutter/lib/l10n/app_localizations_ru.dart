@@ -336,10 +336,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get clientName => 'Имя';
 
   @override
-  String get clientNameCannotChange => 'Имя потом изменить нельзя.';
+  String get clientLastName => 'Фамилия';
 
   @override
-  String get clientNameTaken => 'Это имя уже занято. Выберите другое.';
+  String get clientLastNameRequired => 'Укажите фамилию.';
+
+  @override
+  String get clientNameCannotChange =>
+      'Имя потом изменить нельзя. Фамилию можно дописать или поправить в карточке клиента.';
+
+  @override
+  String get clientNameTaken => 'Клиент с таким именем и фамилией уже есть.';
 
   @override
   String get clientGoal => 'Цель';
@@ -854,7 +861,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get instructionLanguageDesc =>
-      'Приложение следует языку системы — отдельной настройки нет. Поддерживается десять языков.';
+      'Приложение следует языку системы — отдельной настройки нет. Поддерживается двенадцать языков.';
 
   @override
   String get instructionHomeLinksTitle => 'Версия и связь';

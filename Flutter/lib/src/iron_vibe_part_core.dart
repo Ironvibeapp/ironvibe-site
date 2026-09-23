@@ -275,18 +275,36 @@ void ironVibeRemoveExerciseFromBank(String rawName) {
   ironVibeRemoveFavoriteExerciseEverywhere(n);
 }
 
+/// Uppercases an exercise name without dropping spaces.
+///
+/// A formatter that clears [TextEditingValue.composing] makes the keyboard
+/// throw away the space between words.
+TextEditingValue ironVibeFormatExerciseNameEdit(
+  TextEditingValue oldValue,
+  TextEditingValue newValue,
+) {
+  final upper = newValue.text.toUpperCase();
+  if (upper == newValue.text) return newValue;
+  var selection = newValue.selection;
+  var composing = newValue.composing;
+  if (upper.length != newValue.text.length) {
+    selection = TextSelection.collapsed(offset: upper.length);
+    composing = TextRange.empty;
+  }
+  return TextEditingValue(
+    text: upper,
+    selection: selection,
+    composing: composing,
+  );
+}
+
 class _UpperCaseExerciseNameInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    final t = newValue.text.toUpperCase();
-    return TextEditingValue(
-      text: t,
-      selection: newValue.selection,
-      composing: TextRange.empty,
-    );
+    return ironVibeFormatExerciseNameEdit(oldValue, newValue);
   }
 }
 
@@ -331,6 +349,7 @@ TrainerSession _normalizeTrainerSessionExerciseNames(TrainerSession s) {
     exercises: exs,
     id: s.id,
     clientId: s.clientId,
+    clientLastName: s.clientLastName,
     isLiveCurrent: s.isLiveCurrent,
     isScheduledPlan: s.isScheduledPlan,
     isCompleted: s.isCompleted,
@@ -374,9 +393,9 @@ Future<void> _deleteExportFile(String path) async {
   } catch (_) {}
 }
 
-/// Семейное правило версий: … 1.7.9+79, 1.8.0+80 …
-const String kAppVersion = '1.8.0';
-const int kAppBuildNumber = 80;
+/// Семейное правило версий: … 1.8.1+81, 1.8.2+82 …
+const String kAppVersion = '1.8.2';
+const int kAppBuildNumber = 82;
 
 /// График прогресса: вес (красный) и повторы (как цвет фокуса полей).
 const Color kProgressChartWeightColor = Color(0xFFFF1744);

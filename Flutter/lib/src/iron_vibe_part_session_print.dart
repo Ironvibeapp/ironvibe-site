@@ -6,11 +6,15 @@ const PdfColor _kPrintGold = PdfColor.fromInt(0xFFC4A06A);
 const String _kPrintFontRegular = 'assets/fonts/NotoSans-Regular.ttf';
 const String _kPrintFontBold = 'assets/fonts/NotoSans-Bold.ttf';
 const String _kPrintFontSc = 'assets/fonts/NotoSansSC-Regular.ttf';
+const String _kPrintFontAr = 'assets/fonts/NotoSansArabic-Regular.ttf';
+const String _kPrintFontHi = 'assets/fonts/NotoSansDevanagari-Regular.ttf';
 const String _kPrintLogoAsset = 'assets/logo_on_light.svg';
 
 pw.Font? _printFontRegular;
 pw.Font? _printFontBold;
 pw.Font? _printFontSc;
+pw.Font? _printFontAr;
+pw.Font? _printFontHi;
 Uint8List? _printLogoPng;
 
 class IronVibeSessionPrintRow {
@@ -91,6 +95,8 @@ Future<void> _ensurePrintAssets() async {
   _printFontRegular ??= pw.Font.ttf(await rootBundle.load(_kPrintFontRegular));
   _printFontBold ??= pw.Font.ttf(await rootBundle.load(_kPrintFontBold));
   _printFontSc ??= pw.Font.ttf(await rootBundle.load(_kPrintFontSc));
+  _printFontAr ??= pw.Font.ttf(await rootBundle.load(_kPrintFontAr));
+  _printFontHi ??= pw.Font.ttf(await rootBundle.load(_kPrintFontHi));
   _printLogoPng ??= await _rasterizePrintLogo();
 }
 
@@ -127,7 +133,7 @@ Future<Uint8List> ironVibeBuildSessionPdfBytes({
   final theme = pw.ThemeData.withFont(
     base: _printFontRegular!,
     bold: _printFontBold!,
-    fontFallback: [_printFontSc!],
+    fontFallback: [_printFontSc!, _printFontAr!, _printFontHi!],
   );
 
   final doc = pw.Document();
@@ -183,7 +189,7 @@ pw.Widget _printBrandHeader(
                 ),
                 pw.SizedBox(height: 6),
                 pw.Text(
-                  session.clientName,
+                  ironVibeSessionClientLabel(session),
                   style: pw.TextStyle(
                     color: _kPrintSteel,
                     fontSize: 13,
@@ -223,7 +229,7 @@ pw.Widget _printContinuationHeader(TrainerSession session) {
       crossAxisAlignment: pw.CrossAxisAlignment.stretch,
       children: [
         pw.Text(
-          '${session.clientName}  ·  ${ironVibeSessionPrintWhen(session.dateTime)}',
+          '${ironVibeSessionClientLabel(session)}  ·  ${ironVibeSessionPrintWhen(session.dateTime)}',
           style: const pw.TextStyle(color: _kPrintSteel, fontSize: 9),
         ),
         pw.SizedBox(height: 4),
@@ -318,7 +324,7 @@ Future<void> ironVibeShareSessionPdf(
     final bytes = await ironVibeBuildSessionPdfBytes(session: session, l: l);
     final directory = await getTemporaryDirectory();
     final stem = ironVibeSessionPrintFileStem(
-      session.clientName,
+      ironVibeSessionClientLabel(session),
       session.dateTime,
     );
     await _cleanOldExportFiles(directory, 'IronVibe_*.pdf');

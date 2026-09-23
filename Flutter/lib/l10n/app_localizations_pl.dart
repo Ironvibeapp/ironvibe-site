@@ -336,10 +336,17 @@ class AppLocalizationsPl extends AppLocalizations {
   String get clientName => 'Imie';
 
   @override
-  String get clientNameCannotChange => 'Imienia nie da sie pozniej zmienic.';
+  String get clientLastName => 'Nazwisko';
 
   @override
-  String get clientNameTaken => 'To imie jest juz zajete. Wybierz inne.';
+  String get clientLastNameRequired => 'Podaj nazwisko.';
+
+  @override
+  String get clientNameCannotChange =>
+      'Imienia nie da sie pozniej zmienic. Nazwisko mozna dopisac lub poprawic w karcie klienta.';
+
+  @override
+  String get clientNameTaken => 'Klient o tym imieniu i nazwisku juz istnieje.';
 
   @override
   String get clientGoal => 'Cel';
@@ -855,7 +862,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get instructionLanguageDesc =>
-      'Aplikacja idzie za językiem systemu — osobnego ustawienia nie ma. Obsługiwanych jest dziesięć języków.';
+      'Aplikacja idzie za językiem systemu — osobnego ustawienia nie ma. Obsługiwanych jest dwanaście języków.';
 
   @override
   String get instructionHomeLinksTitle => 'Wersja i kontakt';

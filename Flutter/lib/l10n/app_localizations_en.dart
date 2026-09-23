@@ -331,13 +331,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editClient => 'EDIT';
 
   @override
-  String get clientName => 'Name';
+  String get clientName => 'First name';
 
   @override
-  String get clientNameCannotChange => 'The name cannot be changed later.';
+  String get clientLastName => 'Last name';
 
   @override
-  String get clientNameTaken => 'This name is already in use. Choose another.';
+  String get clientLastNameRequired => 'Enter a last name.';
+
+  @override
+  String get clientNameCannotChange =>
+      'The first name cannot be changed later. You can add or correct the last name on the client card.';
+
+  @override
+  String get clientNameTaken =>
+      'A client with this first and last name already exists.';
 
   @override
   String get clientGoal => 'Goal';
@@ -852,7 +860,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get instructionLanguageDesc =>
-      'The app follows the system language — there is no separate setting. Ten languages are supported.';
+      'The app follows the system language — there is no separate setting. Twelve languages are supported.';
 
   @override
   String get instructionHomeLinksTitle => 'Version and contact';
