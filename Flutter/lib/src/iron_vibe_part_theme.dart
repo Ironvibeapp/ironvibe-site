@@ -14,6 +14,22 @@ const double kIronVibeCtaHeight = 56;
 const double kIronVibeCtaIconSize = 22;
 const double kIronVibeCtaFontSize = 15;
 
+/// Uppercase exercise names in the workout logger (name field and history).
+/// Smaller and tighter than the old 14–15px black tracking, so a long name
+/// wraps onto two lines instead of one overflowing line.
+const double kIronVibeExerciseNameFontSize = 13;
+const int kIronVibeExerciseNameMaxLines = 2;
+
+TextStyle ironVibeExerciseNameStyle(Color color) {
+  return TextStyle(
+    color: color,
+    fontSize: kIronVibeExerciseNameFontSize,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.1,
+    height: 1.2,
+  );
+}
+
 String ironVibeSentenceCase(String raw) {
   if (raw.isEmpty) return raw;
   final lower = raw.toLowerCase();
