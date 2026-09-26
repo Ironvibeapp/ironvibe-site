@@ -2183,13 +2183,13 @@ class _ExerciseCardState extends State<ExerciseCard> {
                         widget.data.nameController.text = text;
                         widget.onDraftChanged?.call();
                       },
-                      style: TextStyle(
-                        color: pal.textPrimary,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: ironVibeExerciseNameStyle(pal.textPrimary),
+                      minLines: 1,
+                      maxLines: kIronVibeExerciseNameMaxLines,
                       decoration: InputDecoration(
                         hintText: AppLocalizations.of(context)!.exerciseHint,
+                        hintStyle: ironVibeExerciseNameStyle(pal.textHint)
+                            .copyWith(fontWeight: FontWeight.w500),
                       ),
                     ),
                   );
@@ -2241,10 +2241,11 @@ class _ExerciseCardState extends State<ExerciseCard> {
                                       padding: const EdgeInsets.all(12.0),
                                       child: Text(
                                         option,
-                                        style: TextStyle(
-                                          color: pal.textPrimary,
-                                          fontSize: 13,
+                                        style: ironVibeExerciseNameStyle(
+                                          pal.textPrimary,
                                         ),
+                                        maxLines: kIronVibeExerciseNameMaxLines,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ),
