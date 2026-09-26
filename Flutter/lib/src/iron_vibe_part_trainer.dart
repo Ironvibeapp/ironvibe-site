@@ -1002,9 +1002,11 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
     final logs = <ExerciseLog>[];
 
     for (final ex in _exercises) {
+      // Do not write this back into the field. canSaveWorkout calls this
+      // on every rebuild of a live client workout, and normalizeExerciseName
+      // trims the trailing space before the next word is typed.
       final name = normalizeExerciseName(ex.nameController.text);
       if (name.isEmpty) continue;
-      ex.nameController.text = name;
 
       final setsToProcess = _isCardio && ex.sets.isNotEmpty
           ? [ex.sets.first]
