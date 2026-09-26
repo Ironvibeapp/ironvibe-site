@@ -1490,13 +1490,10 @@ class _EditableHistoryExerciseBlockState
                       widget.exerciseIndex + 1,
                       ex.name.trim(),
                     ),
-              style: TextStyle(
-                color: ex.name.trim().isEmpty ? pal.textMuted : pal.textPrimary,
-                fontSize: 15,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.0,
+              style: ironVibeExerciseNameStyle(
+                ex.name.trim().isEmpty ? pal.textMuted : pal.textPrimary,
               ),
-              maxLines: 2,
+              maxLines: kIronVibeExerciseNameMaxLines,
               overflow: TextOverflow.ellipsis,
             ),
           ),
