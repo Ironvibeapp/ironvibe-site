@@ -737,6 +737,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get noteLabel => 'Нотатка';
 
   @override
+  String get exerciseSessionNoteTitle => 'Замітка до вправи';
+
+  @override
+  String get exerciseSessionNoteHint => 'Лише це тренування';
+
+  @override
+  String get exerciseSessionNoteTooltip => 'Замітка до вправи';
+
+  @override
   String get addClient => 'ДОДАТИ КЛІЄНТА';
 
   @override

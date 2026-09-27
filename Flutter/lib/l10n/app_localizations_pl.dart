@@ -740,6 +740,15 @@ class AppLocalizationsPl extends AppLocalizations {
   String get noteLabel => 'Notatka';
 
   @override
+  String get exerciseSessionNoteTitle => 'Notatka do ćwiczenia';
+
+  @override
+  String get exerciseSessionNoteHint => 'Tylko ten trening';
+
+  @override
+  String get exerciseSessionNoteTooltip => 'Notatka do ćwiczenia';
+
+  @override
   String get addClient => 'DODAJ KLIENTA';
 
   @override

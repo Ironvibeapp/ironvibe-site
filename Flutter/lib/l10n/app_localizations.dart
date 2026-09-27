@@ -1498,6 +1498,24 @@ abstract class AppLocalizations {
   /// **'NOTE:'**
   String get noteLabel;
 
+  /// No description provided for @exerciseSessionNoteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercise note'**
+  String get exerciseSessionNoteTitle;
+
+  /// No description provided for @exerciseSessionNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'This workout only'**
+  String get exerciseSessionNoteHint;
+
+  /// No description provided for @exerciseSessionNoteTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercise note'**
+  String get exerciseSessionNoteTooltip;
+
   /// No description provided for @addClient.
   ///
   /// In en, this message translates to:

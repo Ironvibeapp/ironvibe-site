@@ -738,6 +738,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noteLabel => 'NOTE:';
 
   @override
+  String get exerciseSessionNoteTitle => 'Exercise note';
+
+  @override
+  String get exerciseSessionNoteHint => 'This workout only';
+
+  @override
+  String get exerciseSessionNoteTooltip => 'Exercise note';
+
+  @override
   String get addClient => 'ADD CLIENT';
 
   @override

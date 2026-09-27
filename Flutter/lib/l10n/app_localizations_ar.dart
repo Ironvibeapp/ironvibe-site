@@ -732,6 +732,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noteLabel => 'ملاحظة:';
 
   @override
+  String get exerciseSessionNoteTitle => 'ملاحظة التمرين';
+
+  @override
+  String get exerciseSessionNoteHint => 'هذا التمرين فقط';
+
+  @override
+  String get exerciseSessionNoteTooltip => 'ملاحظة التمرين';
+
+  @override
   String get addClient => 'إضافة عميل';
 
   @override
