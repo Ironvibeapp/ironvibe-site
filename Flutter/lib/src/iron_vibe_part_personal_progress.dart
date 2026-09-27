@@ -189,6 +189,8 @@ Widget _personalProgressNameWithGroupCell(
   IronVibePalette pal, {
   required VoidCallback onGroupChanged,
   VoidCallback? onRemove,
+  VoidCallback? onRename,
+  String? renameTooltip,
 }) {
   final nameText = Text(
     name,
@@ -204,31 +206,55 @@ Widget _personalProgressNameWithGroupCell(
     maxLines: 4,
     overflow: TextOverflow.ellipsis,
   );
+  final nameChild = onRename == null
+      ? nameText
+      : GestureDetector(
+          onTap: onRename,
+          behavior: HitTestBehavior.opaque,
+          child: nameText,
+        );
   return Padding(
     padding: const EdgeInsets.fromLTRB(5, 7, 4, 7),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (onRemove == null)
+        if (onRemove == null && onRename == null)
           nameText
         else
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: nameText),
-              GestureDetector(
-                onTap: onRemove,
-                behavior: HitTestBehavior.opaque,
-                child: const Padding(
-                  padding: EdgeInsets.only(left: 4, top: 1, bottom: 2),
-                  child: Icon(
-                    Icons.close,
-                    size: 16,
-                    color: Colors.red,
+              Expanded(child: nameChild),
+              if (onRename != null)
+                Tooltip(
+                  message: renameTooltip ?? '',
+                  child: GestureDetector(
+                    onTap: onRename,
+                    behavior: HitTestBehavior.opaque,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 4, top: 1, bottom: 2),
+                      child: Icon(
+                        Icons.edit_outlined,
+                        size: 15,
+                        color: pal.textMuted,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              if (onRemove != null)
+                GestureDetector(
+                  onTap: onRemove,
+                  behavior: HitTestBehavior.opaque,
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 4, top: 1, bottom: 2),
+                    child: Icon(
+                      Icons.close,
+                      size: 16,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
             ],
           ),
         ironVibeMuscleGroupChip(
@@ -358,6 +384,7 @@ Widget _personalProgressTable({
   String? clientName,
   required Future<void> Function(String exerciseName) onToggleFavorite,
   required Future<void> Function(String exerciseName) onRemove,
+  required Future<void> Function(String exerciseName) onRename,
   required VoidCallback onMuscleGroupChanged,
 }) {
   const edge = 0.5;
@@ -406,6 +433,8 @@ Widget _personalProgressTable({
             pal,
             onGroupChanged: onMuscleGroupChanged,
             onRemove: () => onRemove(filtered[i].name),
+            onRename: () => onRename(filtered[i].name),
+            renameTooltip: l.renameExerciseTitle,
           ),
           _personalProgressDataCell(
             _personalProgressBestSetText(filtered[i]),
@@ -485,6 +514,12 @@ class _PersonalProgressScreenState extends State<PersonalProgressScreen> {
       exerciseName,
     );
     if (removed && mounted) setState(() {});
+  }
+
+  Future<void> _renameExercise(String exerciseName) async {
+    await showRenameExerciseDialog(context, exerciseName, (_) {
+      if (mounted) setState(() {});
+    });
   }
 
   @override
@@ -579,6 +614,7 @@ class _PersonalProgressScreenState extends State<PersonalProgressScreen> {
                                 clientName: widget.clientName,
                                 onToggleFavorite: _toggleFavorite,
                                 onRemove: _removeFromProgress,
+                                onRename: _renameExercise,
                                 onMuscleGroupChanged: () {
                                   if (mounted) setState(() {});
                                 },
