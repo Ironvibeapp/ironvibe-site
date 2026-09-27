@@ -13,6 +13,7 @@ ExerciseData ironVibeExerciseDataFromLog(ExerciseLog log) {
     name: log.name,
     sets: sets.isEmpty ? null : sets,
     isCardio: log.isCardio,
+    note: log.note,
   );
 }
 
@@ -69,7 +70,12 @@ ExerciseData ironVibeExerciseDataPlannedWithHints({
       ),
     );
   }
-  return ExerciseData(name: planned.name, sets: sets, isCardio: false);
+  return ExerciseData(
+    name: planned.name,
+    sets: sets,
+    isCardio: false,
+    note: planned.note,
+  );
 }
 
 bool ironVibeApplyClientPreviousSetHints({
@@ -162,8 +168,16 @@ class ExerciseData {
   final List<SetData> sets;
   bool isCardio;
 
-  ExerciseData({String name = '', List<SetData>? sets, this.isCardio = false})
-    : sets = sets ?? [SetData()] {
+  /// This workout's note for the exercise. Older workouts keep their own.
+  String note;
+
+  ExerciseData({
+    String name = '',
+    List<SetData>? sets,
+    this.isCardio = false,
+    String note = '',
+  }) : sets = sets ?? [SetData()],
+       note = note.trim() {
     nameController.text = normalizeExerciseName(name);
   }
 }
@@ -284,6 +298,7 @@ SetData ironVibeSetDataFromDraftJson(Map<String, dynamic> json) => SetData(
 Map<String, dynamic> ironVibeExerciseDataToDraftJson(ExerciseData ex) => {
   'name': ex.nameController.text,
   'isCardio': ex.isCardio,
+  if (ex.note.trim().isNotEmpty) 'note': ex.note.trim(),
   'sets': ex.sets.map(ironVibeSetDataToDraftJson).toList(),
 };
 
@@ -300,6 +315,7 @@ ExerciseData ironVibeExerciseDataFromDraftJson(Map<String, dynamic> json) {
     name: _jsonString(json['name']),
     sets: sets.isEmpty ? null : sets,
     isCardio: _jsonPickBool(json, ['isCardio', 'is_cardio', 'cardio']),
+    note: _jsonPickString(json, ['note']),
   );
 }
 
@@ -1733,6 +1749,166 @@ class _SetRowState extends State<SetRow> {
   }
 }
 
+Widget ironVibeExerciseNotePencil({
+  required String tooltip,
+  required bool hasNote,
+  required VoidCallback onTap,
+  required Color idleColor,
+  required Color filledColor,
+}) {
+  return Tooltip(
+    message: tooltip,
+    child: GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 2, top: 2, bottom: 2),
+        child: Icon(
+          hasNote ? Icons.edit : Icons.edit_outlined,
+          size: 16,
+          color: hasNote ? filledColor : idleColor,
+        ),
+      ),
+    ),
+  );
+}
+
+/// Older lines for this exercise, then a field for the open workout.
+/// Returns the saved text, or null if cancelled. An empty string clears the note.
+Future<String?> showExerciseSessionNoteDialog(
+  BuildContext context, {
+  required DateTime sessionDate,
+  required String exerciseName,
+  required String currentNote,
+  String? clientName,
+  String? clientId,
+  WorkoutLog? excludeWorkout,
+  TrainerSession? excludeSession,
+}) {
+  return showDialog<String>(
+    context: context,
+    builder: (ctx) => _ExerciseSessionNoteDialog(
+      sessionDate: sessionDate,
+      lines: ironVibeExerciseSessionNoteLines(
+        exerciseName: exerciseName,
+        clientName: clientName,
+        clientId: clientId,
+        excludeWorkout: excludeWorkout,
+        excludeSession: excludeSession,
+      ),
+      currentNote: currentNote,
+    ),
+  );
+}
+
+class _ExerciseSessionNoteDialog extends StatefulWidget {
+  final DateTime sessionDate;
+  final List<String> lines;
+  final String currentNote;
+
+  const _ExerciseSessionNoteDialog({
+    required this.sessionDate,
+    required this.lines,
+    required this.currentNote,
+  });
+
+  @override
+  State<_ExerciseSessionNoteDialog> createState() => _ExerciseSessionNoteDialogState();
+}
+
+class _ExerciseSessionNoteDialogState extends State<_ExerciseSessionNoteDialog> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.currentNote.trim());
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final pal = IronVibePalette.of(context);
+    final l = AppLocalizations.of(context)!;
+    final dateLabel = ironVibeFormatExerciseNoteDate(widget.sessionDate);
+    final lineStyle = TextStyle(color: pal.textSecondary, fontSize: 14, height: 1.35);
+    return AlertDialog(
+      backgroundColor: pal.dialog,
+      shape: ironVibeDialogShape(pal),
+      title: Text(
+        l.exerciseSessionNoteTitle,
+        style: TextStyle(color: pal.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.55),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (final line in widget.lines) ...[
+                  Text(line, style: lineStyle),
+                  const SizedBox(height: 8),
+                ],
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 14),
+                      child: Text(
+                        '$dateLabel —',
+                        style: TextStyle(color: pal.textMuted, fontSize: 14),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        controller: _controller,
+                        autofocus: true,
+                        minLines: 1,
+                        maxLines: 4,
+                        textCapitalization: TextCapitalization.sentences,
+                        style: TextStyle(color: pal.textPrimary, fontSize: 14),
+                        decoration: InputDecoration(
+                          hintText: l.exerciseSessionNoteHint,
+                          hintStyle: TextStyle(color: pal.textHint),
+                          filled: true,
+                          fillColor: pal.inputFill,
+                          isDense: true,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(l.cancel, style: TextStyle(color: pal.textMuted)),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, _controller.text.trim()),
+          child: Text(
+            l.save,
+            style: TextStyle(color: pal.textPrimary, fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class ExerciseCard extends StatefulWidget {
   final ExerciseData data;
   final bool? forceCardioMode;
@@ -1761,6 +1937,15 @@ class ExerciseCard extends StatefulWidget {
   /// Current trainer session, excluded when looking up the client's previous log.
   final TrainerSession? excludeTrainerSession;
 
+  /// Date of the open workout. Shown in front of the note; not typed by the user.
+  final DateTime? noteSessionDate;
+
+  /// With [clientNameForProgress], past notes stay on this client.
+  final String? clientIdForNotes;
+
+  /// Personal history workout being edited, so its note stays in the field.
+  final WorkoutLog? excludeWorkoutForNotes;
+
   const ExerciseCard({
     super.key,
     required this.data,
@@ -1773,6 +1958,9 @@ class ExerciseCard extends StatefulWidget {
     this.onRemove,
     this.previousSetsAsHints = false,
     this.excludeTrainerSession,
+    this.noteSessionDate,
+    this.clientIdForNotes,
+    this.excludeWorkoutForNotes,
   });
 
   @override
@@ -1862,6 +2050,23 @@ class _ExerciseCardState extends State<ExerciseCard> {
       clientName: widget.clientNameForProgress,
     );
     if (mounted) setState(() {});
+  }
+
+  Future<void> _editSessionNote() async {
+    final next = await showExerciseSessionNoteDialog(
+      context,
+      sessionDate: widget.noteSessionDate ?? DateTime.now(),
+      exerciseName: widget.data.nameController.text,
+      currentNote: widget.data.note,
+      clientName: widget.clientNameForProgress,
+      clientId: widget.clientIdForNotes,
+      excludeWorkout: widget.excludeWorkoutForNotes,
+      excludeSession: widget.excludeTrainerSession,
+    );
+    if (next == null || !mounted) return;
+    widget.data.note = next;
+    setState(() {});
+    widget.onDraftChanged?.call();
   }
 
   void _addSet() {
@@ -2054,6 +2259,13 @@ class _ExerciseCardState extends State<ExerciseCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                ironVibeExerciseNotePencil(
+                  tooltip: l.exerciseSessionNoteTooltip,
+                  hasNote: widget.data.note.trim().isNotEmpty,
+                  onTap: () => unawaited(_editSessionNote()),
+                  idleColor: pal.textMuted,
+                  filledColor: _favoriteStarGold,
+                ),
                 GestureDetector(
                   onTap: _toggleFavorite,
                   behavior: HitTestBehavior.opaque,
@@ -2183,13 +2395,13 @@ class _ExerciseCardState extends State<ExerciseCard> {
                         widget.data.nameController.text = text;
                         widget.onDraftChanged?.call();
                       },
-                      style: TextStyle(
-                        color: pal.textPrimary,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: ironVibeExerciseNameStyle(pal.textPrimary),
+                      minLines: 1,
+                      maxLines: kIronVibeExerciseNameMaxLines,
                       decoration: InputDecoration(
                         hintText: AppLocalizations.of(context)!.exerciseHint,
+                        hintStyle: ironVibeExerciseNameStyle(pal.textHint)
+                            .copyWith(fontWeight: FontWeight.w500),
                       ),
                     ),
                   );
@@ -2241,10 +2453,11 @@ class _ExerciseCardState extends State<ExerciseCard> {
                                       padding: const EdgeInsets.all(12.0),
                                       child: Text(
                                         option,
-                                        style: TextStyle(
-                                          color: pal.textPrimary,
-                                          fontSize: 13,
+                                        style: ironVibeExerciseNameStyle(
+                                          pal.textPrimary,
                                         ),
+                                        maxLines: kIronVibeExerciseNameMaxLines,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ),

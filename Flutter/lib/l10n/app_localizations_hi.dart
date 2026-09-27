@@ -738,6 +738,15 @@ class AppLocalizationsHi extends AppLocalizations {
   String get noteLabel => 'नोट:';
 
   @override
+  String get exerciseSessionNoteTitle => 'एक्सरसाइज़ नोट';
+
+  @override
+  String get exerciseSessionNoteHint => 'सिर्फ़ यह वर्कआउट';
+
+  @override
+  String get exerciseSessionNoteTooltip => 'एक्सरसाइज़ नोट';
+
+  @override
   String get addClient => 'क्लाइंट जोड़ें';
 
   @override

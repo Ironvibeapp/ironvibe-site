@@ -40,12 +40,17 @@ class ExerciseLog {
   final String name;
   final List<SetLog> sets;
   final bool isCardio;
-  ExerciseLog(this.name, this.sets, {this.isCardio = false});
+
+  /// Text for this exercise in this workout only. The date is the parent
+  /// workout or session date; it is not stored in the string.
+  final String note;
+  ExerciseLog(this.name, this.sets, {this.isCardio = false, this.note = ''});
 
   Map<String, dynamic> toJson() => {
     'name': name,
     'sets': sets.map((s) => s.toJson()).toList(),
     'isCardio': isCardio,
+    if (note.trim().isNotEmpty) 'note': note.trim(),
   };
 
   factory ExerciseLog.fromJson(Map<String, dynamic> json) {
@@ -97,8 +102,117 @@ class ExerciseLog {
       normalizeExerciseName(name),
       sets,
       isCardio: isCardio,
+      note: _jsonPickString(j, ['note']).trim(),
     );
   }
+}
+
+/// Joins two notes from logs that become one exercise. Empty text drops out.
+String ironVibeCombineExerciseNotes(String a, String b) {
+  final left = a.trim();
+  final right = b.trim();
+  if (left.isEmpty) return right;
+  if (right.isEmpty) return left;
+  if (left == right) return left;
+  return '$left\n$right';
+}
+
+/// Session date in front of an exercise note: `dd.MM.yy`.
+String ironVibeFormatExerciseNoteDate(DateTime date) {
+  final day = date.day.toString().padLeft(2, '0');
+  final month = date.month.toString().padLeft(2, '0');
+  final year = (date.year % 100).toString().padLeft(2, '0');
+  return '$day.$month.$year';
+}
+
+/// `17.01.25 — короткая амплитуда`. The date is the workout date, not typed text.
+String ironVibeFormatExerciseNoteLine(DateTime date, String text) {
+  return '${ironVibeFormatExerciseNoteDate(date)} — ${text.trim()}';
+}
+
+/// Past notes for one exercise name.
+///
+/// Personal history when [clientName] and [clientId] are both empty.
+/// Otherwise only that client's completed sessions. Empty notes are omitted.
+/// [excludeWorkout] and [excludeSession] stay out of the list so the open
+/// workout's text can sit in the editor instead of being repeated.
+List<String> ironVibeExerciseSessionNoteLines({
+  required String exerciseName,
+  String? clientName,
+  String? clientId,
+  WorkoutLog? excludeWorkout,
+  TrainerSession? excludeSession,
+}) {
+  final key = normalizeExerciseName(exerciseName);
+  if (key.isEmpty) return const [];
+
+  final entries = <({DateTime date, int order, String text})>[];
+  var order = 0;
+
+  void take(DateTime date, List<ExerciseLog> exercises) {
+    for (final ex in exercises) {
+      if (normalizeExerciseName(ex.name) != key) continue;
+      final text = ex.note.trim();
+      if (text.isEmpty) continue;
+      entries.add((date: date, order: order, text: text));
+      order++;
+    }
+  }
+
+  final scopedName = clientName?.trim() ?? '';
+  final scopedId = clientId?.trim() ?? '';
+  if (scopedName.isEmpty && scopedId.isEmpty) {
+    for (final workout in workoutHistory) {
+      if (excludeWorkout != null && identical(workout, excludeWorkout)) {
+        continue;
+      }
+      take(workout.date, workout.exercises);
+    }
+  } else {
+    for (final session in trainerSchedule) {
+      if (!ironVibeSessionBelongsToClient(
+        session,
+        clientName: scopedName,
+        clientId: scopedId,
+      )) {
+        continue;
+      }
+      if (!ironVibeTrainerSessionInClientHistory(session)) continue;
+      if (excludeSession != null &&
+          _ironVibeSameTrainerSession(session, excludeSession)) {
+        continue;
+      }
+      take(session.dateTime, session.exercises);
+    }
+  }
+
+  entries.sort((a, b) {
+    final byDate = a.date.compareTo(b.date);
+    if (byDate != 0) return byDate;
+    return a.order.compareTo(b.order);
+  });
+  return [
+    for (final entry in entries)
+      ironVibeFormatExerciseNoteLine(entry.date, entry.text),
+  ];
+}
+
+/// Replaces the note on one log. Sets, name, and the parent date stay.
+void ironVibeSetExerciseNoteAt(
+  List<ExerciseLog> exercises,
+  int index,
+  String note,
+) {
+  if (index < 0 || index >= exercises.length) return;
+  final old = exercises[index];
+  final trimmed = note.trim();
+  if (old.note.trim() == trimmed) return;
+  exercises[index] = ExerciseLog(
+    old.name,
+    old.sets,
+    isCardio: old.isCardio,
+    note: trimmed,
+  );
 }
 
 class SetLog {
@@ -1193,7 +1307,95 @@ TrainerSession? ironVibeFindTrainerSessionForDraft(ActiveWorkoutDraft draft) {
   return null;
 }
 
-void _renameExerciseGlobally(String oldName, String newName) {
+/// Rewrites [oldName] to [newName] inside one workout or session.
+///
+/// Logs that already used [newName] stay, and the renamed logs join them:
+/// same sets, same order. The old name is not left as its own exercise.
+List<ExerciseLog> ironVibeRenameExerciseLogs(
+  List<ExerciseLog> exercises,
+  String oldName,
+  String newName,
+) {
+  final o = normalizeExerciseName(oldName);
+  final n = normalizeExerciseName(newName);
+  if (o.isEmpty || n.isEmpty || o == n) return exercises;
+  final containsOld = exercises.any((ex) => normalizeExerciseName(ex.name) == o);
+  if (!containsOld) return exercises;
+
+  final out = <ExerciseLog>[];
+  final mergedAt = <bool, int>{};
+  for (final ex in exercises) {
+    final isOld = normalizeExerciseName(ex.name) == o;
+    final name = isOld ? n : ex.name;
+    if (normalizeExerciseName(name) != n) {
+      out.add(ex);
+      continue;
+    }
+    final slot = mergedAt[ex.isCardio];
+    if (slot == null) {
+      mergedAt[ex.isCardio] = out.length;
+      out.add(
+        ExerciseLog(
+          n,
+          List<SetLog>.from(ex.sets),
+          isCardio: ex.isCardio,
+          note: ex.note,
+        ),
+      );
+      continue;
+    }
+    final prev = out[slot];
+    out[slot] = ExerciseLog(
+      n,
+      [...prev.sets, ...ex.sets],
+      isCardio: prev.isCardio,
+      note: ironVibeCombineExerciseNotes(prev.note, ex.note),
+    );
+  }
+  return out;
+}
+
+void _renameNamesInActiveDraft(String oldName, String newName) {
+  final draft = activeWorkoutDraft;
+  if (draft == null) return;
+  var changed = false;
+  final next = <dynamic>[];
+  for (final item in draft.exercisesJson) {
+    if (item is Map) {
+      final name = normalizeExerciseName(_jsonString(item['name']));
+      if (name == oldName) {
+        final copy = Map<String, dynamic>.from(item);
+        copy['name'] = newName;
+        next.add(copy);
+        changed = true;
+        continue;
+      }
+    }
+    next.add(item);
+  }
+  if (!changed) return;
+  final updated = ActiveWorkoutDraft(
+    kind: draft.kind,
+    targetDate: draft.targetDate,
+    sessionId: draft.sessionId,
+    clientName: draft.clientName,
+    clientId: draft.clientId,
+    sessionDateTime: draft.sessionDateTime,
+    sessionNote: draft.sessionNote,
+    isCardio: draft.isCardio,
+    exercisesJson: next,
+    savedAt: draft.savedAt,
+  );
+  activeWorkoutDraft = updated;
+  DataService.saveActiveWorkoutDraft(updated);
+}
+
+/// Replaces [oldName] with [newName] everywhere that name is stored.
+///
+/// Personal workouts, client sessions, the exercise bank, favorites, muscle
+/// groups, and the open draft all move to [newName]. If [newName] already
+/// exists, both histories stay under that one name. The old name is removed.
+void ironVibeRenameExercise(String oldName, String newName) {
   final o = normalizeExerciseName(oldName);
   final n = normalizeExerciseName(newName);
   if (o.isEmpty || n.isEmpty || o == n) return;
@@ -1201,23 +1403,23 @@ void _renameExerciseGlobally(String oldName, String newName) {
   exerciseBank.removeWhere((e) => normalizeExerciseName(e) == o);
   ensureExerciseInBank(n);
 
-  workoutHistory = workoutHistory.map((w) {
-    final newExercises = w.exercises.map((ex) {
-      if (normalizeExerciseName(ex.name) == o) return ExerciseLog(n, ex.sets, isCardio: ex.isCardio);
-      return ex;
-    }).toList();
-    return WorkoutLog(w.date, newExercises, id: w.id);
-  }).toList();
+  workoutHistory = workoutHistory
+      .map(
+        (w) => WorkoutLog(
+          w.date,
+          ironVibeRenameExerciseLogs(w.exercises, o, n),
+          id: w.id,
+        ),
+      )
+      .toList();
 
-  for (var s in trainerSchedule) {
-    s.exercises = s.exercises.map((ex) {
-      if (normalizeExerciseName(ex.name) == o) return ExerciseLog(n, ex.sets, isCardio: ex.isCardio);
-      return ex;
-    }).toList();
+  for (final s in trainerSchedule) {
+    s.exercises = ironVibeRenameExerciseLogs(s.exercises, o, n);
   }
 
   ironVibeRenameFavoriteExercise(o, n);
   ironVibeRenameMuscleGroup(o, n);
+  _renameNamesInActiveDraft(o, n);
 
   DataService.saveData();
 }
@@ -1230,7 +1432,12 @@ void reassignExerciseInExerciseList(List<ExerciseLog> exercises, int exerciseInd
   final old = exercises[exerciseIndex];
   if (normalizeExerciseName(old.name) == n) return;
   ensureExerciseInBank(n);
-  exercises[exerciseIndex] = ExerciseLog(n, old.sets, isCardio: old.isCardio);
+  exercises[exerciseIndex] = ExerciseLog(
+    n,
+    old.sets,
+    isCardio: old.isCardio,
+    note: old.note,
+  );
   DataService.saveData();
 }
 
@@ -1420,7 +1627,7 @@ Future<void> showRenameExerciseDialog(
               );
               return;
             }
-            _renameExerciseGlobally(currentName, newName);
+            ironVibeRenameExercise(currentName, newName);
             onSuccess(newName);
             Navigator.pop(ctx);
           },
@@ -1439,7 +1646,7 @@ Future<void> showRenameExerciseDialog(
               );
               return;
             }
-            _renameExerciseGlobally(currentName, newName);
+            ironVibeRenameExercise(currentName, newName);
             onSuccess(newName);
             Navigator.pop(ctx);
           },

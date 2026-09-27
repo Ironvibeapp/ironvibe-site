@@ -739,6 +739,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noteLabel => 'Заметка';
 
   @override
+  String get exerciseSessionNoteTitle => 'Заметка к упражнению';
+
+  @override
+  String get exerciseSessionNoteHint => 'Только эта тренировка';
+
+  @override
+  String get exerciseSessionNoteTooltip => 'Заметка к упражнению';
+
+  @override
   String get addClient => 'ДОБАВИТЬ КЛИЕНТА';
 
   @override

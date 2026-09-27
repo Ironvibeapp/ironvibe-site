@@ -148,7 +148,12 @@ IronVibeAthleteImportOutcome ironVibeImportAthleteHistory({
         '',
         exercises: [
           for (final ex in w.exercises)
-            ExerciseLog(ex.name, List<SetLog>.from(ex.sets), isCardio: ex.isCardio),
+            ExerciseLog(
+              ex.name,
+              List<SetLog>.from(ex.sets),
+              isCardio: ex.isCardio,
+              note: ex.note,
+            ),
         ],
         id: id,
         isCompleted: true,
@@ -481,6 +486,7 @@ Future<void> _importFromJson(BuildContext context, bool isTrainer) async {
                 ex.name,
                 List<SetLog>.from(ex.sets),
                 isCardio: ex.isCardio,
+                note: ex.note,
               ),
           ],
           id: s.id,

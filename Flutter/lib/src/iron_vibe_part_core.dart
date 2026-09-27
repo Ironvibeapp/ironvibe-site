@@ -326,6 +326,7 @@ WorkoutLog _normalizeWorkoutLogExerciseNames(WorkoutLog w) {
           normalizeExerciseName(ex.name),
           ex.sets,
           isCardio: ex.isCardio,
+          note: ex.note,
         ),
       )
       .toList();
@@ -339,6 +340,7 @@ TrainerSession _normalizeTrainerSessionExerciseNames(TrainerSession s) {
           normalizeExerciseName(ex.name),
           ex.sets,
           isCardio: ex.isCardio,
+          note: ex.note,
         ),
       )
       .toList();
@@ -393,9 +395,9 @@ Future<void> _deleteExportFile(String path) async {
   } catch (_) {}
 }
 
-/// Семейное правило версий: … 1.8.1+81, 1.8.2+82 …
-const String kAppVersion = '1.8.2';
-const int kAppBuildNumber = 82;
+/// Семейное правило версий: … 1.8.4+84, 1.8.5+85 …
+const String kAppVersion = '1.8.5';
+const int kAppBuildNumber = 85;
 
 /// График прогресса: вес (красный) и повторы (как цвет фокуса полей).
 const Color kProgressChartWeightColor = Color(0xFFFF1744);

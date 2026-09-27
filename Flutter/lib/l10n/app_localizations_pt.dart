@@ -741,6 +741,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get noteLabel => 'Nota';
 
   @override
+  String get exerciseSessionNoteTitle => 'Nota do exercício';
+
+  @override
+  String get exerciseSessionNoteHint => 'Só este treino';
+
+  @override
+  String get exerciseSessionNoteTooltip => 'Nota do exercício';
+
+  @override
   String get addClient => 'ADICIONAR CLIENTE';
 
   @override

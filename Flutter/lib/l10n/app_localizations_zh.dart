@@ -718,6 +718,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get noteLabel => '备注';
 
   @override
+  String get exerciseSessionNoteTitle => '动作备注';
+
+  @override
+  String get exerciseSessionNoteHint => '仅本次训练';
+
+  @override
+  String get exerciseSessionNoteTooltip => '动作备注';
+
+  @override
   String get addClient => '添加客户';
 
   @override

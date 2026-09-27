@@ -1002,9 +1002,11 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
     final logs = <ExerciseLog>[];
 
     for (final ex in _exercises) {
+      // Do not write this back into the field. canSaveWorkout calls this
+      // on every rebuild of a live client workout, and normalizeExerciseName
+      // trims the trailing space before the next word is typed.
       final name = normalizeExerciseName(ex.nameController.text);
       if (name.isEmpty) continue;
-      ex.nameController.text = name;
 
       final setsToProcess = _isCardio && ex.sets.isNotEmpty
           ? [ex.sets.first]
@@ -1023,7 +1025,7 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
                 duration: s?.duration.text.trim() ?? '',
                 intensity: s?.intensity.text.trim() ?? '',
               ),
-            ], isCardio: true),
+            ], isCardio: true, note: ex.note.trim()),
           );
         } else {
           final n = math.max(1, setsToProcess.length);
@@ -1039,6 +1041,7 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
                   normalizeRirStored(s.rir.text),
                 );
               }),
+              note: ex.note.trim(),
             ),
           );
         }
@@ -1077,7 +1080,14 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
       }
 
       if (setLogs.isNotEmpty) {
-        logs.add(ExerciseLog(name, setLogs, isCardio: _isCardio));
+        logs.add(
+          ExerciseLog(
+            name,
+            setLogs,
+            isCardio: _isCardio,
+            note: ex.note.trim(),
+          ),
+        );
       }
     }
 
@@ -1154,6 +1164,7 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
           n,
           setLogs.isNotEmpty ? setLogs : old.sets,
           isCardio: _isCardio,
+          note: draft.note.trim(),
         );
       }
     });
@@ -1416,6 +1427,8 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
                 onRemove: () => _removeExercise(index),
                 previousSetsAsHints: widget.previousSetsAsHints,
                 excludeTrainerSession: widget.session,
+                clientIdForNotes: widget.session.clientId,
+                noteSessionDate: widget.session.dateTime,
               ),
             );
           },
