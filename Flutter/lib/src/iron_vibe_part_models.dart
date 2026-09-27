@@ -1193,7 +1193,87 @@ TrainerSession? ironVibeFindTrainerSessionForDraft(ActiveWorkoutDraft draft) {
   return null;
 }
 
-void _renameExerciseGlobally(String oldName, String newName) {
+/// Rewrites [oldName] to [newName] inside one workout or session.
+///
+/// Logs that already used [newName] stay, and the renamed logs join them:
+/// same sets, same order. The old name is not left as its own exercise.
+List<ExerciseLog> ironVibeRenameExerciseLogs(
+  List<ExerciseLog> exercises,
+  String oldName,
+  String newName,
+) {
+  final o = normalizeExerciseName(oldName);
+  final n = normalizeExerciseName(newName);
+  if (o.isEmpty || n.isEmpty || o == n) return exercises;
+  final containsOld = exercises.any((ex) => normalizeExerciseName(ex.name) == o);
+  if (!containsOld) return exercises;
+
+  final out = <ExerciseLog>[];
+  final mergedAt = <bool, int>{};
+  for (final ex in exercises) {
+    final isOld = normalizeExerciseName(ex.name) == o;
+    final name = isOld ? n : ex.name;
+    if (normalizeExerciseName(name) != n) {
+      out.add(ex);
+      continue;
+    }
+    final slot = mergedAt[ex.isCardio];
+    if (slot == null) {
+      mergedAt[ex.isCardio] = out.length;
+      out.add(ExerciseLog(n, List<SetLog>.from(ex.sets), isCardio: ex.isCardio));
+      continue;
+    }
+    final prev = out[slot];
+    out[slot] = ExerciseLog(
+      n,
+      [...prev.sets, ...ex.sets],
+      isCardio: prev.isCardio,
+    );
+  }
+  return out;
+}
+
+void _renameNamesInActiveDraft(String oldName, String newName) {
+  final draft = activeWorkoutDraft;
+  if (draft == null) return;
+  var changed = false;
+  final next = <dynamic>[];
+  for (final item in draft.exercisesJson) {
+    if (item is Map) {
+      final name = normalizeExerciseName(_jsonString(item['name']));
+      if (name == oldName) {
+        final copy = Map<String, dynamic>.from(item);
+        copy['name'] = newName;
+        next.add(copy);
+        changed = true;
+        continue;
+      }
+    }
+    next.add(item);
+  }
+  if (!changed) return;
+  final updated = ActiveWorkoutDraft(
+    kind: draft.kind,
+    targetDate: draft.targetDate,
+    sessionId: draft.sessionId,
+    clientName: draft.clientName,
+    clientId: draft.clientId,
+    sessionDateTime: draft.sessionDateTime,
+    sessionNote: draft.sessionNote,
+    isCardio: draft.isCardio,
+    exercisesJson: next,
+    savedAt: draft.savedAt,
+  );
+  activeWorkoutDraft = updated;
+  DataService.saveActiveWorkoutDraft(updated);
+}
+
+/// Replaces [oldName] with [newName] everywhere that name is stored.
+///
+/// Personal workouts, client sessions, the exercise bank, favorites, muscle
+/// groups, and the open draft all move to [newName]. If [newName] already
+/// exists, both histories stay under that one name. The old name is removed.
+void ironVibeRenameExercise(String oldName, String newName) {
   final o = normalizeExerciseName(oldName);
   final n = normalizeExerciseName(newName);
   if (o.isEmpty || n.isEmpty || o == n) return;
@@ -1201,23 +1281,23 @@ void _renameExerciseGlobally(String oldName, String newName) {
   exerciseBank.removeWhere((e) => normalizeExerciseName(e) == o);
   ensureExerciseInBank(n);
 
-  workoutHistory = workoutHistory.map((w) {
-    final newExercises = w.exercises.map((ex) {
-      if (normalizeExerciseName(ex.name) == o) return ExerciseLog(n, ex.sets, isCardio: ex.isCardio);
-      return ex;
-    }).toList();
-    return WorkoutLog(w.date, newExercises, id: w.id);
-  }).toList();
+  workoutHistory = workoutHistory
+      .map(
+        (w) => WorkoutLog(
+          w.date,
+          ironVibeRenameExerciseLogs(w.exercises, o, n),
+          id: w.id,
+        ),
+      )
+      .toList();
 
-  for (var s in trainerSchedule) {
-    s.exercises = s.exercises.map((ex) {
-      if (normalizeExerciseName(ex.name) == o) return ExerciseLog(n, ex.sets, isCardio: ex.isCardio);
-      return ex;
-    }).toList();
+  for (final s in trainerSchedule) {
+    s.exercises = ironVibeRenameExerciseLogs(s.exercises, o, n);
   }
 
   ironVibeRenameFavoriteExercise(o, n);
   ironVibeRenameMuscleGroup(o, n);
+  _renameNamesInActiveDraft(o, n);
 
   DataService.saveData();
 }
@@ -1420,7 +1500,7 @@ Future<void> showRenameExerciseDialog(
               );
               return;
             }
-            _renameExerciseGlobally(currentName, newName);
+            ironVibeRenameExercise(currentName, newName);
             onSuccess(newName);
             Navigator.pop(ctx);
           },
@@ -1439,7 +1519,7 @@ Future<void> showRenameExerciseDialog(
               );
               return;
             }
-            _renameExerciseGlobally(currentName, newName);
+            ironVibeRenameExercise(currentName, newName);
             onSuccess(newName);
             Navigator.pop(ctx);
           },
