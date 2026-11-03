@@ -555,6 +555,11 @@ List<_InstructionChapter> _ironVibeInstructionChapters(AppLocalizations l) {
             description: l.instructionNavImportExportDesc,
           ),
           _InstructionTopic(
+            icon: Icons.table_chart_outlined,
+            label: l.instructionSheetTitle,
+            description: l.instructionSheetDesc,
+          ),
+          _InstructionTopic(
             icon: Icons.backup_outlined,
             label: l.instructionBackupNudgeTitle,
             description: l.instructionBackupNudgeDesc,

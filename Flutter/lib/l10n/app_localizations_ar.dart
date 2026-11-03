@@ -1473,4 +1473,65 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get rhythmInsightDisclaimer =>
       'هذه توصية لا نصيحة طبية. إذا كنت بخير، لا شيء يجب أن يتغيّر.';
+
+  @override
+  String get sheetExportButton => 'GOOGLE SHEETS';
+
+  @override
+  String get sheetImportButton => 'استيراد الجدول';
+
+  @override
+  String get sheetExportTitle => 'Google Sheets';
+
+  @override
+  String get sheetExportBody =>
+      'تفتح قائمة المشاركة جدولاً. افتحه في Google Sheets أو Excel، وعدّله في البيت، ثم نزّل CSV واستورده هنا. أبقِ أعمدة id حتى تتحدّث التمارين الموجودة على الهاتف بدل أن تُنسخ من جديد. تبقى نسخة JSON النسخة الكاملة.';
+
+  @override
+  String get sheetExportShare => 'مشاركة الجدول';
+
+  @override
+  String get sheetShareText => 'جدول IronVibe';
+
+  @override
+  String get sheetImportInvalid => 'هذا الملف ليس جدول IronVibe.';
+
+  @override
+  String get sheetImportEmpty => 'لا صفوف للاستيراد في هذا الجدول.';
+
+  @override
+  String get sheetImportPersonalFile =>
+      'هذا سجل شخصي. استورده في وضع التدريب لنفسك.';
+
+  @override
+  String get sheetImportCoachFile =>
+      'هذا جدول مدرّب. استورده في وضع تدريب الآخرين.';
+
+  @override
+  String get sheetImportNothing =>
+      'لا شيء للتغيير. الصفوف متطابقة أصلًا، أو تم تخطي بعضها لأن اليوم فيه عدة تمارين وعمود id غير موجود.';
+
+  @override
+  String sheetImportPreview(
+    int updated,
+    int added,
+    int clientsAdded,
+    int clientsUpdated,
+    int skipped,
+  ) {
+    return 'تمارين للتحديث: $updated. تمارين للإضافة: $added. عملاء للإضافة: $clientsAdded. عملاء للتحديث: $clientsUpdated. صفوف متخطاة: $skipped. التمارين غير الموجودة في الملف تبقى على الهاتف. التمرين الوارد في الملف يستبدل مجموعاته.';
+  }
+
+  @override
+  String get sheetImportConfirm => 'استيراد';
+
+  @override
+  String get sheetImportSuccess => 'تم استيراد الجدول';
+
+  @override
+  String get instructionSheetTitle => 'Google Sheets';
+
+  @override
+  String get instructionSheetDesc =>
+      'من الإحصاءات يمكن مشاركة جدول لفتحه في Google Sheets أو Excel. عدّل المجموعات في البيت، نزّل CSV، ثم استوردها. أبقِ أعمدة id واجعل صفوف كل تمرين معًا بالترتيب. التمرين الوارد في الملف يستبدل مجموعاته، والتمارين الغائبة عن الملف تبقى. اسم العميل وهدفه وملاحظاته تُؤخذ من أول صف ممتلئ. يبقى JSON النسخة الكاملة.';
 }
