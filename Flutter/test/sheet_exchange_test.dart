@@ -335,6 +335,33 @@ Date,Exercise,Set,Weight,Reps
     );
   });
 
+  test('an exercise note and a pre-workout alarm survive an edit', () {
+    workoutHistory.add(
+      WorkoutLog(
+        DateTime(2020, 5, 5, 8, 30),
+        [
+          ExerciseLog('ЖИМ', [SetLog('20', '8', '2')], note: 'локти'),
+        ],
+        id: 'w-note',
+        remindMinutesBefore: 30,
+      ),
+    );
+    final csv = ironVibeBuildSheetCsv(coach: false, languageCode: 'ru');
+    expect(csv.contains('Заметка к упражнению'), isTrue);
+    expect(csv.contains('локти'), isTrue);
+    final lines = csv.split(RegExp(r'\r?\n'));
+    final edited = lines
+        .map((line) => line.replaceFirst('"20"', '"25"'))
+        .join('\r\n');
+    final plan = ironVibePlanSheetImport(edited, coach: false);
+    expect(plan.sessionsToUpdate, 1);
+    plan.commit();
+    final log = workoutHistory.single;
+    expect(log.exercises.single.sets.single.weight, '25');
+    expect(log.exercises.single.note, 'локти');
+    expect(log.remindMinutesBefore, 30);
+  });
+
   test('formula-looking names survive a round trip', () {
     workoutHistory.add(
       WorkoutLog(DateTime(2020, 4, 4, 8), [

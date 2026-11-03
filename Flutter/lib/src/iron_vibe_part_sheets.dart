@@ -66,6 +66,7 @@ const List<String> _kCoachColumns = [
   'rir',
   'duration',
   'intensity',
+  'exercise_note',
   'session_note',
   'session_id',
   'client_id',
@@ -82,6 +83,7 @@ const List<String> _kPersonalColumns = [
   'rir',
   'duration',
   'intensity',
+  'exercise_note',
   'session_note',
   'session_id',
 ];
@@ -114,6 +116,7 @@ const Map<String, Map<String, String>> _kSheetLabels = {
     'rir': 'RIR',
     'duration': 'Duration',
     'intensity': 'Intensity',
+    'exercise_note': 'Exercise note',
     'session_note': 'Session note',
     'session_id': 'Session id',
     'client_id': 'Client id',
@@ -135,6 +138,7 @@ const Map<String, Map<String, String>> _kSheetLabels = {
     'rir': 'RIR',
     'duration': 'Длительность',
     'intensity': 'Интенсивность',
+    'exercise_note': 'Заметка к упражнению',
     'session_note': 'Заметка',
     'session_id': 'Id тренировки',
     'client_id': 'Id клиента',
@@ -156,6 +160,7 @@ const Map<String, Map<String, String>> _kSheetLabels = {
     'rir': 'RIR',
     'duration': 'Тривалість',
     'intensity': 'Інтенсивність',
+    'exercise_note': 'Нотатка до вправи',
     'session_note': 'Нотатка',
     'session_id': 'Id тренування',
     'client_id': 'Id клієнта',
@@ -177,6 +182,7 @@ const Map<String, Map<String, String>> _kSheetLabels = {
     'rir': 'RIR',
     'duration': 'Dauer',
     'intensity': 'Intensität',
+    'exercise_note': 'Übungsnotiz',
     'session_note': 'Trainingsnotiz',
     'session_id': 'Training-Id',
     'client_id': 'Kunden-Id',
@@ -198,6 +204,7 @@ const Map<String, Map<String, String>> _kSheetLabels = {
     'rir': 'RIR',
     'duration': 'Duración',
     'intensity': 'Intensidad',
+    'exercise_note': 'Nota del ejercicio',
     'session_note': 'Nota de sesión',
     'session_id': 'Id de sesión',
     'client_id': 'Id de cliente',
@@ -219,6 +226,7 @@ const Map<String, Map<String, String>> _kSheetLabels = {
     'rir': 'RIR',
     'duration': 'Durée',
     'intensity': 'Intensité',
+    'exercise_note': 'Note d\'exercice',
     'session_note': 'Note de séance',
     'session_id': 'Id séance',
     'client_id': 'Id client',
@@ -240,6 +248,7 @@ const Map<String, Map<String, String>> _kSheetLabels = {
     'rir': 'RIR',
     'duration': 'Durata',
     'intensity': 'Intensità',
+    'exercise_note': 'Nota esercizio',
     'session_note': 'Nota sessione',
     'session_id': 'Id sessione',
     'client_id': 'Id cliente',
@@ -261,6 +270,7 @@ const Map<String, Map<String, String>> _kSheetLabels = {
     'rir': 'RIR',
     'duration': 'Duração',
     'intensity': 'Intensidade',
+    'exercise_note': 'Nota do exercício',
     'session_note': 'Nota da sessão',
     'session_id': 'Id da sessão',
     'client_id': 'Id do cliente',
@@ -282,6 +292,7 @@ const Map<String, Map<String, String>> _kSheetLabels = {
     'rir': 'RIR',
     'duration': 'Czas',
     'intensity': 'Intensywność',
+    'exercise_note': 'Notatka ćwiczenia',
     'session_note': 'Notatka sesji',
     'session_id': 'Id sesji',
     'client_id': 'Id klienta',
@@ -303,6 +314,7 @@ const Map<String, Map<String, String>> _kSheetLabels = {
     'rir': 'RIR',
     'duration': '时长',
     'intensity': '强度',
+    'exercise_note': '动作备注',
     'session_note': '训练备注',
     'session_id': '训练ID',
     'client_id': '客户ID',
@@ -324,6 +336,7 @@ const Map<String, Map<String, String>> _kSheetLabels = {
     'rir': 'RIR',
     'duration': 'अवधि',
     'intensity': 'तीव्रता',
+    'exercise_note': 'व्यायाम नोट',
     'session_note': 'सत्र नोट',
     'session_id': 'सत्र आईडी',
     'client_id': 'क्लाइंट आईडी',
@@ -345,6 +358,7 @@ const Map<String, Map<String, String>> _kSheetLabels = {
     'rir': 'RIR',
     'duration': 'المدة',
     'intensity': 'الشدة',
+    'exercise_note': 'ملاحظة التمرين',
     'session_note': 'ملاحظة الجلسة',
     'session_id': 'معرّف الجلسة',
     'client_id': 'معرّف العميل',
@@ -602,6 +616,7 @@ List<List<String>> _exerciseRows(
           ...shared,
           'exercise': exercise.name,
           'type': typeWord,
+          'exercise_note': exercise.note,
         }),
       );
       continue;
@@ -619,6 +634,7 @@ List<List<String>> _exerciseRows(
           'rir': cardio ? '' : set.rir,
           'duration': cardio ? set.duration : '',
           'intensity': cardio ? set.intensity : '',
+          'exercise_note': exercise.note,
         }),
       );
     }
@@ -1054,7 +1070,8 @@ class _BuiltExercise {
   final bool cardio;
   final List<SetLog> sets = [];
   int? lastSetNumber;
-  _BuiltExercise(this.name, this.cardio);
+  String note;
+  _BuiltExercise(this.name, this.cardio, {this.note = ''});
 }
 
 List<ExerciseLog> _exercisesFromRows(List<_SheetRow> rows) {
@@ -1072,6 +1089,7 @@ List<ExerciseLog> _exercisesFromRows(List<_SheetRow> rows) {
         row.get('duration').isNotEmpty || row.get('intensity').isNotEmpty;
     final cardio = explicit ?? (hasCardio && !hasStrength);
     final setNumber = _parseSheetSetNumber(row.get('set'));
+    final note = row.get('exercise_note').trim();
     final restart =
         setNumber != null &&
         built.isNotEmpty &&
@@ -1083,14 +1101,21 @@ List<ExerciseLog> _exercisesFromRows(List<_SheetRow> rows) {
         built.last.name != name ||
         built.last.cardio != cardio ||
         restart) {
-      built.add(_BuiltExercise(name, cardio));
+      built.add(_BuiltExercise(name, cardio, note: note));
+    } else if (built.last.note.isEmpty && note.isNotEmpty) {
+      built.last.note = note;
     }
     built.last.sets.add(_setFromRow(row, cardio));
     if (setNumber != null) built.last.lastSetNumber = setNumber;
   }
   return [
     for (final exercise in built)
-      ExerciseLog(exercise.name, exercise.sets, isCardio: exercise.cardio),
+      ExerciseLog(
+        exercise.name,
+        exercise.sets,
+        isCardio: exercise.cardio,
+        note: exercise.note,
+      ),
   ];
 }
 
@@ -1112,6 +1137,28 @@ SetLog _setFromRow(_SheetRow row, bool cardio) {
   );
 }
 
+/// A spreadsheet saved before the exercise-note column existed should not
+/// wipe notes that already live on the phone.
+List<ExerciseLog> _sheetKeepExerciseNotes(
+  List<ExerciseLog> previous,
+  List<ExerciseLog> next,
+) {
+  if (previous.length != next.length) return next;
+  return [
+    for (var i = 0; i < next.length; i++)
+      normalizeExerciseName(previous[i].name) ==
+                  normalizeExerciseName(next[i].name) &&
+              previous[i].isCardio == next[i].isCardio
+          ? ExerciseLog(
+              next[i].name,
+              next[i].sets,
+              isCardio: next[i].isCardio,
+              note: previous[i].note,
+            )
+          : next[i],
+  ];
+}
+
 bool _sameSheetExercises(List<ExerciseLog> a, List<ExerciseLog> b) {
   if (a.length != b.length) return false;
   for (var i = 0; i < a.length; i++) {
@@ -1119,6 +1166,7 @@ bool _sameSheetExercises(List<ExerciseLog> a, List<ExerciseLog> b) {
       return false;
     }
     if (a[i].isCardio != b[i].isCardio) return false;
+    if (a[i].note.trim() != b[i].note.trim()) return false;
     if (a[i].sets.length != b[i].sets.length) return false;
     for (var j = 0; j < a[i].sets.length; j++) {
       final left = a[i].sets[j];
@@ -1421,7 +1469,10 @@ IronVibeSheetImportPlan _planCoachSheet(_SheetTable table) {
       skipped += usable.length;
       return;
     }
-    final exercises = _exercisesFromRows(usable);
+    var exercises = _exercisesFromRows(usable);
+    if (!table.has('exercise_note') && target != null) {
+      exercises = _sheetKeepExerciseNotes(target.exercises, exercises);
+    }
     final note = table.has('session_note')
         ? _firstText(usable, 'session_note')
         : (target?.note ?? '');
@@ -1454,6 +1505,7 @@ IronVibeSheetImportPlan _planCoachSheet(_SheetTable table) {
       isScheduledPlan: flags.scheduled,
       isCompleted: flags.completed,
       isImportedHistory: flags.imported,
+      remindMinutesBefore: target?.remindMinutesBefore,
     );
     if (target != null) {
       claimedSessions.add(target);
@@ -1781,7 +1833,10 @@ IronVibeSheetImportPlan _planPersonalSheet(_SheetTable table) {
     if (target != null && _sameSheetMinute(target.date, when)) {
       when = target.date;
     }
-    final exercises = _exercisesFromRows(usable);
+    var exercises = _exercisesFromRows(usable);
+    if (!table.has('exercise_note') && target != null) {
+      exercises = _sheetKeepExerciseNotes(target.exercises, exercises);
+    }
     if (target == null && exercises.isEmpty) {
       skipped += usable.length;
       return;
@@ -1791,7 +1846,12 @@ IronVibeSheetImportPlan _planPersonalSheet(_SheetTable table) {
         (sessionId.isNotEmpty && !claimed.contains(sessionId)
             ? sessionId
             : ironVibeNewEntityId());
-    final next = WorkoutLog(when, exercises, id: id);
+    final next = WorkoutLog(
+      when,
+      exercises,
+      id: id,
+      remindMinutesBefore: target?.remindMinutesBefore,
+    );
     if (target != null) {
       claimed.add(target.id ?? id);
       if (_sameSheetMinute(target.date, next.date) &&
