@@ -440,5 +440,22 @@
   "rhythmInsightPraiseVeryDense": "On dirait que vous avez trouvé le mode secret de l'organisme.",
   "rhythmInsightRecentLighter": "La charge a déjà baissé récemment — la récupération active peut compter comme faite. Reprenez le rythme.",
   "rhythmInsightAccumulation": "{weeks, plural, =1{Ce rythme tient déjà depuis {weeks} semaine.} other{Ce rythme tient déjà depuis {weeks} semaines.}}",
-  "rhythmInsightDisclaimer": "C'est une recommandation, pas un avis médical. Si vous vous sentez bien, rien n'est à changer."
+  "rhythmInsightDisclaimer": "C'est une recommandation, pas un avis médical. Si vous vous sentez bien, rien n'est à changer.",
+  "sheetExportButton": "GOOGLE SHEETS",
+  "sheetImportButton": "IMPORTER LE TABLEAU",
+  "sheetExportTitle": "Google Sheets",
+  "sheetExportBody": "Un tableau s'ouvre dans le menu de partage. Ouvre-le dans Google Sheets ou Excel, modifie-le à la maison, télécharge le CSV et importe-le ici. Garde les colonnes id pour que les séances déjà sur le téléphone soient mises à jour et non recopiées. La sauvegarde JSON reste la copie complète.",
+  "sheetExportShare": "Partager le tableau",
+  "sheetShareText": "Tableau IronVibe",
+  "sheetImportInvalid": "Ce fichier n'est pas un tableau IronVibe.",
+  "sheetImportEmpty": "Ce tableau n'a aucune ligne à importer.",
+  "sheetImportPersonalFile": "C'est un journal personnel. Importe-le dans le mode où tu t'entraînes toi-même.",
+  "sheetImportCoachFile": "C'est un tableau d'entraîneur. Importe-le dans le mode où tu entraînes d'autres personnes.",
+  "sheetImportNothing": "Rien à modifier. Les lignes correspondent déjà, ou certaines ont été ignorées parce qu'un jour compte plusieurs séances et que la colonne id manque.",
+  "sheetImportPreview": "Séances à mettre à jour : {updated}. Séances à ajouter : {added}. Clients à ajouter : {clientsAdded}. Clients à mettre à jour : {clientsUpdated}. Lignes ignorées : {skipped}. Les séances absentes du fichier restent sur le téléphone. Une séance du fichier remplace ses séries.",
+  "@sheetImportPreview": {"placeholders": {"updated": {"type": "int"}, "added": {"type": "int"}, "clientsAdded": {"type": "int"}, "clientsUpdated": {"type": "int"}, "skipped": {"type": "int"}}},
+  "sheetImportConfirm": "Importer",
+  "sheetImportSuccess": "Tableau importé",
+  "instructionSheetTitle": "Google Sheets",
+  "instructionSheetDesc": "Dans Statistiques, tu peux partager un tableau pour Google Sheets ou Excel. Modifie les séries à la maison, télécharge le CSV et réimporte-le. Garde les colonnes id et laisse ensemble, dans l'ordre, les lignes de chaque exercice. Une séance du fichier remplace ses séries. Celles qui manquent dans le fichier restent. Le nom, l'objectif et les notes d'un client viennent de sa première ligne remplie. JSON reste la sauvegarde complète."
 }

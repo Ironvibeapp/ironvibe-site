@@ -440,5 +440,22 @@
   "rhythmInsightPraiseVeryDense": "Wygląda na to, że namierzyłeś tajny tryb organizmu.",
   "rhythmInsightRecentLighter": "Ostatnio obciążenie już było niższe niż zwykle — aktywny wypoczynek można uznać za zaliczony. Nabieraj tempa.",
   "rhythmInsightAccumulation": "{weeks, plural, one{Taki rytm trzyma się już {weeks} tydzień.} few{Taki rytm trzyma się już {weeks} tygodnie.} many{Taki rytm trzyma się już {weeks} tygodni.} other{Taki rytm trzyma się już {weeks} tygodnia.}}",
-  "rhythmInsightDisclaimer": "To rekomendacja, nie porada medyczna. Jeśli czujesz się dobrze — nic nie trzeba zmieniać."
+  "rhythmInsightDisclaimer": "To rekomendacja, nie porada medyczna. Jeśli czujesz się dobrze — nic nie trzeba zmieniać.",
+  "sheetExportButton": "GOOGLE SHEETS",
+  "sheetImportButton": "IMPORTUJ ARKUSZ",
+  "sheetExportTitle": "Google Sheets",
+  "sheetExportBody": "W menu udostępniania otworzy się arkusz. Otwórz go w Google Sheets lub Excelu, popraw w domu, pobierz CSV i zaimportuj tutaj. Zostaw kolumny id, żeby treningi już obecne w telefonie zostały zaktualizowane, a nie skopiowane ponownie. Kopia JSON nadal jest pełną kopią.",
+  "sheetExportShare": "Udostępnij arkusz",
+  "sheetShareText": "Arkusz IronVibe",
+  "sheetImportInvalid": "Ten plik nie jest arkuszem IronVibe.",
+  "sheetImportEmpty": "W tym arkuszu nie ma wierszy do importu.",
+  "sheetImportPersonalFile": "To osobisty dziennik. Zaimportuj go w trybie własnego treningu.",
+  "sheetImportCoachFile": "To arkusz trenera. Zaimportuj go w trybie trenowania innych.",
+  "sheetImportNothing": "Nie ma czego zmieniać. Wiersze już się zgadzają albo część pominięto, bo jednego dnia jest kilka treningów, a brakuje kolumny id.",
+  "sheetImportPreview": "Treningi do aktualizacji: {updated}. Treningi do dodania: {added}. Klienci do dodania: {clientsAdded}. Klienci do aktualizacji: {clientsUpdated}. Pominięte wiersze: {skipped}. Treningów spoza pliku nie ruszamy. Trening z pliku zastępuje swoje serie.",
+  "@sheetImportPreview": {"placeholders": {"updated": {"type": "int"}, "added": {"type": "int"}, "clientsAdded": {"type": "int"}, "clientsUpdated": {"type": "int"}, "skipped": {"type": "int"}}},
+  "sheetImportConfirm": "Importuj",
+  "sheetImportSuccess": "Arkusz zaimportowany",
+  "instructionSheetTitle": "Google Sheets",
+  "instructionSheetDesc": "W statystykach można udostępnić arkusz do Google Sheets lub Excela. Popraw serie w domu, pobierz CSV i zaimportuj z powrotem. Zostaw kolumny id i trzymaj wiersze jednego ćwiczenia razem, po kolei. Trening z pliku zastępuje swoje serie. Treningów, których w pliku nie ma, nie usuwamy. Imię, cel i notatki klienta bierzemy z pierwszego wypełnionego wiersza. JSON nadal jest pełną kopią."
 }

@@ -1419,4 +1419,63 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get rhythmInsightDisclaimer => '这是建议，不是医嘱。如果自我感觉正常，不必改任何东西。';
+
+  @override
+  String get sheetExportButton => 'GOOGLE 表格';
+
+  @override
+  String get sheetImportButton => '导入表格';
+
+  @override
+  String get sheetExportTitle => 'Google 表格';
+
+  @override
+  String get sheetExportBody =>
+      '分享菜单会打开一份表格。用 Google 表格或 Excel 打开，在家里改好，下载为 CSV，再导入回来。保留 id 列，手机上已有的训练会更新，而不会再复制一份。JSON 备份仍然是完整副本。';
+
+  @override
+  String get sheetExportShare => '分享表格';
+
+  @override
+  String get sheetShareText => 'IronVibe 表格';
+
+  @override
+  String get sheetImportInvalid => '这个文件不是 IronVibe 表格。';
+
+  @override
+  String get sheetImportEmpty => '这个表格里没有可导入的行。';
+
+  @override
+  String get sheetImportPersonalFile => '这是个人训练记录。请在自己训练的模式下导入。';
+
+  @override
+  String get sheetImportCoachFile => '这是教练表格。请在训练他人的模式下导入。';
+
+  @override
+  String get sheetImportNothing =>
+      '没有需要更改的内容。这些行已经一致，或者因为同一天有多次训练且缺少 id 列而被跳过。';
+
+  @override
+  String sheetImportPreview(
+    int updated,
+    int added,
+    int clientsAdded,
+    int clientsUpdated,
+    int skipped,
+  ) {
+    return '要更新的训练：$updated。要添加的训练：$added。要添加的客户：$clientsAdded。要更新的客户：$clientsUpdated。跳过的行：$skipped。文件里没有的训练会留在手机上。文件中的训练会替换它的组数。';
+  }
+
+  @override
+  String get sheetImportConfirm => '导入';
+
+  @override
+  String get sheetImportSuccess => '表格已导入';
+
+  @override
+  String get instructionSheetTitle => 'Google 表格';
+
+  @override
+  String get instructionSheetDesc =>
+      '在统计里可以分享一份表格，用 Google 表格或 Excel 打开。在家里改组数，下载 CSV，再导入回来。保留 id 列，并把每个动作的行按顺序放在一起。文件里的训练会替换它的组数。文件里没有的训练会留下。客户的姓名、目标和备注取自这个人第一行已填写的内容。JSON 仍然是完整备份。';
 }

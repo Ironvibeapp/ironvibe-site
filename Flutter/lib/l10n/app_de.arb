@@ -440,5 +440,22 @@
   "rhythmInsightPraiseVeryDense": "Sieht so aus, als hättest du den geheimen Modus des Körpers gefunden.",
   "rhythmInsightRecentLighter": "Die Last war kürzlich schon niedriger — aktive Erholung kann als erledigt gelten. Tempo wieder aufnehmen.",
   "rhythmInsightAccumulation": "{weeks, plural, =1{Dieser Rhythmus hält schon {weeks} Woche.} other{Dieser Rhythmus hält schon {weeks} Wochen.}}",
-  "rhythmInsightDisclaimer": "Das ist eine Empfehlung, kein medizinischer Rat. Wenn du dich gut fühlst, muss sich nichts ändern."
+  "rhythmInsightDisclaimer": "Das ist eine Empfehlung, kein medizinischer Rat. Wenn du dich gut fühlst, muss sich nichts ändern.",
+  "sheetExportButton": "GOOGLE SHEETS",
+  "sheetImportButton": "TABELLE IMPORTIEREN",
+  "sheetExportTitle": "Google Sheets",
+  "sheetExportBody": "Im Teilen-Menü öffnet sich eine Tabelle. In Google Sheets oder Excel öffnen, zu Hause bearbeiten, als CSV herunterladen und hier importieren. Die ID-Spalten behalten, damit Trainings auf dem Telefon aktualisiert und nicht noch einmal kopiert werden. Die JSON-Sicherung bleibt die vollständige Kopie.",
+  "sheetExportShare": "Tabelle teilen",
+  "sheetShareText": "IronVibe-Tabelle",
+  "sheetImportInvalid": "Diese Datei ist keine IronVibe-Tabelle.",
+  "sheetImportEmpty": "Diese Tabelle hat keine Zeilen zum Importieren.",
+  "sheetImportPersonalFile": "Das ist ein persönliches Tagebuch. Importiere es im Modus für eigenes Training.",
+  "sheetImportCoachFile": "Das ist eine Trainer-Tabelle. Importiere sie im Modus für andere.",
+  "sheetImportNothing": "Nichts zu ändern. Die Zeilen stimmen schon, oder einige wurden übersprungen, weil an einem Tag mehrere Trainings liegen und die ID-Spalte fehlt.",
+  "sheetImportPreview": "Trainings aktualisieren: {updated}. Trainings hinzufügen: {added}. Kunden hinzufügen: {clientsAdded}. Kunden aktualisieren: {clientsUpdated}. Übersprungene Zeilen: {skipped}. Trainings, die nicht in der Datei stehen, bleiben auf dem Telefon. Ein Training aus der Datei ersetzt seine Sätze.",
+  "@sheetImportPreview": {"placeholders": {"updated": {"type": "int"}, "added": {"type": "int"}, "clientsAdded": {"type": "int"}, "clientsUpdated": {"type": "int"}, "skipped": {"type": "int"}}},
+  "sheetImportConfirm": "Importieren",
+  "sheetImportSuccess": "Tabelle importiert",
+  "instructionSheetTitle": "Google Sheets",
+  "instructionSheetDesc": "Unter Statistik lässt sich eine Tabelle für Google Sheets oder Excel teilen. Sätze zu Hause ändern, CSV herunterladen und wieder importieren. Die ID-Spalten behalten und die Zeilen einer Übung der Reihe nach zusammen lassen. Ein Training aus der Datei ersetzt seine Sätze. Trainings, die in der Datei fehlen, bleiben. Name, Ziel und Notizen eines Kunden kommen aus der ersten gefüllten Zeile. JSON bleibt die vollständige Sicherung."
 }

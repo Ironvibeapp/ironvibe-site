@@ -1480,4 +1480,65 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get rhythmInsightDisclaimer =>
       'Это рекомендация, а не медицинский совет. Если чувствуете себя хорошо — менять ничего не нужно.';
+
+  @override
+  String get sheetExportButton => 'GOOGLE ТАБЛИЦЫ';
+
+  @override
+  String get sheetImportButton => 'ИМПОРТ ТАБЛИЦЫ';
+
+  @override
+  String get sheetExportTitle => 'Google Таблицы';
+
+  @override
+  String get sheetExportBody =>
+      'В меню «Поделиться» откроется таблица. Откройте её в Google Таблицах или Excel, поправьте дома, скачайте CSV и импортируйте сюда. Не удаляйте столбцы id: по ним тренировки на телефоне обновляются, а не копируются заново. Полная копия по-прежнему в JSON.';
+
+  @override
+  String get sheetExportShare => 'Поделиться таблицей';
+
+  @override
+  String get sheetShareText => 'Таблица IronVibe';
+
+  @override
+  String get sheetImportInvalid => 'Этот файл не похож на таблицу IronVibe.';
+
+  @override
+  String get sheetImportEmpty => 'В таблице нет строк для импорта.';
+
+  @override
+  String get sheetImportPersonalFile =>
+      'Это личный дневник. Импортируйте его в режиме «Тренируюсь сам».';
+
+  @override
+  String get sheetImportCoachFile =>
+      'Это таблица тренера. Импортируйте её в режиме «Тренирую других».';
+
+  @override
+  String get sheetImportNothing =>
+      'Менять нечего. Строки уже совпадают, либо часть пропущена: в один день несколько тренировок, а столбца id нет.';
+
+  @override
+  String sheetImportPreview(
+    int updated,
+    int added,
+    int clientsAdded,
+    int clientsUpdated,
+    int skipped,
+  ) {
+    return 'Обновить тренировок: $updated. Добавить тренировок: $added. Новых клиентов: $clientsAdded. Обновить клиентов: $clientsUpdated. Пропущено строк: $skipped. Тренировок, которых нет в файле, на телефоне не трогаем. Тренировка из файла заменяет свои подходы.';
+  }
+
+  @override
+  String get sheetImportConfirm => 'Импортировать';
+
+  @override
+  String get sheetImportSuccess => 'Таблица импортирована';
+
+  @override
+  String get instructionSheetTitle => 'Google Таблицы';
+
+  @override
+  String get instructionSheetDesc =>
+      'В статистике можно отправить таблицу в Google Таблицы или Excel. Поправьте подходы дома, скачайте CSV и импортируйте обратно. Столбцы id не удаляйте, а строки одного упражнения держите вместе по порядку. Тренировка из файла заменяет свои подходы. Тренировки, которых в файле нет, остаются. Имя, цель и заметки клиента берутся из первой заполненной строки. Полная копия по-прежнему в JSON.';
 }

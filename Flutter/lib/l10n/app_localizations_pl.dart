@@ -1481,4 +1481,65 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get rhythmInsightDisclaimer =>
       'To rekomendacja, nie porada medyczna. Jeśli czujesz się dobrze — nic nie trzeba zmieniać.';
+
+  @override
+  String get sheetExportButton => 'GOOGLE SHEETS';
+
+  @override
+  String get sheetImportButton => 'IMPORTUJ ARKUSZ';
+
+  @override
+  String get sheetExportTitle => 'Google Sheets';
+
+  @override
+  String get sheetExportBody =>
+      'W menu udostępniania otworzy się arkusz. Otwórz go w Google Sheets lub Excelu, popraw w domu, pobierz CSV i zaimportuj tutaj. Zostaw kolumny id, żeby treningi już obecne w telefonie zostały zaktualizowane, a nie skopiowane ponownie. Kopia JSON nadal jest pełną kopią.';
+
+  @override
+  String get sheetExportShare => 'Udostępnij arkusz';
+
+  @override
+  String get sheetShareText => 'Arkusz IronVibe';
+
+  @override
+  String get sheetImportInvalid => 'Ten plik nie jest arkuszem IronVibe.';
+
+  @override
+  String get sheetImportEmpty => 'W tym arkuszu nie ma wierszy do importu.';
+
+  @override
+  String get sheetImportPersonalFile =>
+      'To osobisty dziennik. Zaimportuj go w trybie własnego treningu.';
+
+  @override
+  String get sheetImportCoachFile =>
+      'To arkusz trenera. Zaimportuj go w trybie trenowania innych.';
+
+  @override
+  String get sheetImportNothing =>
+      'Nie ma czego zmieniać. Wiersze już się zgadzają albo część pominięto, bo jednego dnia jest kilka treningów, a brakuje kolumny id.';
+
+  @override
+  String sheetImportPreview(
+    int updated,
+    int added,
+    int clientsAdded,
+    int clientsUpdated,
+    int skipped,
+  ) {
+    return 'Treningi do aktualizacji: $updated. Treningi do dodania: $added. Klienci do dodania: $clientsAdded. Klienci do aktualizacji: $clientsUpdated. Pominięte wiersze: $skipped. Treningów spoza pliku nie ruszamy. Trening z pliku zastępuje swoje serie.';
+  }
+
+  @override
+  String get sheetImportConfirm => 'Importuj';
+
+  @override
+  String get sheetImportSuccess => 'Arkusz zaimportowany';
+
+  @override
+  String get instructionSheetTitle => 'Google Sheets';
+
+  @override
+  String get instructionSheetDesc =>
+      'W statystykach można udostępnić arkusz do Google Sheets lub Excela. Popraw serie w domu, pobierz CSV i zaimportuj z powrotem. Zostaw kolumny id i trzymaj wiersze jednego ćwiczenia razem, po kolei. Trening z pliku zastępuje swoje serie. Treningów, których w pliku nie ma, nie usuwamy. Imię, cel i notatki klienta bierzemy z pierwszego wypełnionego wiersza. JSON nadal jest pełną kopią.';
 }

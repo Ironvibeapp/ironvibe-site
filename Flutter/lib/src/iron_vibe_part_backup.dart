@@ -925,6 +925,20 @@ void _showStatistics(BuildContext context, bool isTrainer) {
                 onPressed: () => _importFromJson(ctx, isTrainer),
                 width: double.infinity,
               ),
+              const SizedBox(height: 10),
+              SteelButton(
+                text: l.sheetExportButton,
+                icon: Icons.table_chart_outlined,
+                onPressed: () => ironVibeExportSheet(ctx, isTrainer),
+                width: double.infinity,
+              ),
+              const SizedBox(height: 10),
+              SteelButton(
+                text: l.sheetImportButton,
+                icon: Icons.upload_file_outlined,
+                onPressed: () => ironVibeImportSheet(ctx, isTrainer),
+                width: double.infinity,
+              ),
               if (isTrainer) ...[
                 const SizedBox(height: 10),
                 SteelButton(

@@ -440,5 +440,22 @@
   "rhythmInsightPraiseVeryDense": "Parece que encontraste el modo secreto del cuerpo.",
   "rhythmInsightRecentLighter": "La carga ya bajó hace poco: el descanso activo puede darse por hecho. Retoma el ritmo.",
   "rhythmInsightAccumulation": "{weeks, plural, =1{Este ritmo lleva ya {weeks} semana.} other{Este ritmo lleva ya {weeks} semanas.}}",
-  "rhythmInsightDisclaimer": "Es una recomendación, no un consejo médico. Si te encuentras bien, no hace falta cambiar nada."
+  "rhythmInsightDisclaimer": "Es una recomendación, no un consejo médico. Si te encuentras bien, no hace falta cambiar nada.",
+  "sheetExportButton": "GOOGLE SHEETS",
+  "sheetImportButton": "IMPORTAR HOJA",
+  "sheetExportTitle": "Google Sheets",
+  "sheetExportBody": "En el menú de compartir se abre una hoja. Ábrela en Google Sheets o Excel, edítala en casa, descárgala como CSV e impórtala aquí. Conserva las columnas de id para que los entrenos que ya están en el teléfono se actualicen y no se copien otra vez. La copia JSON sigue siendo la copia completa.",
+  "sheetExportShare": "Compartir hoja",
+  "sheetShareText": "Hoja de IronVibe",
+  "sheetImportInvalid": "Este archivo no es una hoja de IronVibe.",
+  "sheetImportEmpty": "Esta hoja no tiene filas para importar.",
+  "sheetImportPersonalFile": "Este es un diario personal. Impórtalo en el modo de entrenarte a ti mismo.",
+  "sheetImportCoachFile": "Esta es una hoja de entrenador. Impórtala en el modo de entrenar a otros.",
+  "sheetImportNothing": "Nada que cambiar. Las filas ya coinciden, o algunas se omitieron porque un día tiene varios entrenos y falta la columna de id.",
+  "sheetImportPreview": "Entrenos a actualizar: {updated}. Entrenos a añadir: {added}. Clientes a añadir: {clientsAdded}. Clientes a actualizar: {clientsUpdated}. Filas omitidas: {skipped}. Los entrenos que no están en el archivo siguen en el teléfono. Un entreno del archivo sustituye sus series.",
+  "@sheetImportPreview": {"placeholders": {"updated": {"type": "int"}, "added": {"type": "int"}, "clientsAdded": {"type": "int"}, "clientsUpdated": {"type": "int"}, "skipped": {"type": "int"}}},
+  "sheetImportConfirm": "Importar",
+  "sheetImportSuccess": "Hoja importada",
+  "instructionSheetTitle": "Google Sheets",
+  "instructionSheetDesc": "En Estadísticas puedes compartir una hoja para Google Sheets o Excel. Edita las series en casa, descarga CSV e impórtala. Conserva las columnas de id y deja juntas, en orden, las filas de cada ejercicio. Un entreno del archivo sustituye sus series. Los que no están en el archivo se quedan. El nombre, el objetivo y las notas de un cliente salen de su primera fila rellena. JSON sigue siendo la copia completa."
 }
