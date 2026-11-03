@@ -66,23 +66,57 @@ bool ironVibeSessionCountsForReminder(TrainerSession session, DateTime now) {
   return session.dateTime.isAfter(now);
 }
 
+class _ReminderEvent {
+  final DateTime when;
+  final int? remindMinutes;
+  final String alarmLabel;
+  final String idKey;
+
+  const _ReminderEvent({
+    required this.when,
+    required this.remindMinutes,
+    required this.alarmLabel,
+    required this.idKey,
+  });
+}
+
 /// One evening note per upcoming training day, plus an alarm only for
-/// sessions where the coach turned it on while picking the time.
+/// workouts where it was switched on while picking the time.
 List<IronVibeReminderPlan> ironVibePlanReminders({
   required List<TrainerSession> sessions,
+  List<WorkoutLog> personal = const [],
   required DateTime now,
   required AppLocalizations l10n,
   int horizonDays = kIronVibeReminderHorizonDays,
 }) {
-  final upcoming = [
+  final upcoming = <_ReminderEvent>[
     for (final session in sessions)
-      if (ironVibeSessionCountsForReminder(session, now)) session,
-  ]..sort((a, b) => a.dateTime.compareTo(b.dateTime));
+      if (ironVibeSessionCountsForReminder(session, now))
+        _ReminderEvent(
+          when: session.dateTime,
+          remindMinutes: session.remindMinutesBefore,
+          alarmLabel: () {
+            final name = ironVibeSessionClientLabel(session).trim();
+            return name.isEmpty ? l10n.reminderAlarmTitle : name;
+          }(),
+          idKey:
+              session.id ??
+              '${session.clientName}|${session.dateTime.toIso8601String()}',
+        ),
+    for (final log in personal)
+      if (log.date.isAfter(now))
+        _ReminderEvent(
+          when: log.date,
+          remindMinutes: log.remindMinutesBefore,
+          alarmLabel: l10n.reminderAlarmTitle,
+          idKey: 'personal:${log.id ?? log.date.toIso8601String()}',
+        ),
+  ]..sort((a, b) => a.when.compareTo(b.when));
 
-  final byDay = <DateTime, List<TrainerSession>>{};
-  for (final session in upcoming) {
-    final day = ironVibeDateOnly(session.dateTime);
-    (byDay[day] ??= <TrainerSession>[]).add(session);
+  final byDay = <DateTime, List<_ReminderEvent>>{};
+  for (final event in upcoming) {
+    final day = ironVibeDateOnly(event.when);
+    (byDay[day] ??= <_ReminderEvent>[]).add(event);
   }
 
   final horizonEnd = now.add(Duration(days: horizonDays));
@@ -102,7 +136,7 @@ List<IronVibeReminderPlan> ironVibePlanReminders({
     );
     if (!when.isAfter(now) || !when.isBefore(horizonEnd)) continue;
     final thatDay = byDay[day]!;
-    final first = thatDay.first.dateTime;
+    final first = thatDay.first.when;
     final id = ironVibeEveningReminderId(day);
     used.add(id);
     plans.add(
@@ -119,16 +153,13 @@ List<IronVibeReminderPlan> ironVibePlanReminders({
     );
   }
 
-  for (final session in upcoming) {
-    final minutes = session.remindMinutesBefore;
+  for (final event in upcoming) {
+    final minutes = event.remindMinutes;
     if (minutes == null) continue;
-    final when = session.dateTime.subtract(Duration(minutes: minutes));
+    final when = event.when.subtract(Duration(minutes: minutes));
     if (!when.isAfter(now) || !when.isBefore(horizonEnd)) continue;
-    final name = ironVibeSessionClientLabel(session).trim();
-    final shown = name.isEmpty ? l10n.reminderAlarmTitle : name;
-    final key =
-        session.id ??
-        '${session.clientName}|${session.dateTime.toIso8601String()}';
+    final shown = event.alarmLabel;
+    final key = event.idKey;
     var id = ironVibeSessionReminderId(key);
     while (used.contains(id)) {
       id = id >= 30000000 ? 1000000 : id + 1;
@@ -141,7 +172,7 @@ List<IronVibeReminderPlan> ironVibePlanReminders({
         title: l10n.reminderAlarmTitle,
         body: l10n.reminderAlarmBody(
           shown,
-          ironVibeReminderClock(session.dateTime),
+          ironVibeReminderClock(event.when),
         ),
         alarm: true,
       ),
@@ -262,9 +293,7 @@ Future<bool> ironVibeEnsureReminderPermission({bool exact = false}) async {
 Future<void> ironVibeRefreshReminders({bool askPermission = false}) async {
   if (!_ironVibeRemindersReady) return;
   if (askPermission &&
-      trainerSchedule.any(
-        (session) => ironVibeSessionCountsForReminder(session, DateTime.now()),
-      )) {
+      _ironVibeHasUpcomingReminder(DateTime.now())) {
     await ironVibeEnsureReminderPermission();
   }
   await ironVibeRescheduleReminders();
@@ -275,12 +304,33 @@ void ironVibeRemindersAfterDataSaved() {
   unawaited(ironVibeRescheduleReminders());
 }
 
+bool _ironVibeHasUpcomingReminder(DateTime now) {
+  if (trainerSchedule.any(
+    (session) => ironVibeSessionCountsForReminder(session, now),
+  )) {
+    return true;
+  }
+  return workoutHistory.any((log) => log.date.isAfter(now));
+}
+
 String ironVibeReminderFingerprint(
   List<TrainerSession> sessions,
-  Locale locale,
-) {
+  Locale locale, {
+  List<WorkoutLog> personal = const [],
+}) {
   final copy = [...sessions]..sort((a, b) => a.dateTime.compareTo(b.dateTime));
   final buffer = StringBuffer(locale.languageCode)..write('|');
+  final logs = [...personal]..sort((a, b) => a.date.compareTo(b.date));
+  for (final log in logs) {
+    buffer
+      ..write('p:')
+      ..write(log.id)
+      ..write(',')
+      ..write(log.date.toIso8601String())
+      ..write(',')
+      ..write(log.remindMinutesBefore)
+      ..write(';');
+  }
   for (final session in copy) {
     buffer
       ..write(session.id)
@@ -303,10 +353,15 @@ Future<void> ironVibeRescheduleReminders() async {
   if (!_ironVibeRemindersReady) return;
   final generation = ++_ironVibeRescheduleGeneration;
   final locale = ironVibeReminderLocale();
-  final fingerprint = ironVibeReminderFingerprint(trainerSchedule, locale);
+  final fingerprint = ironVibeReminderFingerprint(
+    trainerSchedule,
+    locale,
+    personal: workoutHistory,
+  );
   if (fingerprint == _ironVibeReminderFingerprint) return;
   final plans = ironVibePlanReminders(
     sessions: trainerSchedule,
+    personal: workoutHistory,
     now: DateTime.now(),
     l10n: lookupAppLocalizations(locale),
   );
