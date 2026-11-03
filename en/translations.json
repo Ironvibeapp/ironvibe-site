@@ -72,6 +72,7 @@
     "s2List1": "workout history, exercises, notes, and related parameters (weight, reps, rest, etc.);",
     "s2List2": "client/athlete data you enter (e.g. name, training goal);",
     "s2List3": "local app settings (language, display options, etc.).",
+    "s2List4": "a workout reminder, if you turn one on: it is scheduled on this phone and is not sent to us;",
     "s2Outro": "This data exists only on your device and is not sent to us automatically.",
     "s3Title": "3. Local storage",
     "s3P1": "All workout and settings data is stored locally on your device. We do not upload it to our servers or have direct access to it.",

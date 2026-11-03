@@ -440,5 +440,18 @@
   "rhythmInsightPraiseVeryDense": "看来你摸到了身体的秘密档位。",
   "rhythmInsightRecentLighter": "最近负荷已经比平时低——主动恢复可以算过了。把节奏拉回来吧。",
   "rhythmInsightAccumulation": "{weeks, plural, =1{这个节奏已经保持了 {weeks} 周。} other{这个节奏已经保持了 {weeks} 周。}}",
-  "rhythmInsightDisclaimer": "这是建议，不是医嘱。如果自我感觉正常，不必改任何东西。"
+  "rhythmInsightDisclaimer": "这是建议，不是医嘱。如果自我感觉正常，不必改任何东西。",
+  "remindBeforePrefix": "提前",
+  "remindBeforeSuffix": "分钟提醒",
+  "remindPermissionDenied": "通知已关闭，所以这条提醒不会送达。可以在手机设置里允许通知。",
+  "reminderEveningTitle": "明天",
+  "reminderEveningBody": "{count, plural, other{明天有 {count} 次训练，第一次 {time} 开始。}}",
+  "reminderAlarmTitle": "训练",
+  "reminderAlarmBody": "{name}，{time} 开始。",
+  "reminderChannelEvening": "前一天晚上的提醒",
+  "reminderChannelEveningDesc": "如果明天有训练，21:00 提醒一次。",
+  "reminderChannelAlarm": "训练闹钟",
+  "reminderChannelAlarmDesc": "你打开后，会在训练前不久响一次。",
+  "instructionReminderTitle": "提醒",
+  "instructionReminderDesc": "有训练的前一天晚上 21:00，应用会说明明天有几次训练、第一次几点开始。训练前几分钟的闹钟默认关闭，要在选择时间时自己打开。两条提醒都只排在手机上，不会发到别处。"
 }

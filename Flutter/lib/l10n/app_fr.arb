@@ -440,5 +440,18 @@
   "rhythmInsightPraiseVeryDense": "On dirait que vous avez trouvé le mode secret de l'organisme.",
   "rhythmInsightRecentLighter": "La charge a déjà baissé récemment — la récupération active peut compter comme faite. Reprenez le rythme.",
   "rhythmInsightAccumulation": "{weeks, plural, =1{Ce rythme tient déjà depuis {weeks} semaine.} other{Ce rythme tient déjà depuis {weeks} semaines.}}",
-  "rhythmInsightDisclaimer": "C'est une recommandation, pas un avis médical. Si vous vous sentez bien, rien n'est à changer."
+  "rhythmInsightDisclaimer": "C'est une recommandation, pas un avis médical. Si vous vous sentez bien, rien n'est à changer.",
+  "remindBeforePrefix": "Prévenir",
+  "remindBeforeSuffix": "minutes avant",
+  "remindPermissionDenied": "Les notifications sont coupées, donc ce rappel n'arrivera pas. Vous pouvez les autoriser dans les réglages du téléphone.",
+  "reminderEveningTitle": "Demain",
+  "reminderEveningBody": "{count, plural, =1{Demain, 1 séance. Elle commence à {time}.} other{Demain, {count} séances. La première commence à {time}.}}",
+  "reminderAlarmTitle": "Séance",
+  "reminderAlarmBody": "{name} commence à {time}.",
+  "reminderChannelEvening": "Rappel de la veille",
+  "reminderChannelEveningDesc": "À 21:00 s'il y a des séances demain.",
+  "reminderChannelAlarm": "Alarme de séance",
+  "reminderChannelAlarmDesc": "Un signal peu avant une séance que vous avez activée.",
+  "instructionReminderTitle": "Rappels",
+  "instructionReminderDesc": "La veille d'un jour avec des séances, à 21:00, l'app indique combien il y en a demain et à quelle heure commence la première. Une alarme quelques minutes avant une séance reste éteinte tant que vous ne l'activez pas en choisissant l'heure. Les deux sont programmées sur le téléphone et ne partent nulle part."
 }

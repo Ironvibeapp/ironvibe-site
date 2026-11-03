@@ -1419,4 +1419,53 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get rhythmInsightDisclaimer => '这是建议，不是医嘱。如果自我感觉正常，不必改任何东西。';
+
+  @override
+  String get remindBeforePrefix => '提前';
+
+  @override
+  String get remindBeforeSuffix => '分钟提醒';
+
+  @override
+  String get remindPermissionDenied => '通知已关闭，所以这条提醒不会送达。可以在手机设置里允许通知。';
+
+  @override
+  String get reminderEveningTitle => '明天';
+
+  @override
+  String reminderEveningBody(int count, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '明天有 $count 次训练，第一次 $time 开始。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderAlarmTitle => '训练';
+
+  @override
+  String reminderAlarmBody(String name, String time) {
+    return '$name，$time 开始。';
+  }
+
+  @override
+  String get reminderChannelEvening => '前一天晚上的提醒';
+
+  @override
+  String get reminderChannelEveningDesc => '如果明天有训练，21:00 提醒一次。';
+
+  @override
+  String get reminderChannelAlarm => '训练闹钟';
+
+  @override
+  String get reminderChannelAlarmDesc => '你打开后，会在训练前不久响一次。';
+
+  @override
+  String get instructionReminderTitle => '提醒';
+
+  @override
+  String get instructionReminderDesc =>
+      '有训练的前一天晚上 21:00，应用会说明明天有几次训练、第一次几点开始。训练前几分钟的闹钟默认关闭，要在选择时间时自己打开。两条提醒都只排在手机上，不会发到别处。';
 }

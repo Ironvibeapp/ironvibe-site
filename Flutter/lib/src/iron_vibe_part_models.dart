@@ -293,6 +293,9 @@ class TrainerSession {
   bool isScheduledPlan;
   bool isCompleted;
   bool isImportedHistory;
+  /// Minutes before [dateTime] to ring a local alarm. Null means the coach
+  /// did not ask for one. The evening digest does not use this field.
+  int? remindMinutesBefore;
   TrainerSession(
     this.dateTime,
     this.clientName,
@@ -305,6 +308,7 @@ class TrainerSession {
     this.isScheduledPlan = false,
     this.isCompleted = false,
     this.isImportedHistory = false,
+    this.remindMinutesBefore,
   });
 
   Map<String, dynamic> toJson() => {
@@ -319,6 +323,7 @@ class TrainerSession {
     if (isScheduledPlan) 'isScheduledPlan': true,
     'isCompleted': isCompleted,
     if (isImportedHistory) 'isImportedHistory': true,
+    if (remindMinutesBefore != null) 'remindMinutesBefore': remindMinutesBefore,
   };
 
   factory TrainerSession.fromJson(Map<String, dynamic> json) {
@@ -365,6 +370,7 @@ class TrainerSession {
       isScheduledPlan: isScheduledPlan,
       isCompleted: isCompleted,
       isImportedHistory: json['isImportedHistory'] == true,
+      remindMinutesBefore: ironVibeSanitizeRemindMinutes(json['remindMinutesBefore']),
     );
   }
 }
@@ -562,6 +568,7 @@ TrainerSession ironVibeNewTrainerSession({
   bool isLiveCurrent = false,
   bool isScheduledPlan = false,
   bool isCompleted = false,
+  int? remindMinutesBefore,
 }) {
   final owner = ironVibeFindClient(name: clientName, id: clientId);
   return TrainerSession(
@@ -575,6 +582,7 @@ TrainerSession ironVibeNewTrainerSession({
     isLiveCurrent: isLiveCurrent,
     isScheduledPlan: isScheduledPlan,
     isCompleted: isCompleted,
+    remindMinutesBefore: ironVibeSanitizeRemindMinutes(remindMinutesBefore),
   );
 }
 
@@ -608,6 +616,7 @@ void ironVibeSyncTrainerSessionInSchedule(TrainerSession session) {
     s.isScheduledPlan = session.isScheduledPlan;
     s.isCompleted = session.isCompleted;
     s.isImportedHistory = session.isImportedHistory;
+    s.remindMinutesBefore = session.remindMinutesBefore;
     return;
   }
 }
@@ -1148,6 +1157,7 @@ class DataService {
       _keyExerciseMuscleGroups,
       jsonEncode(ironVibeExerciseMuscleGroupsToJsonMap()),
     );
+    ironVibeRemindersAfterDataSaved();
   }
 
   static Future<void> saveActiveWorkoutDraft(ActiveWorkoutDraft draft) async {

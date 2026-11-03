@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -17,6 +17,10 @@ import 'package:uuid/uuid.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:timezone/data/latest.dart' as tzdata;
+import 'package:timezone/timezone.dart' as tz;
 import 'dart:ui' as ui;
 import 'l10n/app_localizations.dart';
 import 'src/timer_sound_player.dart';
@@ -33,9 +37,9 @@ part 'src/iron_vibe_part_favorite_exercises.dart';
 part 'src/iron_vibe_part_app.dart';
 part 'src/iron_vibe_part_instructions.dart';
 part 'src/iron_vibe_part_backup.dart';
+part 'src/iron_vibe_part_reminders.dart';
 part 'src/iron_vibe_part_trainer.dart';
 part 'src/iron_vibe_part_session_print.dart';
 part 'src/iron_vibe_part_rhythm.dart';
 part 'src/iron_vibe_part_rhythm_insight.dart';
 part 'src/iron_vibe_part_athlete.dart';
-

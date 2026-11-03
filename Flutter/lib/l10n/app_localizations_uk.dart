@@ -1478,4 +1478,58 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get rhythmInsightDisclaimer =>
       'Це рекомендація, а не медична порада. Якщо почуваєтесь добре — нічого змінювати не потрібно.';
+
+  @override
+  String get remindBeforePrefix => 'Додати сповіщення за';
+
+  @override
+  String get remindBeforeSuffix => 'хвилин';
+
+  @override
+  String get remindPermissionDenied =>
+      'Сповіщення вимкнені, тож нагадування не надійде. Їх можна дозволити в налаштуваннях телефона.';
+
+  @override
+  String get reminderEveningTitle => 'Завтра';
+
+  @override
+  String reminderEveningBody(int count, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Завтра у вас $count тренувань, перше почнеться о $time.',
+      many: 'Завтра у вас $count тренувань, перше почнеться о $time.',
+      few: 'Завтра у вас $count тренування, перше почнеться о $time.',
+      one: 'Завтра у вас одне тренування, воно почнеться о $time.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderAlarmTitle => 'Тренування';
+
+  @override
+  String reminderAlarmBody(String name, String time) {
+    return '$name: початок о $time.';
+  }
+
+  @override
+  String get reminderChannelEvening => 'Нагадування напередодні';
+
+  @override
+  String get reminderChannelEveningDesc => 'О 21:00, якщо завтра є тренування.';
+
+  @override
+  String get reminderChannelAlarm => 'Будильник тренування';
+
+  @override
+  String get reminderChannelAlarmDesc =>
+      'Сигнал незадовго до тренування, якщо ви його увімкнули.';
+
+  @override
+  String get instructionReminderTitle => 'Нагадування';
+
+  @override
+  String get instructionReminderDesc =>
+      'Увечері напередодні дня з тренуваннями, о 21:00, застосунок пише, скільки занять завтра і о котрій почнеться перше. Окремий сигнал за кілька хвилин до тренування вимкнений, поки ви самі не ввімкнете його під час вибору часу. Обидва нагадування ставляться на телефоні і нікуди не надсилаються.';
 }

@@ -440,5 +440,18 @@
   "rhythmInsightPraiseVeryDense": "Sieht so aus, als hättest du den geheimen Modus des Körpers gefunden.",
   "rhythmInsightRecentLighter": "Die Last war kürzlich schon niedriger — aktive Erholung kann als erledigt gelten. Tempo wieder aufnehmen.",
   "rhythmInsightAccumulation": "{weeks, plural, =1{Dieser Rhythmus hält schon {weeks} Woche.} other{Dieser Rhythmus hält schon {weeks} Wochen.}}",
-  "rhythmInsightDisclaimer": "Das ist eine Empfehlung, kein medizinischer Rat. Wenn du dich gut fühlst, muss sich nichts ändern."
+  "rhythmInsightDisclaimer": "Das ist eine Empfehlung, kein medizinischer Rat. Wenn du dich gut fühlst, muss sich nichts ändern.",
+  "remindBeforePrefix": "Benachrichtigung",
+  "remindBeforeSuffix": "Minuten vorher",
+  "remindPermissionDenied": "Benachrichtigungen sind aus, deshalb kommt diese Erinnerung nicht an. Du kannst sie in den Telefoneinstellungen erlauben.",
+  "reminderEveningTitle": "Morgen",
+  "reminderEveningBody": "{count, plural, =1{Morgen steht 1 Training an. Es beginnt um {time}.} other{Morgen stehen {count} Trainings an. Das erste beginnt um {time}.}}",
+  "reminderAlarmTitle": "Training",
+  "reminderAlarmBody": "{name} beginnt um {time}.",
+  "reminderChannelEvening": "Erinnerung am Vorabend",
+  "reminderChannelEveningDesc": "Um 21:00, wenn morgen Trainings anstehen.",
+  "reminderChannelAlarm": "Trainingswecker",
+  "reminderChannelAlarmDesc": "Ein Signal kurz vor einem Training, das du eingeschaltet hast.",
+  "instructionReminderTitle": "Erinnerungen",
+  "instructionReminderDesc": "Am Abend vor einem Tag mit Trainings, um 21:00, sagt die App, wie viele Einheiten morgen sind und wann die erste beginnt. Ein eigener Wecker ein paar Minuten vor einer Einheit bleibt aus, bis du ihn beim Wählen der Uhrzeit einschaltest. Beides wird auf dem Telefon geplant und nirgendwohin geschickt."
 }

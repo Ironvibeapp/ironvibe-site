@@ -540,5 +540,38 @@
       }
     }
   },
-  "rhythmInsightDisclaimer": "This is a recommendation, not medical advice. If you feel fine, nothing has to change."
+  "rhythmInsightDisclaimer": "This is a recommendation, not medical advice. If you feel fine, nothing has to change.",
+  "remindBeforePrefix": "Add a notification",
+  "remindBeforeSuffix": "minutes before",
+  "remindPermissionDenied": "Notifications are off, so this reminder will not arrive. You can allow them in the phone settings.",
+  "reminderEveningTitle": "Tomorrow",
+  "reminderEveningBody": "{count, plural, =1{Tomorrow you have 1 workout. It starts at {time}.} other{Tomorrow you have {count} workouts. The first starts at {time}.}}",
+  "reminderAlarmTitle": "Workout",
+  "reminderAlarmBody": "{name} starts at {time}.",
+  "reminderChannelEvening": "Day-before reminder",
+  "reminderChannelEveningDesc": "At 21:00 on the evening before a day with workouts.",
+  "reminderChannelAlarm": "Workout alarm",
+  "reminderChannelAlarmDesc": "A signal shortly before a workout you turned on.",
+  "instructionReminderTitle": "Reminders",
+  "instructionReminderDesc": "The evening before a day with scheduled workouts, at 21:00, the app says how many sessions are tomorrow and when the first one starts. A separate alarm a few minutes before a session stays off until you turn it on while choosing the time. Both are scheduled on the phone and are not sent anywhere.",
+  "@reminderEveningBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@reminderAlarmBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  }
 }

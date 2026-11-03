@@ -1481,4 +1481,56 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get rhythmInsightDisclaimer =>
       'Isto é uma recomendação, não um conselho médico. Se te sentes bem, não é preciso mudar nada.';
+
+  @override
+  String get remindBeforePrefix => 'Avisar';
+
+  @override
+  String get remindBeforeSuffix => 'minutos antes';
+
+  @override
+  String get remindPermissionDenied =>
+      'As notificações estão desligadas, por isso este aviso não chega. Podes permiti-las nas definições do telefone.';
+
+  @override
+  String get reminderEveningTitle => 'Amanhã';
+
+  @override
+  String reminderEveningBody(int count, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Amanhã há $count treinos. O primeiro começa às $time.',
+      one: 'Amanhã há 1 treino. Começa às $time.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderAlarmTitle => 'Treino';
+
+  @override
+  String reminderAlarmBody(String name, String time) {
+    return '$name começa às $time.';
+  }
+
+  @override
+  String get reminderChannelEvening => 'Aviso da véspera';
+
+  @override
+  String get reminderChannelEveningDesc => 'Às 21:00 se amanhã houver treinos.';
+
+  @override
+  String get reminderChannelAlarm => 'Alarme do treino';
+
+  @override
+  String get reminderChannelAlarmDesc =>
+      'Um sinal pouco antes de um treino que tenhas ligado.';
+
+  @override
+  String get instructionReminderTitle => 'Avisos';
+
+  @override
+  String get instructionReminderDesc =>
+      'Na véspera de um dia com treinos, às 21:00, a app diz quantas sessões há amanhã e a que horas começa a primeira. Um alarme alguns minutos antes de uma sessão fica desligado até o ligares ao escolher a hora. Os dois ficam marcados no telefone e não são enviados para lado nenhum.';
 }
