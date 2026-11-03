@@ -157,6 +157,28 @@ void main() {
     expect(ironVibeSanitizeRemindMinutes(15), 15);
   });
 
+  test('a personal workout on the calendar counts toward tomorrow', () {
+    final plans = ironVibePlanReminders(
+      now: DateTime(2026, 11, 3, 18),
+      l10n: en,
+      sessions: const [],
+      personal: [
+        WorkoutLog(
+          DateTime(2026, 11, 4, 8, 30),
+          const [],
+          id: 'me',
+          remindMinutesBefore: 30,
+        ),
+      ],
+    );
+    expect(plans.where((plan) => !plan.alarm), hasLength(1));
+    expect(plans.singleWhere((plan) => plan.alarm).when, DateTime(2026, 11, 4, 8));
+    expect(
+      plans.singleWhere((plan) => !plan.alarm).body,
+      en.reminderEveningBody(1, '08:30'),
+    );
+  });
+
   test('reminder ids stay stable and inside 32 bits', () {
     expect(
       ironVibeSessionReminderId('session-a'),
@@ -170,5 +192,50 @@ void main() {
       ironVibeEveningReminderId(DateTime(2099, 12, 31)),
       lessThan(0x7fffffff),
     );
+  });
+
+  testWidgets('personal calendar shows the reminder switch while picking a time', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(800, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('en'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: ironVibeBuildTheme(Brightness.dark),
+        home: const CalendarScreen(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Add workout'));
+    await tester.pumpAndSettle();
+    expect(find.text('Add a notification'), findsOneWidget);
+    expect(find.text('minutes before'), findsOneWidget);
+  });
+
+  testWidgets('coach calendar shows the reminder switch while picking a time', (
+    tester,
+  ) async {
+    final savedClients = List<Client>.from(clients);
+    clients = [Client('Ann', '')];
+    addTearDown(() => clients = savedClients);
+    await tester.binding.setSurfaceSize(const Size(800, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('en'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: ironVibeBuildTheme(Brightness.dark),
+        home: const TrainerScreen(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Add workout'));
+    await tester.pumpAndSettle();
+    expect(find.text('Add a notification'), findsOneWidget);
+    expect(find.text('minutes before'), findsOneWidget);
   });
 }

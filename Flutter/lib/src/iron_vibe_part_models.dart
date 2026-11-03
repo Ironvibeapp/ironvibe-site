@@ -6,12 +6,14 @@ class WorkoutLog {
   final DateTime date;
   final List<ExerciseLog> exercises;
   String? id;
-  WorkoutLog(this.date, this.exercises, {this.id});
+  int? remindMinutesBefore;
+  WorkoutLog(this.date, this.exercises, {this.id, this.remindMinutesBefore});
 
   Map<String, dynamic> toJson() => {
     if (id != null) 'id': id,
     'date': date.toIso8601String(),
     'exercises': exercises.map((e) => e.toJson()).toList(),
+    if (remindMinutesBefore != null) 'remindMinutesBefore': remindMinutesBefore,
   };
 
   factory WorkoutLog.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class WorkoutLog {
       date,
       exercises,
       id: _jsonOptionalId(json['id']),
+      remindMinutesBefore: ironVibeSanitizeRemindMinutes(json['remindMinutesBefore']),
     );
   }
 }
@@ -555,8 +558,17 @@ Future<bool> ironVibePurgeExpiredUnloggedTrainerSessionsAndSave() async {
   return true;
 }
 
-WorkoutLog ironVibeNewWorkoutLog(DateTime date, List<ExerciseLog> exercises) {
-  return WorkoutLog(date, exercises, id: ironVibeNewEntityId());
+WorkoutLog ironVibeNewWorkoutLog(
+  DateTime date,
+  List<ExerciseLog> exercises, {
+  int? remindMinutesBefore,
+}) {
+  return WorkoutLog(
+    date,
+    exercises,
+    id: ironVibeNewEntityId(),
+    remindMinutesBefore: ironVibeSanitizeRemindMinutes(remindMinutesBefore),
+  );
 }
 
 TrainerSession ironVibeNewTrainerSession({
@@ -1216,7 +1228,12 @@ void _renameExerciseGlobally(String oldName, String newName) {
       if (normalizeExerciseName(ex.name) == o) return ExerciseLog(n, ex.sets, isCardio: ex.isCardio);
       return ex;
     }).toList();
-    return WorkoutLog(w.date, newExercises, id: w.id);
+    return WorkoutLog(
+      w.date,
+      newExercises,
+      id: w.id,
+      remindMinutesBefore: w.remindMinutesBefore,
+    );
   }).toList();
 
   for (var s in trainerSchedule) {

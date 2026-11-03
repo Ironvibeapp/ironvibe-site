@@ -329,7 +329,12 @@ WorkoutLog _normalizeWorkoutLogExerciseNames(WorkoutLog w) {
         ),
       )
       .toList();
-  return WorkoutLog(w.date, exs, id: w.id);
+  return WorkoutLog(
+    w.date,
+    exs,
+    id: w.id,
+    remindMinutesBefore: w.remindMinutesBefore,
+  );
 }
 
 TrainerSession _normalizeTrainerSessionExerciseNames(TrainerSession s) {
