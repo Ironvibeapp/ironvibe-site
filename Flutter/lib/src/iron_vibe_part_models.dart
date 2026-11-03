@@ -399,7 +399,7 @@ bool ironVibeSessionBelongsToClientRecord(TrainerSession s, Client client) {
 }
 
 class TrainerSession {
-  final DateTime dateTime;
+  DateTime dateTime;
   final String clientName;
   String clientLastName;
   String? clientId;
@@ -1506,97 +1506,151 @@ Future<String?> showExerciseReassignPickerDialog(
         return StatefulBuilder(
           builder: (ctx, setModal) {
             final options = _exerciseBankOptionsForQuery(controller.text).toList();
-            return AlertDialog(
+            final media = MediaQuery.of(ctx);
+            final available = media.size.height -
+                media.viewInsets.bottom -
+                media.padding.vertical -
+                16;
+            final bounded = available > 180
+                ? math.min(560.0, available)
+                : math.max(180.0, available);
+            final nameField = TextField(
+              controller: controller,
+              autofocus: true,
+              onChanged: (_) => setModal(() {}),
+              onSubmitted: (_) => trySave(),
+              inputFormatters: [_UpperCaseExerciseNameInputFormatter()],
+              style: TextStyle(color: pal.textPrimary),
+              decoration: InputDecoration(
+                hintText: locale.exerciseHint,
+                filled: true,
+                fillColor: pal.inputFill,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: pal.borderSubtle, width: 0.5),
+                  borderRadius: BorderRadius.circular(kIronVibeRadiusField),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: kIronVibeAccent, width: 1.6),
+                  borderRadius: BorderRadius.all(Radius.circular(kIronVibeRadiusField)),
+                ),
+              ),
+            );
+            return Dialog(
               backgroundColor: pal.dialog,
+              insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
               shape: RoundedRectangleBorder(
                 side: BorderSide(color: pal.borderDefault, width: 0.5),
                 borderRadius: BorderRadius.circular(kIronVibeRadiusDialog),
               ),
-              title: Text(
-                locale.reassignHistoryExerciseTitle,
-                style: TextStyle(color: pal.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              content: SizedBox(
-                width: double.maxFinite,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      locale.reassignHistoryExerciseBody,
-                      style: TextStyle(color: pal.textSecondary, fontSize: 12, height: 1.35),
-                    ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: controller,
-                      autofocus: true,
-                      onChanged: (_) => setModal(() {}),
-                      onSubmitted: (_) => trySave(),
-                      inputFormatters: [_UpperCaseExerciseNameInputFormatter()],
-                      style: TextStyle(color: pal.textPrimary),
-                      decoration: InputDecoration(
-                        hintText: locale.exerciseHint,
-                        filled: true,
-                        fillColor: pal.inputFill,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: pal.borderSubtle, width: 0.5),
-                          borderRadius: BorderRadius.circular(kIronVibeRadiusField),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: kIronVibeAccent, width: 1.6),
-                          borderRadius: BorderRadius.all(Radius.circular(kIronVibeRadiusField)),
-                        ),
-                      ),
-                    ),
-                    if (options.isNotEmpty) ...[
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        height: 200,
-                        child: Material(
-                          color: pal.autocompleteBg,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(color: pal.borderDefault, width: 0.5),
-                            borderRadius: BorderRadius.circular(kIronVibeRadiusDialog),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 420, maxHeight: bounded),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                  child: SizedBox(
+                    width: double.maxFinite,
+                    child: Column(
+                      mainAxisSize: options.isEmpty ? MainAxisSize.min : MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (options.isEmpty) ...[
+                          Text(
+                            locale.reassignHistoryExerciseTitle,
+                            style: TextStyle(
+                              color: pal.textPrimary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          child: ListView.builder(
-                            padding: EdgeInsets.zero,
-                            itemCount: options.length,
-                            itemBuilder: (BuildContext itemContext, int index) {
-                              final String option = options[index];
-                              return InkWell(
-                                onTap: () {
-                                  controller.text = normalizeExerciseName(option);
-                                  controller.selection = TextSelection.fromPosition(
-                                    TextPosition(offset: controller.text.length),
-                                  );
-                                  setModal(() {});
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Text(
-                                    option,
-                                    style: TextStyle(color: pal.textPrimary, fontSize: 13),
+                          const SizedBox(height: 8),
+                          Text(
+                            locale.reassignHistoryExerciseBody,
+                            style: TextStyle(color: pal.textSecondary, fontSize: 12, height: 1.35),
+                          ),
+                          const SizedBox(height: 12),
+                          nameField,
+                        ] else
+                          Expanded(
+                            child: ListView(
+                              padding: EdgeInsets.zero,
+                              children: [
+                                Text(
+                                  locale.reassignHistoryExerciseTitle,
+                                  style: TextStyle(
+                                    color: pal.textPrimary,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              );
-                            },
+                                const SizedBox(height: 8),
+                                Text(
+                                  locale.reassignHistoryExerciseBody,
+                                  style: TextStyle(
+                                    color: pal.textSecondary,
+                                    fontSize: 12,
+                                    height: 1.35,
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                nameField,
+                                const SizedBox(height: 8),
+                                Material(
+                                  color: pal.autocompleteBg,
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(color: pal.borderDefault, width: 0.5),
+                                    borderRadius: BorderRadius.circular(kIronVibeRadiusDialog),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      for (final option in options)
+                                        InkWell(
+                                          onTap: () {
+                                            controller.text = normalizeExerciseName(option);
+                                            controller.selection = TextSelection.fromPosition(
+                                              TextPosition(offset: controller.text.length),
+                                            );
+                                            setModal(() {});
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(12.0),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                option,
+                                                style: TextStyle(color: pal.textPrimary, fontSize: 13),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(ctx),
+                              child: Text(locale.cancel, style: TextStyle(color: pal.textMuted)),
+                            ),
+                            TextButton(
+                              onPressed: trySave,
+                              child: Text(
+                                locale.save,
+                                style: TextStyle(
+                                  color: pal.textPrimary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ],
+                      ],
+                    ),
+                  ),
                 ),
               ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(ctx),
-                  child: Text(locale.cancel, style: TextStyle(color: pal.textMuted)),
-                ),
-                TextButton(
-                  onPressed: trySave,
-                  child: Text(locale.save, style: TextStyle(color: pal.textPrimary, fontWeight: FontWeight.w600)),
-                ),
-              ],
             );
           },
         );

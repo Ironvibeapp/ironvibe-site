@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:fitness_app/l10n/app_localizations.dart';
 import 'package:fitness_app/main.dart';
@@ -7,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const _longName = 'ГОРИЗОНТАЛЬНАЯ ТЯГА К ПОЯСУ ОДНОЙ РУКОЙ';
 
@@ -54,6 +54,10 @@ void _expectCompactNameStyle(TextStyle? style) {
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUp(() {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+  });
 
   test('saved exercise names stay trimmed uppercase', () {
     expect(
@@ -145,19 +149,32 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
 
-    final history = find.textContaining(_longName);
-    expect(history, findsOneWidget);
-    final text = tester.widget<Text>(history);
-    expect(text.maxLines, kIronVibeExerciseNameMaxLines);
-    expect(text.overflow, TextOverflow.ellipsis);
-    _expectCompactNameStyle(text.style);
-    expect(text.data, contains(_longName));
-    expect(text.data, isNot(contains('горизонтальная')));
+    final field = find.byWidgetPredicate(
+      (widget) => widget is TextField && widget.controller?.text == _longName,
+    );
+    expect(field, findsOneWidget);
+    final textField = tester.widget<TextField>(field);
+    expect(textField.maxLines, kIronVibeExerciseNameMaxLines);
+    expect(textField.minLines, 1);
+    _expectCompactNameStyle(textField.style);
 
-    final paragraph = tester.renderObject<RenderParagraph>(history);
-    expect(paragraph.didExceedMaxLines, isFalse);
+    final editableElement = tester.element(
+      find.descendant(of: field, matching: find.byType(EditableText)),
+    );
+    late RenderEditable editable;
+    void visit(RenderObject object) {
+      if (object is RenderEditable) {
+        editable = object;
+        return;
+      }
+      object.visitChildren(visit);
+    }
+    visit(editableElement.renderObject!);
+    expect(editable.text?.toPlainText(), contains(_longName));
+    expect(editable.text?.toPlainText(), isNot(contains('горизонтальная')));
+    expect(editable.maxLines, kIronVibeExerciseNameMaxLines);
     final oneLine = kIronVibeExerciseNameFontSize * 1.2;
-    expect(paragraph.size.height, greaterThan(oneLine * 1.4));
-    expect(paragraph.size.height, lessThanOrEqualTo(oneLine * 2.15));
+    expect(editable.size.height, greaterThan(oneLine * 1.4));
+    expect(editable.size.height, lessThanOrEqualTo(oneLine * 2.15));
   });
 }

@@ -1216,6 +1216,12 @@ abstract class AppLocalizations {
   /// **'Time'**
   String get time;
 
+  /// No description provided for @editSessionTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Change time'**
+  String get editSessionTime;
+
   /// No description provided for @rest.
   ///
   /// In en, this message translates to:

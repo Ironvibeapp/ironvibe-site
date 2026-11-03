@@ -597,6 +597,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get time => 'समय';
 
   @override
+  String get editSessionTime => 'समय बदलें';
+
+  @override
   String get rest => 'आराम';
 
   @override

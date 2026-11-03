@@ -577,6 +577,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get time => '时间';
 
   @override
+  String get editSessionTime => '更改时间';
+
+  @override
   String get rest => '休息';
 
   @override

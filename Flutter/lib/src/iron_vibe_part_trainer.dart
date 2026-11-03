@@ -54,6 +54,118 @@ Future<void> ironVibeOpenTrainerSession(
   );
 }
 
+/// A logged or imported session keeps its clock. A plan can still move.
+bool ironVibeTrainerSessionTimeIsEditable(TrainerSession session) {
+  if (session.isImportedHistory) return false;
+  return !ironVibeTrainerSessionIsCompleted(session);
+}
+
+/// Same calendar day, new clock. Exercises, note, and the reminder offset stay.
+void ironVibeApplyTrainerSessionTime(TrainerSession session, TimeOfDay time) {
+  final current = session.dateTime;
+  session.dateTime = DateTime(
+    current.year,
+    current.month,
+    current.day,
+    time.hour,
+    time.minute,
+  );
+}
+
+Future<bool> ironVibeEditTrainerSessionTime(
+  BuildContext context,
+  TrainerSession session,
+) async {
+  if (!ironVibeTrainerSessionTimeIsEditable(session)) return false;
+  var selected = TimeOfDay.fromDateTime(session.dateTime);
+  final saved = await showDialog<bool>(
+    context: context,
+    builder: (dialogCtx) {
+      return StatefulBuilder(
+        builder: (context, setDialogState) {
+          final pal = IronVibePalette.of(context);
+          final l = AppLocalizations.of(context)!;
+          final clock =
+              '${selected.hour.toString().padLeft(2, '0')}:${selected.minute.toString().padLeft(2, '0')}';
+          return AlertDialog(
+            backgroundColor: pal.dialog,
+            shape: ironVibeDialogShape(pal),
+            title: Text(
+              l.editSessionTime,
+              style: TextStyle(
+                color: pal.textPrimary,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: InkWell(
+              onTap: () async {
+                final time = await showTimePicker(
+                  context: context,
+                  initialTime: selected,
+                  builder: (c2, child) => ironVibeTimePickerTheme(c2, child),
+                );
+                if (time != null) setDialogState(() => selected = time);
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 15,
+                  horizontal: 10,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(color: pal.borderSubtle, width: 0.5),
+                  color: pal.inputFill,
+                  borderRadius: BorderRadius.circular(kIronVibeRadiusField),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(l.time, style: TextStyle(color: pal.textMuted)),
+                    Text(
+                      clock,
+                      style: TextStyle(
+                        color: pal.textPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text(l.cancel, style: TextStyle(color: pal.textMuted)),
+              ),
+              TextButton(
+                onPressed: () async {
+                  final same =
+                      selected.hour == session.dateTime.hour &&
+                      selected.minute == session.dateTime.minute;
+                  if (!same) {
+                    ironVibeApplyTrainerSessionTime(session, selected);
+                    await DataService.saveData();
+                  }
+                  if (!context.mounted) return;
+                  Navigator.pop(context, !same);
+                },
+                child: Text(
+                  l.save,
+                  style: TextStyle(
+                    color: pal.textPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+  return saved == true;
+}
+
 Future<bool> ironVibeConfirmDeleteTrainerSessionDialog(
   BuildContext context, {
   required bool scheduledNotLogged,
@@ -504,6 +616,11 @@ class _TrainerScreenState extends State<TrainerScreen> {
     if (created != null) setState(() {});
   }
 
+  Future<void> _editSessionTime(TrainerSession session) async {
+    final changed = await ironVibeEditTrainerSessionTime(context, session);
+    if (changed && mounted) setState(() {});
+  }
+
   List<TrainerSession> _getSessionsForDate(DateTime date) {
     return trainerSchedule
         .where(ironVibeTrainerSessionVisibleOnCoachCalendar)
@@ -721,6 +838,10 @@ class _TrainerScreenState extends State<TrainerScreen> {
                           session: session,
                           showClientName: true,
                           onTap: () => _openSession(session),
+                          onEditTime:
+                              ironVibeTrainerSessionTimeIsEditable(session)
+                              ? () => _editSessionTime(session)
+                              : null,
                         ),
                   ],
                 ),
@@ -800,11 +921,13 @@ class _TrainerSessionCard extends StatelessWidget {
   final TrainerSession session;
   final bool showClientName;
   final VoidCallback onTap;
+  final VoidCallback? onEditTime;
   final String? customTitle;
 
   const _TrainerSessionCard({
     required this.session,
     required this.onTap,
+    this.onEditTime,
     this.showClientName = false,
     this.customTitle,
   });
@@ -827,10 +950,12 @@ class _TrainerSessionCard extends StatelessWidget {
       detail = subtitle;
     }
 
+    final l = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: IronVibePressScale(
         onPressed: onTap,
+        onLongPress: onEditTime,
         child: Container(
           padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
           decoration: ironVibeElevatedCardDecoration(pal),
@@ -874,6 +999,22 @@ class _TrainerSessionCard extends StatelessWidget {
                   ],
                 ),
               ),
+              if (onEditTime != null)
+                IconButton(
+                  visualDensity: VisualDensity.compact,
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(
+                    minWidth: 36,
+                    minHeight: 36,
+                  ),
+                  tooltip: l.editSessionTime,
+                  onPressed: onEditTime,
+                  icon: Icon(
+                    Icons.edit_outlined,
+                    size: 18,
+                    color: pal.textMuted,
+                  ),
+                ),
               Icon(
                 ironVibeTrainerSessionStatusIcon(session),
                 size: 24,
@@ -885,6 +1026,39 @@ class _TrainerSessionCard extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _sessionWhenLine(
+  BuildContext context, {
+  required String dateStr,
+  required String timeStr,
+  required bool editable,
+  required VoidCallback onEdit,
+}) {
+  final pal = IronVibePalette.of(context);
+  final l = AppLocalizations.of(context)!;
+  final label = Text(
+    '$dateStr · $timeStr',
+    textAlign: TextAlign.center,
+    style: TextStyle(color: pal.textMuted, fontSize: 13),
+  );
+  if (!editable) return label;
+  return GestureDetector(
+    onTap: onEdit,
+    onLongPress: onEdit,
+    behavior: HitTestBehavior.opaque,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        label,
+        const SizedBox(width: 6),
+        Tooltip(
+          message: l.editSessionTime,
+          child: Icon(Icons.edit_outlined, size: 14, color: pal.textMuted),
+        ),
+      ],
+    ),
+  );
 }
 
 class TrainerSessionEditor extends StatefulWidget {
@@ -1280,6 +1454,14 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
     await DataService.saveData();
   }
 
+  Future<void> _editSessionTime() async {
+    final changed = await ironVibeEditTrainerSessionTime(
+      context,
+      widget.session,
+    );
+    if (changed && mounted) setState(() {});
+  }
+
   Future<void> _setSessionCardio(bool cardio) async {
     if (_isCardio == cardio) return;
     if (ironVibeDraftHasOpposingModeInput(
@@ -1298,6 +1480,14 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
     widget.session.exercises = _logsFromCurrentDraft(
       keepPlanPlaceholders: keepPlanPlaceholders,
     );
+    if (widget.mode == TrainerSessionUiMode.history &&
+        !widget.session.isImportedHistory) {
+      for (final log in widget.session.exercises) {
+        if (ironVibeExerciseLogHasLoggedData(log)) {
+          ensureExerciseInBank(log.name);
+        }
+      }
+    }
     ironVibeSyncTrainerSessionInSchedule(widget.session);
   }
 
@@ -1454,10 +1644,12 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
           ),
         ),
         const SizedBox(height: 4),
-        Text(
-          '$dateStr · $timeStr',
-          textAlign: TextAlign.center,
-          style: TextStyle(color: pal.textMuted, fontSize: 13),
+        _sessionWhenLine(
+          context,
+          dateStr: dateStr,
+          timeStr: timeStr,
+          editable: ironVibeTrainerSessionTimeIsEditable(widget.session),
+          onEdit: _editSessionTime,
         ),
         if (widget.mode != TrainerSessionUiMode.history &&
             widget.session.dateTime.isAfter(DateTime.now())) ...[

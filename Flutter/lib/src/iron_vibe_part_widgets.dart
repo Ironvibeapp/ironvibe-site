@@ -720,12 +720,14 @@ class IronVibePinnedHeaderDelegate extends SliverPersistentHeaderDelegate {
 class IronVibePressScale extends StatefulWidget {
   final Widget child;
   final VoidCallback onPressed;
+  final VoidCallback? onLongPress;
   final bool mediumHaptic;
 
   const IronVibePressScale({
     super.key,
     required this.child,
     required this.onPressed,
+    this.onLongPress,
     this.mediumHaptic = false,
   });
 
@@ -767,6 +769,13 @@ class _IronVibePressScaleState extends State<IronVibePressScale>
         }
         widget.onPressed();
       },
+      onLongPress: widget.onLongPress == null
+          ? null
+          : () {
+              _press.reverse();
+              HapticFeedback.mediumImpact();
+              widget.onLongPress!();
+            },
       child: AnimatedBuilder(
         animation: _press,
         builder: (context, child) {
@@ -1928,6 +1937,12 @@ class ExerciseCard extends StatefulWidget {
   /// Когда задано, долгое нажатие на поле имени — смена упражнения только для этой сессии (тренер), без глобального переименования.
   final Future<void> Function()? onLongPressReassignExercise;
 
+  /// Поставить курсор в название, когда карточка только что добавлена.
+  final bool autofocusName;
+
+  /// Поле названия потеряло фокус. Имя в этот момент уже в [ExerciseData.nameController].
+  final VoidCallback? onExerciseNameCommitted;
+
   /// Удаление карточки из текущей тренировки (тренер и клиент).
   final VoidCallback? onRemove;
 
@@ -1955,6 +1970,8 @@ class ExerciseCard extends StatefulWidget {
     this.onDraftChanged,
     this.sessionPrHighlight = IronVibeSessionPrHighlight.none,
     this.onLongPressReassignExercise,
+    this.autofocusName = false,
+    this.onExerciseNameCommitted,
     this.onRemove,
     this.previousSetsAsHints = false,
     this.excludeTrainerSession,
@@ -2019,6 +2036,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
     final node = _exerciseNameFieldFocus;
     if (node == null || node.hasFocus) return;
     _refreshClientPreviousHints();
+    widget.onExerciseNameCommitted?.call();
     unawaited(_maybePromptMuscleGroup());
   }
 
@@ -2385,6 +2403,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                     child: TextField(
                       controller: controller,
                       focusNode: focusNode,
+                      autofocus: widget.autofocusName,
                       onEditingComplete: () {
                         onEditingComplete();
                         _refreshClientPreviousHints();

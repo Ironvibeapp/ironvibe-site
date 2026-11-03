@@ -600,6 +600,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get time => 'Zeit';
 
   @override
+  String get editSessionTime => 'Uhrzeit ändern';
+
+  @override
   String get rest => 'Pause';
 
   @override

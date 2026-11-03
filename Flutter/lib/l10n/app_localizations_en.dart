@@ -597,6 +597,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get time => 'Time';
 
   @override
+  String get editSessionTime => 'Change time';
+
+  @override
   String get rest => 'Rest';
 
   @override

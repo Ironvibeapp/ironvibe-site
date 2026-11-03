@@ -599,6 +599,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get time => 'Czas';
 
   @override
+  String get editSessionTime => 'Zmień godzinę';
+
+  @override
   String get rest => 'Odpoczynek';
 
   @override

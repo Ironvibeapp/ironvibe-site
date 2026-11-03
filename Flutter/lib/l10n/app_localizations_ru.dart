@@ -598,6 +598,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get time => 'Время';
 
   @override
+  String get editSessionTime => 'Изменить время';
+
+  @override
   String get rest => 'Отдых';
 
   @override

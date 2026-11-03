@@ -600,6 +600,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get time => 'Tempo';
 
   @override
+  String get editSessionTime => 'Alterar a hora';
+
+  @override
   String get rest => 'Descanso';
 
   @override

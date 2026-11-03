@@ -596,6 +596,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get time => 'Час';
 
   @override
+  String get editSessionTime => 'Змінити час';
+
+  @override
   String get rest => 'Відпочинок';
 
   @override

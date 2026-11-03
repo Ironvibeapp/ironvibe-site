@@ -601,6 +601,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get time => 'Tiempo';
 
   @override
+  String get editSessionTime => 'Cambiar la hora';
+
+  @override
   String get rest => 'Descanso';
 
   @override

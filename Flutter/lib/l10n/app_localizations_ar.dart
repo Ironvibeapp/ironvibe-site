@@ -591,6 +591,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get time => 'الوقت';
 
   @override
+  String get editSessionTime => 'تغيير الوقت';
+
+  @override
   String get rest => 'راحة';
 
   @override
