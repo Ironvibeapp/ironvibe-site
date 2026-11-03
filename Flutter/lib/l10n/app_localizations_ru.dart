@@ -1480,4 +1480,59 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get rhythmInsightDisclaimer =>
       'Это рекомендация, а не медицинский совет. Если чувствуете себя хорошо — менять ничего не нужно.';
+
+  @override
+  String get remindBeforePrefix => 'Добавить уведомление за';
+
+  @override
+  String get remindBeforeSuffix => 'минут';
+
+  @override
+  String get remindPermissionDenied =>
+      'Уведомления выключены, поэтому напоминание не придёт. Их можно разрешить в настройках телефона.';
+
+  @override
+  String get reminderEveningTitle => 'Завтра';
+
+  @override
+  String reminderEveningBody(int count, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Завтра у вас $count тренировок, первая начнётся в $time.',
+      many: 'Завтра у вас $count тренировок, первая начнётся в $time.',
+      few: 'Завтра у вас $count тренировки, первая начнётся в $time.',
+      one: 'Завтра у вас одна тренировка, она начнётся в $time.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderAlarmTitle => 'Тренировка';
+
+  @override
+  String reminderAlarmBody(String name, String time) {
+    return '$name: начало в $time.';
+  }
+
+  @override
+  String get reminderChannelEvening => 'Напоминание накануне';
+
+  @override
+  String get reminderChannelEveningDesc =>
+      'В 21:00, если завтра есть тренировки.';
+
+  @override
+  String get reminderChannelAlarm => 'Будильник тренировки';
+
+  @override
+  String get reminderChannelAlarmDesc =>
+      'Сигнал незадолго до тренировки, если вы его включили.';
+
+  @override
+  String get instructionReminderTitle => 'Напоминания';
+
+  @override
+  String get instructionReminderDesc =>
+      'Вечером накануне дня с тренировками, в 21:00, приложение пишет, сколько занятий завтра и во сколько начнётся первое. Отдельный сигнал за несколько минут до тренировки выключен, пока вы сами не включите его при выборе времени. Оба напоминания ставятся на телефоне и никуда не отправляются.';
 }

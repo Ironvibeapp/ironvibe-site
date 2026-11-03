@@ -490,6 +490,7 @@ Future<void> _importFromJson(BuildContext context, bool isTrainer) async {
           isScheduledPlan: s.isScheduledPlan,
           isCompleted: s.isCompleted,
           isImportedHistory: s.isImportedHistory,
+          remindMinutesBefore: s.remindMinutesBefore,
         ),
     ];
     final savedBank = List<String>.from(exerciseBank);

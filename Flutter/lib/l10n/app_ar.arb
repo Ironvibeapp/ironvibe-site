@@ -540,5 +540,18 @@
       }
     }
   },
-  "rhythmInsightDisclaimer": "هذه توصية لا نصيحة طبية. إذا كنت بخير، لا شيء يجب أن يتغيّر."
+  "rhythmInsightDisclaimer": "هذه توصية لا نصيحة طبية. إذا كنت بخير، لا شيء يجب أن يتغيّر.",
+  "remindBeforePrefix": "أضف تنبيهًا قبل",
+  "remindBeforeSuffix": "دقيقة",
+  "remindPermissionDenied": "الإشعارات متوقفة، لذا لن يصل هذا التنبيه. يمكن السماح بها من إعدادات الهاتف.",
+  "reminderEveningTitle": "غدًا",
+  "reminderEveningBody": "{count, plural, zero{غدًا لا توجد تمارين.} one{غدًا تمرين واحد، يبدأ في {time}.} two{غدًا تمرينان، الأول يبدأ في {time}.} few{غدًا {count} تمارين، الأول يبدأ في {time}.} many{غدًا {count} تمرينًا، الأول يبدأ في {time}.} other{غدًا {count} تمرين، الأول يبدأ في {time}.}}",
+  "reminderAlarmTitle": "تمرين",
+  "reminderAlarmBody": "{name} يبدأ في {time}.",
+  "reminderChannelEvening": "تذكير مساء اليوم السابق",
+  "reminderChannelEveningDesc": "في 21:00 إذا كان الغد فيه تمارين.",
+  "reminderChannelAlarm": "منبه التمرين",
+  "reminderChannelAlarmDesc": "إشارة قبل التمرين بقليل، إذا فعّلتها.",
+  "instructionReminderTitle": "التذكيرات",
+  "instructionReminderDesc": "مساء اليوم السابق ليوم فيه تمارين، عند 21:00، يخبرك التطبيق كم تمرينًا غدًا ومتى يبدأ الأول. منبّه قبل التمرين بدقائق يبقى مطفأً إلى أن تشغّله أنت عند اختيار الوقت. الاثنان يُجدولان على الهاتف ولا يُرسلان إلى أي مكان."
 }

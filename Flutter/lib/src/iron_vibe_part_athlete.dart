@@ -283,6 +283,7 @@ class WorkoutSessionScreen extends StatefulWidget {
   /// When provided, the workout is saved with this exact timestamp,
   /// enabling logging into a specific calendar day.
   final DateTime? targetDate;
+  final int? remindMinutesBefore;
   final ActiveWorkoutDraft? restoredDraft;
   final List<String>? initialExerciseNames;
   final List<ExerciseLog>? initialExercises;
@@ -293,6 +294,7 @@ class WorkoutSessionScreen extends StatefulWidget {
   const WorkoutSessionScreen({
     super.key,
     this.targetDate,
+    this.remindMinutesBefore,
     this.restoredDraft,
     this.initialExerciseNames,
     this.initialExercises,
@@ -525,7 +527,11 @@ class _WorkoutSessionScreenState extends State<WorkoutSessionScreen>
 
     if (logs.isNotEmpty) {
       workoutHistory.add(
-        ironVibeNewWorkoutLog(widget.targetDate ?? DateTime.now(), logs),
+        ironVibeNewWorkoutLog(
+          widget.targetDate ?? DateTime.now(),
+          logs,
+          remindMinutesBefore: widget.remindMinutesBefore,
+        ),
       );
     }
 
@@ -863,34 +869,149 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   Future<void> _addWorkoutOnSelectedDate() async {
     final now = DateTime.now();
-    final isToday =
-        _selectedDate.year == now.year &&
-        _selectedDate.month == now.month &&
-        _selectedDate.day == now.day;
-    final initialTime = isToday
+    final isToday = ironVibeIsSameCalendarDay(_selectedDate, now);
+    var selectedTime = isToday
         ? TimeOfDay(hour: now.hour, minute: now.minute)
         : const TimeOfDay(hour: 12, minute: 0);
+    var remind = false;
+    var remindMinutes = kIronVibeDefaultRemindMinutes;
+    var reminderDenied = false;
+    final hostContext = context;
 
-    final time = await showTimePicker(
+    final picked = await showDialog<({TimeOfDay time, int? minutes})>(
       context: context,
-      initialTime: initialTime,
-      builder: (c, child) => ironVibeTimePickerTheme(c, child),
+      builder: (dialogCtx) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            final pal = IronVibePalette.of(context);
+            final l = AppLocalizations.of(context)!;
+            final clock =
+                '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}';
+            return AlertDialog(
+              backgroundColor: pal.dialog,
+              shape: ironVibeDialogShape(pal),
+              title: Text(
+                l.addTraining,
+                style: TextStyle(
+                  color: pal.textPrimary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: selectedTime,
+                          builder: (c2, child) =>
+                              ironVibeTimePickerTheme(c2, child),
+                        );
+                        if (time != null) {
+                          setDialogState(() => selectedTime = time);
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 15,
+                          horizontal: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: pal.borderSubtle, width: 0.5),
+                          color: pal.inputFill,
+                          borderRadius: BorderRadius.circular(
+                            kIronVibeRadiusField,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(l.time, style: TextStyle(color: pal.textMuted)),
+                            Text(
+                              clock,
+                              style: TextStyle(
+                                color: pal.textPrimary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    ironVibeRemindBeforeControl(
+                      enabled: remind,
+                      minutes: remindMinutes,
+                      onEnabled: (value) async {
+                        if (value) {
+                          final allowed = await ironVibeEnsureReminderPermission(
+                            exact: true,
+                          );
+                          reminderDenied = !allowed;
+                        } else {
+                          reminderDenied = false;
+                        }
+                        setDialogState(() => remind = value);
+                      },
+                      onMinutes: (value) {
+                        setDialogState(() => remindMinutes = value);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(l.cancel, style: TextStyle(color: pal.textMuted)),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, (
+                    time: selectedTime,
+                    minutes: remind ? remindMinutes : null,
+                  )),
+                  child: Text(
+                    l.add,
+                    style: TextStyle(
+                      color: pal.textPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
-    if (time == null) return;
-    if (!mounted) return;
-
+    if (picked == null || !mounted) return;
+    if (reminderDenied && hostContext.mounted) {
+      ScaffoldMessenger.of(hostContext).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(hostContext)!.remindPermissionDenied),
+        ),
+      );
+    }
     final targetDate = DateTime(
       _selectedDate.year,
       _selectedDate.month,
       _selectedDate.day,
-      time.hour,
-      time.minute,
+      picked.time.hour,
+      picked.time.minute,
     );
-
+    if (targetDate.isAfter(DateTime.now())) {
+      await ironVibeEnsureReminderPermission(exact: picked.minutes != null);
+    }
+    if (!mounted) return;
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => WorkoutSessionScreen(targetDate: targetDate),
+        builder: (_) => WorkoutSessionScreen(
+          targetDate: targetDate,
+          remindMinutesBefore: picked.minutes,
+        ),
       ),
     );
     if (!mounted) return;

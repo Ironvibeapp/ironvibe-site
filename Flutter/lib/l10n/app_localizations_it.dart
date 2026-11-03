@@ -1483,4 +1483,57 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get rhythmInsightDisclaimer =>
       'È una raccomandazione, non un consiglio medico. Se ti senti bene, non c\'è niente da cambiare.';
+
+  @override
+  String get remindBeforePrefix => 'Avvisa';
+
+  @override
+  String get remindBeforeSuffix => 'minuti prima';
+
+  @override
+  String get remindPermissionDenied =>
+      'Le notifiche sono disattivate, quindi questo promemoria non arriverà. Puoi consentirle nelle impostazioni del telefono.';
+
+  @override
+  String get reminderEveningTitle => 'Domani';
+
+  @override
+  String reminderEveningBody(int count, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Domani hai $count allenamenti. Il primo inizia alle $time.',
+      one: 'Domani hai 1 allenamento. Inizia alle $time.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderAlarmTitle => 'Allenamento';
+
+  @override
+  String reminderAlarmBody(String name, String time) {
+    return '$name inizia alle $time.';
+  }
+
+  @override
+  String get reminderChannelEvening => 'Promemoria della sera prima';
+
+  @override
+  String get reminderChannelEveningDesc =>
+      'Alle 21:00 se domani ci sono allenamenti.';
+
+  @override
+  String get reminderChannelAlarm => 'Sveglia allenamento';
+
+  @override
+  String get reminderChannelAlarmDesc =>
+      'Un segnale poco prima di un allenamento che hai attivato.';
+
+  @override
+  String get instructionReminderTitle => 'Promemoria';
+
+  @override
+  String get instructionReminderDesc =>
+      'La sera prima di un giorno con allenamenti, alle 21:00, l\'app dice quante sedute ci sono domani e a che ora inizia la prima. Una sveglia qualche minuto prima di una seduta resta spenta finché non la attivi scegliendo l\'orario. Entrambe restano sul telefono e non vengono inviate da nessuna parte.';
 }

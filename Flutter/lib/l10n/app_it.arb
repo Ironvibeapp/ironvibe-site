@@ -440,5 +440,18 @@
   "rhythmInsightPraiseVeryDense": "Sembra che tu abbia trovato la modalità segreta del corpo.",
   "rhythmInsightRecentLighter": "Il carico è già sceso di recente: il recupero attivo può contare come fatto. Riprendi il ritmo.",
   "rhythmInsightAccumulation": "{weeks, plural, =1{Questo ritmo dura già da {weeks} settimana.} other{Questo ritmo dura già da {weeks} settimane.}}",
-  "rhythmInsightDisclaimer": "È una raccomandazione, non un consiglio medico. Se ti senti bene, non c'è niente da cambiare."
+  "rhythmInsightDisclaimer": "È una raccomandazione, non un consiglio medico. Se ti senti bene, non c'è niente da cambiare.",
+  "remindBeforePrefix": "Avvisa",
+  "remindBeforeSuffix": "minuti prima",
+  "remindPermissionDenied": "Le notifiche sono disattivate, quindi questo promemoria non arriverà. Puoi consentirle nelle impostazioni del telefono.",
+  "reminderEveningTitle": "Domani",
+  "reminderEveningBody": "{count, plural, =1{Domani hai 1 allenamento. Inizia alle {time}.} other{Domani hai {count} allenamenti. Il primo inizia alle {time}.}}",
+  "reminderAlarmTitle": "Allenamento",
+  "reminderAlarmBody": "{name} inizia alle {time}.",
+  "reminderChannelEvening": "Promemoria della sera prima",
+  "reminderChannelEveningDesc": "Alle 21:00 se domani ci sono allenamenti.",
+  "reminderChannelAlarm": "Sveglia allenamento",
+  "reminderChannelAlarmDesc": "Un segnale poco prima di un allenamento che hai attivato.",
+  "instructionReminderTitle": "Promemoria",
+  "instructionReminderDesc": "La sera prima di un giorno con allenamenti, alle 21:00, l'app dice quante sedute ci sono domani e a che ora inizia la prima. Una sveglia qualche minuto prima di una seduta resta spenta finché non la attivi scegliendo l'orario. Entrambe restano sul telefono e non vengono inviate da nessuna parte."
 }

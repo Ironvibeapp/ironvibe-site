@@ -6,6 +6,8 @@ void main() async {
   unawaited(IronVibeTimerSounds.initialize());
   await DataService.loadData();
   await ironVibeLoadThemePreference();
+  await ironVibeRemindersStart();
+  await ironVibeRefreshReminders(askPermission: true);
   SystemChrome.setSystemUIOverlayStyle(ironVibeSystemOverlayFor(ironVibeThemeMode.value));
   runApp(const IronVibeApp());
 }

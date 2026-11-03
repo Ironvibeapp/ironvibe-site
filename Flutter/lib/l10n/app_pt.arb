@@ -440,5 +440,18 @@
   "rhythmInsightPraiseVeryDense": "Parece que encontraste o modo secreto do corpo.",
   "rhythmInsightRecentLighter": "A carga já baixou há pouco — a recuperação ativa pode contar como feita. Retoma o ritmo.",
   "rhythmInsightAccumulation": "{weeks, plural, =1{Este ritmo já dura há {weeks} semana.} other{Este ritmo já dura há {weeks} semanas.}}",
-  "rhythmInsightDisclaimer": "Isto é uma recomendação, não um conselho médico. Se te sentes bem, não é preciso mudar nada."
+  "rhythmInsightDisclaimer": "Isto é uma recomendação, não um conselho médico. Se te sentes bem, não é preciso mudar nada.",
+  "remindBeforePrefix": "Avisar",
+  "remindBeforeSuffix": "minutos antes",
+  "remindPermissionDenied": "As notificações estão desligadas, por isso este aviso não chega. Podes permiti-las nas definições do telefone.",
+  "reminderEveningTitle": "Amanhã",
+  "reminderEveningBody": "{count, plural, =1{Amanhã há 1 treino. Começa às {time}.} other{Amanhã há {count} treinos. O primeiro começa às {time}.}}",
+  "reminderAlarmTitle": "Treino",
+  "reminderAlarmBody": "{name} começa às {time}.",
+  "reminderChannelEvening": "Aviso da véspera",
+  "reminderChannelEveningDesc": "Às 21:00 se amanhã houver treinos.",
+  "reminderChannelAlarm": "Alarme do treino",
+  "reminderChannelAlarmDesc": "Um sinal pouco antes de um treino que tenhas ligado.",
+  "instructionReminderTitle": "Avisos",
+  "instructionReminderDesc": "Na véspera de um dia com treinos, às 21:00, a app diz quantas sessões há amanhã e a que horas começa a primeira. Um alarme alguns minutos antes de uma sessão fica desligado até o ligares ao escolher a hora. Os dois ficam marcados no telefone e não são enviados para lado nenhum."
 }

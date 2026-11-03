@@ -440,5 +440,18 @@
   "rhythmInsightPraiseVeryDense": "Wygląda na to, że namierzyłeś tajny tryb organizmu.",
   "rhythmInsightRecentLighter": "Ostatnio obciążenie już było niższe niż zwykle — aktywny wypoczynek można uznać za zaliczony. Nabieraj tempa.",
   "rhythmInsightAccumulation": "{weeks, plural, one{Taki rytm trzyma się już {weeks} tydzień.} few{Taki rytm trzyma się już {weeks} tygodnie.} many{Taki rytm trzyma się już {weeks} tygodni.} other{Taki rytm trzyma się już {weeks} tygodnia.}}",
-  "rhythmInsightDisclaimer": "To rekomendacja, nie porada medyczna. Jeśli czujesz się dobrze — nic nie trzeba zmieniać."
+  "rhythmInsightDisclaimer": "To rekomendacja, nie porada medyczna. Jeśli czujesz się dobrze — nic nie trzeba zmieniać.",
+  "remindBeforePrefix": "Powiadom",
+  "remindBeforeSuffix": "minut wcześniej",
+  "remindPermissionDenied": "Powiadomienia są wyłączone, więc to przypomnienie nie przyjdzie. Można je włączyć w ustawieniach telefonu.",
+  "reminderEveningTitle": "Jutro",
+  "reminderEveningBody": "{count, plural, one{Jutro jest {count} trening. Zaczyna się o {time}.} few{Jutro są {count} treningi. Pierwszy zaczyna się o {time}.} many{Jutro jest {count} treningów. Pierwszy zaczyna się o {time}.} other{Jutro jest {count} treningu. Pierwszy zaczyna się o {time}.}}",
+  "reminderAlarmTitle": "Trening",
+  "reminderAlarmBody": "{name} zaczyna się o {time}.",
+  "reminderChannelEvening": "Przypomnienie wieczorem",
+  "reminderChannelEveningDesc": "O 21:00, jeśli jutro są treningi.",
+  "reminderChannelAlarm": "Budzik treningu",
+  "reminderChannelAlarmDesc": "Sygnał chwilę przed treningiem, który włączysz.",
+  "instructionReminderTitle": "Przypomnienia",
+  "instructionReminderDesc": "Wieczorem w przeddzień dnia z treningami, o 21:00, aplikacja podaje, ile sesji jest jutro i o której zaczyna się pierwsza. Osobny budzik kilka minut przed sesją jest wyłączony, dopóki sam go nie włączysz przy wyborze godziny. Oba przypomnienia są ustawiane na telefonie i nigdzie nie wychodzą."
 }
