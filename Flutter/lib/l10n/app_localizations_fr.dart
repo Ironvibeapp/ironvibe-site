@@ -1494,4 +1494,65 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get rhythmInsightDisclaimer =>
       'C\'est une recommandation, pas un avis médical. Si vous vous sentez bien, rien n\'est à changer.';
+
+  @override
+  String get sheetExportButton => 'GOOGLE SHEETS';
+
+  @override
+  String get sheetImportButton => 'IMPORTER LE TABLEAU';
+
+  @override
+  String get sheetExportTitle => 'Google Sheets';
+
+  @override
+  String get sheetExportBody =>
+      'Un tableau s\'ouvre dans le menu de partage. Ouvre-le dans Google Sheets ou Excel, modifie-le à la maison, télécharge le CSV et importe-le ici. Garde les colonnes id pour que les séances déjà sur le téléphone soient mises à jour et non recopiées. La sauvegarde JSON reste la copie complète.';
+
+  @override
+  String get sheetExportShare => 'Partager le tableau';
+
+  @override
+  String get sheetShareText => 'Tableau IronVibe';
+
+  @override
+  String get sheetImportInvalid => 'Ce fichier n\'est pas un tableau IronVibe.';
+
+  @override
+  String get sheetImportEmpty => 'Ce tableau n\'a aucune ligne à importer.';
+
+  @override
+  String get sheetImportPersonalFile =>
+      'C\'est un journal personnel. Importe-le dans le mode où tu t\'entraînes toi-même.';
+
+  @override
+  String get sheetImportCoachFile =>
+      'C\'est un tableau d\'entraîneur. Importe-le dans le mode où tu entraînes d\'autres personnes.';
+
+  @override
+  String get sheetImportNothing =>
+      'Rien à modifier. Les lignes correspondent déjà, ou certaines ont été ignorées parce qu\'un jour compte plusieurs séances et que la colonne id manque.';
+
+  @override
+  String sheetImportPreview(
+    int updated,
+    int added,
+    int clientsAdded,
+    int clientsUpdated,
+    int skipped,
+  ) {
+    return 'Séances à mettre à jour : $updated. Séances à ajouter : $added. Clients à ajouter : $clientsAdded. Clients à mettre à jour : $clientsUpdated. Lignes ignorées : $skipped. Les séances absentes du fichier restent sur le téléphone. Une séance du fichier remplace ses séries.';
+  }
+
+  @override
+  String get sheetImportConfirm => 'Importer';
+
+  @override
+  String get sheetImportSuccess => 'Tableau importé';
+
+  @override
+  String get instructionSheetTitle => 'Google Sheets';
+
+  @override
+  String get instructionSheetDesc =>
+      'Dans Statistiques, tu peux partager un tableau pour Google Sheets ou Excel. Modifie les séries à la maison, télécharge le CSV et réimporte-le. Garde les colonnes id et laisse ensemble, dans l\'ordre, les lignes de chaque exercice. Une séance du fichier remplace ses séries. Celles qui manquent dans le fichier restent. Le nom, l\'objectif et les notes d\'un client viennent de sa première ligne remplie. JSON reste la sauvegarde complète.';
 }

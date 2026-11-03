@@ -1492,4 +1492,65 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get rhythmInsightDisclaimer =>
       'Es una recomendación, no un consejo médico. Si te encuentras bien, no hace falta cambiar nada.';
+
+  @override
+  String get sheetExportButton => 'GOOGLE SHEETS';
+
+  @override
+  String get sheetImportButton => 'IMPORTAR HOJA';
+
+  @override
+  String get sheetExportTitle => 'Google Sheets';
+
+  @override
+  String get sheetExportBody =>
+      'En el menú de compartir se abre una hoja. Ábrela en Google Sheets o Excel, edítala en casa, descárgala como CSV e impórtala aquí. Conserva las columnas de id para que los entrenos que ya están en el teléfono se actualicen y no se copien otra vez. La copia JSON sigue siendo la copia completa.';
+
+  @override
+  String get sheetExportShare => 'Compartir hoja';
+
+  @override
+  String get sheetShareText => 'Hoja de IronVibe';
+
+  @override
+  String get sheetImportInvalid => 'Este archivo no es una hoja de IronVibe.';
+
+  @override
+  String get sheetImportEmpty => 'Esta hoja no tiene filas para importar.';
+
+  @override
+  String get sheetImportPersonalFile =>
+      'Este es un diario personal. Impórtalo en el modo de entrenarte a ti mismo.';
+
+  @override
+  String get sheetImportCoachFile =>
+      'Esta es una hoja de entrenador. Impórtala en el modo de entrenar a otros.';
+
+  @override
+  String get sheetImportNothing =>
+      'Nada que cambiar. Las filas ya coinciden, o algunas se omitieron porque un día tiene varios entrenos y falta la columna de id.';
+
+  @override
+  String sheetImportPreview(
+    int updated,
+    int added,
+    int clientsAdded,
+    int clientsUpdated,
+    int skipped,
+  ) {
+    return 'Entrenos a actualizar: $updated. Entrenos a añadir: $added. Clientes a añadir: $clientsAdded. Clientes a actualizar: $clientsUpdated. Filas omitidas: $skipped. Los entrenos que no están en el archivo siguen en el teléfono. Un entreno del archivo sustituye sus series.';
+  }
+
+  @override
+  String get sheetImportConfirm => 'Importar';
+
+  @override
+  String get sheetImportSuccess => 'Hoja importada';
+
+  @override
+  String get instructionSheetTitle => 'Google Sheets';
+
+  @override
+  String get instructionSheetDesc =>
+      'En Estadísticas puedes compartir una hoja para Google Sheets o Excel. Edita las series en casa, descarga CSV e impórtala. Conserva las columnas de id y deja juntas, en orden, las filas de cada ejercicio. Un entreno del archivo sustituye sus series. Los que no están en el archivo se quedan. El nombre, el objetivo y las notas de un cliente salen de su primera fila rellena. JSON sigue siendo la copia completa.';
 }

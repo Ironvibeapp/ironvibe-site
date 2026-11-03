@@ -1484,4 +1484,65 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get rhythmInsightDisclaimer =>
       'This is a recommendation, not medical advice. If you feel fine, nothing has to change.';
+
+  @override
+  String get sheetExportButton => 'GOOGLE SHEETS';
+
+  @override
+  String get sheetImportButton => 'IMPORT SHEET';
+
+  @override
+  String get sheetExportTitle => 'Google Sheets';
+
+  @override
+  String get sheetExportBody =>
+      'A spreadsheet opens in the share menu. Open it in Google Sheets or Excel, edit it at home, then download CSV and import it here. Keep the id columns so workouts already on the phone update instead of being copied again. The JSON backup is still the full copy.';
+
+  @override
+  String get sheetExportShare => 'Share spreadsheet';
+
+  @override
+  String get sheetShareText => 'IronVibe spreadsheet';
+
+  @override
+  String get sheetImportInvalid => 'This file is not an IronVibe spreadsheet.';
+
+  @override
+  String get sheetImportEmpty => 'This spreadsheet has no rows to import.';
+
+  @override
+  String get sheetImportPersonalFile =>
+      'This is a personal log. Import it in the mode where you train yourself.';
+
+  @override
+  String get sheetImportCoachFile =>
+      'This is a coach spreadsheet. Import it in the mode where you train others.';
+
+  @override
+  String get sheetImportNothing =>
+      'Nothing to change. The rows already match, or some were skipped because one day has several workouts and the id column is missing.';
+
+  @override
+  String sheetImportPreview(
+    int updated,
+    int added,
+    int clientsAdded,
+    int clientsUpdated,
+    int skipped,
+  ) {
+    return 'Workouts to update: $updated. Workouts to add: $added. Clients to add: $clientsAdded. Clients to update: $clientsUpdated. Skipped rows: $skipped. Workouts left out of the file stay on the phone. A workout in the file replaces its sets.';
+  }
+
+  @override
+  String get sheetImportConfirm => 'Import';
+
+  @override
+  String get sheetImportSuccess => 'Spreadsheet imported';
+
+  @override
+  String get instructionSheetTitle => 'Google Sheets';
+
+  @override
+  String get instructionSheetDesc =>
+      'Statistics can share a spreadsheet for Google Sheets or Excel. Edit the sets at home, download CSV, and import it back. Keep the id columns, and keep each exercise\'s rows together in order. A workout in the file replaces its sets. Workouts missing from the file stay. A client\'s name, goal, and notes come from the first filled row. JSON is still the full backup.';
 }

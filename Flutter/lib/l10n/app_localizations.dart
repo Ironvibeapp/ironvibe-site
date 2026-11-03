@@ -2781,6 +2781,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This is a recommendation, not medical advice. If you feel fine, nothing has to change.'**
   String get rhythmInsightDisclaimer;
+
+  /// No description provided for @sheetExportButton.
+  ///
+  /// In en, this message translates to:
+  /// **'GOOGLE SHEETS'**
+  String get sheetExportButton;
+
+  /// No description provided for @sheetImportButton.
+  ///
+  /// In en, this message translates to:
+  /// **'IMPORT SHEET'**
+  String get sheetImportButton;
+
+  /// No description provided for @sheetExportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Sheets'**
+  String get sheetExportTitle;
+
+  /// No description provided for @sheetExportBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A spreadsheet opens in the share menu. Open it in Google Sheets or Excel, edit it at home, then download CSV and import it here. Keep the id columns so workouts already on the phone update instead of being copied again. The JSON backup is still the full copy.'**
+  String get sheetExportBody;
+
+  /// No description provided for @sheetExportShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share spreadsheet'**
+  String get sheetExportShare;
+
+  /// No description provided for @sheetShareText.
+  ///
+  /// In en, this message translates to:
+  /// **'IronVibe spreadsheet'**
+  String get sheetShareText;
+
+  /// No description provided for @sheetImportInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is not an IronVibe spreadsheet.'**
+  String get sheetImportInvalid;
+
+  /// No description provided for @sheetImportEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'This spreadsheet has no rows to import.'**
+  String get sheetImportEmpty;
+
+  /// No description provided for @sheetImportPersonalFile.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a personal log. Import it in the mode where you train yourself.'**
+  String get sheetImportPersonalFile;
+
+  /// No description provided for @sheetImportCoachFile.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a coach spreadsheet. Import it in the mode where you train others.'**
+  String get sheetImportCoachFile;
+
+  /// No description provided for @sheetImportNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to change. The rows already match, or some were skipped because one day has several workouts and the id column is missing.'**
+  String get sheetImportNothing;
+
+  /// No description provided for @sheetImportPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Workouts to update: {updated}. Workouts to add: {added}. Clients to add: {clientsAdded}. Clients to update: {clientsUpdated}. Skipped rows: {skipped}. Workouts left out of the file stay on the phone. A workout in the file replaces its sets.'**
+  String sheetImportPreview(
+    int updated,
+    int added,
+    int clientsAdded,
+    int clientsUpdated,
+    int skipped,
+  );
+
+  /// No description provided for @sheetImportConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get sheetImportConfirm;
+
+  /// No description provided for @sheetImportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Spreadsheet imported'**
+  String get sheetImportSuccess;
+
+  /// No description provided for @instructionSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Sheets'**
+  String get instructionSheetTitle;
+
+  /// No description provided for @instructionSheetDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics can share a spreadsheet for Google Sheets or Excel. Edit the sets at home, download CSV, and import it back. Keep the id columns, and keep each exercise\'s rows together in order. A workout in the file replaces its sets. Workouts missing from the file stay. A client\'s name, goal, and notes come from the first filled row. JSON is still the full backup.'**
+  String get instructionSheetDesc;
 }
 
 class _AppLocalizationsDelegate

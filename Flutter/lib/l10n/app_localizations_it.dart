@@ -1492,4 +1492,65 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get rhythmInsightDisclaimer =>
       'È una raccomandazione, non un consiglio medico. Se ti senti bene, non c\'è niente da cambiare.';
+
+  @override
+  String get sheetExportButton => 'GOOGLE SHEETS';
+
+  @override
+  String get sheetImportButton => 'IMPORTA FOGLIO';
+
+  @override
+  String get sheetExportTitle => 'Google Sheets';
+
+  @override
+  String get sheetExportBody =>
+      'Nel menu di condivisione si apre un foglio. Aprilo in Google Sheets o Excel, modificalo a casa, scaricalo come CSV e importalo qui. Tieni le colonne id così gli allenamenti già sul telefono si aggiornano e non vengono copiati di nuovo. Il backup JSON resta la copia completa.';
+
+  @override
+  String get sheetExportShare => 'Condividi foglio';
+
+  @override
+  String get sheetShareText => 'Foglio IronVibe';
+
+  @override
+  String get sheetImportInvalid => 'Questo file non è un foglio IronVibe.';
+
+  @override
+  String get sheetImportEmpty => 'Questo foglio non ha righe da importare.';
+
+  @override
+  String get sheetImportPersonalFile =>
+      'Questo è un diario personale. Importalo nella modalità in cui ti alleni da solo.';
+
+  @override
+  String get sheetImportCoachFile =>
+      'Questo è un foglio da trainer. Importalo nella modalità in cui alleni altre persone.';
+
+  @override
+  String get sheetImportNothing =>
+      'Niente da cambiare. Le righe coincidono già, oppure alcune sono state saltate perché un giorno ha più allenamenti e manca la colonna id.';
+
+  @override
+  String sheetImportPreview(
+    int updated,
+    int added,
+    int clientsAdded,
+    int clientsUpdated,
+    int skipped,
+  ) {
+    return 'Allenamenti da aggiornare: $updated. Allenamenti da aggiungere: $added. Clienti da aggiungere: $clientsAdded. Clienti da aggiornare: $clientsUpdated. Righe saltate: $skipped. Gli allenamenti assenti dal file restano sul telefono. Un allenamento nel file sostituisce le sue serie.';
+  }
+
+  @override
+  String get sheetImportConfirm => 'Importa';
+
+  @override
+  String get sheetImportSuccess => 'Foglio importato';
+
+  @override
+  String get instructionSheetTitle => 'Google Sheets';
+
+  @override
+  String get instructionSheetDesc =>
+      'In Statistiche puoi condividere un foglio per Google Sheets o Excel. Modifica le serie a casa, scarica il CSV e importalo di nuovo. Tieni le colonne id e lascia insieme, in ordine, le righe di ogni esercizio. Un allenamento nel file sostituisce le sue serie. Quelli che mancano nel file restano. Nome, obiettivo e note di un cliente arrivano dalla sua prima riga compilata. JSON resta il backup completo.';
 }

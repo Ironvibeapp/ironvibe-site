@@ -1492,4 +1492,66 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get rhythmInsightDisclaimer =>
       'Das ist eine Empfehlung, kein medizinischer Rat. Wenn du dich gut fühlst, muss sich nichts ändern.';
+
+  @override
+  String get sheetExportButton => 'GOOGLE SHEETS';
+
+  @override
+  String get sheetImportButton => 'TABELLE IMPORTIEREN';
+
+  @override
+  String get sheetExportTitle => 'Google Sheets';
+
+  @override
+  String get sheetExportBody =>
+      'Im Teilen-Menü öffnet sich eine Tabelle. In Google Sheets oder Excel öffnen, zu Hause bearbeiten, als CSV herunterladen und hier importieren. Die ID-Spalten behalten, damit Trainings auf dem Telefon aktualisiert und nicht noch einmal kopiert werden. Die JSON-Sicherung bleibt die vollständige Kopie.';
+
+  @override
+  String get sheetExportShare => 'Tabelle teilen';
+
+  @override
+  String get sheetShareText => 'IronVibe-Tabelle';
+
+  @override
+  String get sheetImportInvalid => 'Diese Datei ist keine IronVibe-Tabelle.';
+
+  @override
+  String get sheetImportEmpty =>
+      'Diese Tabelle hat keine Zeilen zum Importieren.';
+
+  @override
+  String get sheetImportPersonalFile =>
+      'Das ist ein persönliches Tagebuch. Importiere es im Modus für eigenes Training.';
+
+  @override
+  String get sheetImportCoachFile =>
+      'Das ist eine Trainer-Tabelle. Importiere sie im Modus für andere.';
+
+  @override
+  String get sheetImportNothing =>
+      'Nichts zu ändern. Die Zeilen stimmen schon, oder einige wurden übersprungen, weil an einem Tag mehrere Trainings liegen und die ID-Spalte fehlt.';
+
+  @override
+  String sheetImportPreview(
+    int updated,
+    int added,
+    int clientsAdded,
+    int clientsUpdated,
+    int skipped,
+  ) {
+    return 'Trainings aktualisieren: $updated. Trainings hinzufügen: $added. Kunden hinzufügen: $clientsAdded. Kunden aktualisieren: $clientsUpdated. Übersprungene Zeilen: $skipped. Trainings, die nicht in der Datei stehen, bleiben auf dem Telefon. Ein Training aus der Datei ersetzt seine Sätze.';
+  }
+
+  @override
+  String get sheetImportConfirm => 'Importieren';
+
+  @override
+  String get sheetImportSuccess => 'Tabelle importiert';
+
+  @override
+  String get instructionSheetTitle => 'Google Sheets';
+
+  @override
+  String get instructionSheetDesc =>
+      'Unter Statistik lässt sich eine Tabelle für Google Sheets oder Excel teilen. Sätze zu Hause ändern, CSV herunterladen und wieder importieren. Die ID-Spalten behalten und die Zeilen einer Übung der Reihe nach zusammen lassen. Ein Training aus der Datei ersetzt seine Sätze. Trainings, die in der Datei fehlen, bleiben. Name, Ziel und Notizen eines Kunden kommen aus der ersten gefüllten Zeile. JSON bleibt die vollständige Sicherung.';
 }

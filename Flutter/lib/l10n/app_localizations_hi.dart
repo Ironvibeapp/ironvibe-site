@@ -1485,4 +1485,66 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get rhythmInsightDisclaimer =>
       'यह सलाह है, चिकित्सा सलाह नहीं। अगर आप ठीक महसूस करते हैं, कुछ बदलना ज़रूरी नहीं।';
+
+  @override
+  String get sheetExportButton => 'GOOGLE SHEETS';
+
+  @override
+  String get sheetImportButton => 'शीट आयात करें';
+
+  @override
+  String get sheetExportTitle => 'Google Sheets';
+
+  @override
+  String get sheetExportBody =>
+      'शेयर मेनू में एक शीट खुलेगी। इसे Google Sheets या Excel में खोलें, घर पर बदलें, CSV डाउनलोड करें और यहाँ आयात करें। id कॉलम रखें, ताकि फ़ोन पर मौजूद वर्कआउट दोबारा कॉपी न हों, बल्कि अपडेट हों। JSON बैकअप अब भी पूरी कॉपी है।';
+
+  @override
+  String get sheetExportShare => 'शीट शेयर करें';
+
+  @override
+  String get sheetShareText => 'IronVibe शीट';
+
+  @override
+  String get sheetImportInvalid => 'यह फ़ाइल IronVibe शीट नहीं है।';
+
+  @override
+  String get sheetImportEmpty =>
+      'इस शीट में आयात करने के लिए कोई पंक्ति नहीं है।';
+
+  @override
+  String get sheetImportPersonalFile =>
+      'यह निजी डायरी है। इसे खुद ट्रेनिंग वाले मोड में आयात करें।';
+
+  @override
+  String get sheetImportCoachFile =>
+      'यह कोच की शीट है। इसे दूसरों को ट्रेन करने वाले मोड में आयात करें।';
+
+  @override
+  String get sheetImportNothing =>
+      'बदलने को कुछ नहीं। पंक्तियाँ पहले से मेल खाती हैं, या कुछ छोड़ दी गईं क्योंकि एक दिन में कई वर्कआउट हैं और id कॉलम नहीं है।';
+
+  @override
+  String sheetImportPreview(
+    int updated,
+    int added,
+    int clientsAdded,
+    int clientsUpdated,
+    int skipped,
+  ) {
+    return 'अपडेट करने के वर्कआउट: $updated। जोड़ने के वर्कआउट: $added। जोड़ने के क्लाइंट: $clientsAdded। अपडेट करने के क्लाइंट: $clientsUpdated। छोड़ी गई पंक्तियाँ: $skipped। फ़ाइल में न होने वाले वर्कआउट फ़ोन पर रहेंगे। फ़ाइल का वर्कआउट अपने सेट बदल देता है।';
+  }
+
+  @override
+  String get sheetImportConfirm => 'आयात करें';
+
+  @override
+  String get sheetImportSuccess => 'शीट आयात हुई';
+
+  @override
+  String get instructionSheetTitle => 'Google Sheets';
+
+  @override
+  String get instructionSheetDesc =>
+      'आँकड़ों से एक शीट शेयर करके Google Sheets या Excel में खोली जा सकती है। सेट घर पर बदलें, CSV डाउनलोड करें और वापस आयात करें। id कॉलम रखें और हर एक्सरसाइज़ की पंक्तियाँ क्रम में साथ रखें। फ़ाइल का वर्कआउट अपने सेट बदल देता है। फ़ाइल में न होने वाले वर्कआउट रह जाते हैं। क्लाइंट का नाम, लक्ष्य और नोट उसकी पहली भरी पंक्ति से आते हैं। JSON अब भी पूरा बैकअप है।';
 }
