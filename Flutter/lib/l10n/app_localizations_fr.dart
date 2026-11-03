@@ -1555,4 +1555,57 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get instructionSheetDesc =>
       'Dans Statistiques, tu peux partager un tableau pour Google Sheets ou Excel. Modifie les séries à la maison, télécharge le CSV et réimporte-le. Garde les colonnes id et laisse ensemble, dans l\'ordre, les lignes de chaque exercice. Une séance du fichier remplace ses séries. Celles qui manquent dans le fichier restent. Le nom, l\'objectif et les notes d\'un client viennent de sa première ligne remplie. JSON reste la sauvegarde complète.';
+
+  @override
+  String get remindBeforePrefix => 'Prévenir';
+
+  @override
+  String get remindBeforeSuffix => 'minutes avant';
+
+  @override
+  String get remindPermissionDenied =>
+      'Les notifications sont coupées, donc ce rappel n\'arrivera pas. Vous pouvez les autoriser dans les réglages du téléphone.';
+
+  @override
+  String get reminderEveningTitle => 'Demain';
+
+  @override
+  String reminderEveningBody(int count, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Demain, $count séances. La première commence à $time.',
+      one: 'Demain, 1 séance. Elle commence à $time.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderAlarmTitle => 'Séance';
+
+  @override
+  String reminderAlarmBody(String name, String time) {
+    return '$name commence à $time.';
+  }
+
+  @override
+  String get reminderChannelEvening => 'Rappel de la veille';
+
+  @override
+  String get reminderChannelEveningDesc =>
+      'À 21:00 s\'il y a des séances demain.';
+
+  @override
+  String get reminderChannelAlarm => 'Alarme de séance';
+
+  @override
+  String get reminderChannelAlarmDesc =>
+      'Un signal peu avant une séance que vous avez activée.';
+
+  @override
+  String get instructionReminderTitle => 'Rappels';
+
+  @override
+  String get instructionReminderDesc =>
+      'La veille d\'un jour avec des séances, à 21:00, l\'app indique combien il y en a demain et à quelle heure commence la première. Une alarme quelques minutes avant une séance reste éteinte tant que vous ne l\'activez pas en choisissant l\'heure. Les deux sont programmées sur le téléphone et ne partent nulle part.';
 }

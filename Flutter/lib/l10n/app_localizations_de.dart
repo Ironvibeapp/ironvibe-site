@@ -1554,4 +1554,57 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get instructionSheetDesc =>
       'Unter Statistik lässt sich eine Tabelle für Google Sheets oder Excel teilen. Sätze zu Hause ändern, CSV herunterladen und wieder importieren. Die ID-Spalten behalten und die Zeilen einer Übung der Reihe nach zusammen lassen. Ein Training aus der Datei ersetzt seine Sätze. Trainings, die in der Datei fehlen, bleiben. Name, Ziel und Notizen eines Kunden kommen aus der ersten gefüllten Zeile. JSON bleibt die vollständige Sicherung.';
+
+  @override
+  String get remindBeforePrefix => 'Benachrichtigung';
+
+  @override
+  String get remindBeforeSuffix => 'Minuten vorher';
+
+  @override
+  String get remindPermissionDenied =>
+      'Benachrichtigungen sind aus, deshalb kommt diese Erinnerung nicht an. Du kannst sie in den Telefoneinstellungen erlauben.';
+
+  @override
+  String get reminderEveningTitle => 'Morgen';
+
+  @override
+  String reminderEveningBody(int count, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Morgen stehen $count Trainings an. Das erste beginnt um $time.',
+      one: 'Morgen steht 1 Training an. Es beginnt um $time.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderAlarmTitle => 'Training';
+
+  @override
+  String reminderAlarmBody(String name, String time) {
+    return '$name beginnt um $time.';
+  }
+
+  @override
+  String get reminderChannelEvening => 'Erinnerung am Vorabend';
+
+  @override
+  String get reminderChannelEveningDesc =>
+      'Um 21:00, wenn morgen Trainings anstehen.';
+
+  @override
+  String get reminderChannelAlarm => 'Trainingswecker';
+
+  @override
+  String get reminderChannelAlarmDesc =>
+      'Ein Signal kurz vor einem Training, das du eingeschaltet hast.';
+
+  @override
+  String get instructionReminderTitle => 'Erinnerungen';
+
+  @override
+  String get instructionReminderDesc =>
+      'Am Abend vor einem Tag mit Trainings, um 21:00, sagt die App, wie viele Einheiten morgen sind und wann die erste beginnt. Ein eigener Wecker ein paar Minuten vor einer Einheit bleibt aus, bis du ihn beim Wählen der Uhrzeit einschaltest. Beides wird auf dem Telefon geplant und nirgendwohin geschickt.';
 }

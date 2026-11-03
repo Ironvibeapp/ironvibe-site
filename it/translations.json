@@ -72,6 +72,7 @@
     "s2List1": "cronologia degli allenamenti, esercizi, note e parametri correlati (peso, ripetizioni, pause, ecc.);",
     "s2List2": "dati di clienti/atleti che inserisci tu stesso (ad esempio nome, obiettivo di allenamento);",
     "s2List3": "impostazioni locali dell’app (lingua, opzioni di visualizzazione, ecc.).",
+    "s2List4": "un promemoria di allenamento, se lo attivi: viene programmato su questo telefono e non ci viene inviato;",
     "s2Outro": "Questi dati esistono solo sul tuo dispositivo e non vengono inviati automaticamente a noi.",
     "s3Title": "3. Archiviazione locale",
     "s3P1": "Tutti i dati relativi ad allenamenti e impostazioni sono archiviati localmente sul tuo dispositivo, nella memoria dell’app. Non carichiamo questi dati sui nostri server e non vi abbiamo accesso diretto.",

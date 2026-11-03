@@ -1543,4 +1543,60 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get instructionSheetDesc =>
       'من الإحصاءات يمكن مشاركة جدول لفتحه في Google Sheets أو Excel. عدّل المجموعات في البيت، نزّل CSV، ثم استوردها. أبقِ أعمدة id واجعل صفوف كل تمرين معًا بالترتيب. التمرين الوارد في الملف يستبدل مجموعاته، والتمارين الغائبة عن الملف تبقى. اسم العميل وهدفه وملاحظاته تُؤخذ من أول صف ممتلئ. يبقى JSON النسخة الكاملة.';
+
+  @override
+  String get remindBeforePrefix => 'أضف تنبيهًا قبل';
+
+  @override
+  String get remindBeforeSuffix => 'دقيقة';
+
+  @override
+  String get remindPermissionDenied =>
+      'الإشعارات متوقفة، لذا لن يصل هذا التنبيه. يمكن السماح بها من إعدادات الهاتف.';
+
+  @override
+  String get reminderEveningTitle => 'غدًا';
+
+  @override
+  String reminderEveningBody(int count, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'غدًا $count تمرين، الأول يبدأ في $time.',
+      many: 'غدًا $count تمرينًا، الأول يبدأ في $time.',
+      few: 'غدًا $count تمارين، الأول يبدأ في $time.',
+      two: 'غدًا تمرينان، الأول يبدأ في $time.',
+      one: 'غدًا تمرين واحد، يبدأ في $time.',
+      zero: 'غدًا لا توجد تمارين.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderAlarmTitle => 'تمرين';
+
+  @override
+  String reminderAlarmBody(String name, String time) {
+    return '$name يبدأ في $time.';
+  }
+
+  @override
+  String get reminderChannelEvening => 'تذكير مساء اليوم السابق';
+
+  @override
+  String get reminderChannelEveningDesc => 'في 21:00 إذا كان الغد فيه تمارين.';
+
+  @override
+  String get reminderChannelAlarm => 'منبه التمرين';
+
+  @override
+  String get reminderChannelAlarmDesc =>
+      'إشارة قبل التمرين بقليل، إذا فعّلتها.';
+
+  @override
+  String get instructionReminderTitle => 'التذكيرات';
+
+  @override
+  String get instructionReminderDesc =>
+      'مساء اليوم السابق ليوم فيه تمارين، عند 21:00، يخبرك التطبيق كم تمرينًا غدًا ومتى يبدأ الأول. منبّه قبل التمرين بدقائق يبقى مطفأً إلى أن تشغّله أنت عند اختيار الوقت. الاثنان يُجدولان على الهاتف ولا يُرسلان إلى أي مكان.';
 }

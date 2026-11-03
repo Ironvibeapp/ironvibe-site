@@ -460,5 +460,18 @@
   "sheetImportConfirm": "Importar",
   "sheetImportSuccess": "Folha importada",
   "instructionSheetTitle": "Google Sheets",
-  "instructionSheetDesc": "Em Estatísticas podes partilhar uma folha para o Google Sheets ou Excel. Edita as séries em casa, descarrega CSV e importa de volta. Mantém as colunas de id e deixa juntas, por ordem, as linhas de cada exercício. Um treino do ficheiro substitui as suas séries. Os que faltam no ficheiro ficam. O nome, o objetivo e as notas de um cliente vêm da primeira linha preenchida. JSON continua a ser a cópia completa."
+  "instructionSheetDesc": "Em Estatísticas podes partilhar uma folha para o Google Sheets ou Excel. Edita as séries em casa, descarrega CSV e importa de volta. Mantém as colunas de id e deixa juntas, por ordem, as linhas de cada exercício. Um treino do ficheiro substitui as suas séries. Os que faltam no ficheiro ficam. O nome, o objetivo e as notas de um cliente vêm da primeira linha preenchida. JSON continua a ser a cópia completa.",
+  "remindBeforePrefix": "Avisar",
+  "remindBeforeSuffix": "minutos antes",
+  "remindPermissionDenied": "As notificações estão desligadas, por isso este aviso não chega. Podes permiti-las nas definições do telefone.",
+  "reminderEveningTitle": "Amanhã",
+  "reminderEveningBody": "{count, plural, =1{Amanhã há 1 treino. Começa às {time}.} other{Amanhã há {count} treinos. O primeiro começa às {time}.}}",
+  "reminderAlarmTitle": "Treino",
+  "reminderAlarmBody": "{name} começa às {time}.",
+  "reminderChannelEvening": "Aviso da véspera",
+  "reminderChannelEveningDesc": "Às 21:00 se amanhã houver treinos.",
+  "reminderChannelAlarm": "Alarme do treino",
+  "reminderChannelAlarmDesc": "Um sinal pouco antes de um treino que tenhas ligado.",
+  "instructionReminderTitle": "Avisos",
+  "instructionReminderDesc": "Na véspera de um dia com treinos, às 21:00, a app diz quantas sessões há amanhã e a que horas começa a primeira. Um alarme alguns minutos antes de uma sessão fica desligado até o ligares ao escolher a hora. Os dois ficam marcados no telefone e não são enviados para lado nenhum."
 }

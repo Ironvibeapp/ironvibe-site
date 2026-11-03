@@ -131,6 +131,73 @@ Widget _ironVibeTrainerSectionTitle(BuildContext context, String title) {
   );
 }
 
+Widget ironVibeRemindBeforeControl({
+  required bool enabled,
+  required int minutes,
+  required Future<void> Function(bool enabled) onEnabled,
+  required ValueChanged<int> onMinutes,
+}) {
+  return Builder(
+    builder: (context) {
+      final pal = IronVibePalette.of(context);
+      final l = AppLocalizations.of(context)!;
+      final choices = kIronVibeRemindMinuteChoices.contains(minutes)
+          ? kIronVibeRemindMinuteChoices
+          : ([...kIronVibeRemindMinuteChoices, minutes]..sort());
+      final shown = choices.contains(minutes)
+          ? minutes
+          : kIronVibeDefaultRemindMinutes;
+      final style = TextStyle(
+        color: enabled ? pal.textPrimary : pal.textMuted,
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+      );
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Switch(
+            value: enabled,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            activeThumbColor: kIronVibeAccent,
+            onChanged: (value) {
+              onEnabled(value);
+            },
+          ),
+          const SizedBox(width: 4),
+          Expanded(
+            child: Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 4,
+              children: [
+                Text(l.remindBeforePrefix, style: style),
+                DropdownButton<int>(
+                  value: shown,
+                  isDense: true,
+                  underline: const SizedBox.shrink(),
+                  dropdownColor: pal.dropdown,
+                  style: TextStyle(
+                    color: pal.textPrimary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                  ),
+                  items: [
+                    for (final choice in choices)
+                      DropdownMenuItem(value: choice, child: Text('$choice')),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) onMinutes(value);
+                  },
+                ),
+                Text(l.remindBeforeSuffix, style: style),
+              ],
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 class TrainerScreen extends StatefulWidget {
   const TrainerScreen({super.key});
 
@@ -191,7 +258,12 @@ class _TrainerScreenState extends State<TrainerScreen> {
         : const TimeOfDay(hour: 12, minute: 0);
     String note = '';
     var repeatLast = false;
+    var remind = false;
+    var remindMinutes = kIronVibeDefaultRemindMinutes;
+    var saving = false;
+    var reminderDenied = false;
 
+    final hostContext = context;
     final created = await showDialog<TrainerSession>(
       context: context,
       builder: (dialogCtx) {
@@ -300,6 +372,22 @@ class _TrainerScreenState extends State<TrainerScreen> {
                         ),
                       ),
                     ),
+                    ironVibeRemindBeforeControl(
+                      enabled: remind,
+                      minutes: remindMinutes,
+                      onEnabled: (value) async {
+                        if (value) {
+                          final allowed = await ironVibeEnsureReminderPermission(exact: true);
+                          reminderDenied = !allowed;
+                        } else {
+                          reminderDenied = false;
+                        }
+                        setDialogState(() => remind = value);
+                      },
+                      onMinutes: (value) {
+                        setDialogState(() => remindMinutes = value);
+                      },
+                    ),
                     const SizedBox(height: 15),
                     TextField(
                       style: TextStyle(color: pal.textPrimary),
@@ -337,9 +425,10 @@ class _TrainerScreenState extends State<TrainerScreen> {
                   child: Text(l.cancel, style: TextStyle(color: pal.textMuted)),
                 ),
                 TextButton(
-                  onPressed: selectedClient == null
+                  onPressed: selectedClient == null || saving
                       ? null
-                      : () {
+                      : () async {
+                          setDialogState(() => saving = true);
                           final client = selectedClient!;
                           List<ExerciseLog>? plan;
                           if (repeatLast) {
@@ -347,12 +436,15 @@ class _TrainerScreenState extends State<TrainerScreen> {
                               client.name,
                             );
                             if (last == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(l.repeatLastUnavailable),
-                                  duration: const Duration(seconds: 2),
-                                ),
-                              );
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(l.repeatLastUnavailable),
+                                    duration: const Duration(seconds: 2),
+                                  ),
+                                );
+                              }
+                              setDialogState(() => saving = false);
                               return;
                             }
                             plan = ironVibeTrainerPlanLogsFrom(last);
@@ -364,6 +456,11 @@ class _TrainerScreenState extends State<TrainerScreen> {
                             selectedTime.hour,
                             selectedTime.minute,
                           );
+                          if (dateTime.isAfter(DateTime.now())) {
+                            final allowed = await ironVibeEnsureReminderPermission(exact: remind);
+                            if (remind && !allowed) reminderDenied = true;
+                          }
+                          if (!context.mounted) return;
                           final session = ironVibeNewTrainerSession(
                             dateTime: dateTime,
                             clientName: client.name,
@@ -371,11 +468,13 @@ class _TrainerScreenState extends State<TrainerScreen> {
                             note: note.trim(),
                             exercises: plan,
                             isScheduledPlan: true,
+                            remindMinutesBefore: remind ? remindMinutes : null,
                           );
                           setState(() {
                             trainerSchedule.add(session);
                           });
-                          DataService.saveData();
+                          await DataService.saveData();
+                          if (!context.mounted) return;
                           Navigator.pop(context, session);
                         },
                   child: Text(
@@ -394,7 +493,15 @@ class _TrainerScreenState extends State<TrainerScreen> {
         );
       },
     );
-    if (mounted && created != null) setState(() {});
+    if (!hostContext.mounted) return;
+    if (reminderDenied) {
+      ScaffoldMessenger.of(hostContext).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(hostContext)!.remindPermissionDenied),
+        ),
+      );
+    }
+    if (created != null) setState(() {});
   }
 
   List<TrainerSession> _getSessionsForDate(DateTime date) {
@@ -809,11 +916,13 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
   late final TextEditingController _noteController;
   bool _suppressPersist = false;
   bool _planDirty = false;
+  int _remindMinutes = kIronVibeDefaultRemindMinutes;
 
   @override
   void initState() {
     super.initState();
     _noteController = TextEditingController(text: widget.session.note);
+    _remindMinutes = widget.session.remindMinutesBefore ?? kIronVibeDefaultRemindMinutes;
     _noteController.addListener(_markPlanDirty);
     if (widget.restoredDraft != null) {
       _isCardio = widget.restoredDraft!.isCardio;
@@ -1350,6 +1459,42 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
           textAlign: TextAlign.center,
           style: TextStyle(color: pal.textMuted, fontSize: 13),
         ),
+        if (widget.mode != TrainerSessionUiMode.history &&
+            widget.session.dateTime.isAfter(DateTime.now())) ...[
+          const SizedBox(height: 8),
+          ironVibeRemindBeforeControl(
+            enabled: widget.session.remindMinutesBefore != null,
+            minutes: widget.session.remindMinutesBefore ?? _remindMinutes,
+            onEnabled: (value) async {
+              if (value) {
+                final allowed = await ironVibeEnsureReminderPermission(exact: true);
+                if (!allowed && context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l.remindPermissionDenied)),
+                  );
+                }
+              }
+              if (!mounted) return;
+              setState(() {
+                widget.session.remindMinutesBefore = value ? _remindMinutes : null;
+              });
+              ironVibeSyncTrainerSessionInSchedule(widget.session);
+              await DataService.saveData();
+            },
+            onMinutes: (value) {
+              setState(() {
+                _remindMinutes = value;
+                if (widget.session.remindMinutesBefore != null) {
+                  widget.session.remindMinutesBefore = value;
+                }
+              });
+              if (widget.session.remindMinutesBefore != null) {
+                ironVibeSyncTrainerSessionInSchedule(widget.session);
+                DataService.saveData();
+              }
+            },
+          ),
+        ],
         const SizedBox(height: 16),
         TextField(
           controller: _noteController,

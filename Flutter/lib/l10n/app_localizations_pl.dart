@@ -1551,4 +1551,58 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get instructionSheetDesc =>
       'W statystykach można udostępnić arkusz do Google Sheets lub Excela. Popraw serie w domu, pobierz CSV i zaimportuj z powrotem. Zostaw kolumny id i trzymaj wiersze jednego ćwiczenia razem, po kolei. Trening z pliku zastępuje swoje serie. Treningów, których w pliku nie ma, nie usuwamy. Imię, cel i notatki klienta bierzemy z pierwszego wypełnionego wiersza. JSON nadal jest pełną kopią.';
+
+  @override
+  String get remindBeforePrefix => 'Powiadom';
+
+  @override
+  String get remindBeforeSuffix => 'minut wcześniej';
+
+  @override
+  String get remindPermissionDenied =>
+      'Powiadomienia są wyłączone, więc to przypomnienie nie przyjdzie. Można je włączyć w ustawieniach telefonu.';
+
+  @override
+  String get reminderEveningTitle => 'Jutro';
+
+  @override
+  String reminderEveningBody(int count, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Jutro jest $count treningu. Pierwszy zaczyna się o $time.',
+      many: 'Jutro jest $count treningów. Pierwszy zaczyna się o $time.',
+      few: 'Jutro są $count treningi. Pierwszy zaczyna się o $time.',
+      one: 'Jutro jest $count trening. Zaczyna się o $time.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderAlarmTitle => 'Trening';
+
+  @override
+  String reminderAlarmBody(String name, String time) {
+    return '$name zaczyna się o $time.';
+  }
+
+  @override
+  String get reminderChannelEvening => 'Przypomnienie wieczorem';
+
+  @override
+  String get reminderChannelEveningDesc => 'O 21:00, jeśli jutro są treningi.';
+
+  @override
+  String get reminderChannelAlarm => 'Budzik treningu';
+
+  @override
+  String get reminderChannelAlarmDesc =>
+      'Sygnał chwilę przed treningiem, który włączysz.';
+
+  @override
+  String get instructionReminderTitle => 'Przypomnienia';
+
+  @override
+  String get instructionReminderDesc =>
+      'Wieczorem w przeddzień dnia z treningami, o 21:00, aplikacja podaje, ile sesji jest jutro i o której zaczyna się pierwsza. Osobny budzik kilka minut przed sesją jest wyłączony, dopóki sam go nie włączysz przy wyborze godziny. Oba przypomnienia są ustawiane na telefonie i nigdzie nie wychodzą.';
 }

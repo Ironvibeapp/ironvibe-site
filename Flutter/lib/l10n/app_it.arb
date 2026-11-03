@@ -460,5 +460,18 @@
   "sheetImportConfirm": "Importa",
   "sheetImportSuccess": "Foglio importato",
   "instructionSheetTitle": "Google Sheets",
-  "instructionSheetDesc": "In Statistiche puoi condividere un foglio per Google Sheets o Excel. Modifica le serie a casa, scarica il CSV e importalo di nuovo. Tieni le colonne id e lascia insieme, in ordine, le righe di ogni esercizio. Un allenamento nel file sostituisce le sue serie. Quelli che mancano nel file restano. Nome, obiettivo e note di un cliente arrivano dalla sua prima riga compilata. JSON resta il backup completo."
+  "instructionSheetDesc": "In Statistiche puoi condividere un foglio per Google Sheets o Excel. Modifica le serie a casa, scarica il CSV e importalo di nuovo. Tieni le colonne id e lascia insieme, in ordine, le righe di ogni esercizio. Un allenamento nel file sostituisce le sue serie. Quelli che mancano nel file restano. Nome, obiettivo e note di un cliente arrivano dalla sua prima riga compilata. JSON resta il backup completo.",
+  "remindBeforePrefix": "Avvisa",
+  "remindBeforeSuffix": "minuti prima",
+  "remindPermissionDenied": "Le notifiche sono disattivate, quindi questo promemoria non arriverà. Puoi consentirle nelle impostazioni del telefono.",
+  "reminderEveningTitle": "Domani",
+  "reminderEveningBody": "{count, plural, =1{Domani hai 1 allenamento. Inizia alle {time}.} other{Domani hai {count} allenamenti. Il primo inizia alle {time}.}}",
+  "reminderAlarmTitle": "Allenamento",
+  "reminderAlarmBody": "{name} inizia alle {time}.",
+  "reminderChannelEvening": "Promemoria della sera prima",
+  "reminderChannelEveningDesc": "Alle 21:00 se domani ci sono allenamenti.",
+  "reminderChannelAlarm": "Sveglia allenamento",
+  "reminderChannelAlarmDesc": "Un segnale poco prima di un allenamento che hai attivato.",
+  "instructionReminderTitle": "Promemoria",
+  "instructionReminderDesc": "La sera prima di un giorno con allenamenti, alle 21:00, l'app dice quante sedute ci sono domani e a che ora inizia la prima. Una sveglia qualche minuto prima di una seduta resta spenta finché non la attivi scegliendo l'orario. Entrambe restano sul telefono e non vengono inviate da nessuna parte."
 }

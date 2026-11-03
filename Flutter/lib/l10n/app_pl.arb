@@ -460,5 +460,18 @@
   "sheetImportConfirm": "Importuj",
   "sheetImportSuccess": "Arkusz zaimportowany",
   "instructionSheetTitle": "Google Sheets",
-  "instructionSheetDesc": "W statystykach można udostępnić arkusz do Google Sheets lub Excela. Popraw serie w domu, pobierz CSV i zaimportuj z powrotem. Zostaw kolumny id i trzymaj wiersze jednego ćwiczenia razem, po kolei. Trening z pliku zastępuje swoje serie. Treningów, których w pliku nie ma, nie usuwamy. Imię, cel i notatki klienta bierzemy z pierwszego wypełnionego wiersza. JSON nadal jest pełną kopią."
+  "instructionSheetDesc": "W statystykach można udostępnić arkusz do Google Sheets lub Excela. Popraw serie w domu, pobierz CSV i zaimportuj z powrotem. Zostaw kolumny id i trzymaj wiersze jednego ćwiczenia razem, po kolei. Trening z pliku zastępuje swoje serie. Treningów, których w pliku nie ma, nie usuwamy. Imię, cel i notatki klienta bierzemy z pierwszego wypełnionego wiersza. JSON nadal jest pełną kopią.",
+  "remindBeforePrefix": "Powiadom",
+  "remindBeforeSuffix": "minut wcześniej",
+  "remindPermissionDenied": "Powiadomienia są wyłączone, więc to przypomnienie nie przyjdzie. Można je włączyć w ustawieniach telefonu.",
+  "reminderEveningTitle": "Jutro",
+  "reminderEveningBody": "{count, plural, one{Jutro jest {count} trening. Zaczyna się o {time}.} few{Jutro są {count} treningi. Pierwszy zaczyna się o {time}.} many{Jutro jest {count} treningów. Pierwszy zaczyna się o {time}.} other{Jutro jest {count} treningu. Pierwszy zaczyna się o {time}.}}",
+  "reminderAlarmTitle": "Trening",
+  "reminderAlarmBody": "{name} zaczyna się o {time}.",
+  "reminderChannelEvening": "Przypomnienie wieczorem",
+  "reminderChannelEveningDesc": "O 21:00, jeśli jutro są treningi.",
+  "reminderChannelAlarm": "Budzik treningu",
+  "reminderChannelAlarmDesc": "Sygnał chwilę przed treningiem, który włączysz.",
+  "instructionReminderTitle": "Przypomnienia",
+  "instructionReminderDesc": "Wieczorem w przeddzień dnia z treningami, o 21:00, aplikacja podaje, ile sesji jest jutro i o której zaczyna się pierwsza. Osobny budzik kilka minut przed sesją jest wyłączony, dopóki sam go nie włączysz przy wyborze godziny. Oba przypomnienia są ustawiane na telefonie i nigdzie nie wychodzą."
 }

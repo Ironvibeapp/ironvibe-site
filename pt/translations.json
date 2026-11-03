@@ -72,6 +72,7 @@
     "s2List1": "histórico de treinos, exercícios, anotações e parâmetros relacionados (peso, repetições, pausas etc.);",
     "s2List2": "dados de clientes/atletas inseridos por você (por exemplo, nome, objetivo de treino);",
     "s2List3": "configurações locais do app (idioma, opções de exibição etc.).",
+    "s2List4": "um aviso de treino, se o ligares: fica marcado neste telefone e não nos é enviado;",
     "s2Outro": "Esses dados existem apenas no seu dispositivo e não são enviados automaticamente para nós.",
     "s3Title": "3. Armazenamento local",
     "s3P1": "Todas as informações sobre treinos e configurações são armazenadas localmente no seu dispositivo, na memória do app. Não fazemos upload desses dados para nossos servidores e não temos acesso direto a eles.",

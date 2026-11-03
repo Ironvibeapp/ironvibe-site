@@ -529,6 +529,11 @@ List<_InstructionChapter> _ironVibeInstructionChapters(AppLocalizations l) {
             description: l.instructionCalendarAddDesc,
           ),
           _InstructionTopic(
+            icon: Icons.alarm_rounded,
+            label: l.instructionReminderTitle,
+            description: l.instructionReminderDesc,
+          ),
+          _InstructionTopic(
             icon: Icons.bar_chart_rounded,
             label: l.instructionNavHistoryTitle,
             description: l.instructionNavHistoryDesc,

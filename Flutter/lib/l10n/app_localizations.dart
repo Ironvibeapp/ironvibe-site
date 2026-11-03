@@ -2883,6 +2883,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Statistics can share a spreadsheet for Google Sheets or Excel. Edit the sets at home, download CSV, and import it back. Keep the id columns, and keep each exercise\'s rows together in order. A workout in the file replaces its sets. Workouts missing from the file stay. A client\'s name, goal, and notes come from the first filled row. JSON is still the full backup.'**
   String get instructionSheetDesc;
+
+  /// No description provided for @remindBeforePrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a notification'**
+  String get remindBeforePrefix;
+
+  /// No description provided for @remindBeforeSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'minutes before'**
+  String get remindBeforeSuffix;
+
+  /// No description provided for @remindPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are off, so this reminder will not arrive. You can allow them in the phone settings.'**
+  String get remindPermissionDenied;
+
+  /// No description provided for @reminderEveningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get reminderEveningTitle;
+
+  /// No description provided for @reminderEveningBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Tomorrow you have 1 workout. It starts at {time}.} other{Tomorrow you have {count} workouts. The first starts at {time}.}}'**
+  String reminderEveningBody(int count, String time);
+
+  /// No description provided for @reminderAlarmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Workout'**
+  String get reminderAlarmTitle;
+
+  /// No description provided for @reminderAlarmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} starts at {time}.'**
+  String reminderAlarmBody(String name, String time);
+
+  /// No description provided for @reminderChannelEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Day-before reminder'**
+  String get reminderChannelEvening;
+
+  /// No description provided for @reminderChannelEveningDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'At 21:00 on the evening before a day with workouts.'**
+  String get reminderChannelEveningDesc;
+
+  /// No description provided for @reminderChannelAlarm.
+  ///
+  /// In en, this message translates to:
+  /// **'Workout alarm'**
+  String get reminderChannelAlarm;
+
+  /// No description provided for @reminderChannelAlarmDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A signal shortly before a workout you turned on.'**
+  String get reminderChannelAlarmDesc;
+
+  /// No description provided for @instructionReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get instructionReminderTitle;
+
+  /// No description provided for @instructionReminderDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The evening before a day with scheduled workouts, at 21:00, the app says how many sessions are tomorrow and when the first one starts. A separate alarm a few minutes before a session stays off until you turn it on while choosing the time. Both are scheduled on the phone and are not sent anywhere.'**
+  String get instructionReminderDesc;
 }
 
 class _AppLocalizationsDelegate

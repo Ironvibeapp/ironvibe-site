@@ -1547,4 +1547,56 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get instructionSheetDesc =>
       'आँकड़ों से एक शीट शेयर करके Google Sheets या Excel में खोली जा सकती है। सेट घर पर बदलें, CSV डाउनलोड करें और वापस आयात करें। id कॉलम रखें और हर एक्सरसाइज़ की पंक्तियाँ क्रम में साथ रखें। फ़ाइल का वर्कआउट अपने सेट बदल देता है। फ़ाइल में न होने वाले वर्कआउट रह जाते हैं। क्लाइंट का नाम, लक्ष्य और नोट उसकी पहली भरी पंक्ति से आते हैं। JSON अब भी पूरा बैकअप है।';
+
+  @override
+  String get remindBeforePrefix => 'सूचना';
+
+  @override
+  String get remindBeforeSuffix => 'मिनट पहले';
+
+  @override
+  String get remindPermissionDenied =>
+      'सूचनाएँ बंद हैं, इसलिए यह रिमाइंडर नहीं आएगा। इन्हें फ़ोन की सेटिंग में चालू किया जा सकता है.';
+
+  @override
+  String get reminderEveningTitle => 'कल';
+
+  @override
+  String reminderEveningBody(int count, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'कल $count वर्कआउट हैं। पहला $time पर शुरू होगा।',
+      one: 'कल $count वर्कआउट है। यह $time पर शुरू होगा।',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderAlarmTitle => 'वर्कआउट';
+
+  @override
+  String reminderAlarmBody(String name, String time) {
+    return '$name $time पर शुरू होगा।';
+  }
+
+  @override
+  String get reminderChannelEvening => 'एक दिन पहले की सूचना';
+
+  @override
+  String get reminderChannelEveningDesc => 'अगर कल वर्कआउट हैं, तो 21:00 पर।';
+
+  @override
+  String get reminderChannelAlarm => 'वर्कआउट अलार्म';
+
+  @override
+  String get reminderChannelAlarmDesc =>
+      'जो अलार्म आपने चालू किया, वह वर्कआउट से थोड़ा पहले।';
+
+  @override
+  String get instructionReminderTitle => 'रिमाइंडर';
+
+  @override
+  String get instructionReminderDesc =>
+      'जिस दिन वर्कआउट हों, उससे पिछली शाम 21:00 पर ऐप बताता है कि कल कितने सेशन हैं और पहला कब शुरू होगा। सेशन से कुछ मिनट पहले का अलार्म तब तक बंद रहता है, जब तक आप समय चुनते हुए उसे खुद न चालू करें। दोनों रिमाइंडर फ़ोन पर लगते हैं और कहीं भेजे नहीं जाते।';
 }

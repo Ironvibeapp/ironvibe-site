@@ -1545,4 +1545,57 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get instructionSheetDesc =>
       'Statistics can share a spreadsheet for Google Sheets or Excel. Edit the sets at home, download CSV, and import it back. Keep the id columns, and keep each exercise\'s rows together in order. A workout in the file replaces its sets. Workouts missing from the file stay. A client\'s name, goal, and notes come from the first filled row. JSON is still the full backup.';
+
+  @override
+  String get remindBeforePrefix => 'Add a notification';
+
+  @override
+  String get remindBeforeSuffix => 'minutes before';
+
+  @override
+  String get remindPermissionDenied =>
+      'Notifications are off, so this reminder will not arrive. You can allow them in the phone settings.';
+
+  @override
+  String get reminderEveningTitle => 'Tomorrow';
+
+  @override
+  String reminderEveningBody(int count, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Tomorrow you have $count workouts. The first starts at $time.',
+      one: 'Tomorrow you have 1 workout. It starts at $time.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderAlarmTitle => 'Workout';
+
+  @override
+  String reminderAlarmBody(String name, String time) {
+    return '$name starts at $time.';
+  }
+
+  @override
+  String get reminderChannelEvening => 'Day-before reminder';
+
+  @override
+  String get reminderChannelEveningDesc =>
+      'At 21:00 on the evening before a day with workouts.';
+
+  @override
+  String get reminderChannelAlarm => 'Workout alarm';
+
+  @override
+  String get reminderChannelAlarmDesc =>
+      'A signal shortly before a workout you turned on.';
+
+  @override
+  String get instructionReminderTitle => 'Reminders';
+
+  @override
+  String get instructionReminderDesc =>
+      'The evening before a day with scheduled workouts, at 21:00, the app says how many sessions are tomorrow and when the first one starts. A separate alarm a few minutes before a session stays off until you turn it on while choosing the time. Both are scheduled on the phone and are not sent anywhere.';
 }

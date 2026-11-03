@@ -460,5 +460,18 @@
   "sheetImportConfirm": "Importieren",
   "sheetImportSuccess": "Tabelle importiert",
   "instructionSheetTitle": "Google Sheets",
-  "instructionSheetDesc": "Unter Statistik lässt sich eine Tabelle für Google Sheets oder Excel teilen. Sätze zu Hause ändern, CSV herunterladen und wieder importieren. Die ID-Spalten behalten und die Zeilen einer Übung der Reihe nach zusammen lassen. Ein Training aus der Datei ersetzt seine Sätze. Trainings, die in der Datei fehlen, bleiben. Name, Ziel und Notizen eines Kunden kommen aus der ersten gefüllten Zeile. JSON bleibt die vollständige Sicherung."
+  "instructionSheetDesc": "Unter Statistik lässt sich eine Tabelle für Google Sheets oder Excel teilen. Sätze zu Hause ändern, CSV herunterladen und wieder importieren. Die ID-Spalten behalten und die Zeilen einer Übung der Reihe nach zusammen lassen. Ein Training aus der Datei ersetzt seine Sätze. Trainings, die in der Datei fehlen, bleiben. Name, Ziel und Notizen eines Kunden kommen aus der ersten gefüllten Zeile. JSON bleibt die vollständige Sicherung.",
+  "remindBeforePrefix": "Benachrichtigung",
+  "remindBeforeSuffix": "Minuten vorher",
+  "remindPermissionDenied": "Benachrichtigungen sind aus, deshalb kommt diese Erinnerung nicht an. Du kannst sie in den Telefoneinstellungen erlauben.",
+  "reminderEveningTitle": "Morgen",
+  "reminderEveningBody": "{count, plural, =1{Morgen steht 1 Training an. Es beginnt um {time}.} other{Morgen stehen {count} Trainings an. Das erste beginnt um {time}.}}",
+  "reminderAlarmTitle": "Training",
+  "reminderAlarmBody": "{name} beginnt um {time}.",
+  "reminderChannelEvening": "Erinnerung am Vorabend",
+  "reminderChannelEveningDesc": "Um 21:00, wenn morgen Trainings anstehen.",
+  "reminderChannelAlarm": "Trainingswecker",
+  "reminderChannelAlarmDesc": "Ein Signal kurz vor einem Training, das du eingeschaltet hast.",
+  "instructionReminderTitle": "Erinnerungen",
+  "instructionReminderDesc": "Am Abend vor einem Tag mit Trainings, um 21:00, sagt die App, wie viele Einheiten morgen sind und wann die erste beginnt. Ein eigener Wecker ein paar Minuten vor einer Einheit bleibt aus, bis du ihn beim Wählen der Uhrzeit einschaltest. Beides wird auf dem Telefon geplant und nirgendwohin geschickt."
 }

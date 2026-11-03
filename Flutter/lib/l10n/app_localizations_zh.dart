@@ -1487,4 +1487,53 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get instructionSheetDesc =>
       '在统计里可以分享一份表格，用 Google 表格或 Excel 打开。在家里改组数，下载 CSV，再导入回来。保留 id 列，并把每个动作的行按顺序放在一起。文件里的训练会替换它的组数。文件里没有的训练会留下。客户的姓名、目标和备注取自这个人第一行已填写的内容。JSON 仍然是完整备份。';
+
+  @override
+  String get remindBeforePrefix => '提前';
+
+  @override
+  String get remindBeforeSuffix => '分钟提醒';
+
+  @override
+  String get remindPermissionDenied => '通知已关闭，所以这条提醒不会送达。可以在手机设置里允许通知。';
+
+  @override
+  String get reminderEveningTitle => '明天';
+
+  @override
+  String reminderEveningBody(int count, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '明天有 $count 次训练，第一次 $time 开始。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reminderAlarmTitle => '训练';
+
+  @override
+  String reminderAlarmBody(String name, String time) {
+    return '$name，$time 开始。';
+  }
+
+  @override
+  String get reminderChannelEvening => '前一天晚上的提醒';
+
+  @override
+  String get reminderChannelEveningDesc => '如果明天有训练，21:00 提醒一次。';
+
+  @override
+  String get reminderChannelAlarm => '训练闹钟';
+
+  @override
+  String get reminderChannelAlarmDesc => '你打开后，会在训练前不久响一次。';
+
+  @override
+  String get instructionReminderTitle => '提醒';
+
+  @override
+  String get instructionReminderDesc =>
+      '有训练的前一天晚上 21:00，应用会说明明天有几次训练、第一次几点开始。训练前几分钟的闹钟默认关闭，要在选择时间时自己打开。两条提醒都只排在手机上，不会发到别处。';
 }
