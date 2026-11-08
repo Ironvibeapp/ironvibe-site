@@ -1,14 +1,9 @@
-# Flutter / Dart (see also app/.gitignore)
-app/build/
-app/.dart_tool/
-app/.flutter-plugins-dependencies
-app/android/.gradle/
-app/android/app/build/
-app/android/local.properties
-app/ios/Pods/
-app/ios/.symlinks/
+# Flutter app lives in Flutter/. Build output is also ignored by Flutter/.gitignore.
 Flutter/build/
 Flutter/.dart_tool/
+
+# Local Chrome profile used to check the site. Holds cookies and cache.
+_tmp_site/
 
 # Signing — never commit
 **/key.properties

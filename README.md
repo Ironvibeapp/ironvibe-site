@@ -73,7 +73,7 @@ Current version: **1.8.6** (`1.8.6+86`). Release builds: see [`Flutter/BUILD_AAB
 
 ## Website
 
-The live site is a static multilingual landing page (EN, RU, AR, DE, ES, FR, HI, IT, PT, ZH) plus a privacy page. No accounts, no server-side forms, no cookies, no analytics. Donation addresses live in the `#support` section of each landing page; `/<locale>/donate/` only redirects there.
+The live site is a static multilingual landing page (EN, RU, AR, DE, ES, FR, HI, IT, PL, PT, UK, ZH) plus a privacy page. No accounts, no server-side forms, no cookies, no analytics. Donation addresses live in the `#support` section of each landing page; `/<locale>/donate/` only redirects there.
 
 ## License
 
