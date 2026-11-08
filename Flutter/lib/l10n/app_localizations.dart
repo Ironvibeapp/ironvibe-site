@@ -586,6 +586,48 @@ abstract class AppLocalizations {
   /// **'Triceps'**
   String get muscleGroupArmExt;
 
+  /// No description provided for @muscleGroupGlutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Glutes'**
+  String get muscleGroupGlutes;
+
+  /// No description provided for @muscleGroupCalves.
+  ///
+  /// In en, this message translates to:
+  /// **'Calves'**
+  String get muscleGroupCalves;
+
+  /// No description provided for @loadInsightTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscle load'**
+  String get loadInsightTitle;
+
+  /// No description provided for @loadSetsShort.
+  ///
+  /// In en, this message translates to:
+  /// **'sets'**
+  String get loadSetsShort;
+
+  /// No description provided for @loadTonnageShort.
+  ///
+  /// In en, this message translates to:
+  /// **'tonnage'**
+  String get loadTonnageShort;
+
+  /// No description provided for @loadWindow.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly average over the last 28 days. First number is sets per week, second is tonnage. Only sets with RIR count; an empty RIR or ∞ is a warm-up. Exercises with no group are left out.'**
+  String get loadWindow;
+
+  /// No description provided for @loadTrendHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Each mark is one calendar week: working sets and tonnage.'**
+  String get loadTrendHint;
+
   /// No description provided for @muscleGroupUntagged.
   ///
   /// In en, this message translates to:
@@ -975,6 +1017,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This client has no previous workout to repeat.'**
   String get repeatLastUnavailable;
+
+  /// No description provided for @repeatPickTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat a workout'**
+  String get repeatPickTitle;
+
+  /// No description provided for @repeatPickSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by note'**
+  String get repeatPickSearchHint;
+
+  /// No description provided for @repeatPickNoNote.
+  ///
+  /// In en, this message translates to:
+  /// **'No note'**
+  String get repeatPickNoNote;
+
+  /// No description provided for @repeatPickNoMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No workout with that note.'**
+  String get repeatPickNoMatch;
+
+  /// No description provided for @reorderExercisesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercise order'**
+  String get reorderExercisesTitle;
+
+  /// No description provided for @reorderExercisesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag the handle to move a row.'**
+  String get reorderExercisesHint;
+
+  /// No description provided for @reorderExercisesTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Change order'**
+  String get reorderExercisesTooltip;
 
   /// No description provided for @editPlan.
   ///
@@ -1609,7 +1693,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionChapterSessionBlurb.
   ///
   /// In en, this message translates to:
-  /// **'Sets, weight, reps, RIR, cardio, and finishing a session.'**
+  /// **'Sets, weight, reps, RIR, an exercise note, cardio, and finishing a session.'**
   String get instructionChapterSessionBlurb;
 
   /// No description provided for @instructionChapterTimerTitle.
@@ -1657,7 +1741,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionChapterRhythmBlurb.
   ///
   /// In en, this message translates to:
-  /// **'The weekly rhythm gauge and the deload week.'**
+  /// **'The weekly rhythm gauge, muscle load, and the deload week.'**
   String get instructionChapterRhythmBlurb;
 
   /// No description provided for @instructionChapterDataTitle.
@@ -1717,7 +1801,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionTrainSelfDesc.
   ///
   /// In en, this message translates to:
-  /// **'Your space: workouts, calendar, personal progress, favorites, and the rhythm gauge.'**
+  /// **'Your space: workouts, calendar, personal progress, favorites, the rhythm gauge, and muscle load.'**
   String get instructionTrainSelfDesc;
 
   /// No description provided for @instructionTrainOthersTitle.
@@ -1864,6 +1948,18 @@ abstract class AppLocalizations {
   /// **'Last time\'s weight and reps show in grey — a target to beat, not a logged set. Only numbers you type yourself go into history.'**
   String get instructionPreviousHintsDesc;
 
+  /// No description provided for @instructionExerciseNoteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercise note'**
+  String get instructionExerciseNoteTitle;
+
+  /// No description provided for @instructionExerciseNoteDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The pencil on the exercise header is a note for this workout only. Older notes for the same movement are listed above, each with its date. Clear the field to remove the note. It stays with that session, including in a saved workout.'**
+  String get instructionExerciseNoteDesc;
+
   /// No description provided for @instructionRemoveExerciseTitle.
   ///
   /// In en, this message translates to:
@@ -1875,6 +1971,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The red X removes the block from the current session. Saved history is not changed.'**
   String get instructionRemoveExerciseDesc;
+
+  /// No description provided for @instructionReorderExercisesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change exercise order'**
+  String get instructionReorderExercisesTitle;
+
+  /// No description provided for @instructionReorderExercisesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the drag handle on the exercise header. A short list opens: drag a row into place. The new order is saved for this workout and stays that way in its history.'**
+  String get instructionReorderExercisesDesc;
 
   /// No description provided for @instructionSectionSetControl.
   ///
@@ -2197,7 +2305,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionMuscleGroupsIntro.
   ///
   /// In en, this message translates to:
-  /// **'A group is an optional tag on your name. It is used only by the quick workout, to build a balanced full-body session. Eight groups: chest, back, shoulders, core, front thigh, rear thigh, biceps, triceps.'**
+  /// **'A group is an optional tag on your name. The quick workout uses it to build a balanced full-body session, and muscle load counts weekly sets and tonnage from it. Ten groups: chest, back, shoulders, core, front thigh, rear thigh, glutes, calves, biceps, triceps.'**
   String get instructionMuscleGroupsIntro;
 
   /// No description provided for @instructionMuscleGroupTagTitle.
@@ -2341,7 +2449,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionRhythmIntro.
   ///
   /// In en, this message translates to:
-  /// **'Once you have at least three strength days in the last four weeks, a rhythm gauge appears at the top of the training screen. It is not a goal and not a grade — just how often you currently get to the gym.'**
+  /// **'Once you have at least three strength days in the last four weeks, a rhythm gauge appears at the top of the training screen, beside the muscle-load figure. It is not a goal and not a grade — just how often you currently get to the gym. The figure stays even before the gauge appears.'**
   String get instructionRhythmIntro;
 
   /// No description provided for @instructionRhythmGaugeTitle.
@@ -2391,6 +2499,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'If you hold two and a half sessions a week or more and have not deloaded in a while, the app suggests taking such a week. The denser the rhythm, the sooner the hint appears. It shows at most once a week, in personal mode only — and it stays a recommendation, not medical advice.'**
   String get instructionRhythmNudgeDesc;
+
+  /// No description provided for @instructionSectionMuscleLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscle load'**
+  String get instructionSectionMuscleLoad;
+
+  /// No description provided for @instructionMuscleLoadIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'The figure beside the rhythm gauge opens the load screen. The same picture is larger, with a callout for each of the ten muscle groups. The first number is working sets per week, the second is tonnage. Both are the average of the last 28 days.'**
+  String get instructionMuscleLoadIntro;
+
+  /// No description provided for @instructionMuscleLoadCountsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What counts'**
+  String get instructionMuscleLoadCountsTitle;
+
+  /// No description provided for @instructionMuscleLoadCountsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A set counts only when RIR is set, from 0 to 5. An empty RIR and ∞ are warm-ups. Cardio does not count, nor does an exercise with no group or one marked not for the quick workout. Tonnage is weight times reps, in the units you log.'**
+  String get instructionMuscleLoadCountsDesc;
+
+  /// No description provided for @instructionMuscleLoadTrendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Week by week'**
+  String get instructionMuscleLoadTrendTitle;
+
+  /// No description provided for @instructionMuscleLoadTrendDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a callout to open that group\'s chart. Each mark is one calendar week, including empty weeks, so a drop stays visible. Month, year, and all time change the window. The number on the callout is the 28-day average; a mark is that week\'s actual total.'**
+  String get instructionMuscleLoadTrendDesc;
+
+  /// No description provided for @instructionMuscleLoadLineSetsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Cyan — working sets that week.'**
+  String get instructionMuscleLoadLineSetsDesc;
+
+  /// No description provided for @instructionMuscleLoadLineTonnageDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Yellow — tonnage that week, weight times reps.'**
+  String get instructionMuscleLoadLineTonnageDesc;
 
   /// No description provided for @instructionSectionCalendar.
   ///
@@ -2443,7 +2599,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionHistoryEditDesc.
   ///
   /// In en, this message translates to:
-  /// **'A saved workout can be expanded and edited: add an exercise or a set, change the numbers, or delete the session. Changes save immediately.'**
+  /// **'Open a saved workout and edit it in place: add an exercise you skipped, a set, or a note, change the numbers or the order, or delete the session. Changes save immediately.'**
   String get instructionHistoryEditDesc;
 
   /// No description provided for @instructionSectionStats.
@@ -2521,7 +2677,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionClientProfileDesc.
   ///
   /// In en, this message translates to:
-  /// **'Today\'s session starts here, along with progress, favorites, and history by month. If there are enough strength days, the rhythm gauge is here too. Deleting a client removes future sessions; past workouts stay for reporting.'**
+  /// **'Today\'s session starts here, along with progress, favorites, and history by month. The muscle-load figure is here, and the rhythm gauge joins it once there are enough strength days. Both read this client\'s finished sessions. Deleting a client removes future sessions; past workouts stay for reporting.'**
   String get instructionClientProfileDesc;
 
   /// No description provided for @instructionTrainerScheduleTitle.
@@ -2535,6 +2691,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The coach calendar shows sessions for every client: a play icon means planned, a check means finished, an hourglass means today is in progress. Empty plans from past days are cleared on their own.'**
   String get instructionTrainerScheduleDesc;
+
+  /// No description provided for @instructionTrainerTimeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change time'**
+  String get instructionTrainerTimeTitle;
+
+  /// No description provided for @instructionTrainerTimeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The pencil on a planned session moves the clock on the same day — on the calendar, or next to the date inside the session. You can also hold the session card. Exercises, the session note, and the reminder stay. A finished or imported session keeps its time.'**
+  String get instructionTrainerTimeDesc;
 
   /// No description provided for @instructionTrainerPlanTitle.
   ///
@@ -2557,7 +2725,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionTrainerRepeatDesc.
   ///
   /// In en, this message translates to:
-  /// **'From the client profile, or as a switch when adding a session on the calendar. The exercise list is copied; weights and reps come as grey hints, not as finished sets.'**
+  /// **'From the client profile, or as a switch when adding a session on the calendar. One past workout is repeated as-is. If there are more, pick from the last five: they are sorted by the note, and you can search that note. The exercise list is copied; weights and reps come as grey hints, not as finished sets.'**
   String get instructionTrainerRepeatDesc;
 
   /// No description provided for @instructionPrintSessionTitle.
@@ -2887,7 +3055,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionSheetDesc.
   ///
   /// In en, this message translates to:
-  /// **'Statistics can share a spreadsheet for Google Sheets or Excel. Edit the sets at home, download CSV, and import it back. Keep the id columns, and keep each exercise\'s rows together in order. A workout in the file replaces its sets. Workouts missing from the file stay. A client\'s name, goal, and notes come from the first filled row. JSON is still the full backup.'**
+  /// **'Statistics can share a spreadsheet for Google Sheets or Excel. Edit the sets at home, download CSV, and import it back. Keep the id columns, and keep each exercise\'s rows together in order. A workout in the file replaces its sets. Workouts missing from the file stay. A client\'s name, goal, and notes come from the first filled row. The exercise note and the session note come back with the file. A file without those columns does not erase notes already on the phone. JSON is still the full backup.'**
   String get instructionSheetDesc;
 
   /// No description provided for @remindBeforePrefix.
@@ -2907,6 +3075,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Notifications are off, so this reminder will not arrive. You can allow them in the phone settings.'**
   String get remindPermissionDenied;
+
+  /// No description provided for @remindPermissionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are off'**
+  String get remindPermissionTitle;
+
+  /// No description provided for @remindPermissionOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get remindPermissionOpenSettings;
+
+  /// No description provided for @remindPermissionNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get remindPermissionNotNow;
 
   /// No description provided for @reminderEveningTitle.
   ///
@@ -2965,7 +3151,7 @@ abstract class AppLocalizations {
   /// No description provided for @instructionReminderDesc.
   ///
   /// In en, this message translates to:
-  /// **'The evening before a day with scheduled workouts, at 21:00, the app says how many sessions are tomorrow and when the first one starts. A separate alarm a few minutes before a session stays off until you turn it on while choosing the time. Both are scheduled on the phone and are not sent anywhere.'**
+  /// **'The evening before a day with workouts, at 21:00, the app says how many sessions are tomorrow and when the first one starts. Your own future workouts and client sessions both count. A separate alarm stays off until you turn it on while choosing the time — from 10 minutes to 2 hours before. If notifications are off, the app offers to open the phone settings. Both reminders stay on the phone and are not sent anywhere.'**
   String get instructionReminderDesc;
 }
 

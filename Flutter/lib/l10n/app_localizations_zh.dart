@@ -246,6 +246,28 @@ class AppLocalizationsZh extends AppLocalizations {
   String get muscleGroupArmExt => '肱三头肌';
 
   @override
+  String get muscleGroupGlutes => '臀';
+
+  @override
+  String get muscleGroupCalves => '小腿';
+
+  @override
+  String get loadInsightTitle => '负荷';
+
+  @override
+  String get loadSetsShort => '组';
+
+  @override
+  String get loadTonnageShort => '吨位';
+
+  @override
+  String get loadWindow =>
+      '最近 28 天的周平均。第一个数是每周组数，第二个是吨位。只统计填写了 RIR 的组；空的 RIR 和 ∞ 算热身。没有肌群的动作不计入。';
+
+  @override
+  String get loadTrendHint => '每个点是一个日历周：工作组和吨位。';
+
+  @override
   String get muscleGroupUntagged => '—';
 
   @override
@@ -445,6 +467,27 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get repeatLastUnavailable => '该客户还没有可重复的训练。';
+
+  @override
+  String get repeatPickTitle => '重复一次训练';
+
+  @override
+  String get repeatPickSearchHint => '按备注搜索';
+
+  @override
+  String get repeatPickNoNote => '无备注';
+
+  @override
+  String get repeatPickNoMatch => '没有带这条备注的训练。';
+
+  @override
+  String get reorderExercisesTitle => '动作顺序';
+
+  @override
+  String get reorderExercisesHint => '拖动把手来移动这一行。';
+
+  @override
+  String get reorderExercisesTooltip => '调整顺序';
 
   @override
   String get editPlan => '编辑计划';
@@ -772,7 +815,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get instructionChapterSessionTitle => '训练当中';
 
   @override
-  String get instructionChapterSessionBlurb => '组数、重量、次数、RIR、有氧，以及结束本次训练。';
+  String get instructionChapterSessionBlurb => '组数、重量、次数、RIR、动作备注、有氧，以及结束本次训练。';
 
   @override
   String get instructionChapterTimerTitle => '秒表';
@@ -796,7 +839,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get instructionChapterRhythmTitle => '节奏与恢复';
 
   @override
-  String get instructionChapterRhythmBlurb => '每周节奏量表和减载周。';
+  String get instructionChapterRhythmBlurb => '每周节奏量表、肌肉负荷和减载周。';
 
   @override
   String get instructionChapterDataTitle => '历史与数据';
@@ -827,7 +870,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get instructionTrainSelfTitle => '自己训练';
 
   @override
-  String get instructionTrainSelfDesc => '你的空间：训练、日历、个人进步、收藏和节奏量表。';
+  String get instructionTrainSelfDesc => '你的空间：训练、日历、个人进步、收藏、节奏量表和肌肉负荷。';
 
   @override
   String get instructionTrainOthersTitle => '训练他人';
@@ -906,10 +949,24 @@ class AppLocalizationsZh extends AppLocalizations {
       '上次的重量和次数显示为灰色 — 那是要超越的参照，不是已经记下的一组。只有你亲手输入的数字会进入历史。';
 
   @override
+  String get instructionExerciseNoteTitle => '动作备注';
+
+  @override
+  String get instructionExerciseNoteDesc =>
+      '动作标题上的铅笔是只属于这次训练的备注。上面会列出同一动作以前的备注，每条都带日期。清空输入就删掉这条备注。它留在这次训练里，已经保存的训练也一样。';
+
+  @override
   String get instructionRemoveExerciseTitle => '去掉动作';
 
   @override
   String get instructionRemoveExerciseDesc => '红色叉号只从当前训练去掉这一块。已保存的历史不会改。';
+
+  @override
+  String get instructionReorderExercisesTitle => '调整动作顺序';
+
+  @override
+  String get instructionReorderExercisesDesc =>
+      '点动作标题上的拖动手柄。会打开一份短列表：把一行拖到新位置。新顺序会留在这次训练里，也会留在它的历史记录中。';
 
   @override
   String get instructionSectionSetControl => '一组那一行';
@@ -1085,7 +1142,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get instructionMuscleGroupsIntro =>
-      '肌群是名称上的可选标签。只给快速训练用来拼一次均衡的全身课。八个组：胸、背、肩、核心、大腿前侧、大腿后侧、肱二头肌、肱三头肌。';
+      '肌群是名称上的可选标签。快速训练用它拼一次均衡的全身课，负荷画面用它统计每周组数和吨位。十个组：胸、背、肩、核心、大腿前侧、大腿后侧、臀、小腿、肱二头肌、肱三头肌。';
 
   @override
   String get instructionMuscleGroupTagTitle => '怎么打标签';
@@ -1168,7 +1225,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get instructionRhythmIntro =>
-      '过去四周里只要凑够三个力量日，训练屏幕顶部就会出现节奏量表。这不是目标，也不是打分 — 只是你现在去健身房的频率。';
+      '过去四周里只要凑够三个力量日，训练屏幕顶部就会出现节奏量表，就在肌肉负荷图旁边。这不是目标，也不是打分 — 只是你现在去健身房的频率。量表还没出现时，图也在。';
 
   @override
   String get instructionRhythmGaugeTitle => '每周几天';
@@ -1199,6 +1256,33 @@ class AppLocalizationsZh extends AppLocalizations {
       '如果你每周保持两次半以上、又很久没减载，应用会建议安排这样一周。节奏越密，提示来得越早。最多每周一次，而且只在个人模式 — 这是建议，不是医嘱。';
 
   @override
+  String get instructionSectionMuscleLoad => '负荷';
+
+  @override
+  String get instructionMuscleLoadIntro =>
+      '节奏量表旁边的人体图会打开负荷画面。同一张图更大，十个肌群各有一条标注。第一个数是每周工作组数，第二个是吨位。两者都是最近 28 天的平均。';
+
+  @override
+  String get instructionMuscleLoadCountsTitle => '什么计入';
+
+  @override
+  String get instructionMuscleLoadCountsDesc =>
+      '只有填写了 0 到 5 的 RIR 的组才计入。空的 RIR 和 ∞ 是热身。有氧不计入，没有肌群或标成不用于快速训练的动作也不计入。吨位是重量乘次数，用你记录的单位。';
+
+  @override
+  String get instructionMuscleLoadTrendTitle => '按周';
+
+  @override
+  String get instructionMuscleLoadTrendDesc =>
+      '点一条标注，打开这个肌群的图。每个点是一个日历周，空周也在，所以下降仍然看得见。月、年和全部时间切换窗口。标注上的数字是 28 天平均，点是那一周的实际合计。';
+
+  @override
+  String get instructionMuscleLoadLineSetsDesc => '青色 — 那一周的工作组数。';
+
+  @override
+  String get instructionMuscleLoadLineTonnageDesc => '黄色 — 那一周的吨位，重量乘次数。';
+
+  @override
   String get instructionSectionCalendar => '日历与历史';
 
   @override
@@ -1227,7 +1311,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get instructionHistoryEditDesc =>
-      '已保存的训练可以展开再改：加动作或加组、改数字、整次删掉。改完立刻保存。';
+      '已保存的训练可以展开再改：补上漏掉的动作、加组或写备注、改数字或顺序、整次删掉。改完立刻保存。';
 
   @override
   String get instructionSectionStats => '统计';
@@ -1272,7 +1356,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get instructionClientProfileDesc =>
-      '今天的训练从这里开始，进步、收藏和按月历史也在这里。力量日够多时，节奏量表也在。删除客户会拿掉未来的课，过去的训练仍留着做记录。';
+      '今天的训练从这里开始，进步、收藏和按月历史也在这里。肌肉负荷图一直在，力量日够多时节奏量表会排到它旁边。两者都看这位客户已完成的课。删除客户会拿掉未来的课，过去的训练仍留着做记录。';
 
   @override
   String get instructionTrainerScheduleTitle => '日程';
@@ -1280,6 +1364,13 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get instructionTrainerScheduleDesc =>
       '教练日历显示所有客户的课：播放图标是已计划，勾是已完成，沙漏是今天进行中。过去日期的空计划会自己清掉。';
+
+  @override
+  String get instructionTrainerTimeTitle => '更改时间';
+
+  @override
+  String get instructionTrainerTimeDesc =>
+      '已计划课程上的铅笔把时间改到同一天——在日历上，或在课程里日期旁边。也可以按住课程卡片。动作、备注和提醒都留着。已完成或导入的课程不改时间。';
 
   @override
   String get instructionTrainerPlanTitle => '课表';
@@ -1293,7 +1384,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get instructionTrainerRepeatDesc =>
-      '从客户资料，或在日历里添加课时用开关。复制的是动作名单；重量和次数是灰色提示，不是现成的组。';
+      '从客户资料，或在日历里添加课时用开关。如果只有一次以往训练，就重复那一次。如果更多，可从最近五次里选：按备注排序，也可以按备注搜索。复制的是动作名单；重量和次数是灰色提示，不是现成的组。';
 
   @override
   String get instructionPrintSessionTitle => '打印本次';
@@ -1489,7 +1580,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get instructionSheetDesc =>
-      '在统计里可以分享一份表格，用 Google 表格或 Excel 打开。在家里改组数，下载 CSV，再导入回来。保留 id 列，并把每个动作的行按顺序放在一起。文件里的训练会替换它的组数。文件里没有的训练会留下。客户的姓名、目标和备注取自这个人第一行已填写的内容。JSON 仍然是完整备份。';
+      '在统计里可以分享一份表格，用 Google 表格或 Excel 打开。在家里改组数，下载 CSV，再导入回来。保留 id 列，并把每个动作的行按顺序放在一起。文件里的训练会替换它的组数。文件里没有的训练会留下。客户的姓名、目标和备注取自这个人第一行已填写的内容。动作备注和训练备注会随文件回来。没有这些列的文件不会清掉手机上已有的备注。JSON 仍然是完整备份。';
 
   @override
   String get remindBeforePrefix => '提前';
@@ -1499,6 +1590,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get remindPermissionDenied => '通知已关闭，所以这条提醒不会送达。可以在手机设置里允许通知。';
+
+  @override
+  String get remindPermissionTitle => '通知已关闭';
+
+  @override
+  String get remindPermissionOpenSettings => '打开设置';
+
+  @override
+  String get remindPermissionNotNow => '暂时不要';
 
   @override
   String get reminderEveningTitle => '明天';
@@ -1538,5 +1638,5 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get instructionReminderDesc =>
-      '有训练的前一天晚上 21:00，应用会说明明天有几次训练、第一次几点开始。训练前几分钟的闹钟默认关闭，要在选择时间时自己打开。两条提醒都只排在手机上，不会发到别处。';
+      '有训练的前一天晚上 21:00，应用会说明明天有几次训练、第一次几点开始。自己以后的训练和客户的课都算。训练前的闹钟默认关闭，要在选择时间时自己打开，可设为提前 10 分钟到 2 小时。如果通知是关的，应用会提议打开手机设置。两条提醒都只排在手机上，不会发到别处。';
 }

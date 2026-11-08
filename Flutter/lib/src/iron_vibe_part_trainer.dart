@@ -54,6 +54,179 @@ Future<void> ironVibeOpenTrainerSession(
   );
 }
 
+String _ironVibeRepeatSessionWhen(TrainerSession session) {
+  final d = session.dateTime;
+  final date =
+      '${d.day.toString().padLeft(2, '0')}.${d.month.toString().padLeft(2, '0')}.${d.year}';
+  final clock =
+      '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
+  return '$date  $clock';
+}
+
+String _ironVibeRepeatSessionNames(TrainerSession session) {
+  return session.exercises
+      .map((e) => e.name.trim())
+      .where((name) => name.isNotEmpty)
+      .take(3)
+      .join(' · ');
+}
+
+/// One past workout repeats immediately. Several open a picker of the last five.
+Future<TrainerSession?> ironVibePickRepeatTrainerSession(
+  BuildContext context,
+  List<TrainerSession> sessions,
+) {
+  if (sessions.isEmpty) return Future<TrainerSession?>.value();
+  if (sessions.length == 1) {
+    return Future<TrainerSession?>.value(sessions.first);
+  }
+  return showDialog<TrainerSession>(
+    context: context,
+    builder: (ctx) => _RepeatTrainerSessionPicker(sessions: sessions),
+  );
+}
+
+class _RepeatTrainerSessionPicker extends StatefulWidget {
+  final List<TrainerSession> sessions;
+
+  const _RepeatTrainerSessionPicker({required this.sessions});
+
+  @override
+  State<_RepeatTrainerSessionPicker> createState() =>
+      _RepeatTrainerSessionPickerState();
+}
+
+class _RepeatTrainerSessionPickerState
+    extends State<_RepeatTrainerSessionPicker> {
+  final TextEditingController _search = TextEditingController();
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final pal = IronVibePalette.of(context);
+    final l = AppLocalizations.of(context)!;
+    final query = _search.text.trim().toLowerCase();
+    final shown = [
+      for (final session in widget.sessions)
+        if (query.isEmpty || session.note.toLowerCase().contains(query))
+          session,
+    ]..sort(ironVibeCompareTrainerSessionsByNote);
+    return AlertDialog(
+      backgroundColor: pal.dialog,
+      shape: ironVibeDialogShape(pal),
+      title: Text(
+        l.repeatPickTitle,
+        style: TextStyle(
+          color: pal.textPrimary,
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      content: SizedBox(
+        width: 420,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _search,
+              style: TextStyle(color: pal.textPrimary),
+              decoration: InputDecoration(
+                hintText: l.repeatPickSearchHint,
+                hintStyle: TextStyle(color: pal.textHint),
+                prefixIcon: Icon(Icons.search, color: pal.textMuted, size: 20),
+                filled: true,
+                fillColor: pal.inputFill,
+                isDense: true,
+              ),
+              onChanged: (_) => setState(() {}),
+            ),
+            const SizedBox(height: 8),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: math.max(
+                  140,
+                  (MediaQuery.sizeOf(context).height -
+                          MediaQuery.viewInsetsOf(context).bottom) *
+                      0.4,
+                ),
+              ),
+              child: shown.isEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 28),
+                      child: Text(
+                        l.repeatPickNoMatch,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: pal.textMuted, fontSize: 14),
+                      ),
+                    )
+                  : ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: shown.length,
+                      separatorBuilder: (_, _) =>
+                          Divider(height: 1, color: pal.borderSubtle),
+                      itemBuilder: (context, index) {
+                        final session = shown[index];
+                        final note = session.note.trim();
+                        final names = _ironVibeRepeatSessionNames(session);
+                        final when = _ironVibeRepeatSessionWhen(session);
+                        return InkWell(
+                          onTap: () => Navigator.pop(context, session),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 4,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  note.isEmpty ? l.repeatPickNoNote : note,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: note.isEmpty
+                                        ? pal.textMuted
+                                        : pal.textPrimary,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  names.isEmpty ? when : '$when\n$names',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: pal.textSecondary,
+                                    fontSize: 12,
+                                    height: 1.35,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(l.cancel, style: TextStyle(color: pal.textMuted)),
+        ),
+      ],
+    );
+  }
+}
+
 /// A logged or imported session keeps its clock. A plan can still move.
 bool ironVibeTrainerSessionTimeIsEditable(TrainerSession session) {
   if (session.isImportedHistory) return false;
@@ -370,10 +543,11 @@ class _TrainerScreenState extends State<TrainerScreen> {
         : const TimeOfDay(hour: 12, minute: 0);
     String note = '';
     var repeatLast = false;
+    TrainerSession? repeatSource;
     var remind = false;
     var remindMinutes = kIronVibeDefaultRemindMinutes;
     var saving = false;
-    var reminderDenied = false;
+    var reminderPrompted = false;
 
     final hostContext = context;
     final created = await showDialog<TrainerSession>(
@@ -383,10 +557,13 @@ class _TrainerScreenState extends State<TrainerScreen> {
           builder: (context, setDialogState) {
             final pal = IronVibePalette.of(context);
             final l = AppLocalizations.of(context)!;
-            final canRepeat =
-                selectedClient != null &&
-                ironVibeLastRepeatableTrainerSession(selectedClient!.name) !=
-                    null;
+            final repeatChoices = selectedClient == null
+                ? const <TrainerSession>[]
+                : ironVibeRecentRepeatableTrainerSessions(
+                    selectedClient!.name,
+                    clientId: selectedClient!.id,
+                  );
+            final canRepeat = repeatChoices.isNotEmpty;
             return AlertDialog(
               backgroundColor: pal.dialog,
               shape: ironVibeDialogShape(pal),
@@ -430,11 +607,8 @@ class _TrainerScreenState extends State<TrainerScreen> {
                       onChanged: (val) {
                         setDialogState(() {
                           selectedClient = val;
-                          if (val == null ||
-                              ironVibeLastRepeatableTrainerSession(val.name) ==
-                                  null) {
-                            repeatLast = false;
-                          }
+                          repeatLast = false;
+                          repeatSource = null;
                         });
                       },
                     ),
@@ -489,10 +663,12 @@ class _TrainerScreenState extends State<TrainerScreen> {
                       minutes: remindMinutes,
                       onEnabled: (value) async {
                         if (value) {
-                          final allowed = await ironVibeEnsureReminderPermission(exact: true);
-                          reminderDenied = !allowed;
-                        } else {
-                          reminderDenied = false;
+                          await ironVibeEnsureReminderPermission(
+                            exact: true,
+                            context: context,
+                            prompt: !reminderPrompted,
+                          );
+                          reminderPrompted = true;
                         }
                         setDialogState(() => remind = value);
                       },
@@ -512,21 +688,51 @@ class _TrainerScreenState extends State<TrainerScreen> {
                       onChanged: (val) => note = val,
                     ),
                     const SizedBox(height: 8),
-                    SwitchListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(
-                        l.repeatLastWorkout,
-                        style: TextStyle(
-                          color: canRepeat ? pal.textPrimary : pal.textMuted,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                    Row(
+                      children: [
+                        Switch(
+                          value: repeatLast && canRepeat,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          activeThumbColor: kIronVibeAccent,
+                          onChanged: canRepeat
+                              ? (val) async {
+                                  if (!val) {
+                                    setDialogState(() {
+                                      repeatLast = false;
+                                      repeatSource = null;
+                                    });
+                                    return;
+                                  }
+                                  final picked =
+                                      await ironVibePickRepeatTrainerSession(
+                                        context,
+                                        repeatChoices,
+                                      );
+                                  if (!context.mounted) return;
+                                  setDialogState(() {
+                                    repeatSource = picked;
+                                    repeatLast = picked != null;
+                                  });
+                                }
+                              : null,
                         ),
-                      ),
-                      value: repeatLast && canRepeat,
-                      activeThumbColor: kIronVibeAccent,
-                      onChanged: canRepeat
-                          ? (val) => setDialogState(() => repeatLast = val)
-                          : null,
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            repeatChoices.length > 1
+                                ? l.repeatPickTitle
+                                : l.repeatLastWorkout,
+                            style: TextStyle(
+                              color: canRepeat
+                                  ? pal.textPrimary
+                                  : pal.textMuted,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -544,9 +750,7 @@ class _TrainerScreenState extends State<TrainerScreen> {
                           final client = selectedClient!;
                           List<ExerciseLog>? plan;
                           if (repeatLast) {
-                            final last = ironVibeLastRepeatableTrainerSession(
-                              client.name,
-                            );
+                            final last = repeatSource;
                             if (last == null) {
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -569,8 +773,12 @@ class _TrainerScreenState extends State<TrainerScreen> {
                             selectedTime.minute,
                           );
                           if (dateTime.isAfter(DateTime.now())) {
-                            final allowed = await ironVibeEnsureReminderPermission(exact: remind);
-                            if (remind && !allowed) reminderDenied = true;
+                            await ironVibeEnsureReminderPermission(
+                              exact: remind,
+                              context: context,
+                              prompt: !reminderPrompted,
+                            );
+                            reminderPrompted = true;
                           }
                           if (!context.mounted) return;
                           final session = ironVibeNewTrainerSession(
@@ -606,13 +814,6 @@ class _TrainerScreenState extends State<TrainerScreen> {
       },
     );
     if (!hostContext.mounted) return;
-    if (reminderDenied) {
-      ScaffoldMessenger.of(hostContext).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(hostContext)!.remindPermissionDenied),
-        ),
-      );
-    }
     if (created != null) setState(() {});
   }
 
@@ -720,9 +921,6 @@ class _TrainerScreenState extends State<TrainerScreen> {
         mode: TrainerSessionUiMode.plan,
       );
     } else {
-      ironVibeMarkTrainerSessionLiveCurrent(session);
-      await DataService.saveData();
-      if (!mounted) return;
       await ironVibeOpenTrainerSession(
         context,
         session,
@@ -940,7 +1138,7 @@ class _TrainerSessionCard extends StatelessWidget {
     final subtitle = ironVibeTrainerSessionSubtitle(context, session);
     final title =
         customTitle ??
-            (showClientName ? ironVibeSessionClientLabel(session) : timeStr);
+        (showClientName ? ironVibeSessionClientLabel(session) : timeStr);
     final String detail;
     if (customTitle != null) {
       detail = subtitle;
@@ -1089,15 +1287,24 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
   late bool _isCardio;
   late final TextEditingController _noteController;
   bool _suppressPersist = false;
-  bool _planDirty = false;
+  bool _restorePending = false;
   int _remindMinutes = kIronVibeDefaultRemindMinutes;
+  late String _baselineNote;
+  late bool _baselineCardio;
+  late DateTime _baselineWhen;
+  late int? _baselineRemind;
+  late bool _baselineLive;
+  late List<ExerciseLog> _baselineExercises;
+  late String _baselineDraft;
 
   @override
   void initState() {
     super.initState();
     _noteController = TextEditingController(text: widget.session.note);
-    _remindMinutes = widget.session.remindMinutesBefore ?? kIronVibeDefaultRemindMinutes;
+    _remindMinutes =
+        widget.session.remindMinutesBefore ?? kIronVibeDefaultRemindMinutes;
     _noteController.addListener(_markPlanDirty);
+    _restorePending = widget.restoredDraft != null;
     if (widget.restoredDraft != null) {
       _isCardio = widget.restoredDraft!.isCardio;
       _exercises = ironVibeExerciseListFromDraftJson(
@@ -1110,6 +1317,16 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
       _isCardio = widget.session.exercises.first.isCardio;
       _exercises = widget.session.exercises.map(_dataForLog).toList();
     }
+    _baselineNote = widget.session.note;
+    _baselineCardio = _isCardio;
+    _baselineWhen = widget.session.dateTime;
+    _baselineRemind = widget.session.remindMinutesBefore;
+    _baselineLive = widget.session.isLiveCurrent;
+    _baselineExercises = [
+      for (final exercise in widget.session.exercises)
+        ExerciseLog.fromJson(Map<String, dynamic>.from(exercise.toJson())),
+    ];
+    _baselineDraft = jsonEncode(ironVibeExerciseListToDraftJson(_exercises));
     if (widget.mode == TrainerSessionUiMode.live) {
       ironVibeStartWorkoutAutoSave(flushDraft: _flushAutoSaveDraft);
     }
@@ -1117,17 +1334,11 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
 
   @override
   void dispose() {
-    if (!_suppressPersist) {
-      if (widget.mode == TrainerSessionUiMode.plan) {
-        widget.session.isLiveCurrent = false;
-        widget.session.isCompleted = false;
-        persistToSession(keepPlanPlaceholders: true);
-        unawaited(DataService.saveData());
-      } else if (widget.mode == TrainerSessionUiMode.history) {
-        persistToSession(keepPlanPlaceholders: false);
-        unawaited(DataService.saveData());
-      }
+    if (!_suppressPersist && widget.mode == TrainerSessionUiMode.history) {
+      persistToSession(keepPlanPlaceholders: false);
+      unawaited(DataService.saveData());
     }
+    _noteController.removeListener(_markPlanDirty);
     _noteController.dispose();
     super.dispose();
   }
@@ -1172,11 +1383,37 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
     await DataService.clearActiveWorkoutDraft();
   }
 
+  bool get hasUnsavedEdits {
+    if (widget.mode == TrainerSessionUiMode.history) return false;
+    if (_restorePending) return true;
+    if (_noteController.text.trim() != _baselineNote.trim()) return true;
+    if (_isCardio != _baselineCardio) return true;
+    if (widget.session.dateTime != _baselineWhen) return true;
+    if (widget.session.remindMinutesBefore != _baselineRemind) return true;
+    return jsonEncode(ironVibeExerciseListToDraftJson(_exercises)) !=
+        _baselineDraft;
+  }
+
+  Future<void> revertUnsavedEdits() async {
+    _suppressPersist = true;
+    _restorePending = false;
+    widget.session.dateTime = _baselineWhen;
+    widget.session.note = _baselineNote;
+    widget.session.remindMinutesBefore = _baselineRemind;
+    widget.session.isLiveCurrent = _baselineLive;
+    widget.session.exercises = [
+      for (final exercise in _baselineExercises)
+        ExerciseLog.fromJson(Map<String, dynamic>.from(exercise.toJson())),
+    ];
+    ironVibeSyncTrainerSessionInSchedule(widget.session);
+    await _clearAutoSaveDraft();
+    await DataService.saveData();
+  }
+
   void _markPlanDirty() {
-    if (widget.mode != TrainerSessionUiMode.plan) return;
-    if (_planDirty) return;
-    _planDirty = true;
-    if (mounted) setState(() {});
+    if (!mounted) return;
+    setState(() {});
+    widget.onChanged?.call();
   }
 
   void _notifyChanged() {
@@ -1281,6 +1518,30 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
     widget.onChanged?.call();
   }
 
+  Future<void> _reorderExercises() async {
+    if (_exercises.length < 2 || !mounted) return;
+    final l = AppLocalizations.of(context)!;
+    final moved = await ironVibeShowExerciseReorderSheet(
+      context: context,
+      labels: [
+        for (final ex in _exercises)
+          ex.nameController.text.trim().isEmpty
+              ? l.exerciseHeader
+              : ex.nameController.text.trim(),
+      ],
+      onReorder: (oldIndex, newIndex) {
+        ironVibeMoveListItem(_exercises, oldIndex, newIndex);
+        _notifyChanged();
+      },
+    );
+    if (!moved || !mounted) return;
+    if (widget.mode == TrainerSessionUiMode.live) {
+      _flushAutoSaveDraft();
+    } else if (widget.mode == TrainerSessionUiMode.history) {
+      persistHistoryAndStay();
+    }
+  }
+
   List<ExerciseLog> _logsFromCurrentDraft({bool keepPlanPlaceholders = false}) {
     final logs = <ExerciseLog>[];
 
@@ -1299,16 +1560,21 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
         if (_isCardio) {
           final s = setsToProcess.isNotEmpty ? setsToProcess.first : null;
           logs.add(
-            ExerciseLog(name, [
-              SetLog(
-                '',
-                '',
-                '',
-                isCardio: true,
-                duration: s?.duration.text.trim() ?? '',
-                intensity: s?.intensity.text.trim() ?? '',
-              ),
-            ], isCardio: true, note: ex.note.trim()),
+            ExerciseLog(
+              name,
+              [
+                SetLog(
+                  '',
+                  '',
+                  '',
+                  isCardio: true,
+                  duration: s?.duration.text.trim() ?? '',
+                  intensity: s?.intensity.text.trim() ?? '',
+                ),
+              ],
+              isCardio: true,
+              note: ex.note.trim(),
+            ),
           );
         } else {
           final n = math.max(1, setsToProcess.length);
@@ -1364,12 +1630,7 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
 
       if (setLogs.isNotEmpty) {
         logs.add(
-          ExerciseLog(
-            name,
-            setLogs,
-            isCardio: _isCardio,
-            note: ex.note.trim(),
-          ),
+          ExerciseLog(name, setLogs, isCardio: _isCardio, note: ex.note.trim()),
         );
       }
     }
@@ -1459,7 +1720,10 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
       context,
       widget.session,
     );
-    if (changed && mounted) setState(() {});
+    if (changed && mounted) {
+      setState(() {});
+      widget.onChanged?.call();
+    }
   }
 
   Future<void> _setSessionCardio(bool cardio) async {
@@ -1507,7 +1771,8 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
         }
       }
     }
-    if (ironVibeTrainerSessionIsAbandonedStub(widget.session)) {
+    if (ironVibeTrainerSessionIsAbandonedStub(widget.session) &&
+        !widget.session.isScheduledPlan) {
       _suppressPersist = true;
       ironVibeRemoveTrainerSession(widget.session);
     }
@@ -1550,7 +1815,8 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
     widget.session.isScheduledPlan = true;
     ironVibeSyncTrainerSessionInSchedule(widget.session);
     await _clearAutoSaveDraft();
-    if (ironVibeTrainerSessionIsAbandonedStub(widget.session)) {
+    if (ironVibeTrainerSessionIsAbandonedStub(widget.session) &&
+        !widget.session.isScheduledPlan) {
       _suppressPersist = true;
       ironVibeRemoveTrainerSession(widget.session);
     }
@@ -1564,7 +1830,6 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
     widget.session.isCompleted = false;
     persistToSession(keepPlanPlaceholders: true);
     DataService.saveData();
-    _planDirty = false;
   }
 
   Future<void> persistPlanAndLeave() async {
@@ -1658,20 +1923,21 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
             enabled: widget.session.remindMinutesBefore != null,
             minutes: widget.session.remindMinutesBefore ?? _remindMinutes,
             onEnabled: (value) async {
-              if (value) {
-                final allowed = await ironVibeEnsureReminderPermission(exact: true);
-                if (!allowed && context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l.remindPermissionDenied)),
-                  );
-                }
+              if (value && context.mounted) {
+                await ironVibeEnsureReminderPermission(
+                  exact: true,
+                  context: context,
+                );
               }
               if (!mounted) return;
               setState(() {
-                widget.session.remindMinutesBefore = value ? _remindMinutes : null;
+                widget.session.remindMinutesBefore = value
+                    ? _remindMinutes
+                    : null;
               });
               ironVibeSyncTrainerSessionInSchedule(widget.session);
               await DataService.saveData();
+              _markPlanDirty();
             },
             onMinutes: (value) {
               setState(() {
@@ -1684,6 +1950,7 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
                 ironVibeSyncTrainerSessionInSchedule(widget.session);
                 DataService.saveData();
               }
+              _markPlanDirty();
             },
           ),
         ],
@@ -1762,6 +2029,9 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
                 onLongPressReassignExercise: () =>
                     _reassignExerciseNameAt(index),
                 onRemove: () => _removeExercise(index),
+                onRequestReorder: _exercises.length < 2
+                    ? null
+                    : _reorderExercises,
                 previousSetsAsHints: widget.previousSetsAsHints,
                 excludeTrainerSession: widget.session,
                 clientIdForNotes: widget.session.clientId,
@@ -1794,9 +2064,9 @@ class _TrainerSessionEditorState extends State<TrainerSessionEditor>
           )
         else if (widget.mode == TrainerSessionUiMode.plan)
           IgnorePointer(
-            ignoring: !_planDirty,
+            ignoring: !hasUnsavedEdits,
             child: Opacity(
-              opacity: _planDirty ? 1.0 : 0.45,
+              opacity: hasUnsavedEdits ? 1.0 : 0.45,
               child: SteelButton(
                 text: l.saveClientChanges,
                 icon: Icons.check_rounded,
@@ -1854,7 +2124,11 @@ class _TrainerWorkoutSessionScreenState
 
   bool get _isLive => widget.mode == TrainerSessionUiMode.live;
   bool get _isHistory => widget.mode == TrainerSessionUiMode.history;
+  bool get _guardsExit => widget.mode != TrainerSessionUiMode.history;
+  bool get _hasUnsavedEdits =>
+      _editorKey.currentState?.hasUnsavedEdits ?? false;
   bool _printBusy = false;
+  bool _exitHandled = false;
 
   @override
   void initState() {
@@ -1869,18 +2143,37 @@ class _TrainerWorkoutSessionScreenState
     super.dispose();
   }
 
-  void _persistQuietly() {
+  Future<void> _closeWithoutSaving({required bool discardEdits}) async {
+    final editor = _editorKey.currentState;
+    final created =
+        widget.session.isScheduledPlan ||
+        widget.mode == TrainerSessionUiMode.plan;
+    if (created) {
+      if (editor != null) await editor.revertUnsavedEdits();
+      return;
+    }
+    if (!_isLive) return;
+    editor?.discardAutoSavedDraft();
+    if (discardEdits) {
+      await ironVibeRevertOrDiscardLiveTrainerSession(widget.session);
+    } else {
+      await ironVibeDiscardAbandonedTrainerSession(widget.session);
+    }
+  }
+
+  Future<void> _saveEditsAndLeave() async {
     final editor = _editorKey.currentState;
     if (editor == null) return;
-    final stillScheduled = trainerSchedule.any(
-      (s) => _ironVibeSameTrainerSession(s, widget.session),
-    );
-    if (!stillScheduled) return;
-    if (widget.mode == TrainerSessionUiMode.plan) {
-      editor.persistPlanAndStay();
-    } else if (widget.mode == TrainerSessionUiMode.history) {
-      editor.persistHistoryAndStay();
+    if (_isLive && editor.canSaveWorkout) {
+      await editor.saveAndExit();
+      return;
     }
+    if (widget.mode == TrainerSessionUiMode.plan ||
+        widget.session.isScheduledPlan) {
+      await editor.persistPlanAndLeave();
+      return;
+    }
+    await editor.saveAndExit();
   }
 
   Future<void> _printHistorySession() async {
@@ -1905,37 +2198,23 @@ class _TrainerWorkoutSessionScreenState
     }
   }
 
-  void _leaveLiveWithoutSaving() {
-    _editorKey.currentState?.discardAutoSavedDraft();
-    unawaited(ironVibeRevertOrDiscardLiveTrainerSession(widget.session));
-    Navigator.of(context).pop();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final editorState = _editorKey.currentState;
-    final hasData =
-        editorState?.hasDraftWorkout ?? widget.session.exercises.isNotEmpty;
     return Scaffold(
       body: PopScope(
-        canPop: !_isLive || !hasData,
+        canPop: !_guardsExit,
         onPopInvokedWithResult: (didPop, result) async {
           if (didPop) {
-            if (!_isLive) {
-              _persistQuietly();
-            } else {
-              _editorKey.currentState?.discardAutoSavedDraft();
-              unawaited(ironVibeDiscardAbandonedTrainerSession(widget.session));
+            if (_isHistory && !_exitHandled) {
+              _editorKey.currentState?.persistHistoryAndStay();
             }
             return;
           }
-          if (!_isLive) {
-            _persistQuietly();
-            Navigator.of(context).pop();
-            return;
-          }
-          if (!hasData) {
-            _leaveLiveWithoutSaving();
+          if (_exitHandled) return;
+          if (!_hasUnsavedEdits) {
+            _exitHandled = true;
+            await _closeWithoutSaving(discardEdits: false);
+            if (context.mounted) Navigator.of(context).pop();
             return;
           }
           final l = AppLocalizations.of(context)!;
@@ -1999,16 +2278,18 @@ class _TrainerWorkoutSessionScreenState
               );
             },
           );
-          if (!context.mounted) return;
+          if (!context.mounted || _exitHandled) return;
           switch (action) {
             case _TrainerWorkoutSessionExitAction.stay:
             case null:
               break;
             case _TrainerWorkoutSessionExitAction.discard:
-              _leaveLiveWithoutSaving();
+              _exitHandled = true;
+              await _closeWithoutSaving(discardEdits: true);
+              if (context.mounted) Navigator.of(context).pop();
               break;
             case _TrainerWorkoutSessionExitAction.saveAndLeave:
-              await _editorKey.currentState?.saveAndExit();
+              await _saveEditsAndLeave();
               break;
           }
         },
@@ -2041,7 +2322,9 @@ class _TrainerWorkoutSessionScreenState
                           ? _ironVibeHeaderIconButton(
                               context,
                               icon: Icons.print_outlined,
-                              tooltip: AppLocalizations.of(context)!.printSession,
+                              tooltip: AppLocalizations.of(
+                                context,
+                              )!.printSession,
                               onPressed: _printHistorySession,
                             )
                           : null,
@@ -2105,74 +2388,71 @@ class _ClientListScreenState extends State<ClientListScreen> {
               ),
               content: SingleChildScrollView(
                 child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    autofocus: true,
-                    textInputAction: TextInputAction.next,
-                    style: TextStyle(color: pal.textPrimary),
-                    decoration: InputDecoration(
-                      labelText: l.clientName,
-                      labelStyle: TextStyle(color: pal.textMuted),
-                      filled: true,
-                      fillColor: pal.inputFill,
-                    ),
-                    onChanged: (val) {
-                      name = val;
-                      if (error != null) setLocal(() => error = null);
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    textInputAction: TextInputAction.done,
-                    style: TextStyle(color: pal.textPrimary),
-                    decoration: InputDecoration(
-                      labelText: l.clientLastName,
-                      labelStyle: TextStyle(color: pal.textMuted),
-                      filled: true,
-                      fillColor: pal.inputFill,
-                    ),
-                    onChanged: (val) {
-                      lastName = val;
-                      if (error != null) setLocal(() => error = null);
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      l.clientNameCannotChange,
-                      style: TextStyle(
-                        color: pal.textMuted,
-                        fontSize: 12,
-                        height: 1.35,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      autofocus: true,
+                      textInputAction: TextInputAction.next,
+                      style: TextStyle(color: pal.textPrimary),
+                      decoration: InputDecoration(
+                        labelText: l.clientName,
+                        labelStyle: TextStyle(color: pal.textMuted),
+                        filled: true,
+                        fillColor: pal.inputFill,
                       ),
+                      onChanged: (val) {
+                        name = val;
+                        if (error != null) setLocal(() => error = null);
+                      },
                     ),
-                  ),
-                  if (error != null) ...[
+                    const SizedBox(height: 12),
+                    TextField(
+                      textInputAction: TextInputAction.done,
+                      style: TextStyle(color: pal.textPrimary),
+                      decoration: InputDecoration(
+                        labelText: l.clientLastName,
+                        labelStyle: TextStyle(color: pal.textMuted),
+                        filled: true,
+                        fillColor: pal.inputFill,
+                      ),
+                      onChanged: (val) {
+                        lastName = val;
+                        if (error != null) setLocal(() => error = null);
+                      },
+                    ),
                     const SizedBox(height: 8),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        error!,
-                        style: const TextStyle(
-                          color: Colors.redAccent,
+                        l.clientNameCannotChange,
+                        style: TextStyle(
+                          color: pal.textMuted,
                           fontSize: 12,
                           height: 1.35,
                         ),
                       ),
                     ),
+                    if (error != null) ...[
+                      const SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          error!,
+                          style: const TextStyle(
+                            color: Colors.redAccent,
+                            fontSize: 12,
+                            height: 1.35,
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
-                ],
                 ),
               ),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(ctx),
-                  child: Text(
-                    l.cancel,
-                    style: TextStyle(color: pal.textMuted),
-                  ),
+                  child: Text(l.cancel, style: TextStyle(color: pal.textMuted)),
                 ),
                 TextButton(
                   onPressed: () {
@@ -2592,11 +2872,11 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
         _abandonedTodayStub();
 
     if (repeatLast) {
-      final last = ironVibeLastRepeatableTrainerSession(
+      final recent = ironVibeRecentRepeatableTrainerSessions(
         name,
         clientId: clientId,
       );
-      if (last == null) {
+      if (recent.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(l.repeatLastUnavailable),
@@ -2605,16 +2885,18 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
         );
         return;
       }
+      final source = await ironVibePickRepeatTrainerSession(context, recent);
+      if (source == null || !mounted) return;
       if (target != null) {
         if (!ironVibeTrainerSessionHasLoggedData(target)) {
-          target.exercises = ironVibeTrainerPlanLogsFrom(last);
+          target.exercises = ironVibeTrainerPlanLogsFrom(source);
         }
       } else {
         target = ironVibeNewTrainerSession(
           dateTime: DateTime.now(),
           clientName: name,
           clientId: clientId,
-          exercises: ironVibeTrainerPlanLogsFrom(last),
+          exercises: ironVibeTrainerPlanLogsFrom(source),
         );
         trainerSchedule.add(target);
       }
@@ -2627,7 +2909,6 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
       trainerSchedule.add(target);
     }
 
-    ironVibeMarkTrainerSessionLiveCurrent(target);
     await DataService.saveData();
     if (!mounted) return;
     await ironVibeOpenTrainerSession(
@@ -2661,7 +2942,9 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
   Widget build(BuildContext context) {
     final history =
         trainerSchedule
-            .where((s) => ironVibeSessionBelongsToClientRecord(s, widget.client))
+            .where(
+              (s) => ironVibeSessionBelongsToClientRecord(s, widget.client),
+            )
             .where(ironVibeTrainerSessionInClientHistory)
             .toList()
           ..sort((a, b) => b.dateTime.compareTo(a.dateTime));
@@ -2683,12 +2966,11 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
       widget.client.name,
       clientId: widget.client.id,
     );
-    final canRepeat =
-        ironVibeLastRepeatableTrainerSession(
-          widget.client.name,
-          clientId: widget.client.id,
-        ) !=
-        null;
+    final repeatChoices = ironVibeRecentRepeatableTrainerSessions(
+      widget.client.name,
+      clientId: widget.client.id,
+    );
+    final canRepeat = repeatChoices.isNotEmpty;
     final rhythm = ironVibeComputeRhythmFor(clientName: widget.client.name);
 
     return PopScope(
@@ -2774,16 +3056,19 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                       style: TextStyle(color: pal.textMuted, fontSize: 13),
                     ),
                     const SizedBox(height: 20),
-                    if (rhythm.hasGauge) ...[
-                      IronVibeRhythmCard(
-                        snapshot: rhythm,
-                        onTap: () => ironVibeOpenRhythmInsight(
-                          context,
-                          clientName: widget.client.name,
-                        ),
+                    IronVibeRhythmAndLoadRow(
+                      rhythm: rhythm,
+                      showRhythm: rhythm.hasGauge,
+                      onRhythm: () => ironVibeOpenRhythmInsight(
+                        context,
+                        clientName: widget.client.name,
                       ),
-                      const SizedBox(height: 20),
-                    ],
+                      onLoad: () => ironVibeOpenMuscleLoad(
+                        context,
+                        clientName: widget.client.name,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
                     IronVibePrimaryCta(
                       label: ironVibeSentenceCase(l.startWorkout),
                       icon: Icons.play_arrow_rounded,
@@ -2792,7 +3077,11 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                     if (canRepeat) ...[
                       const SizedBox(height: 12),
                       IronVibeSecondaryCta(
-                        label: ironVibeSentenceCase(l.repeatLastWorkout),
+                        label: ironVibeSentenceCase(
+                          repeatChoices.length > 1
+                              ? l.repeatPickTitle
+                              : l.repeatLastWorkout,
+                        ),
                         icon: Icons.replay_rounded,
                         onPressed: () => _openTodaySession(repeatLast: true),
                       ),
@@ -2856,7 +3145,10 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                     TextField(
                       controller: _lastNameController,
                       style: TextStyle(color: pal.textPrimary),
-                      decoration: _fieldDecoration(pal, label: l.clientLastName),
+                      decoration: _fieldDecoration(
+                        pal,
+                        label: l.clientLastName,
+                      ),
                       onChanged: (_) => setState(() => _lastNameError = null),
                     ),
                     if (_lastNameError != null) ...[

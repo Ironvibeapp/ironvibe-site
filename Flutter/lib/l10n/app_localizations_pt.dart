@@ -254,6 +254,29 @@ class AppLocalizationsPt extends AppLocalizations {
   String get muscleGroupArmExt => 'Tríceps';
 
   @override
+  String get muscleGroupGlutes => 'Glúteos';
+
+  @override
+  String get muscleGroupCalves => 'Gémeos';
+
+  @override
+  String get loadInsightTitle => 'Carga';
+
+  @override
+  String get loadSetsShort => 'séries';
+
+  @override
+  String get loadTonnageShort => 'tonelagem';
+
+  @override
+  String get loadWindow =>
+      'Média dos últimos 28 dias. O primeiro número são séries por semana, o segundo a tonelagem. Só contam séries com RIR; um RIR vazio ou ∞ é aquecimento. Exercícios sem grupo não contam.';
+
+  @override
+  String get loadTrendHint =>
+      'Cada marca é uma semana de calendário: séries de trabalho e tonelagem.';
+
+  @override
   String get muscleGroupUntagged => '—';
 
   @override
@@ -467,6 +490,27 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get repeatLastUnavailable =>
       'Este cliente ainda não tem um treino para repetir.';
+
+  @override
+  String get repeatPickTitle => 'Repetir um treino';
+
+  @override
+  String get repeatPickSearchHint => 'Procurar pela nota';
+
+  @override
+  String get repeatPickNoNote => 'Sem nota';
+
+  @override
+  String get repeatPickNoMatch => 'Nenhum treino com essa nota.';
+
+  @override
+  String get reorderExercisesTitle => 'Ordem dos exercícios';
+
+  @override
+  String get reorderExercisesHint => 'Arraste a pega para mover a linha.';
+
+  @override
+  String get reorderExercisesTooltip => 'Mudar a ordem';
 
   @override
   String get editPlan => 'Editar plano';
@@ -798,7 +842,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get instructionChapterSessionBlurb =>
-      'Séries, carga, repetições, RIR, cardio e fecho da sessão.';
+      'Séries, carga, repetições, RIR, uma nota do exercício, cardio e fecho da sessão.';
 
   @override
   String get instructionChapterTimerTitle => 'Cronómetro';
@@ -826,7 +870,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get instructionChapterRhythmBlurb =>
-      'O indicador semanal de ritmo e a semana de descarga.';
+      'O indicador semanal de ritmo, a carga muscular e a semana de descarga.';
 
   @override
   String get instructionChapterDataTitle => 'Histórico e dados';
@@ -861,7 +905,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get instructionTrainSelfDesc =>
-      'O teu espaço: treinos, calendário, progresso pessoal, favoritos e o indicador de ritmo.';
+      'O teu espaço: treinos, calendário, progresso pessoal, favoritos, o indicador de ritmo e a carga muscular.';
 
   @override
   String get instructionTrainOthersTitle => 'Treino outros';
@@ -947,11 +991,25 @@ class AppLocalizationsPt extends AppLocalizations {
       'Carga e repetições da última vez aparecem a cinzento — um alvo a bater, não uma série já registada. Para o histórico só entra o que escreveres tu.';
 
   @override
+  String get instructionExerciseNoteTitle => 'Nota do exercício';
+
+  @override
+  String get instructionExerciseNoteDesc =>
+      'O lápis no cabeçalho do exercício é uma nota só deste treino. Por cima ficam as notas anteriores do mesmo movimento, cada uma com a sua data. Um campo vazio apaga a nota. Ela fica nesta sessão, inclusive num treino já guardado.';
+
+  @override
   String get instructionRemoveExerciseTitle => 'Retirar exercício';
 
   @override
   String get instructionRemoveExerciseDesc =>
       'A cruz vermelha tira o bloco da sessão atual. O histórico guardado não muda.';
+
+  @override
+  String get instructionReorderExercisesTitle => 'Ordem dos exercícios';
+
+  @override
+  String get instructionReorderExercisesDesc =>
+      'Toque na pega no cabeçalho do exercício. Abre-se uma lista curta: arraste uma linha para o lugar. A nova ordem fica neste treino e no seu histórico.';
 
   @override
   String get instructionSectionSetControl => 'Linha da série';
@@ -1138,7 +1196,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get instructionMuscleGroupsIntro =>
-      'O grupo é uma etiqueta opcional no teu nome. Só serve ao treino rápido, para montar um corpo todo equilibrado. Oito grupos: peito, costas, ombros, core, coxa anterior, coxa posterior, bíceps, tríceps.';
+      'O grupo é uma etiqueta opcional no teu nome. O treino rápido usa-o para montar um corpo todo equilibrado, e o ecrã de carga conta séries e tonelagem semanais. Dez grupos: peito, costas, ombros, core, coxa anterior, coxa posterior, glúteos, gémeos, bíceps, tríceps.';
 
   @override
   String get instructionMuscleGroupTagTitle => 'Como etiquetar';
@@ -1224,7 +1282,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get instructionRhythmIntro =>
-      'Quando nas últimas quatro semanas se juntam pelo menos três dias de força, no topo do ecrã de treinos aparece o indicador de ritmo. Não é um objetivo nem uma nota — é só a frequência com que vais ao ginásio neste momento.';
+      'Quando nas últimas quatro semanas se juntam pelo menos três dias de força, no topo do ecrã de treinos aparece o indicador de ritmo, ao lado da figura da carga muscular. Não é um objetivo nem uma nota — é só a frequência com que vais ao ginásio neste momento. A figura fica mesmo antes de o indicador aparecer.';
 
   @override
   String get instructionRhythmGaugeTitle => 'Dias por semana';
@@ -1255,6 +1313,35 @@ class AppLocalizationsPt extends AppLocalizations {
       'Se manténs duas sessões e meia por semana ou mais e há muito que não descarregas, a app sugere tirar uma semana dessas. Quanto mais denso o ritmo, mais cedo aparece o aviso. Surge no máximo uma vez por semana e só no modo pessoal — é uma recomendação, não um conselho médico.';
 
   @override
+  String get instructionSectionMuscleLoad => 'Carga';
+
+  @override
+  String get instructionMuscleLoadIntro =>
+      'A figura ao lado do indicador de ritmo abre o ecrã de carga. A mesma imagem fica maior, e cada um dos dez grupos tem a sua chamada. O primeiro número são séries de trabalho por semana, o segundo a tonelagem. Os dois são a média dos últimos 28 dias.';
+
+  @override
+  String get instructionMuscleLoadCountsTitle => 'O que conta';
+
+  @override
+  String get instructionMuscleLoadCountsDesc =>
+      'Uma série conta só com RIR de 0 a 5. RIR vazio e ∞ são aquecimento. O cardio não conta, nem um exercício sem grupo ou marcado como não para o treino rápido. A tonelagem é peso vezes repetições, nas unidades que registas.';
+
+  @override
+  String get instructionMuscleLoadTrendTitle => 'Semana a semana';
+
+  @override
+  String get instructionMuscleLoadTrendDesc =>
+      'Toca numa chamada para abrir o gráfico desse grupo. Cada marca é uma semana de calendário, incluindo as vazias, para a descida continuar visível. Mês, ano e todo o tempo mudam a janela. O número na chamada é a média de 28 dias; a marca é o total real dessa semana.';
+
+  @override
+  String get instructionMuscleLoadLineSetsDesc =>
+      'Ciano — séries de trabalho dessa semana.';
+
+  @override
+  String get instructionMuscleLoadLineTonnageDesc =>
+      'Amarelo — tonelagem dessa semana, peso vezes repetições.';
+
+  @override
   String get instructionSectionCalendar => 'Calendário e histórico';
 
   @override
@@ -1283,7 +1370,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get instructionHistoryEditDesc =>
-      'Um treino guardado pode abrir-se e corrigir-se: acrescentar exercício ou série, mudar os números, apagar a sessão inteira. As alterações guardam-se já.';
+      'Um treino guardado pode abrir-se e corrigir-se no lugar: acrescentar um exercício que faltou, uma série ou uma nota, mudar os números ou a ordem, apagar a sessão inteira. As alterações guardam-se já.';
 
   @override
   String get instructionSectionStats => 'Estatísticas';
@@ -1328,7 +1415,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get instructionClientProfileDesc =>
-      'Daqui parte a sessão de hoje e abrem-se o progresso, os favoritos e o histórico por mês. Se houver dias de força suficientes, está também o indicador de ritmo. Apagar um cliente tira as sessões futuras; os treinos passados ficam para o relatório.';
+      'Daqui parte a sessão de hoje e abrem-se o progresso, os favoritos e o histórico por mês. A figura da carga está sempre, e o indicador de ritmo junta-se quando há dias de força suficientes. Os dois leem as sessões concluídas deste cliente. Apagar um cliente tira as sessões futuras; os treinos passados ficam para o relatório.';
 
   @override
   String get instructionTrainerScheduleTitle => 'Agenda';
@@ -1336,6 +1423,13 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get instructionTrainerScheduleDesc =>
       'O calendário do treinador mostra as sessões de todos os clientes: ícone de play é planeada, visto é concluída, ampulheta é a de hoje em curso. Os planos vazios de dias passados desaparecem sozinhos.';
+
+  @override
+  String get instructionTrainerTimeTitle => 'Alterar a hora';
+
+  @override
+  String get instructionTrainerTimeDesc =>
+      'O lápis numa sessão planeada muda a hora no mesmo dia — no calendário, ou junto à data dentro da sessão. Também podes manter o cartão premido. Os exercícios, a nota e o lembrete ficam. Uma sessão concluída ou importada mantém a hora.';
 
   @override
   String get instructionTrainerPlanTitle => 'Plano de sessão';
@@ -1349,7 +1443,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get instructionTrainerRepeatDesc =>
-      'Do perfil do cliente ou com o interruptor ao acrescentar uma sessão no calendário. Copia-se a composição dos exercícios; carga e repetições vêm como pistas cinzentas, não como séries já feitas.';
+      'Do perfil do cliente ou com o interruptor ao acrescentar uma sessão no calendário. Se houver só um treino anterior, é esse que se repete. Se houver mais, escolhe entre os últimos cinco: ordenados pela nota, e podes procurar por ela. Copia-se a composição dos exercícios; carga e repetições vêm como pistas cinzentas, não como séries já feitas.';
 
   @override
   String get instructionPrintSessionTitle => 'Imprimir a sessão';
@@ -1553,7 +1647,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get instructionSheetDesc =>
-      'Em Estatísticas podes partilhar uma folha para o Google Sheets ou Excel. Edita as séries em casa, descarrega CSV e importa de volta. Mantém as colunas de id e deixa juntas, por ordem, as linhas de cada exercício. Um treino do ficheiro substitui as suas séries. Os que faltam no ficheiro ficam. O nome, o objetivo e as notas de um cliente vêm da primeira linha preenchida. JSON continua a ser a cópia completa.';
+      'Em Estatísticas podes partilhar uma folha para o Google Sheets ou Excel. Edita as séries em casa, descarrega CSV e importa de volta. Mantém as colunas de id e deixa juntas, por ordem, as linhas de cada exercício. Um treino do ficheiro substitui as suas séries. Os que faltam no ficheiro ficam. O nome, o objetivo e as notas de um cliente vêm da primeira linha preenchida. A nota do exercício e a nota da sessão voltam com o ficheiro. Um ficheiro sem essas colunas não apaga as notas que já estão no telefone. JSON continua a ser a cópia completa.';
 
   @override
   String get remindBeforePrefix => 'Avisar';
@@ -1564,6 +1658,15 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get remindPermissionDenied =>
       'As notificações estão desligadas, por isso este aviso não chega. Podes permiti-las nas definições do telefone.';
+
+  @override
+  String get remindPermissionTitle => 'As notificações estão desligadas';
+
+  @override
+  String get remindPermissionOpenSettings => 'Abrir definições';
+
+  @override
+  String get remindPermissionNotNow => 'Agora não';
 
   @override
   String get reminderEveningTitle => 'Amanhã';
@@ -1605,5 +1708,5 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get instructionReminderDesc =>
-      'Na véspera de um dia com treinos, às 21:00, a app diz quantas sessões há amanhã e a que horas começa a primeira. Um alarme alguns minutos antes de uma sessão fica desligado até o ligares ao escolher a hora. Os dois ficam marcados no telefone e não são enviados para lado nenhum.';
+      'Na véspera de um dia com treinos, às 21:00, a app diz quantas sessões há amanhã e a que horas começa a primeira. Contam os teus treinos futuros e as sessões de clientes. Um alarme fica desligado até o ligares ao escolher a hora — de 10 minutos a 2 horas antes. Se as notificações estiverem desligadas, a app oferece abrir as definições do telefone. Os dois ficam marcados no telefone e não são enviados para lado nenhum.';
 }

@@ -253,6 +253,29 @@ class AppLocalizationsPl extends AppLocalizations {
   String get muscleGroupArmExt => 'Triceps';
 
   @override
+  String get muscleGroupGlutes => 'Pośladki';
+
+  @override
+  String get muscleGroupCalves => 'Łydki';
+
+  @override
+  String get loadInsightTitle => 'Obciążenie';
+
+  @override
+  String get loadSetsShort => 'serie';
+
+  @override
+  String get loadTonnageShort => 'tonaż';
+
+  @override
+  String get loadWindow =>
+      'Średnia z ostatnich 28 dni. Pierwsza liczba to serie na tydzień, druga to tonaż. Liczą się tylko serie z RIR; puste RIR i ∞ to rozgrzewka. Ćwiczenia bez grupy się nie liczą.';
+
+  @override
+  String get loadTrendHint =>
+      'Każdy znacznik to jeden tydzień kalendarzowy: serie robocze i tonaż.';
+
+  @override
   String get muscleGroupUntagged => '—';
 
   @override
@@ -465,6 +488,27 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get repeatLastUnavailable =>
       'Ten klient nie ma jeszcze treningu do powtórzenia.';
+
+  @override
+  String get repeatPickTitle => 'Powtórz trening';
+
+  @override
+  String get repeatPickSearchHint => 'Szukaj po notatce';
+
+  @override
+  String get repeatPickNoNote => 'Bez notatki';
+
+  @override
+  String get repeatPickNoMatch => 'Brak treningu z taką notatką.';
+
+  @override
+  String get reorderExercisesTitle => 'Kolejność ćwiczeń';
+
+  @override
+  String get reorderExercisesHint => 'Pociągnij uchwyt, aby przesunąć wiersz.';
+
+  @override
+  String get reorderExercisesTooltip => 'Zmień kolejność';
 
   @override
   String get editPlan => 'Edytuj plan';
@@ -797,7 +841,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get instructionChapterSessionBlurb =>
-      'Serie, ciężar, powtórzenia, RIR, cardio i zakończenie sesji.';
+      'Serie, ciężar, powtórzenia, RIR, notatka do ćwiczenia, cardio i zakończenie sesji.';
 
   @override
   String get instructionChapterTimerTitle => 'Stoper';
@@ -825,7 +869,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get instructionChapterRhythmBlurb =>
-      'Wskaźnik tygodniowego rytmu i tydzień roztrenowania.';
+      'Wskaźnik tygodniowego rytmu, obciążenie mięśni i tydzień roztrenowania.';
 
   @override
   String get instructionChapterDataTitle => 'Historia i dane';
@@ -860,7 +904,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get instructionTrainSelfDesc =>
-      'Twój obszar: treningi, kalendarz, postępy osobiste, ulubione i wskaźnik rytmu.';
+      'Twój obszar: treningi, kalendarz, postępy osobiste, ulubione, wskaźnik rytmu i obciążenie mięśni.';
 
   @override
   String get instructionTrainOthersTitle => 'Trenuję innych';
@@ -946,11 +990,25 @@ class AppLocalizationsPl extends AppLocalizations {
       'Ciężar i powtórzenia z ostatniego razu są szare — to orientacja do zbicia, nie zapisana seria. Do historii trafia tylko to, co wpiszesz sam.';
 
   @override
+  String get instructionExerciseNoteTitle => 'Notatka do ćwiczenia';
+
+  @override
+  String get instructionExerciseNoteDesc =>
+      'Ołówek w nagłówku ćwiczenia to notatka tylko do tego treningu. Wyżej są starsze notatki do tego samego ruchu, każda ze swoją datą. Puste pole kasuje notatkę. Zostaje przy tej sesji, także w już zapisanym treningu.';
+
+  @override
   String get instructionRemoveExerciseTitle => 'Usuń ćwiczenie';
 
   @override
   String get instructionRemoveExerciseDesc =>
       'Czerwony krzyżyk usuwa blok z bieżącej sesji. Zapisana historia się nie zmienia.';
+
+  @override
+  String get instructionReorderExercisesTitle => 'Kolejność ćwiczeń';
+
+  @override
+  String get instructionReorderExercisesDesc =>
+      'Dotknij uchwytu w nagłówku ćwiczenia. Otworzy się krótka lista: przeciągnij wiersz na miejsce. Nowa kolejność zostanie w tym treningu i w jego historii.';
 
   @override
   String get instructionSectionSetControl => 'Wiersz serii';
@@ -1136,7 +1194,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get instructionMuscleGroupsIntro =>
-      'Grupa to opcjonalny znacznik przy twojej nazwie. Potrzebna jest tylko szybkiemu treningowi, żeby złożyć zrównoważone całe ciało. Osiem grup: klatka, plecy, barki, core, przód uda, tył uda, biceps, triceps.';
+      'Grupa to opcjonalny znacznik przy twojej nazwie. Szybki trening układa z niej zrównoważone całe ciało, a ekran obciążenia liczy tygodniowe serie i tonaż. Dziesięć grup: klatka, plecy, barki, core, przód uda, tył uda, pośladki, łydki, biceps, triceps.';
 
   @override
   String get instructionMuscleGroupTagTitle => 'Jak oznaczyć';
@@ -1222,7 +1280,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get instructionRhythmIntro =>
-      'Gdy w ostatnich czterech tygodniach zbierze się przynajmniej trzy dni siłowe, na górze ekranu treningów pojawia się wskaźnik rytmu. To nie cel i nie ocena — po prostu to, jak teraz chodzisz na siłownię.';
+      'Gdy w ostatnich czterech tygodniach zbierze się przynajmniej trzy dni siłowe, na górze ekranu treningów pojawia się wskaźnik rytmu — obok figury obciążenia. To nie cel i nie ocena, tylko to, jak często teraz chodzisz na siłownię. Figura zostaje nawet zanim pojawi się wskaźnik.';
 
   @override
   String get instructionRhythmGaugeTitle => 'Dni w tygodniu';
@@ -1253,6 +1311,35 @@ class AppLocalizationsPl extends AppLocalizations {
       'Jeśli trzymasz od dwóch i pół treningów w tygodniu i dawno się nie roztrenowywałeś, aplikacja zaproponuje taki tydzień. Im gęstszy rytm, tym wcześniej pojawi się podpowiedź. Wyskakuje nie częściej niż raz w tygodniu i tylko w trybie osobistym — i zostaje rekomendacją, nie poradą medyczną.';
 
   @override
+  String get instructionSectionMuscleLoad => 'Obciążenie';
+
+  @override
+  String get instructionMuscleLoadIntro =>
+      'Figura obok wskaźnika rytmu otwiera ekran obciążenia. Ten sam obraz jest większy, a każda z dziesięciu grup ma własną wskazówkę. Pierwsza liczba to serie robocze na tydzień, druga to tonaż. Obie są średnią z ostatnich 28 dni.';
+
+  @override
+  String get instructionMuscleLoadCountsTitle => 'Co się liczy';
+
+  @override
+  String get instructionMuscleLoadCountsDesc =>
+      'Seria liczy się tylko z RIR od 0 do 5. Puste RIR i ∞ to rozgrzewka. Kardio się nie liczy, ani ćwiczenie bez grupy lub oznaczone jako nie do szybkiego treningu. Tonaż to ciężar razy powtórzenia, w jednostkach, które wpisujesz.';
+
+  @override
+  String get instructionMuscleLoadTrendTitle => 'Tydzień po tygodniu';
+
+  @override
+  String get instructionMuscleLoadTrendDesc =>
+      'Dotknij wskazówki, żeby otworzyć wykres tej grupy. Każdy znacznik to tydzień kalendarzowy, także pusty, więc spadek zostaje widoczny. Miesiąc, rok i cały czas zmieniają okno. Liczba na wskazówce to średnia z 28 dni, znacznik to rzeczywista suma tego tygodnia.';
+
+  @override
+  String get instructionMuscleLoadLineSetsDesc =>
+      'Błękitna — serie robocze tego tygodnia.';
+
+  @override
+  String get instructionMuscleLoadLineTonnageDesc =>
+      'Żółta — tonaż tego tygodnia, ciężar razy powtórzenia.';
+
+  @override
   String get instructionSectionCalendar => 'Kalendarz i historia';
 
   @override
@@ -1281,7 +1368,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get instructionHistoryEditDesc =>
-      'Zapisany trening można rozwinąć i poprawić: dodać ćwiczenie albo serię, zmienić cyfry, usunąć sesję w całości. Zmiany zapisują się od razu.';
+      'Zapisany trening można rozwinąć i poprawić na miejscu: dodać pominięte ćwiczenie, serię albo notatkę, zmienić cyfry lub kolejność, usunąć sesję w całości. Zmiany zapisują się od razu.';
 
   @override
   String get instructionSectionStats => 'Statystyki';
@@ -1326,7 +1413,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get instructionClientProfileDesc =>
-      'Stąd startuje dzisiejsza sesja i otwierają się postępy, ulubione oraz historia po miesiącach. Jeśli siłowych dni wystarczy, jest też wskaźnik rytmu. Usunięcie klienta zdejmuje przyszłe sesje, ale minione treningi zostają do rozliczenia.';
+      'Stąd startuje dzisiejsza sesja i otwierają się postępy, ulubione oraz historia po miesiącach. Figura obciążenia jest zawsze, a wskaźnik rytmu staje obok, gdy siłowych dni wystarczy. Oba patrzą na ukończone sesje tego klienta. Usunięcie klienta zdejmuje przyszłe sesje, ale minione treningi zostają do rozliczenia.';
 
   @override
   String get instructionTrainerScheduleTitle => 'Grafik';
@@ -1334,6 +1421,13 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get instructionTrainerScheduleDesc =>
       'Kalendarz trenera pokazuje sesje wszystkich klientów: ikona odtwarzania to zaplanowana, ptaszek — zakończona, klepsydra — dzisiejsza w toku. Puste plany minionych dni znikają same.';
+
+  @override
+  String get instructionTrainerTimeTitle => 'Zmień godzinę';
+
+  @override
+  String get instructionTrainerTimeDesc =>
+      'Ołówek przy zaplanowanej sesji przesuwa godzinę w tym samym dniu — w kalendarzu albo obok daty wewnątrz sesji. Kartę można też przytrzymać. Ćwiczenia, notatka i przypomnienie zostają. Zakończona albo zaimportowana sesja godziny nie zmienia.';
 
   @override
   String get instructionTrainerPlanTitle => 'Plan sesji';
@@ -1347,7 +1441,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get instructionTrainerRepeatDesc =>
-      'Z profilu klienta albo przełącznikiem przy dodawaniu sesji w kalendarzu. Kopiuje się skład ćwiczeń; ciężar i powtórzenia przychodzą szarymi podpowiedziami, nie gotowymi seriami.';
+      'Z profilu klienta albo przełącznikiem przy dodawaniu sesji w kalendarzu. Jeśli jest jeden poprzedni trening, powtarza się właśnie on. Jeśli jest ich więcej, wybierasz z ostatnich pięciu: lista jest posortowana po notatce i można po niej szukać. Kopiuje się skład ćwiczeń; ciężar i powtórzenia przychodzą szarymi podpowiedziami, nie gotowymi seriami.';
 
   @override
   String get instructionPrintSessionTitle => 'Druk sesji';
@@ -1553,7 +1647,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get instructionSheetDesc =>
-      'W statystykach można udostępnić arkusz do Google Sheets lub Excela. Popraw serie w domu, pobierz CSV i zaimportuj z powrotem. Zostaw kolumny id i trzymaj wiersze jednego ćwiczenia razem, po kolei. Trening z pliku zastępuje swoje serie. Treningów, których w pliku nie ma, nie usuwamy. Imię, cel i notatki klienta bierzemy z pierwszego wypełnionego wiersza. JSON nadal jest pełną kopią.';
+      'W statystykach można udostępnić arkusz do Google Sheets lub Excela. Popraw serie w domu, pobierz CSV i zaimportuj z powrotem. Zostaw kolumny id i trzymaj wiersze jednego ćwiczenia razem, po kolei. Trening z pliku zastępuje swoje serie. Treningów, których w pliku nie ma, nie usuwamy. Imię, cel i notatki klienta bierzemy z pierwszego wypełnionego wiersza. Notatka do ćwiczenia i notatka do treningu wracają razem z plikiem. Plik bez tych kolumn nie kasuje notatek, które już są w telefonie. JSON nadal jest pełną kopią.';
 
   @override
   String get remindBeforePrefix => 'Powiadom';
@@ -1564,6 +1658,15 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get remindPermissionDenied =>
       'Powiadomienia są wyłączone, więc to przypomnienie nie przyjdzie. Można je włączyć w ustawieniach telefonu.';
+
+  @override
+  String get remindPermissionTitle => 'Powiadomienia są wyłączone';
+
+  @override
+  String get remindPermissionOpenSettings => 'Otwórz ustawienia';
+
+  @override
+  String get remindPermissionNotNow => 'Nie teraz';
 
   @override
   String get reminderEveningTitle => 'Jutro';
@@ -1607,5 +1710,5 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get instructionReminderDesc =>
-      'Wieczorem w przeddzień dnia z treningami, o 21:00, aplikacja podaje, ile sesji jest jutro i o której zaczyna się pierwsza. Osobny budzik kilka minut przed sesją jest wyłączony, dopóki sam go nie włączysz przy wyborze godziny. Oba przypomnienia są ustawiane na telefonie i nigdzie nie wychodzą.';
+      'Wieczorem w przeddzień dnia z treningami, o 21:00, aplikacja podaje, ile sesji jest jutro i o której zaczyna się pierwsza. Liczą się i twoje przyszłe treningi, i sesje klientów. Osobny budzik jest wyłączony, dopóki sam go nie włączysz przy wyborze godziny — od 10 minut do 2 godzin. Jeśli powiadomienia są wyłączone, aplikacja zaproponuje otwarcie ustawień telefonu. Oba przypomnienia są ustawiane na telefonie i nigdzie nie wychodzą.';
 }

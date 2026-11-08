@@ -122,6 +122,61 @@ void main() {
     expect(self.single.exercises.single.name, 'Squat');
   });
 
+  test('client rhythm keeps the previous month inside the rolling 28 days', () {
+    final now = DateTime(2026, 11, 2, 18);
+    trainerSchedule = [
+      for (final day in [20, 22, 24, 27, 29])
+        TrainerSession(
+          DateTime(2026, 10, day, 18),
+          'Ada',
+          '',
+          exercises: [
+            ExerciseLog('Squat', [SetLog('100', '5', '2')]),
+          ],
+          isCompleted: true,
+          clientId: 'ada',
+        ),
+      TrainerSession(
+        DateTime(2026, 11, 2, 12),
+        'Ada',
+        '',
+        exercises: [
+          ExerciseLog('Squat', [SetLog('100', '5', '2')]),
+        ],
+        isCompleted: true,
+        clientId: 'ada',
+      ),
+      TrainerSession(
+        DateTime(2026, 9, 3, 12),
+        'Ada',
+        '',
+        exercises: [
+          ExerciseLog('Squat', [SetLog('80', '5', '2')]),
+        ],
+        isCompleted: true,
+        clientId: 'ada',
+      ),
+    ];
+
+    final snap = ironVibeComputeRhythmFor(clientName: 'Ada', now: now);
+    // Window is 6 Oct–2 Nov. September is out. All five October days and
+    // 2 Nov are in.
+    expect(snap.daysInWindow, 6);
+    expect(snap.daysPerWeek, 1.5);
+    expect(snap.hasGauge, isTrue);
+
+    final self = ironVibeComputeRhythm([
+      for (final day in [20, 22, 24, 27, 29])
+        WorkoutLog(DateTime(2026, 10, day, 18), [
+          ExerciseLog('Squat', [SetLog('100', '5', '1')]),
+        ]),
+      WorkoutLog(DateTime(2026, 11, 2, 12), [
+        ExerciseLog('Squat', [SetLog('100', '5', '1')]),
+      ]),
+    ], now: now);
+    expect(self.daysInWindow, snap.daysInWindow);
+  });
+
   test('rhythm gauge color densifies toward rust with no mid plateau', () {
     final c1 = ironVibeRhythmZoneColor(1.0);
     final c2 = ironVibeRhythmZoneColor(2.0);

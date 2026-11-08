@@ -254,6 +254,29 @@ class AppLocalizationsDe extends AppLocalizations {
   String get muscleGroupArmExt => 'Trizeps';
 
   @override
+  String get muscleGroupGlutes => 'Gesäß';
+
+  @override
+  String get muscleGroupCalves => 'Waden';
+
+  @override
+  String get loadInsightTitle => 'Belastung';
+
+  @override
+  String get loadSetsShort => 'Sätze';
+
+  @override
+  String get loadTonnageShort => 'Tonnage';
+
+  @override
+  String get loadWindow =>
+      'Wochenschnitt der letzten 28 Tage. Die erste Zahl sind Sätze pro Woche, die zweite die Tonnage. Nur Sätze mit RIR zählen; leeres RIR und ∞ sind Aufwärmen. Übungen ohne Gruppe zählen nicht.';
+
+  @override
+  String get loadTrendHint =>
+      'Jede Markierung ist eine Kalenderwoche: Arbeitssätze und Tonnage.';
+
+  @override
   String get muscleGroupUntagged => '—';
 
   @override
@@ -467,6 +490,28 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get repeatLastUnavailable =>
       'Dieser Kunde hat noch kein Training zum Wiederholen.';
+
+  @override
+  String get repeatPickTitle => 'Training wiederholen';
+
+  @override
+  String get repeatPickSearchHint => 'Nach Notiz suchen';
+
+  @override
+  String get repeatPickNoNote => 'Keine Notiz';
+
+  @override
+  String get repeatPickNoMatch => 'Kein Training mit dieser Notiz.';
+
+  @override
+  String get reorderExercisesTitle => 'Übungsreihenfolge';
+
+  @override
+  String get reorderExercisesHint =>
+      'Am Griff ziehen, um die Zeile zu verschieben.';
+
+  @override
+  String get reorderExercisesTooltip => 'Reihenfolge ändern';
 
   @override
   String get editPlan => 'Plan bearbeiten';
@@ -799,7 +844,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get instructionChapterSessionBlurb =>
-      'Sätze, Gewicht, Wiederholungen, RIR, Cardio und Abschluss der Einheit.';
+      'Sätze, Gewicht, Wiederholungen, RIR, eine Übungsnotiz, Cardio und Abschluss der Einheit.';
 
   @override
   String get instructionChapterTimerTitle => 'Stoppuhr';
@@ -828,7 +873,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get instructionChapterRhythmBlurb =>
-      'Die Wochenanzeige und die Entlastungswoche.';
+      'Die Wochenanzeige, die Muskelbelastung und die Entlastungswoche.';
 
   @override
   String get instructionChapterDataTitle => 'Verlauf und Daten';
@@ -863,7 +908,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get instructionTrainSelfDesc =>
-      'Dein Bereich: Training, Kalender, persönlicher Fortschritt, Favoriten und die Rhythmusanzeige.';
+      'Dein Bereich: Training, Kalender, persönlicher Fortschritt, Favoriten, die Rhythmusanzeige und die Muskelbelastung.';
 
   @override
   String get instructionTrainOthersTitle => 'Ich trainiere andere';
@@ -949,11 +994,25 @@ class AppLocalizationsDe extends AppLocalizations {
       'Gewicht und Wiederholungen vom letzten Mal stehen grau da — als Ziel, das du überbieten sollst, nicht als eingetragener Satz. In den Verlauf kommen nur Zahlen, die du selbst tippst.';
 
   @override
+  String get instructionExerciseNoteTitle => 'Übungsnotiz';
+
+  @override
+  String get instructionExerciseNoteDesc =>
+      'Der Stift in der Übungszeile ist eine Notiz nur für dieses Training. Ältere Notizen zur selben Bewegung stehen darüber, jede mit ihrem Datum. Ein leeres Feld löscht die Notiz. Sie bleibt bei dieser Einheit, auch in einem gespeicherten Training.';
+
+  @override
   String get instructionRemoveExerciseTitle => 'Übung entfernen';
 
   @override
   String get instructionRemoveExerciseDesc =>
       'Das rote Kreuz entfernt den Block aus der aktuellen Einheit. Der gespeicherte Verlauf ändert sich nicht.';
+
+  @override
+  String get instructionReorderExercisesTitle => 'Übungsreihenfolge';
+
+  @override
+  String get instructionReorderExercisesDesc =>
+      'Tippe auf das Ziehsymbol in der Übungszeile. Eine kurze Liste öffnet sich: ziehe eine Zeile an ihren Platz. Die neue Reihenfolge bleibt in diesem Training und in seiner Historie.';
 
   @override
   String get instructionSectionSetControl => 'Satzzeile';
@@ -1140,7 +1199,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get instructionMuscleGroupsIntro =>
-      'Die Gruppe ist eine optionale Markierung an deinem Namen. Sie braucht nur das schnelle Training, um ein ausgewogenes Ganzkörpertraining zu bauen. Acht Gruppen: Brust, Rücken, Schultern, Core, vorderer Oberschenkel, hinterer Oberschenkel, Bizeps, Trizeps.';
+      'Die Gruppe ist eine optionale Markierung an deinem Namen. Das schnelle Training baut damit ein ausgewogenes Ganzkörpertraining, und die Belastungsansicht zählt daraus wöchentliche Sätze und Tonnage. Zehn Gruppen: Brust, Rücken, Schultern, Core, vorderer Oberschenkel, hinterer Oberschenkel, Gesäß, Waden, Bizeps, Trizeps.';
 
   @override
   String get instructionMuscleGroupTagTitle => 'So markierst du';
@@ -1226,7 +1285,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get instructionRhythmIntro =>
-      'Sind in den letzten vier Wochen mindestens drei Krafttage zusammengekommen, erscheint oben auf dem Trainingsbildschirm die Rhythmusanzeige. Das ist kein Ziel und keine Note — nur, wie oft du gerade ins Studio gehst.';
+      'Sind in den letzten vier Wochen mindestens drei Krafttage zusammengekommen, erscheint oben auf dem Trainingsbildschirm die Rhythmusanzeige, neben der Figur der Muskelbelastung. Das ist kein Ziel und keine Note — nur, wie oft du gerade ins Studio gehst. Die Figur bleibt auch, bevor die Anzeige da ist.';
 
   @override
   String get instructionRhythmGaugeTitle => 'Tage pro Woche';
@@ -1257,6 +1316,35 @@ class AppLocalizationsDe extends AppLocalizations {
       'Hältst du mindestens zweieinhalb Einheiten pro Woche und hast lange nicht entlastet, schlägt die App eine solche Woche vor. Je dichter der Rhythmus, desto früher der Hinweis. Er erscheint höchstens einmal pro Woche und nur im eigenen Modus — und bleibt eine Empfehlung, kein medizinischer Rat.';
 
   @override
+  String get instructionSectionMuscleLoad => 'Belastung';
+
+  @override
+  String get instructionMuscleLoadIntro =>
+      'Die Figur neben der Rhythmusanzeige öffnet den Belastungsbildschirm. Dasselbe Bild ist größer, und jede der zehn Gruppen hat eine eigene Beschriftung. Die erste Zahl sind Arbeitssätze pro Woche, die zweite die Tonnage. Beides ist der Schnitt der letzten 28 Tage.';
+
+  @override
+  String get instructionMuscleLoadCountsTitle => 'Was zählt';
+
+  @override
+  String get instructionMuscleLoadCountsDesc =>
+      'Ein Satz zählt nur mit RIR von 0 bis 5. Leeres RIR und ∞ sind Aufwärmen. Cardio zählt nicht, ebenso wenig eine Übung ohne Gruppe oder mit der Markierung nicht für das Schnelltraining. Tonnage ist Gewicht mal Wiederholungen, in den Einheiten, die du einträgst.';
+
+  @override
+  String get instructionMuscleLoadTrendTitle => 'Woche für Woche';
+
+  @override
+  String get instructionMuscleLoadTrendDesc =>
+      'Tippe auf eine Beschriftung, dann öffnet sich das Diagramm dieser Gruppe. Jede Markierung ist eine Kalenderwoche, auch leere, damit ein Rückgang sichtbar bleibt. Monat, Jahr und gesamte Zeit wechseln das Fenster. Die Zahl an der Beschriftung ist der 28-Tage-Schnitt, die Markierung die tatsächliche Summe dieser Woche.';
+
+  @override
+  String get instructionMuscleLoadLineSetsDesc =>
+      'Cyan — Arbeitssätze dieser Woche.';
+
+  @override
+  String get instructionMuscleLoadLineTonnageDesc =>
+      'Gelb — Tonnage dieser Woche, Gewicht mal Wiederholungen.';
+
+  @override
   String get instructionSectionCalendar => 'Kalender und Verlauf';
 
   @override
@@ -1285,7 +1373,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get instructionHistoryEditDesc =>
-      'Ein gespeichertes Training lässt sich aufklappen und korrigieren: Übung oder Satz hinzufügen, Zahlen ändern, die Einheit ganz löschen. Änderungen speichern sich sofort.';
+      'Ein gespeichertes Training lässt sich aufklappen und an Ort und Stelle korrigieren: eine vergessene Übung, einen Satz oder eine Notiz hinzufügen, Zahlen oder die Reihenfolge ändern, die Einheit ganz löschen. Änderungen speichern sich sofort.';
 
   @override
   String get instructionSectionStats => 'Statistik';
@@ -1330,7 +1418,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get instructionClientProfileDesc =>
-      'Von hier startet die heutige Einheit, und hier liegen Fortschritt, Favoriten und Verlauf nach Monat. Reichen die Krafttage, ist auch die Rhythmusanzeige da. Wird ein Kunde gelöscht, entfallen künftige Einheiten; vergangene Trainings bleiben für die Auswertung.';
+      'Von hier startet die heutige Einheit, und hier liegen Fortschritt, Favoriten und Verlauf nach Monat. Die Figur der Belastung ist immer da, die Rhythmusanzeige kommt dazu, sobald genug Krafttage da sind. Beide lesen die abgeschlossenen Einheiten dieses Kunden. Wird ein Kunde gelöscht, entfallen künftige Einheiten; vergangene Trainings bleiben für die Auswertung.';
 
   @override
   String get instructionTrainerScheduleTitle => 'Plan';
@@ -1338,6 +1426,13 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get instructionTrainerScheduleDesc =>
       'Der Trainerkalender zeigt Einheiten aller Kunden: Play-Symbol heißt geplant, Häkchen fertig, Sanduhr heute in Arbeit. Leere Pläne vergangener Tage verschwinden von selbst.';
+
+  @override
+  String get instructionTrainerTimeTitle => 'Uhrzeit ändern';
+
+  @override
+  String get instructionTrainerTimeDesc =>
+      'Der Stift an einer geplanten Einheit verschiebt die Uhrzeit am selben Tag — im Kalender oder neben dem Datum in der Einheit. Die Karte lässt sich auch gedrückt halten. Übungen, Notiz und Erinnerung bleiben. Eine abgeschlossene oder importierte Einheit behält ihre Uhrzeit.';
 
   @override
   String get instructionTrainerPlanTitle => 'Einheit planen';
@@ -1351,7 +1446,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get instructionTrainerRepeatDesc =>
-      'Aus dem Kundenprofil oder per Schalter beim Hinzufügen im Kalender. Kopiert wird die Übungsauswahl; Gewicht und Wiederholungen kommen als graue Hinweise, nicht als fertige Sätze.';
+      'Aus dem Kundenprofil oder per Schalter beim Hinzufügen im Kalender. Gibt es nur ein vergangenes Training, wird dieses wiederholt. Bei mehreren wählst du aus den letzten fünf: sortiert nach der Notiz, und danach lässt sich auch suchen. Kopiert wird die Übungsauswahl; Gewicht und Wiederholungen kommen als graue Hinweise, nicht als fertige Sätze.';
 
   @override
   String get instructionPrintSessionTitle => 'Einheit drucken';
@@ -1556,7 +1651,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get instructionSheetDesc =>
-      'Unter Statistik lässt sich eine Tabelle für Google Sheets oder Excel teilen. Sätze zu Hause ändern, CSV herunterladen und wieder importieren. Die ID-Spalten behalten und die Zeilen einer Übung der Reihe nach zusammen lassen. Ein Training aus der Datei ersetzt seine Sätze. Trainings, die in der Datei fehlen, bleiben. Name, Ziel und Notizen eines Kunden kommen aus der ersten gefüllten Zeile. JSON bleibt die vollständige Sicherung.';
+      'Unter Statistik lässt sich eine Tabelle für Google Sheets oder Excel teilen. Sätze zu Hause ändern, CSV herunterladen und wieder importieren. Die ID-Spalten behalten und die Zeilen einer Übung der Reihe nach zusammen lassen. Ein Training aus der Datei ersetzt seine Sätze. Trainings, die in der Datei fehlen, bleiben. Name, Ziel und Notizen eines Kunden kommen aus der ersten gefüllten Zeile. Die Übungsnotiz und die Trainingsnotiz kommen mit der Datei zurück. Eine Datei ohne diese Spalten löscht Notizen auf dem Telefon nicht. JSON bleibt die vollständige Sicherung.';
 
   @override
   String get remindBeforePrefix => 'Benachrichtigung';
@@ -1567,6 +1662,15 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get remindPermissionDenied =>
       'Benachrichtigungen sind aus, deshalb kommt diese Erinnerung nicht an. Du kannst sie in den Telefoneinstellungen erlauben.';
+
+  @override
+  String get remindPermissionTitle => 'Benachrichtigungen sind aus';
+
+  @override
+  String get remindPermissionOpenSettings => 'Einstellungen öffnen';
+
+  @override
+  String get remindPermissionNotNow => 'Nicht jetzt';
 
   @override
   String get reminderEveningTitle => 'Morgen';
@@ -1609,5 +1713,5 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get instructionReminderDesc =>
-      'Am Abend vor einem Tag mit Trainings, um 21:00, sagt die App, wie viele Einheiten morgen sind und wann die erste beginnt. Ein eigener Wecker ein paar Minuten vor einer Einheit bleibt aus, bis du ihn beim Wählen der Uhrzeit einschaltest. Beides wird auf dem Telefon geplant und nirgendwohin geschickt.';
+      'Am Abend vor einem Tag mit Trainings, um 21:00, sagt die App, wie viele Einheiten morgen sind und wann die erste beginnt. Eigene künftige Trainings und Kundeneinheiten zählen beide. Ein eigener Wecker bleibt aus, bis du ihn beim Wählen der Uhrzeit einschaltest — von 10 Minuten bis 2 Stunden vorher. Sind Mitteilungen aus, bietet die App an, die Telefoneinstellungen zu öffnen. Beides wird auf dem Telefon geplant und nirgendwohin geschickt.';
 }

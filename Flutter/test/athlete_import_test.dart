@@ -1,14 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fitness_app/main.dart';
 
-WorkoutLog _athleteDay(DateTime date, {String? id, String exercise = 'Athlete Curl'}) {
-  return WorkoutLog(
-    date,
-    [
-      ExerciseLog(exercise, [SetLog('20', '10', '2')]),
-    ],
-    id: id,
-  );
+WorkoutLog _athleteDay(
+  DateTime date, {
+  String? id,
+  String exercise = 'Athlete Curl',
+}) {
+  return WorkoutLog(date, [
+    ExerciseLog(exercise, [SetLog('20', '10', '2')]),
+  ], id: id);
 }
 
 void main() {
@@ -86,60 +86,59 @@ void main() {
     );
   });
 
-  test('import creates a client and imported sessions without touching the bank', () {
-    final workouts = [
-      _athleteDay(DateTime(2026, 3, 1), id: 'w-a', exercise: 'Weird Curl'),
-      _athleteDay(DateTime(2026, 3, 2), id: 'w-b', exercise: 'Weird Press'),
-    ];
-    exerciseBank.add('SQUAT');
+  test(
+    'import creates a client and imported sessions without touching the bank',
+    () {
+      final workouts = [
+        _athleteDay(DateTime(2026, 3, 1), id: 'w-a', exercise: 'Weird Curl'),
+        _athleteDay(DateTime(2026, 3, 2), id: 'w-b', exercise: 'Weird Press'),
+      ];
+      exerciseBank.add('SQUAT');
 
-    final outcome = ironVibeImportAthleteHistory(
-      workouts: workouts,
-      clientName: 'Ivan',
-      height: '180',
-      weight: '80',
-    );
+      final outcome = ironVibeImportAthleteHistory(
+        workouts: workouts,
+        clientName: 'Ivan',
+        height: '180',
+        weight: '80',
+      );
 
-    expect(outcome.status, IronVibeAthleteImportStatus.success);
-    expect(outcome.addedSessionCount, 2);
-    expect(clients, hasLength(1));
-    expect(clients.single.name, 'Ivan');
-    expect(clients.single.height, '180');
-    expect(clients.single.weight, '80');
-    expect(trainerSchedule, hasLength(2));
-    expect(trainerSchedule.every((s) => s.isImportedHistory), isTrue);
-    expect(trainerSchedule.every((s) => s.isCompleted), isTrue);
-    expect(trainerSchedule.every((s) => s.clientName == 'Ivan'), isTrue);
-    expect(exerciseBank, ['SQUAT']);
+      expect(outcome.status, IronVibeAthleteImportStatus.success);
+      expect(outcome.addedSessionCount, 2);
+      expect(clients, hasLength(1));
+      expect(clients.single.name, 'Ivan');
+      expect(clients.single.height, '180');
+      expect(clients.single.weight, '80');
+      expect(trainerSchedule, hasLength(2));
+      expect(trainerSchedule.every((s) => s.isImportedHistory), isTrue);
+      expect(trainerSchedule.every((s) => s.isCompleted), isTrue);
+      expect(trainerSchedule.every((s) => s.clientName == 'Ivan'), isTrue);
+      expect(exerciseBank, ['SQUAT']);
 
-    ironVibeRebuildExerciseBankFromCompletedWorkouts();
-    expect(exerciseBank, ['SQUAT']);
-    expect(
-      ironVibeExerciseNameSuggestions(query: 'weird', clientName: 'Ivan'),
-      isEmpty,
-    );
-    expect(
-      ironVibeExerciseNameSuggestions(query: 'sq', clientName: 'Ivan'),
-      ['SQUAT'],
-    );
-    expect(
-      trainerSchedule.map((s) => s.exercises.single.name).toSet(),
-      {'Weird Curl', 'Weird Press'},
-    );
-    expect(
-      ironVibeCompletedExerciseNames(clientName: 'Ivan'),
-      isEmpty,
-    );
-    expect(
-      trainerSchedule.where(ironVibeTrainerSessionCountsAsWork),
-      isEmpty,
-    );
-    expect(
-      trainerSchedule.where(ironVibeTrainerSessionIsCompleted),
-      hasLength(2),
-    );
-    expect(ironVibeRhythmHistoryFor(clientName: 'Ivan'), hasLength(2));
-  });
+      ironVibeRebuildExerciseBankFromCompletedWorkouts();
+      expect(exerciseBank, ['SQUAT']);
+      expect(
+        ironVibeExerciseNameSuggestions(query: 'weird', clientName: 'Ivan'),
+        isEmpty,
+      );
+      expect(ironVibeExerciseNameSuggestions(query: 'sq', clientName: 'Ivan'), [
+        'SQUAT',
+      ]);
+      expect(trainerSchedule.map((s) => s.exercises.single.name).toSet(), {
+        'Weird Curl',
+        'Weird Press',
+      });
+      expect(ironVibeCompletedExerciseNames(clientName: 'Ivan'), isEmpty);
+      expect(
+        trainerSchedule.where(ironVibeTrainerSessionCountsAsWork),
+        isEmpty,
+      );
+      expect(
+        trainerSchedule.where(ironVibeTrainerSessionIsCompleted),
+        hasLength(2),
+      );
+      expect(ironVibeRhythmHistoryFor(clientName: 'Ivan'), hasLength(2));
+    },
+  );
 
   test('import refuses a taken name and does not write sessions', () {
     clients.add(Client('Ivan', ''));
@@ -169,9 +168,7 @@ void main() {
   });
 
   test('re-import of the same workout ids adds nothing', () {
-    final workouts = [
-      _athleteDay(DateTime(2026, 3, 1), id: 'same-id'),
-    ];
+    final workouts = [_athleteDay(DateTime(2026, 3, 1), id: 'same-id')];
     expect(
       ironVibeImportAthleteHistory(
         workouts: workouts,
@@ -222,74 +219,64 @@ void main() {
       trainerSchedule.where(ironVibeTrainerSessionCountsAsWork),
       hasLength(1),
     );
-    expect(
-      ironVibeCompletedExerciseNames(clientName: 'Ivan'),
-      ['BENCH'],
-    );
+    expect(ironVibeCompletedExerciseNames(clientName: 'Ivan'), ['BENCH']);
     ironVibeRebuildExerciseBankFromCompletedWorkouts();
     expect(exerciseBank, ['BENCH']);
-    expect(
-      ironVibeLastRepeatableTrainerSession('Ivan')?.id,
-      'owned',
-    );
+    expect(ironVibeLastRepeatableTrainerSession('Ivan')?.id, 'owned');
   });
 
   test('name suggestions use the shared bank even for a new client', () {
     exerciseBank.addAll(['SQUAT', 'BENCH PRESS']);
 
-    expect(
-      ironVibeExerciseNameSuggestions(query: 'sq', clientName: 'Ivan'),
-      ['SQUAT'],
-    );
-    expect(
-      ironVibeExerciseNameSuggestions(query: 'be'),
-      ['BENCH PRESS'],
-    );
+    expect(ironVibeExerciseNameSuggestions(query: 'sq', clientName: 'Ivan'), [
+      'SQUAT',
+    ]);
+    expect(ironVibeExerciseNameSuggestions(query: 'be'), ['BENCH PRESS']);
     expect(
       ironVibeExerciseNameSuggestions(query: '   ', clientName: 'Ivan'),
       isEmpty,
     );
   });
 
-  test('rebuild merges completed names into the bank without dropping catalog entries', () {
-    exerciseBank.add('SQUAT');
-    workoutHistory.add(
-      WorkoutLog(
-        DateTime(2026, 4, 1),
-        [
+  test(
+    'rebuild merges completed names into the bank without dropping catalog entries',
+    () {
+      exerciseBank.add('SQUAT');
+      workoutHistory.add(
+        WorkoutLog(DateTime(2026, 4, 1), [
           ExerciseLog('Deadlift', [SetLog('100', '5', '1')]),
-        ],
-      ),
-    );
-    trainerSchedule.add(
-      TrainerSession(
-        DateTime(2026, 4, 2),
-        'Ivan',
-        '',
-        exercises: [
-          ExerciseLog('Bench', [SetLog('80', '5', '1')]),
-        ],
-        id: 'owned',
-        isCompleted: true,
-      ),
-    );
-    trainerSchedule.add(
-      TrainerSession(
-        DateTime(2026, 3, 1),
-        'Ivan',
-        '',
-        exercises: [
-          ExerciseLog('Weird Curl', [SetLog('20', '10', '2')]),
-        ],
-        id: 'imported',
-        isCompleted: true,
-        isImportedHistory: true,
-      ),
-    );
+        ]),
+      );
+      trainerSchedule.add(
+        TrainerSession(
+          DateTime(2026, 4, 2),
+          'Ivan',
+          '',
+          exercises: [
+            ExerciseLog('Bench', [SetLog('80', '5', '1')]),
+          ],
+          id: 'owned',
+          isCompleted: true,
+        ),
+      );
+      trainerSchedule.add(
+        TrainerSession(
+          DateTime(2026, 3, 1),
+          'Ivan',
+          '',
+          exercises: [
+            ExerciseLog('Weird Curl', [SetLog('20', '10', '2')]),
+          ],
+          id: 'imported',
+          isCompleted: true,
+          isImportedHistory: true,
+        ),
+      );
 
-    ironVibeRebuildExerciseBankFromCompletedWorkouts();
-    expect(exerciseBank, ['SQUAT', 'DEADLIFT', 'BENCH']);
-  });
+      ironVibeRebuildExerciseBankFromCompletedWorkouts();
+      expect(exerciseBank, ['SQUAT', 'DEADLIFT', 'BENCH']);
+    },
+  );
 
   test('imported flag survives json round-trip', () {
     final session = TrainerSession(
@@ -328,7 +315,10 @@ void main() {
     });
 
     expect(ironVibeAthleteFavoriteExercises, ['BENCH PRESS', 'ROW']);
-    expect(ironVibeMuscleGroupForName('bench press'), IronVibeMuscleGroup.chest);
+    expect(
+      ironVibeMuscleGroupForName('bench press'),
+      IronVibeMuscleGroup.chest,
+    );
     expect(ironVibeMuscleGroupForName('row'), IronVibeMuscleGroup.back);
     expect(ironVibeMuscleGroupForName('unknown'), isNull);
   });
@@ -355,10 +345,7 @@ void main() {
       ironVibeIsFavoriteExercise('Weird Curl', clientName: 'Ivan'),
       isTrue,
     );
-    expect(
-      ironVibeIsFavoriteExercise('Ghost Fly', clientName: 'Ivan'),
-      isTrue,
-    );
+    expect(ironVibeIsFavoriteExercise('Ghost Fly', clientName: 'Ivan'), isTrue);
     expect(ironVibeAthleteFavoriteExercises, ['SQUAT']);
     expect(exerciseBank, ['SQUAT']);
     expect(ironVibeMuscleGroupForName('Weird Curl'), isNull);
@@ -368,7 +355,10 @@ void main() {
     expect(ironVibeLastLoggedTrainerSessionForClient('Ivan'), isNull);
     expect(ironVibeLastHistoryTrainerSessionForClient('Ivan')?.id, isNotNull);
     expect(
-      ironVibeLastExerciseLogFor('Weird Curl', clientName: 'Ivan').sets.single.weight,
+      ironVibeLastExerciseLogFor(
+        'Weird Curl',
+        clientName: 'Ivan',
+      ).sets.single.weight,
       '20',
     );
     expect(
@@ -376,7 +366,9 @@ void main() {
       isEmpty,
     );
     expect(
-      ironVibeRhythmHistoryFor(clientName: 'Ivan').map((w) => w.exercises.single.name).toSet(),
+      ironVibeRhythmHistoryFor(
+        clientName: 'Ivan',
+      ).map((w) => w.exercises.single.name).toSet(),
       {'Weird Curl', 'Weird Press'},
     );
   });
@@ -387,7 +379,10 @@ void main() {
       _athleteDay(DateTime(2026, 3, 2), id: 'w-b', exercise: 'Weird Press'),
     ];
     expect(
-      ironVibeImportAthleteHistory(workouts: workouts, clientName: 'Ivan').status,
+      ironVibeImportAthleteHistory(
+        workouts: workouts,
+        clientName: 'Ivan',
+      ).status,
       IronVibeAthleteImportStatus.success,
     );
     final client = clients.single;
@@ -431,5 +426,96 @@ void main() {
     expect(clients, isEmpty);
     expect(trainerSchedule, isEmpty);
     expect(ironVibeTrainerWorkCountsByClient(), isEmpty);
+  });
+
+  TrainerSession finishedSession(String id, DateTime when, String note) {
+    return TrainerSession(
+      when,
+      'Ivan',
+      note,
+      exercises: [
+        ExerciseLog('Squat', [SetLog('20', '10', '2')]),
+      ],
+      id: id,
+      isCompleted: true,
+    );
+  }
+
+  test('repeat offers the five newest finished workouts, newest first', () {
+    trainerSchedule.addAll([
+      finishedSession('a', DateTime(2026, 1, 1), 'спина'),
+      finishedSession('b', DateTime(2026, 2, 1), 'ноги'),
+      finishedSession('c', DateTime(2026, 3, 1), 'грудь'),
+      finishedSession('d', DateTime(2026, 4, 1), 'ноги'),
+      finishedSession('e', DateTime(2026, 5, 1), 'плечи'),
+      finishedSession('f', DateTime(2026, 6, 1), 'спина'),
+      TrainerSession(
+        DateTime(2026, 7, 1),
+        'Ivan',
+        'план',
+        exercises: [
+          ExerciseLog('Row', [SetLog('', '', '')]),
+        ],
+        id: 'plan',
+        isScheduledPlan: true,
+      ),
+      TrainerSession(
+        DateTime(2026, 6, 15),
+        'Olga',
+        'чужая',
+        exercises: [
+          ExerciseLog('Curl', [SetLog('10', '10', '1')]),
+        ],
+        id: 'other',
+        isCompleted: true,
+      ),
+      finishedSession('imported', DateTime(2026, 6, 20), 'импорт')
+        ..isImportedHistory = true,
+    ]);
+
+    final recent = ironVibeRecentRepeatableTrainerSessions('Ivan');
+    expect(recent.map((s) => s.id), ['f', 'e', 'd', 'c', 'b']);
+    expect(ironVibeLastRepeatableTrainerSession('Ivan')?.id, 'f');
+
+    final byNote = [...recent]..sort(ironVibeCompareTrainerSessionsByNote);
+    expect(byNote.map((s) => s.note), [
+      'грудь',
+      'ноги',
+      'ноги',
+      'плечи',
+      'спина',
+    ]);
+    expect(byNote[1].id, 'd');
+    expect(byNote[2].id, 'b');
+
+    final withBlank = [
+      finishedSession('named', DateTime(2026, 1, 2), 'а'),
+      finishedSession('blank', DateTime(2026, 8, 1), '  '),
+    ]..sort(ironVibeCompareTrainerSessionsByNote);
+    expect(withBlank.map((s) => s.id), ['named', 'blank']);
+  });
+
+  test('with no finished workout, repeat falls back to the newest plan', () {
+    trainerSchedule.add(
+      TrainerSession(
+        DateTime(2026, 8, 1),
+        'Ivan',
+        'ноги',
+        exercises: [
+          ExerciseLog('Squat', [SetLog('', '', '')]),
+        ],
+        id: 'plan',
+        isScheduledPlan: true,
+      ),
+    );
+    expect(ironVibeRecentRepeatableTrainerSessions('Ivan').single.id, 'plan');
+  });
+
+  test('reorder index matches a drag before the later row', () {
+    final items = ['a', 'b', 'c', 'd'];
+    ironVibeMoveListItem(items, 1, 3);
+    expect(items, ['a', 'c', 'b', 'd']);
+    ironVibeMoveListItem(items, 3, 0);
+    expect(items, ['d', 'a', 'c', 'b']);
   });
 }

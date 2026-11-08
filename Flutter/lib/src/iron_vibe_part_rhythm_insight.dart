@@ -33,47 +33,78 @@ class IronVibeRhythmCard extends StatelessWidget {
       child: SizedBox(
         height: height,
         width: double.infinity,
-        child: TweenAnimationBuilder<double>(
-          tween: Tween(begin: 1.0, end: snapshot.daysPerWeek.clamp(1.0, 6.0)),
-          duration: const Duration(milliseconds: 900),
-          curve: Curves.easeOutCubic,
-          builder: (context, value, _) {
-            return CustomPaint(
-              painter: _IronVibeRhythmGaugePainter(
-                needleAt: value,
-                trackColor: pal.borderSubtle,
-                tickColor: pal.textMuted,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final caption = Text(
+              l.rhythmPerWeek,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: pal.textSecondary,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.3,
               ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        rate,
-                        style: TextStyle(
-                          color: zone,
-                          fontSize: height >= 160 ? 36 : 32,
-                          fontWeight: FontWeight.w800,
-                          height: 1.0,
-                          letterSpacing: 0.4,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        l.rhythmPerWeek,
-                        style: TextStyle(
-                          color: pal.textSecondary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.3,
-                        ),
-                      ),
-                    ],
+            );
+            if (constraints.maxWidth < 220) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    rate,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: zone,
+                      fontSize: 34,
+                      fontWeight: FontWeight.w800,
+                      height: 1.0,
+                      letterSpacing: 0.4,
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 6),
+                  caption,
+                ],
+              );
+            }
+            return TweenAnimationBuilder<double>(
+              tween: Tween(
+                begin: 1.0,
+                end: snapshot.daysPerWeek.clamp(1.0, 6.0),
               ),
+              duration: const Duration(milliseconds: 900),
+              curve: Curves.easeOutCubic,
+              builder: (context, value, _) {
+                return CustomPaint(
+                  painter: _IronVibeRhythmGaugePainter(
+                    needleAt: value,
+                    trackColor: pal.borderSubtle,
+                    tickColor: pal.textMuted,
+                  ),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            rate,
+                            style: TextStyle(
+                              color: zone,
+                              fontSize: height >= 160 ? 36 : 32,
+                              fontWeight: FontWeight.w800,
+                              height: 1.0,
+                              letterSpacing: 0.4,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          caption,
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
             );
           },
         ),

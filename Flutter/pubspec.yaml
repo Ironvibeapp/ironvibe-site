@@ -16,8 +16,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-# Версия как у IronVibe: … 1.8.5+85, 1.8.6+86 …
-version: 1.8.6+86
+# Версия как у IronVibe: … 1.8.9+89, 1.9.0+90 …
+version: 1.9.0+90
 
 environment:
   sdk: ^3.11.0
@@ -107,6 +107,7 @@ flutter:
     - assets/sounds/timer_tick.wav
     - assets/sounds/timer_phase.wav
     - assets/rhythm_smirk.png
+    - assets/muscle_load.png
     - assets/fonts/NotoSans-Regular.ttf
     - assets/fonts/NotoSans-Bold.ttf
     - assets/fonts/NotoSansSC-Regular.ttf

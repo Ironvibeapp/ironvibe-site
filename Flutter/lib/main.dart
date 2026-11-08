@@ -44,4 +44,5 @@ part 'src/iron_vibe_part_trainer.dart';
 part 'src/iron_vibe_part_session_print.dart';
 part 'src/iron_vibe_part_rhythm.dart';
 part 'src/iron_vibe_part_rhythm_insight.dart';
+part 'src/iron_vibe_part_muscle_load.dart';
 part 'src/iron_vibe_part_athlete.dart';

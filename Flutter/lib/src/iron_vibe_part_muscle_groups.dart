@@ -11,6 +11,8 @@ enum IronVibeMuscleGroup {
   hamstring('hamstring'),
   armFlex('armFlex'),
   armExt('armExt'),
+  glute('glute'),
+  calf('calf'),
   skip('skip');
 
   const IronVibeMuscleGroup(this.id);
@@ -26,6 +28,8 @@ const List<IronVibeMuscleGroup> _kMuscleGroupsForPicker = [
   IronVibeMuscleGroup.core,
   IronVibeMuscleGroup.quad,
   IronVibeMuscleGroup.hamstring,
+  IronVibeMuscleGroup.glute,
+  IronVibeMuscleGroup.calf,
   IronVibeMuscleGroup.armFlex,
   IronVibeMuscleGroup.armExt,
 ];
@@ -132,10 +136,7 @@ void ironVibeMergeMuscleGroupsFromBackup(
   });
 }
 
-String ironVibeMuscleGroupLabel(
-  AppLocalizations l,
-  IronVibeMuscleGroup group,
-) {
+String ironVibeMuscleGroupLabel(AppLocalizations l, IronVibeMuscleGroup group) {
   switch (group) {
     case IronVibeMuscleGroup.chest:
       return l.muscleGroupChest;
@@ -153,6 +154,10 @@ String ironVibeMuscleGroupLabel(
       return l.muscleGroupArmFlex;
     case IronVibeMuscleGroup.armExt:
       return l.muscleGroupArmExt;
+    case IronVibeMuscleGroup.glute:
+      return l.muscleGroupGlutes;
+    case IronVibeMuscleGroup.calf:
+      return l.muscleGroupCalves;
     case IronVibeMuscleGroup.skip:
       return l.muscleGroupSkip;
   }
@@ -278,10 +283,11 @@ class _MuscleGroupPickerPanel extends StatelessWidget {
     final pal = IronVibePalette.of(context);
     final name = normalizeExerciseName(exerciseName);
     final media = MediaQuery.of(context);
-    final available = media.size.height
-        - media.viewInsets.bottom
-        - media.padding.top
-        - media.padding.bottom;
+    final available =
+        media.size.height -
+        media.viewInsets.bottom -
+        media.padding.top -
+        media.padding.bottom;
 
     Widget groupChip(IronVibeMuscleGroup group) {
       final isOn = selected == group;
@@ -290,10 +296,8 @@ class _MuscleGroupPickerPanel extends StatelessWidget {
         borderRadius: BorderRadius.circular(kIronVibeRadiusChip),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: () => Navigator.pop(
-            context,
-            _MuscleGroupDialogResult.group(group),
-          ),
+          onTap: () =>
+              Navigator.pop(context, _MuscleGroupDialogResult.group(group)),
           child: Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -323,7 +327,7 @@ class _MuscleGroupPickerPanel extends StatelessWidget {
 
     final skipOn = selected == IronVibeMuscleGroup.skip;
     final chromeReserve = (sheetStyle ? 36.0 : 24.0) + 188.0;
-    final gridMaxHeight = (available - chromeReserve).clamp(140.0, 280.0);
+    final gridMaxHeight = (available - chromeReserve).clamp(140.0, 360.0);
 
     return Padding(
       padding: EdgeInsets.only(bottom: media.viewInsets.bottom),
@@ -542,10 +546,7 @@ Widget ironVibeMuscleGroupChip({
           onTap: name.isEmpty
               ? null
               : () async {
-                  await ironVibeEditMuscleGroup(
-                    context,
-                    rawName: name,
-                  );
+                  await ironVibeEditMuscleGroup(context, rawName: name);
                   onChanged();
                 },
           behavior: HitTestBehavior.opaque,
@@ -700,10 +701,7 @@ IronVibeMuscleGroup? _pickStaleQuickWorkoutGroup(
   var bestScore = 0;
   for (final group in groups) {
     if (!_quickWorkoutGroupHasExercises(group)) continue;
-    final score = _quickWorkoutGroupRecencyScore(
-      group,
-      clientName: clientName,
-    );
+    final score = _quickWorkoutGroupRecencyScore(group, clientName: clientName);
     if (best == null ||
         score < bestScore ||
         (score == bestScore && group.index < best.index)) {
@@ -719,9 +717,9 @@ String? _pickQuickWorkoutNameForGroup(
   String? clientName,
   Set<String> exclude = const {},
 }) {
-  final candidates = ironVibeNamesForMuscleGroup(group)
-      .where((n) => !exclude.contains(n))
-      .toList();
+  final candidates = ironVibeNamesForMuscleGroup(
+    group,
+  ).where((n) => !exclude.contains(n)).toList();
   if (candidates.isEmpty) return null;
 
   final favorites = candidates
@@ -811,10 +809,7 @@ Future<void> _ironVibeShowQuickWorkoutInsufficient(
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(
-              l.close,
-              style: TextStyle(color: dpal.textMuted),
-            ),
+            child: Text(l.close, style: TextStyle(color: dpal.textMuted)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -834,8 +829,7 @@ Future<void> _ironVibeShowQuickWorkoutInsufficient(
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            PersonalProgressScreen(clientName: clientName),
+        builder: (context) => PersonalProgressScreen(clientName: clientName),
       ),
     );
   }
@@ -896,9 +890,7 @@ Future<void> ironVibeStartQuickWorkout(
   }
 
   final logs = confirmed
-      .map(
-        (p) => ironVibeLastExerciseLogFor(p.name, clientName: clientName),
-      )
+      .map((p) => ironVibeLastExerciseLogFor(p.name, clientName: clientName))
       .toList();
 
   await Navigator.push(
@@ -915,16 +907,15 @@ Future<void> ironVibeStartQuickWorkout(
 class _QuickWorkoutPreviewDialog extends StatefulWidget {
   final List<IronVibeQuickWorkoutPick> initialPicks;
 
-  const _QuickWorkoutPreviewDialog({
-    required this.initialPicks,
-  });
+  const _QuickWorkoutPreviewDialog({required this.initialPicks});
 
   @override
   State<_QuickWorkoutPreviewDialog> createState() =>
       _QuickWorkoutPreviewDialogState();
 }
 
-class _QuickWorkoutPreviewDialogState extends State<_QuickWorkoutPreviewDialog> {
+class _QuickWorkoutPreviewDialogState
+    extends State<_QuickWorkoutPreviewDialog> {
   late List<IronVibeQuickWorkoutPick> _picks;
 
   @override
@@ -936,14 +927,16 @@ class _QuickWorkoutPreviewDialogState extends State<_QuickWorkoutPreviewDialog> 
   Future<void> _swapAt(int index) async {
     final current = _picks[index];
     final used = _picks.map((p) => p.name).toSet();
-    final alternatives = ironVibeNamesForMuscleGroup(current.group)
-        .where((n) => n != current.name && !used.contains(n))
-        .toList();
+    final alternatives = ironVibeNamesForMuscleGroup(
+      current.group,
+    ).where((n) => n != current.name && !used.contains(n)).toList();
     if (alternatives.isEmpty) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.quickWorkoutNoAlternatives),
+          content: Text(
+            AppLocalizations.of(context)!.quickWorkoutNoAlternatives,
+          ),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -1012,53 +1005,53 @@ class _QuickWorkoutPreviewDialogState extends State<_QuickWorkoutPreviewDialog> 
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-            for (var i = 0; i < _picks.length; i++)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _picks[i].name,
-                            style: TextStyle(
-                              color: pal.textPrimary,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
+              for (var i = 0; i < _picks.length; i++)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _picks[i].name,
+                              style: TextStyle(
+                                color: pal.textPrimary,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            ironVibeMuscleGroupLabel(l, _picks[i].group),
-                            style: TextStyle(
-                              color: pal.textMuted,
-                              fontSize: 11,
+                            const SizedBox(height: 2),
+                            Text(
+                              ironVibeMuscleGroupLabel(l, _picks[i].group),
+                              style: TextStyle(
+                                color: pal.textMuted,
+                                fontSize: 11,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () => _swapAt(i),
-                      child: Text(
-                        l.quickWorkoutSwap,
-                        style: TextStyle(
-                          color: pal.textSecondary,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 12,
+                          ],
                         ),
                       ),
-                    ),
-                  ],
+                      TextButton(
+                        onPressed: () => _swapAt(i),
+                        child: Text(
+                          l.quickWorkoutSwap,
+                          style: TextStyle(
+                            color: pal.textSecondary,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-          ],
-            ),
+            ],
           ),
         ),
+      ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),

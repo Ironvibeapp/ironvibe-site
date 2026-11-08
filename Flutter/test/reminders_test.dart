@@ -1,6 +1,7 @@
 import 'package:fitness_app/l10n/app_localizations.dart';
 import 'package:fitness_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 TrainerSession _session({
@@ -176,6 +177,17 @@ void main() {
     expect(
       plans.singleWhere((plan) => !plan.alarm).body,
       en.reminderEveningBody(1, '08:30'),
+    );
+  });
+
+  test('a clock-time reminder uses an exact alarm when the phone allows it', () {
+    expect(
+      ironVibeReminderAndroidMode(exact: true),
+      AndroidScheduleMode.exactAllowWhileIdle,
+    );
+    expect(
+      ironVibeReminderAndroidMode(exact: false),
+      AndroidScheduleMode.inexactAllowWhileIdle,
     );
   });
 

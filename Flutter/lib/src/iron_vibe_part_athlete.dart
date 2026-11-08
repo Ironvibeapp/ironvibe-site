@@ -142,17 +142,18 @@ class _AthleteScreenState extends State<AthleteScreen>
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                if (rhythm.hasGauge) ...[
-                                  IronVibeEnter(
-                                    animation: _stagger(0.0, 0.46),
-                                    child: IronVibeRhythmCard(
-                                      snapshot: rhythm,
-                                      onTap: () =>
-                                          ironVibeOpenRhythmInsight(context),
-                                    ),
+                                IronVibeEnter(
+                                  animation: _stagger(0.0, 0.46),
+                                  child: IronVibeRhythmAndLoadRow(
+                                    rhythm: rhythm,
+                                    showRhythm: rhythm.hasGauge,
+                                    onRhythm: () =>
+                                        ironVibeOpenRhythmInsight(context),
+                                    onLoad: () =>
+                                        ironVibeOpenMuscleLoad(context),
                                   ),
-                                  const SizedBox(height: 28),
-                                ],
+                                ),
+                                const SizedBox(height: 28),
                                 IronVibeEnter(
                                   animation: _stagger(
                                     rhythm.hasGauge ? 0.08 : 0.0,
@@ -440,6 +441,24 @@ class _WorkoutSessionScreenState extends State<WorkoutSessionScreen>
     setState(() {
       _exercises.removeAt(index);
     });
+  }
+
+  Future<void> _reorderExercises() async {
+    if (_exercises.length < 2 || !mounted) return;
+    final l = AppLocalizations.of(context)!;
+    final moved = await ironVibeShowExerciseReorderSheet(
+      context: context,
+      labels: [
+        for (final ex in _exercises)
+          ex.nameController.text.trim().isEmpty
+              ? l.exerciseHeader
+              : ex.nameController.text.trim(),
+      ],
+      onReorder: (oldIndex, newIndex) {
+        setState(() => ironVibeMoveListItem(_exercises, oldIndex, newIndex));
+      },
+    );
+    if (moved && mounted) _flushAutoSaveDraft();
   }
 
   List<ExerciseLog> _logsFromCurrentDraft() {
@@ -767,6 +786,9 @@ class _WorkoutSessionScreenState extends State<WorkoutSessionScreen>
                                 sessionPrHighlight:
                                     _sessionPrHighlightForExercise(index),
                                 onRemove: () => _removeExercise(index),
+                                onRequestReorder: _exercises.length < 2
+                                    ? null
+                                    : _reorderExercises,
                                 noteSessionDate: widget.targetDate,
                               ),
                             );
@@ -879,7 +901,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         : const TimeOfDay(hour: 12, minute: 0);
     var remind = false;
     var remindMinutes = kIronVibeDefaultRemindMinutes;
-    var reminderDenied = false;
+    var reminderPrompted = false;
     final hostContext = context;
 
     final picked = await showDialog<({TimeOfDay time, int? minutes})>(
@@ -924,7 +946,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           horizontal: 10,
                         ),
                         decoration: BoxDecoration(
-                          border: Border.all(color: pal.borderSubtle, width: 0.5),
+                          border: Border.all(
+                            color: pal.borderSubtle,
+                            width: 0.5,
+                          ),
                           color: pal.inputFill,
                           borderRadius: BorderRadius.circular(
                             kIronVibeRadiusField,
@@ -933,7 +958,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(l.time, style: TextStyle(color: pal.textMuted)),
+                            Text(
+                              l.time,
+                              style: TextStyle(color: pal.textMuted),
+                            ),
                             Text(
                               clock,
                               style: TextStyle(
@@ -950,12 +978,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       minutes: remindMinutes,
                       onEnabled: (value) async {
                         if (value) {
-                          final allowed = await ironVibeEnsureReminderPermission(
+                          await ironVibeEnsureReminderPermission(
                             exact: true,
+                            context: context,
+                            prompt: !reminderPrompted,
                           );
-                          reminderDenied = !allowed;
-                        } else {
-                          reminderDenied = false;
+                          reminderPrompted = true;
                         }
                         setDialogState(() => remind = value);
                       },
@@ -991,13 +1019,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
       },
     );
     if (picked == null || !mounted) return;
-    if (reminderDenied && hostContext.mounted) {
-      ScaffoldMessenger.of(hostContext).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(hostContext)!.remindPermissionDenied),
-        ),
-      );
-    }
     final targetDate = DateTime(
       _selectedDate.year,
       _selectedDate.month,
@@ -1005,8 +1026,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
       picked.time.hour,
       picked.time.minute,
     );
-    if (targetDate.isAfter(DateTime.now())) {
-      await ironVibeEnsureReminderPermission(exact: picked.minutes != null);
+    if (targetDate.isAfter(DateTime.now()) && hostContext.mounted) {
+      await ironVibeEnsureReminderPermission(
+        exact: picked.minutes != null,
+        context: hostContext,
+        prompt: !reminderPrompted,
+      );
     }
     if (!mounted) return;
     await Navigator.push(
@@ -1336,7 +1361,8 @@ class _HistoryWorkoutEditorState extends State<_HistoryWorkoutEditor> {
     _sessionCardio = _detectCardio(widget.workout);
     _exercises = [for (final log in widget.workout.exercises) _dataFor(log)];
     _savedNames = [
-      for (final log in widget.workout.exercises) normalizeExerciseName(log.name),
+      for (final log in widget.workout.exercises)
+        normalizeExerciseName(log.name),
     ];
   }
 
@@ -1417,7 +1443,14 @@ class _HistoryWorkoutEditorState extends State<_HistoryWorkoutEditor> {
           sets.isEmpty
               ? [
                   cardio
-                      ? SetLog('', '', '', isCardio: true, duration: '', intensity: '')
+                      ? SetLog(
+                          '',
+                          '',
+                          '',
+                          isCardio: true,
+                          duration: '',
+                          intensity: '',
+                        )
                       : SetLog('', '', ''),
                 ]
               : sets,
@@ -1507,6 +1540,27 @@ class _HistoryWorkoutEditorState extends State<_HistoryWorkoutEditor> {
     _sync();
   }
 
+  Future<void> _reorderExercises() async {
+    if (_exercises.length < 2 || !mounted) return;
+    final l = AppLocalizations.of(context)!;
+    final moved = await ironVibeShowExerciseReorderSheet(
+      context: context,
+      labels: [
+        for (final ex in _exercises)
+          ex.nameController.text.trim().isEmpty
+              ? l.exerciseHeader
+              : ex.nameController.text.trim(),
+      ],
+      onReorder: (oldIndex, newIndex) {
+        setState(() {
+          ironVibeMoveListItem(_exercises, oldIndex, newIndex);
+          ironVibeMoveListItem(_savedNames, oldIndex, newIndex);
+        });
+      },
+    );
+    if (moved && mounted) _sync();
+  }
+
   @override
   void dispose() {
     if (!_removed) _writeWorkout();
@@ -1542,6 +1596,9 @@ class _HistoryWorkoutEditorState extends State<_HistoryWorkoutEditor> {
               },
               onLongPressReassignExercise: () => _reassign(i),
               onRemove: () => _removeExercise(i),
+              onRequestReorder: _exercises.length < 2
+                  ? null
+                  : _reorderExercises,
               noteSessionDate: widget.workout.date,
               excludeWorkoutForNotes: widget.workout,
             ),

@@ -168,6 +168,22 @@ void main() {
     );
   });
 
+  test('a created client workout stays when it is left untouched', () {
+    final created = ironVibeNewTrainerSession(
+      dateTime: DateTime.now(),
+      clientName: 'Ivan',
+      isScheduledPlan: true,
+    );
+    expect(ironVibeTrainerSessionIsAbandonedStub(created), isTrue);
+    expect(ironVibeCreatedTrainerSessionShouldStay(created), isTrue);
+
+    final scratch = ironVibeNewTrainerSession(
+      dateTime: DateTime.now(),
+      clientName: 'Ivan',
+    );
+    expect(ironVibeCreatedTrainerSessionShouldStay(scratch), isFalse);
+  });
+
   test('ui mode returns live for today live-current', () {
     final session = TrainerSession(
       DateTime.now(),

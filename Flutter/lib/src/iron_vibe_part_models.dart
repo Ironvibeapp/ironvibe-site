@@ -34,7 +34,9 @@ class WorkoutLog {
       date,
       exercises,
       id: _jsonOptionalId(json['id']),
-      remindMinutesBefore: ironVibeSanitizeRemindMinutes(json['remindMinutesBefore']),
+      remindMinutesBefore: ironVibeSanitizeRemindMinutes(
+        json['remindMinutesBefore'],
+      ),
     );
   }
 }
@@ -63,7 +65,13 @@ class ExerciseLog {
     }
     final isCardio = _jsonPickBool(j, ['isCardio', 'is_cardio', 'cardio']);
 
-    var rawSets = _jsonValueForKeys(j, ['sets', 'setList', 'set_list', 'approaches', 'set']);
+    var rawSets = _jsonValueForKeys(j, [
+      'sets',
+      'setList',
+      'set_list',
+      'approaches',
+      'set',
+    ]);
     if (rawSets is String) {
       try {
         rawSets = jsonDecode(rawSets);
@@ -78,7 +86,10 @@ class ExerciseLog {
     final sets = <SetLog>[];
     if (rawSets is List) {
       for (final item in rawSets) {
-        final parsed = _setLogFromDecoded(item, parentExerciseIsCardio: isCardio);
+        final parsed = _setLogFromDecoded(
+          item,
+          parentExerciseIsCardio: isCardio,
+        );
         if (parsed != null) sets.add(parsed);
       }
     }
@@ -93,12 +104,20 @@ class ExerciseLog {
         final d = _jsonPickString(j, ['duration', 'time', 'minutes', 'min']);
         final i = _jsonPickString(j, ['intensity', 'level']);
         if (d.isNotEmpty || i.isNotEmpty) {
-          sets.add(SetLog('', '', '', isCardio: true, duration: d, intensity: i));
+          sets.add(
+            SetLog('', '', '', isCardio: true, duration: d, intensity: i),
+          );
         }
       }
     }
 
-    var name = _jsonPickString(j, ['name', 'exerciseName', 'exercise', 'title', 'label']);
+    var name = _jsonPickString(j, [
+      'name',
+      'exerciseName',
+      'exercise',
+      'title',
+      'label',
+    ]);
     if (name.isEmpty) name = _jsonString(j['name']);
 
     return ExerciseLog(
@@ -225,7 +244,14 @@ class SetLog {
   final bool isCardio;
   final String duration;
   final String intensity;
-  SetLog(this.weight, this.reps, this.rir, {this.isCardio = false, this.duration = '', this.intensity = ''});
+  SetLog(
+    this.weight,
+    this.reps,
+    this.rir, {
+    this.isCardio = false,
+    this.duration = '',
+    this.intensity = '',
+  });
 
   Map<String, dynamic> toJson() => {
     'weight': weight,
@@ -383,11 +409,15 @@ bool ironVibeSessionBelongsToClient(
   String? clientId,
 }) {
   final idKey = clientId?.trim();
-  if (idKey != null && idKey.isNotEmpty && s.clientId != null && s.clientId == idKey) {
+  if (idKey != null &&
+      idKey.isNotEmpty &&
+      s.clientId != null &&
+      s.clientId == idKey) {
     return true;
   }
   if (clientName == null) return false;
-  return ironVibeClientNameKey(s.clientName) == ironVibeClientNameKey(clientName);
+  return ironVibeClientNameKey(s.clientName) ==
+      ironVibeClientNameKey(clientName);
 }
 
 bool ironVibeSessionBelongsToClientRecord(TrainerSession s, Client client) {
@@ -410,6 +440,7 @@ class TrainerSession {
   bool isScheduledPlan;
   bool isCompleted;
   bool isImportedHistory;
+
   /// Minutes before [dateTime] to ring a local alarm. Null means the coach
   /// did not ask for one. The evening digest does not use this field.
   int? remindMinutesBefore;
@@ -432,7 +463,8 @@ class TrainerSession {
     if (id != null) 'id': id,
     'dateTime': dateTime.toIso8601String(),
     'clientName': clientName,
-    if (clientLastName.trim().isNotEmpty) 'clientLastName': clientLastName.trim(),
+    if (clientLastName.trim().isNotEmpty)
+      'clientLastName': clientLastName.trim(),
     if (clientId != null) 'clientId': clientId,
     'note': note,
     'exercises': exercises.map((e) => e.toJson()).toList(),
@@ -487,7 +519,9 @@ class TrainerSession {
       isScheduledPlan: isScheduledPlan,
       isCompleted: isCompleted,
       isImportedHistory: json['isImportedHistory'] == true,
-      remindMinutesBefore: ironVibeSanitizeRemindMinutes(json['remindMinutesBefore']),
+      remindMinutesBefore: ironVibeSanitizeRemindMinutes(
+        json['remindMinutesBefore'],
+      ),
     );
   }
 }
@@ -514,7 +548,9 @@ bool ironVibeTrainerSessionHasLoggedData(TrainerSession s) =>
 
 bool ironVibeTrainerSessionIsCompleted(TrainerSession s) {
   if (!s.isCompleted) return false;
-  return !ironVibeDateOnly(s.dateTime).isAfter(ironVibeDateOnly(DateTime.now()));
+  return !ironVibeDateOnly(
+    s.dateTime,
+  ).isAfter(ironVibeDateOnly(DateTime.now()));
 }
 
 bool ironVibeTrainerSessionCountsAsWork(TrainerSession s) =>
@@ -595,9 +631,8 @@ List<MapEntry<String, int>> ironVibeTrainerWorkCountsByClient() {
   return [for (final k in keys) MapEntry(labels[k]!, counts[k]!)];
 }
 
-int ironVibeTrainerSessionNamedExerciseCount(TrainerSession s) => s.exercises
-    .where((e) => normalizeExerciseName(e.name).isNotEmpty)
-    .length;
+int ironVibeTrainerSessionNamedExerciseCount(TrainerSession s) =>
+    s.exercises.where((e) => normalizeExerciseName(e.name).isNotEmpty).length;
 
 bool ironVibeTrainerSessionHasPlan(TrainerSession s) =>
     ironVibeTrainerSessionNamedExerciseCount(s) > 0;
@@ -650,8 +685,7 @@ bool ironVibeNormalizeFutureTrainerPlans() {
 bool ironVibePurgeExpiredUnloggedTrainerSessions() {
   var changed = ironVibeNormalizeFutureTrainerPlans();
   final today = ironVibeDateOnly(DateTime.now());
-  final protectedId =
-      activeWorkoutDraft?.kind == ActiveWorkoutDraftKind.trainer
+  final protectedId = activeWorkoutDraft?.kind == ActiveWorkoutDraftKind.trainer
       ? activeWorkoutDraft?.sessionId
       : null;
   final before = trainerSchedule.length;
@@ -756,7 +790,8 @@ void ironVibeMarkTrainerSessionLiveCurrent(TrainerSession session) {
     )) {
       continue;
     }
-    s.isLiveCurrent = identical(s, session) || _ironVibeSameTrainerSession(s, session);
+    s.isLiveCurrent =
+        identical(s, session) || _ironVibeSameTrainerSession(s, session);
   }
   session.isLiveCurrent = true;
 }
@@ -766,7 +801,9 @@ TrainerSession? ironVibeLiveCurrentTrainerSessionForClient(
   String? clientId,
 }) {
   final name = clientName.trim();
-  if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) return null;
+  if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) {
+    return null;
+  }
   for (final s in trainerSchedule) {
     if (!ironVibeSessionBelongsToClient(
       s,
@@ -788,7 +825,9 @@ TrainerSession? ironVibeTodaysIncompleteTrainerSessionForClient(
   String? clientId,
 }) {
   final name = clientName.trim();
-  if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) return null;
+  if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) {
+    return null;
+  }
   TrainerSession? best;
   for (final s in trainerSchedule) {
     if (!ironVibeSessionBelongsToClient(
@@ -806,10 +845,30 @@ TrainerSession? ironVibeTodaysIncompleteTrainerSessionForClient(
   return best;
 }
 
+/// A workout the coach placed on the calendar stays there. Only a live
+/// session that was never scheduled, and still has nothing in it, is dropped.
+bool ironVibeCreatedTrainerSessionShouldStay(TrainerSession session) {
+  if (session.isScheduledPlan ||
+      session.isCompleted ||
+      session.isImportedHistory) {
+    return true;
+  }
+  return !ironVibeTrainerSessionIsAbandonedStub(session);
+}
+
 Future<void> ironVibeDiscardAbandonedTrainerSession(
   TrainerSession session,
 ) async {
-  if (!ironVibeTrainerSessionIsAbandonedStub(session)) return;
+  if (ironVibeCreatedTrainerSessionShouldStay(session)) {
+    if (session.isScheduledPlan &&
+        session.isLiveCurrent &&
+        !session.isCompleted) {
+      session.isLiveCurrent = false;
+      ironVibeSyncTrainerSessionInSchedule(session);
+      await DataService.saveData();
+    }
+    return;
+  }
   ironVibeRemoveTrainerSession(session);
   await DataService.saveData();
 }
@@ -835,7 +894,9 @@ TrainerSession? _ironVibeLastCompletedTrainerSessionForClient(
   required bool coachWorkOnly,
 }) {
   final name = clientName.trim();
-  if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) return null;
+  if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) {
+    return null;
+  }
   TrainerSession? best;
   final today = ironVibeDateOnly(DateTime.now());
   for (final s in trainerSchedule) {
@@ -884,47 +945,97 @@ TrainerSession? ironVibeLastHistoryTrainerSessionForClient(
   );
 }
 
+/// ReorderableListView index contract: [newIndex] is the slot before removal.
+void ironVibeMoveListItem<T>(List<T> items, int oldIndex, int newIndex) {
+  if (oldIndex < 0 || oldIndex >= items.length) return;
+  if (newIndex < 0 || newIndex > items.length) return;
+  if (newIndex > oldIndex) newIndex -= 1;
+  if (newIndex == oldIndex) return;
+  final item = items.removeAt(oldIndex);
+  items.insert(newIndex, item);
+}
+
+/// Note text first (blank notes last), then newer session first.
+int ironVibeCompareTrainerSessionsByNote(TrainerSession a, TrainerSession b) {
+  final an = a.note.trim().toLowerCase();
+  final bn = b.note.trim().toLowerCase();
+  if (an.isEmpty != bn.isEmpty) return an.isEmpty ? 1 : -1;
+  final byNote = an.compareTo(bn);
+  if (byNote != 0) return byNote;
+  return b.dateTime.compareTo(a.dateTime);
+}
+
+List<TrainerSession> _ironVibeRepeatableTrainerPool(
+  String clientName, {
+  String? clientId,
+  TrainerSession? exclude,
+  required bool completedOnly,
+}) {
+  final name = clientName.trim();
+  if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) {
+    return const [];
+  }
+  final out = <TrainerSession>[];
+  for (final s in trainerSchedule) {
+    if (!ironVibeSessionBelongsToClient(
+      s,
+      clientName: name,
+      clientId: clientId,
+    )) {
+      continue;
+    }
+    if (exclude != null && _ironVibeSameTrainerSession(s, exclude)) continue;
+    if (s.isImportedHistory) continue;
+    if (completedOnly) {
+      if (!ironVibeTrainerSessionIsCompleted(s)) continue;
+    } else if (!ironVibeTrainerSessionHasPlan(s)) {
+      continue;
+    }
+    out.add(s);
+  }
+  out.sort((a, b) => b.dateTime.compareTo(a.dateTime));
+  return out;
+}
+
+/// Newest completed workouts, up to [limit]. If none are finished, the newest plans.
+List<TrainerSession> ironVibeRecentRepeatableTrainerSessions(
+  String clientName, {
+  String? clientId,
+  TrainerSession? exclude,
+  int limit = 5,
+}) {
+  final cap = limit < 1 ? 1 : limit;
+  final completed = _ironVibeRepeatableTrainerPool(
+    clientName,
+    clientId: clientId,
+    exclude: exclude,
+    completedOnly: true,
+  );
+  final pool = completed.isNotEmpty
+      ? completed
+      : _ironVibeRepeatableTrainerPool(
+          clientName,
+          clientId: clientId,
+          exclude: exclude,
+          completedOnly: false,
+        );
+  if (pool.length <= cap) return pool;
+  return pool.sublist(0, cap);
+}
+
 TrainerSession? ironVibeLastRepeatableTrainerSession(
   String clientName, {
   String? clientId,
   TrainerSession? exclude,
 }) {
-  final name = clientName.trim();
-  if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) return null;
-  final today = ironVibeDateOnly(DateTime.now());
-  TrainerSession? bestLogged;
-  for (final s in trainerSchedule) {
-    if (!ironVibeSessionBelongsToClient(
-      s,
-      clientName: name,
-      clientId: clientId,
-    )) {
-      continue;
-    }
-    if (exclude != null && _ironVibeSameTrainerSession(s, exclude)) continue;
-    if (s.isImportedHistory) continue;
-    if (!ironVibeTrainerSessionIsCompleted(s)) continue;
-    if (ironVibeDateOnly(s.dateTime).isAfter(today)) continue;
-    if (bestLogged == null || s.dateTime.isAfter(bestLogged.dateTime)) {
-      bestLogged = s;
-    }
-  }
-  if (bestLogged != null) return bestLogged;
-  TrainerSession? best;
-  for (final s in trainerSchedule) {
-    if (!ironVibeSessionBelongsToClient(
-      s,
-      clientName: name,
-      clientId: clientId,
-    )) {
-      continue;
-    }
-    if (exclude != null && _ironVibeSameTrainerSession(s, exclude)) continue;
-    if (s.isImportedHistory) continue;
-    if (!ironVibeTrainerSessionHasPlan(s)) continue;
-    if (best == null || s.dateTime.isAfter(best.dateTime)) best = s;
-  }
-  return best;
+  final recent = ironVibeRecentRepeatableTrainerSessions(
+    clientName,
+    clientId: clientId,
+    exclude: exclude,
+    limit: 1,
+  );
+  if (recent.isEmpty) return null;
+  return recent.first;
 }
 
 TrainerSession? ironVibeNextTrainerSessionForClient(
@@ -932,7 +1043,9 @@ TrainerSession? ironVibeNextTrainerSessionForClient(
   String? clientId,
 }) {
   final name = clientName.trim();
-  if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) return null;
+  if (name.isEmpty && (clientId == null || clientId.trim().isEmpty)) {
+    return null;
+  }
   final today = ironVibeDateOnly(DateTime.now());
   TrainerSession? best;
   for (final s in trainerSchedule) {
@@ -958,19 +1071,14 @@ List<ExerciseLog> ironVibeTrainerPlanLogsFrom(TrainerSession source) {
     if (name.isEmpty) continue;
     if (ex.isCardio) {
       out.add(
-        ExerciseLog(
-          name,
-          [SetLog('', '', '', isCardio: true, duration: '', intensity: '')],
-          isCardio: true,
-        ),
+        ExerciseLog(name, [
+          SetLog('', '', '', isCardio: true, duration: '', intensity: ''),
+        ], isCardio: true),
       );
     } else {
       final n = math.max(1, ex.sets.length);
       out.add(
-        ExerciseLog(
-          name,
-          List<SetLog>.generate(n, (_) => SetLog('', '', '')),
-        ),
+        ExerciseLog(name, List<SetLog>.generate(n, (_) => SetLog('', '', ''))),
       );
     }
   }
@@ -1065,12 +1173,15 @@ class ActiveWorkoutDraft {
       ironVibeDraftExercisesHaveMeaningfulInput(exercisesJson);
 
   Map<String, dynamic> toJson() => {
-    'kind': kind == ActiveWorkoutDraftKind.personal ? _kindPersonal : _kindTrainer,
+    'kind': kind == ActiveWorkoutDraftKind.personal
+        ? _kindPersonal
+        : _kindTrainer,
     if (targetDate != null) 'targetDate': targetDate!.toIso8601String(),
     if (sessionId != null) 'sessionId': sessionId,
     if (clientName != null) 'clientName': clientName,
     if (clientId != null) 'clientId': clientId,
-    if (sessionDateTime != null) 'sessionDateTime': sessionDateTime!.toIso8601String(),
+    if (sessionDateTime != null)
+      'sessionDateTime': sessionDateTime!.toIso8601String(),
     if (sessionNote != null) 'sessionNote': sessionNote,
     'isCardio': isCardio,
     'exercises': exercisesJson,
@@ -1083,7 +1194,9 @@ class ActiveWorkoutDraft {
         ? ActiveWorkoutDraftKind.trainer
         : ActiveWorkoutDraftKind.personal;
     final rawExercises = json['exercises'];
-    final exercisesJson = rawExercises is List ? List<dynamic>.from(rawExercises) : <dynamic>[];
+    final exercisesJson = rawExercises is List
+        ? List<dynamic>.from(rawExercises)
+        : <dynamic>[];
     return ActiveWorkoutDraft(
       kind: kind,
       targetDate: DateTime.tryParse(_jsonString(json['targetDate'])),
@@ -1098,7 +1211,8 @@ class ActiveWorkoutDraft {
           : _jsonString(json['sessionNote']),
       isCardio: _jsonPickBool(json, ['isCardio', 'is_cardio', 'cardio']),
       exercisesJson: exercisesJson,
-      savedAt: DateTime.tryParse(_jsonString(json['savedAt'])) ?? DateTime.now(),
+      savedAt:
+          DateTime.tryParse(_jsonString(json['savedAt'])) ?? DateTime.now(),
     );
   }
 }
@@ -1186,6 +1300,7 @@ class DataService {
   static const String _keyTrainerSchedule = 'trainerSchedule';
   static const String _keyActiveWorkoutDraft = 'activeWorkoutDraft';
   static const String _keyAthleteFavoriteExercises = 'athleteFavoriteExercises';
+
   /// Separate from workout history so older installs keep loading logs as-is.
   static const String _keyExerciseMuscleGroups = 'exerciseMuscleGroups';
 
@@ -1221,7 +1336,9 @@ class DataService {
           activeWorkoutDraft = ActiveWorkoutDraft.fromJson(m);
         }
       } catch (err, st) {
-        debugPrint('IronVibe: не удалось загрузить черновик тренировки: $err\n$st');
+        debugPrint(
+          'IronVibe: не удалось загрузить черновик тренировки: $err\n$st',
+        );
         activeWorkoutDraft = null;
       }
     } else {
@@ -1247,14 +1364,20 @@ class DataService {
     }
 
     exerciseBank = _dedupeNormalizedExerciseBank(exerciseBank);
-    ironVibeAthleteFavoriteExercises =
-        _dedupeNormalizedExerciseBank(ironVibeAthleteFavoriteExercises);
+    ironVibeAthleteFavoriteExercises = _dedupeNormalizedExerciseBank(
+      ironVibeAthleteFavoriteExercises,
+    );
     for (final client in clients) {
-      client.favoriteExercises =
-          _dedupeNormalizedExerciseBank(client.favoriteExercises);
+      client.favoriteExercises = _dedupeNormalizedExerciseBank(
+        client.favoriteExercises,
+      );
     }
-    workoutHistory = workoutHistory.map(_normalizeWorkoutLogExerciseNames).toList();
-    trainerSchedule = trainerSchedule.map(_normalizeTrainerSessionExerciseNames).toList();
+    workoutHistory = workoutHistory
+        .map(_normalizeWorkoutLogExerciseNames)
+        .toList();
+    trainerSchedule = trainerSchedule
+        .map(_normalizeTrainerSessionExerciseNames)
+        .toList();
     ironVibePurgeExpiredUnloggedTrainerSessions();
     ironVibeEnsurePersistentIds();
     ironVibeRebuildExerciseBankFromCompletedWorkouts();
@@ -1269,14 +1392,18 @@ class DataService {
       _keyAthleteFavoriteExercises,
       ironVibeAthleteFavoriteExercises,
     );
-    
-    final historyJson = jsonEncode(workoutHistory.map((e) => e.toJson()).toList());
+
+    final historyJson = jsonEncode(
+      workoutHistory.map((e) => e.toJson()).toList(),
+    );
     await prefs.setString(_keyWorkoutHistory, historyJson);
 
     final clientsJson = jsonEncode(clients.map((e) => e.toJson()).toList());
     await prefs.setString(_keyClients, clientsJson);
 
-    final scheduleJson = jsonEncode(trainerSchedule.map((e) => e.toJson()).toList());
+    final scheduleJson = jsonEncode(
+      trainerSchedule.map((e) => e.toJson()).toList(),
+    );
     await prefs.setString(_keyTrainerSchedule, scheduleJson);
 
     await prefs.setString(
@@ -1341,7 +1468,9 @@ List<ExerciseLog> ironVibeRenameExerciseLogs(
   final o = normalizeExerciseName(oldName);
   final n = normalizeExerciseName(newName);
   if (o.isEmpty || n.isEmpty || o == n) return exercises;
-  final containsOld = exercises.any((ex) => normalizeExerciseName(ex.name) == o);
+  final containsOld = exercises.any(
+    (ex) => normalizeExerciseName(ex.name) == o,
+  );
   if (!containsOld) return exercises;
 
   final out = <ExerciseLog>[];
@@ -1448,7 +1577,11 @@ void ironVibeRenameExercise(String oldName, String newName) {
 }
 
 /// One row in [exercises] only: same sets, new exercise name. Progress charts follow [newName].
-void reassignExerciseInExerciseList(List<ExerciseLog> exercises, int exerciseIndex, String newName) {
+void reassignExerciseInExerciseList(
+  List<ExerciseLog> exercises,
+  int exerciseIndex,
+  String newName,
+) {
   final n = normalizeExerciseName(newName);
   if (n.isEmpty) return;
   if (exerciseIndex < 0 || exerciseIndex >= exercises.length) return;
@@ -1484,7 +1617,9 @@ Future<String?> showExerciseReassignPickerDialog(
   BuildContext context, {
   required String initialName,
 }) async {
-  final controller = TextEditingController(text: normalizeExerciseName(initialName));
+  final controller = TextEditingController(
+    text: normalizeExerciseName(initialName),
+  );
   final locale = AppLocalizations.of(context)!;
 
   try {
@@ -1496,7 +1631,10 @@ Future<String?> showExerciseReassignPickerDialog(
           final newName = normalizeExerciseName(controller.text);
           if (newName.isEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(locale.renameExerciseEmpty), backgroundColor: Colors.grey[900]),
+              SnackBar(
+                content: Text(locale.renameExerciseEmpty),
+                backgroundColor: Colors.grey[900],
+              ),
             );
             return;
           }
@@ -1505,9 +1643,12 @@ Future<String?> showExerciseReassignPickerDialog(
 
         return StatefulBuilder(
           builder: (ctx, setModal) {
-            final options = _exerciseBankOptionsForQuery(controller.text).toList();
+            final options = _exerciseBankOptionsForQuery(
+              controller.text,
+            ).toList();
             final media = MediaQuery.of(ctx);
-            final available = media.size.height -
+            final available =
+                media.size.height -
                 media.viewInsets.bottom -
                 media.padding.vertical -
                 16;
@@ -1531,13 +1672,18 @@ Future<String?> showExerciseReassignPickerDialog(
                 ),
                 focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: kIronVibeAccent, width: 1.6),
-                  borderRadius: BorderRadius.all(Radius.circular(kIronVibeRadiusField)),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(kIronVibeRadiusField),
+                  ),
                 ),
               ),
             );
             return Dialog(
               backgroundColor: pal.dialog,
-              insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              insetPadding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 24,
+              ),
               shape: RoundedRectangleBorder(
                 side: BorderSide(color: pal.borderDefault, width: 0.5),
                 borderRadius: BorderRadius.circular(kIronVibeRadiusDialog),
@@ -1549,7 +1695,9 @@ Future<String?> showExerciseReassignPickerDialog(
                   child: SizedBox(
                     width: double.maxFinite,
                     child: Column(
-                      mainAxisSize: options.isEmpty ? MainAxisSize.min : MainAxisSize.max,
+                      mainAxisSize: options.isEmpty
+                          ? MainAxisSize.min
+                          : MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         if (options.isEmpty) ...[
@@ -1564,7 +1712,11 @@ Future<String?> showExerciseReassignPickerDialog(
                           const SizedBox(height: 8),
                           Text(
                             locale.reassignHistoryExerciseBody,
-                            style: TextStyle(color: pal.textSecondary, fontSize: 12, height: 1.35),
+                            style: TextStyle(
+                              color: pal.textSecondary,
+                              fontSize: 12,
+                              height: 1.35,
+                            ),
                           ),
                           const SizedBox(height: 12),
                           nameField,
@@ -1596,18 +1748,28 @@ Future<String?> showExerciseReassignPickerDialog(
                                 Material(
                                   color: pal.autocompleteBg,
                                   shape: RoundedRectangleBorder(
-                                    side: BorderSide(color: pal.borderDefault, width: 0.5),
-                                    borderRadius: BorderRadius.circular(kIronVibeRadiusDialog),
+                                    side: BorderSide(
+                                      color: pal.borderDefault,
+                                      width: 0.5,
+                                    ),
+                                    borderRadius: BorderRadius.circular(
+                                      kIronVibeRadiusDialog,
+                                    ),
                                   ),
                                   child: Column(
                                     children: [
                                       for (final option in options)
                                         InkWell(
                                           onTap: () {
-                                            controller.text = normalizeExerciseName(option);
-                                            controller.selection = TextSelection.fromPosition(
-                                              TextPosition(offset: controller.text.length),
-                                            );
+                                            controller.text =
+                                                normalizeExerciseName(option);
+                                            controller.selection =
+                                                TextSelection.fromPosition(
+                                                  TextPosition(
+                                                    offset:
+                                                        controller.text.length,
+                                                  ),
+                                                );
                                             setModal(() {});
                                           },
                                           child: Padding(
@@ -1616,7 +1778,10 @@ Future<String?> showExerciseReassignPickerDialog(
                                               alignment: Alignment.centerLeft,
                                               child: Text(
                                                 option,
-                                                style: TextStyle(color: pal.textPrimary, fontSize: 13),
+                                                style: TextStyle(
+                                                  color: pal.textPrimary,
+                                                  fontSize: 13,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -1632,7 +1797,10 @@ Future<String?> showExerciseReassignPickerDialog(
                           children: [
                             TextButton(
                               onPressed: () => Navigator.pop(ctx),
-                              child: Text(locale.cancel, style: TextStyle(color: pal.textMuted)),
+                              child: Text(
+                                locale.cancel,
+                                style: TextStyle(color: pal.textMuted),
+                              ),
                             ),
                             TextButton(
                               onPressed: trySave,
@@ -1666,7 +1834,9 @@ Future<void> showRenameExerciseDialog(
   String currentName,
   void Function(String newName) onSuccess,
 ) async {
-  final controller = TextEditingController(text: normalizeExerciseName(currentName));
+  final controller = TextEditingController(
+    text: normalizeExerciseName(currentName),
+  );
   final locale = AppLocalizations.of(context)!;
 
   await showDialog<void>(
@@ -1681,7 +1851,11 @@ Future<void> showRenameExerciseDialog(
         ),
         title: Text(
           locale.renameExerciseTitle,
-          style: TextStyle(color: pal.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: pal.textPrimary,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         content: TextField(
           controller: controller,
@@ -1700,7 +1874,10 @@ Future<void> showRenameExerciseDialog(
             final newName = normalizeExerciseName(value);
             if (newName.isEmpty) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(locale.renameExerciseEmpty), backgroundColor: Colors.grey[900]),
+                SnackBar(
+                  content: Text(locale.renameExerciseEmpty),
+                  backgroundColor: Colors.grey[900],
+                ),
               );
               return;
             }
@@ -1710,25 +1887,34 @@ Future<void> showRenameExerciseDialog(
           },
         ),
         actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(ctx),
-          child: Text(locale.cancel, style: TextStyle(color: pal.textMuted)),
-        ),
-        TextButton(
-          onPressed: () {
-            final newName = normalizeExerciseName(controller.text);
-            if (newName.isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(locale.renameExerciseEmpty), backgroundColor: Colors.grey[900]),
-              );
-              return;
-            }
-            ironVibeRenameExercise(currentName, newName);
-            onSuccess(newName);
-            Navigator.pop(ctx);
-          },
-          child: Text(locale.save, style: TextStyle(color: pal.textPrimary, fontWeight: FontWeight.w600)),
-        ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(locale.cancel, style: TextStyle(color: pal.textMuted)),
+          ),
+          TextButton(
+            onPressed: () {
+              final newName = normalizeExerciseName(controller.text);
+              if (newName.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(locale.renameExerciseEmpty),
+                    backgroundColor: Colors.grey[900],
+                  ),
+                );
+                return;
+              }
+              ironVibeRenameExercise(currentName, newName);
+              onSuccess(newName);
+              Navigator.pop(ctx);
+            },
+            child: Text(
+              locale.save,
+              style: TextStyle(
+                color: pal.textPrimary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
         ],
       );
     },
@@ -1758,10 +1944,7 @@ Future<bool> showRemoveExerciseFromBankDialog(
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
-            child: Text(
-              locale.cancel,
-              style: TextStyle(color: dpal.textMuted),
-            ),
+            child: Text(locale.cancel, style: TextStyle(color: dpal.textMuted)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, true),

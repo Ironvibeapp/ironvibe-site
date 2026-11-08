@@ -401,9 +401,9 @@ Future<void> _deleteExportFile(String path) async {
   } catch (_) {}
 }
 
-/// Семейное правило версий: … 1.8.5+85, 1.8.6+86 …
-const String kAppVersion = '1.8.6';
-const int kAppBuildNumber = 86;
+/// Семейное правило версий: … 1.8.9+89, 1.9.0+90 …
+const String kAppVersion = '1.9.0';
+const int kAppBuildNumber = 90;
 
 /// График прогресса: вес (красный) и повторы (как цвет фокуса полей).
 const Color kProgressChartWeightColor = Color(0xFFFF1744);
